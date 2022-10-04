@@ -13,13 +13,15 @@ import styles from './Main.module.scss';
 
 export interface MainProps {
   className?: string;
+  product: string;
 }
 
-const Main = ({ className }: MainProps) => {
+const Main = ({ className, product }: MainProps) => {
   // const id = 'gid://shopify/Product/7737134055648';
-  const id = 'gid://shopify/Product/7745243447520';
+  // const id = 'gid://shopify/Product/7745243447520';
+
   useCustomiserStore.persist.setOptions({
-    name: `customiser-${id}`,
+    name: `customiser-${product}`,
   });
 
   const setCustomProduct = useCustomiserStore((state) => state.setCustomProduct);
@@ -27,7 +29,7 @@ const Main = ({ className }: MainProps) => {
 
   const { data } = useGetCustomProductByShopifyIdQuery(
     graphQLClient,
-    { id },
+    { id: product },
     { select: (data) => data.customProductByShopifyId?.data as CustomProductEntity },
   );
 

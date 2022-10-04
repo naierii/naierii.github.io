@@ -668,9 +668,11 @@ h4,
   font-size: 1.75rem;
 }
 
-p {
-  color: #696969;
+h5,
+.h5 {
+  font-size: 1.375rem;
 }
+
 .text--large p {
   font-size: 1.125rem;
   font-size: clamp(

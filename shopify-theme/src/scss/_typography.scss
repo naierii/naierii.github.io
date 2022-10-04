@@ -56,9 +56,13 @@ h4,
     font-size: rem(28px);
 }
 
-p {
-    color: $darkGrey;
+h5,
+.h5 {
+    font-size: rem(22px);
+}
 
+
+p {
     .text--large & {
         @include fluidType(rem(18px), rem(22px));
     }

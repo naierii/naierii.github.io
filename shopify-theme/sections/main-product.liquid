@@ -265,7 +265,7 @@
               {% endcomment %}
             {%- when 'size_details' -%}
               <fieldset class="js product-form__input">
-                <legend class="form__label h3">{{ block.settings.title }}</legend>
+                <legend class="form__label h4">{{ block.settings.title }}</legend>
                 {{- block.settings.description -}}
                 <input
                   type="text"
@@ -292,7 +292,7 @@
                 data-form="{{ product_form_id }}"
                 data-parent-product="{{product.selected_or_first_available_variant.id}}"
               >
-                <legend class="form__label h3">{{ block.settings.title }}</legend>
+                <legend class="form__label h4">{{ block.settings.title }}</legend>
                 <input
                   type="text"
                   id="{{ section.id }}-front-waist"
@@ -353,7 +353,7 @@
                   >
                     {%- for option in product.options_with_values -%}
                       <fieldset class="js product-form__input">
-                        <legend class="form__label h3">{{ option.name }}</legend>
+                        <legend class="form__label h4">{{ option.name }}</legend>
                         {%- for value in option.values -%}
                           <input
                             type="radio"
@@ -1093,6 +1093,11 @@
           "label": "Front bottom right product"
         }
       ]
+    },
+    {
+      "type": "customiser",
+      "name": "Customiser",
+      "limit": 1
     }
   ],
   "settings": [

@@ -7,8 +7,10 @@
   class="featured-links swiper--overflow-hidden color-{{ section.settings.color_scheme }} align-{{ section.settings.align }}"
 >
   <div class="featured-links__header page-width">
-    <h2 class="outlined">{{ section.settings.heading_1 }}</h2>
-    <h2>{{ section.settings.heading_2 }}</h2>
+    <h2 class="{% if section.settings.color_scheme == 'black' %}text-color-light{% else %}text-color-dark{% endif %}">
+       <span class="outlined">{{ section.settings.heading_1 }}</span><br>
+      {{ section.settings.heading_2 }}
+    </h2>
     <a
       {% if section.settings.button_link_1 == blank %}
         role="link" aria-disabled="true"

@@ -11,6 +11,7 @@
     "/component-collection-hero.css": "/component-collection-hero.css",
     "/component-card.css": "/component-card.css",
     "/component-accordion.css": "/component-accordion.css",
+    "/theme-base.css": "/theme-base.css",
     "/section-rich-text.css": "/section-rich-text.css",
     "/section-product-grid.css": "/section-product-grid.css",
     "/section-newsletter.css": "/section-newsletter.css",
@@ -23,6 +24,5 @@
     "/component-swiper.css": "/component-swiper.css",
     "/component-sidebar-menu.css": "/component-sidebar-menu.css",
     "/component-price.css": "/component-price.css",
-    "/component-pagination.css": "/component-pagination.css",
-    "/theme-base.css": "/theme-base.css"
+    "/component-pagination.css": "/component-pagination.css"
 }

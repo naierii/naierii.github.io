@@ -1,0 +1,22 @@
+@use '~sass-rem' as *;
+@use '~sass-mq/mq' as *;
+
+.content-for-layout {
+    .shopify-section {
+        margin-bottom: var(--grid-vertical-spacing);
+    }
+}
+
+.page-width {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+
+    @include mq($from: tablet) {
+        padding: 0 5rem;
+    }
+}
+
+.page-padding {
+    padding-top: rem(90px);
+}

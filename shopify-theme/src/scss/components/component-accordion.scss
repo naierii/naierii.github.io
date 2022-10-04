@@ -1,0 +1,55 @@
+@use '~sass-rem' as *;
+
+@import '../variables';
+
+.accordion {
+    margin: 0;
+    padding: rem(30px) 0;
+    border-top: 1px solid $midGrey;
+
+    &:last-of-type {
+        border-bottom: 1px solid $midGrey;
+    }
+
+    .summary {
+        display: flex;
+        align-items: center;
+    }
+
+    .details[collapse] > .summary {
+        cursor: pointer;
+    }
+
+    .summary__title {
+        flex: 1;
+
+        > * {
+            margin-bottom: 0;
+        }
+
+        + .icon-chevron {
+            height: calc(var(--font-heading-scale) * 0.6rem);
+            width: rem(16px);
+            margin-left: rem(20px);
+            transform: rotate(90deg);
+            transition: transform 0.2s ease-out;
+        }
+    }
+
+    .details[open] > .summary .icon-chevron {
+        transform: rotate(-90deg);
+    }
+
+    &__content {
+        color: $darkGrey;
+
+        .details[open] & {
+            padding-top: rem(20px);
+        }
+        .details[collapse] & {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.2s ease-out;
+        }
+    }
+}

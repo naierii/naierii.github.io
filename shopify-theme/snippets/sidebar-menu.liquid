@@ -1,0 +1,52 @@
+{% comment %}
+  Renders an sidebar menu.
+
+  Accepts:
+  - id: {String} Unique ID for menu
+  - menu: {Object} Menu object
+  - collapse: {Boolean} Menu should be collapsable Default: true (optional)
+  - show_title: {Boolean} Menu should be collapsable Default: true (optional)
+
+  Usage:
+  {% render 'sidebar-menu' menu: menu %}
+{% endcomment %}
+
+{{ 'component-sidebar-menu.css' | asset_url | stylesheet_tag }}
+{{ 'component-accordion.css' | asset_url | stylesheet_tag }}
+<div class="sidebar-menu accordion">
+  <div
+    id="Details-{{ id }}"
+    class="details"
+    {% unless collapse == false %}
+      collapse
+    {% endunless %}
+    {% if collapse == false %}
+      open
+    {% endif %}
+  >
+    {% unless show_title == false %}
+      <div class="summary">
+        <div class="summary__title">
+          <h4>{{ menu.title }}</h4>
+        </div>
+        {% unless collapse == false %}
+          {% render 'icon-chevron' -%}
+        {%- endunless %}
+      </div>
+    {% endunless %}
+    <div class="accordion__content" id="SidebarMenuAccordian-{{ id }}">
+      <ul class="sidebar-menu__menu">
+        {% for link in menu.links %}
+          <li>
+            <a
+              class="sidebar-menu__item {% if link.current %} sidebar-menu__item--active{% endif %}{% if menu.links.size == 1 and show_title == false %} sidebar-menu__item--large{% endif %}"
+              href="{{ link.url }}"
+            >
+              {{- link.title -}}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>

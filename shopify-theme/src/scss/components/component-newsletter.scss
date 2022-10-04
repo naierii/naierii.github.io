@@ -1,0 +1,18 @@
+@use '~sass-rem' as *;
+
+@import '../variables';
+
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    position: relative;
+    margin-top: 1rem;
+
+    .field {
+        gap: rem(30px);
+        align-items: center;
+    }
+}

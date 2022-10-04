@@ -1,0 +1,72 @@
+@use 'mq-settings';
+@use '~sass-mq/mq';
+
+@import './variables';
+@import './helpers';
+@import './root';
+@import 'hamburgers-settings';
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+html {
+    box-sizing: border-box;
+    height: 100%;
+}
+
+body {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-columns: 100%;
+    min-height: 100%;
+    margin: 0;
+    line-height: 1.5;
+    font-family: $defaultFont;
+}
+
+.ratio {
+    display: flex;
+    position: relative;
+    align-items: stretch;
+}
+
+.ratio::before {
+    content: '';
+    width: 0;
+    height: 0;
+    padding-bottom: var(--ratio-percent);
+}
+
+.visually-hidden {
+    position: absolute !important;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    clip: rect(0 0 0 0);
+    word-wrap: normal !important;
+}
+
+.visually-hidden--inline {
+    margin: 0;
+    height: 1em;
+}
+
+.full-unstyled-link {
+    text-decoration: none;
+    color: currentColor;
+    display: block;
+}
+
+@import 'hamburgers/hamburgers';
+@import './header';
+@import './typography';
+@import './buttons';
+@import './form';
+@import './grid';
+@import './layout';

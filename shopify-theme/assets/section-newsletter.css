@@ -1,0 +1,24 @@
+.newsletter {
+  background-color: #fcd02f;
+  position: relative;
+  padding-top: 2.5rem;
+  margin-top: 2.5rem;
+}
+.newsletter p {
+  color: #000000;
+}
+.newsletter::before {
+  content: "";
+  position: absolute;
+  top: -2.4375rem;
+  left: 0;
+  width: 100%;
+  height: 2.5rem;
+  background-color: #fcd02f;
+  -webkit-clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+          clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+}
+.newsletter__wrapper {
+  padding-top: 3.125rem;
+  padding-bottom: 5rem;
+}

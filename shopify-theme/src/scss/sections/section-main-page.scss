@@ -1,0 +1,30 @@
+@use '~sass-rem' as *;
+@use '~sass-mq/mq' as *;
+
+@import '../variables';
+
+.page-title {
+    margin-top: 0;
+}
+
+.page-content {
+    max-width: var(--page-width-narrow);
+}
+
+.main-page-title {
+    padding-top: rem(62px);
+    padding-bottom: rem(47px);
+    margin-bottom: rem(50px);
+    border-top: 1px solid $midGrey;
+    border-bottom: 1px solid $midGrey;
+}
+
+.page-placeholder-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.page-placeholder {
+    width: 52.5rem;
+    height: 52.5rem;
+}

@@ -1,0 +1,36 @@
+@use '~sass-rem' as *;
+
+.button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+    text-decoration: none;
+    appearance: none;
+    cursor: pointer;
+    padding: rem(13px) rem(20px) rem(7px);
+    color: $white;
+    transform: skewX(-5deg);
+    background-color: $black;
+    font-family: $displayFont;
+    font-size: rem(28px);
+    font-weight: 900;
+    line-height: 1;
+
+    span {
+        transform: skewX(5deg);
+    }
+
+    &--color-red {
+        background-color: $red;
+    }
+
+    &:disabled {
+        opacity: 0.25;
+    }
+}
+
+.button--straight {
+    @extend .button;
+    transform: none;
+}

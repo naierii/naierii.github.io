@@ -1,0 +1,37 @@
+.footer {
+  background-color: #000000;
+  color: #fff;
+}
+.footer p,
+.footer a {
+  color: #fff;
+}
+.footer a {
+  text-decoration: none;
+}
+.footer__content-top {
+  padding-top: 6.875rem;
+  padding-bottom: 7.5rem;
+}
+.footer__logo svg {
+  fill: #fff;
+  max-width: 7.125rem;
+  margin-top: -2.1875rem;
+}
+
+.footer-block {
+  text-align: center;
+}
+.footer-block__heading {
+  font-size: 1.75rem;
+  margin-bottom: 1.125rem;
+}
+.footer-block__details-content a,
+.footer-block__details-content p {
+  font-size: 1rem;
+}
+@media (min-width: 46.25em) {
+  .footer-block {
+    text-align: left;
+  }
+}

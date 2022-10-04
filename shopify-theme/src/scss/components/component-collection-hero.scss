@@ -1,0 +1,55 @@
+@use '~sass-rem' as *;
+@use '~sass-mq/mq' as *;
+
+@import '../variables';
+@import '../helpers';
+
+.collection-hero {
+    position: relative;
+    padding: rem(80px) 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__box {
+        text-align: center;
+    }
+
+    &__title {
+        margin: 0;
+    }
+
+    &__content {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+    }
+
+    &__heading {
+        margin-bottom: 0;
+        @include fluidType(rem(48px), rem(72px));
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: rem(40px);
+        background-color: $white;
+        clip-path: polygon(0 0, 0% 100%, 100% 100%);
+    }
+
+    &.color-red {
+        background-color: $red;
+    }
+
+    &.color-yellow {
+        background-color: $yellow;
+    }
+
+    &.color-black {
+        background-color: $black;
+    }
+}

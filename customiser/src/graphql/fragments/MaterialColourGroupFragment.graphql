@@ -1,0 +1,7 @@
+fragment MaterialColourGroupFragment on MaterialColourGroupEntity {
+  id
+  attributes {
+    name
+    colour
+  }
+}

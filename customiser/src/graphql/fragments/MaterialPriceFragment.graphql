@@ -1,0 +1,8 @@
+fragment MaterialPriceFragment on MaterialPriceEntity {
+  id
+  attributes {
+    name
+    price
+    sku
+  }
+}

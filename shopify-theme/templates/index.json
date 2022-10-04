@@ -1,0 +1,164 @@
+{
+  "sections": {
+    "image_banner": {
+      "type": "image-banner",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Fierce Fightwear",
+            "heading_style": "solid"
+          }
+        },
+        "b801cd2a-bf5c-4427-8ec6-ee0d8a781d8d": {
+          "type": "heading",
+          "settings": {
+            "heading": "Designed By You",
+            "heading_style": "outlined"
+          }
+        },
+        "41f86f60-970a-41a9-b29d-ecd1f93aadef": {
+          "type": "button",
+          "settings": {
+            "button_label_1": "Start Designing",
+            "button_link_1": "shopify:\/\/collections\/all"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "b801cd2a-bf5c-4427-8ec6-ee0d8a781d8d",
+        "41f86f60-970a-41a9-b29d-ecd1f93aadef"
+      ],
+      "settings": {
+        "color_scheme": "yellow",
+        "image": "shopify:\/\/shop_images\/MAX2595.jpg",
+        "image_vertical_align_desktop": "top",
+        "image_horizontal_align_desktop": "center",
+        "image_vertical_align_mobile": "center",
+        "image_horizontal_align_mobile": "center",
+        "text_color": "light",
+        "is_header": true
+      }
+    },
+    "rich_text": {
+      "type": "rich-text",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "<p>THE FIRST CHOICE FOR CUSTOM FIGHTWEAR<\/p>",
+            "heading_size": "h2"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Boxxerworld’s unique customising technology burst onto the scene in 2014, allowing easy and affordable do-it-yourself design for the first time. <\/p><p>Get personalised boxing shorts, Muay Thai shorts and custom fight wear anywhere in the world in record time. With speed and quality our top priorities, we have quickly become the first choice for custom fight-wear.<\/p>",
+            "text_size": "large"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "text"
+      ],
+      "settings": {
+        "content_alignment": "center",
+        "full_width": false,
+        "padding_bottom": false
+      }
+    },
+    "166357534769765602": {
+      "type": "customiser-steps",
+      "blocks": {
+        "16635753471253b4e8-0": {
+          "type": "step",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/blue.png",
+            "title": "Step 1",
+            "instructions": "Instructions"
+          }
+        },
+        "16635753471253b4e8-1": {
+          "type": "step",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/blue.png",
+            "title": "Step 2",
+            "instructions": "instructions"
+          }
+        },
+        "16635753471253b4e8-2": {
+          "type": "step",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/blue.png",
+            "title": "Step 3",
+            "instructions": "instructions"
+          }
+        }
+      },
+      "block_order": [
+        "16635753471253b4e8-0",
+        "16635753471253b4e8-1",
+        "16635753471253b4e8-2"
+      ],
+      "settings": {
+        "heading_1": "Take a look at",
+        "heading_2": "our customiser",
+        "button_label_1": "Customise now",
+        "button_link_1": "shopify:\/\/collections\/frontpage"
+      }
+    },
+    "166367467472332475": {
+      "type": "featured-links",
+      "blocks": {
+        "16636746748bdfcb68-0": {
+          "type": "link",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/blue.png",
+            "title": "SHORTS AND TRUNKS",
+            "subtitle": "MUAY THAI, BOXING AND GLADIATOR",
+            "link": "shopify:\/\/collections\/ready-made-shorts"
+          }
+        },
+        "16636746748bdfcb68-1": {
+          "type": "link",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/blue.png",
+            "title": "GLOVES, PADS AND GUARDS",
+            "subtitle": "BAG, TRAINING AND COMPETITION",
+            "link": "shopify:\/\/collections\/ready-made"
+          }
+        },
+        "16636746748bdfcb68-2": {
+          "type": "link",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/blue.png",
+            "title": "TRAINING AND CLUB WEAR",
+            "subtitle": "SOLO AND TEAM KITS",
+            "link": "shopify:\/\/collections\/ready-made"
+          }
+        }
+      },
+      "block_order": [
+        "16636746748bdfcb68-0",
+        "16636746748bdfcb68-1",
+        "16636746748bdfcb68-2"
+      ],
+      "settings": {
+        "heading_1": "Don't have time?",
+        "heading_2": "Shop ready made",
+        "button_label_1": "Shop now",
+        "button_link_1": "shopify:\/\/collections\/ready-made",
+        "color_scheme": "black",
+        "align": "right"
+      }
+    }
+  },
+  "order": [
+    "image_banner",
+    "rich_text",
+    "166357534769765602",
+    "166367467472332475"
+  ]
+}

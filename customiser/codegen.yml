@@ -1,0 +1,15 @@
+overwrite: true
+schema: "http://localhost:1337/graphql"
+documents: "./src/graphql/**/*.graphql"
+generates:
+  ./src/graphql/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-query
+    config:
+      pureMagicComment: true
+      fetcher: graphql-request
+      exposeFetcher: true
+      exposeQueryKeys: true
+      dedupeFragments: true

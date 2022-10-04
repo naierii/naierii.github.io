@@ -1,0 +1,51 @@
+@use '~sass-rem' as *;
+@use '~sass-mq/mq' as *;
+
+@import '../variables';
+
+.footer {
+    background-color: $black;
+    color: $white;
+
+    p,
+    a {
+        color: $white;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    &__content-top {
+        padding-top: rem(110px);
+        padding-bottom: rem(120px);
+    }
+
+    &__logo {
+        svg {
+            fill: $white;
+            max-width: rem(114px);
+            margin-top: rem(-35px);
+        }
+    }
+}
+
+.footer-block {
+    text-align: center;
+
+    &__heading {
+        font-size: rem(28px);
+        margin-bottom: rem(18px);
+    }
+
+    &__details-content {
+        a,
+        p {
+            font-size: rem(16px);
+        }
+    }
+
+    @include mq($from: tablet) {
+        text-align: left;
+    }
+}

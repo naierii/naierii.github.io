@@ -1,0 +1,42 @@
+fragment CustomProductFragment on CustomProductEntityResponse {
+  data {
+    id
+    attributes {
+      name
+      shopifyProductId
+      initPrice
+      initSku
+      options {
+        id
+        name
+        models {
+          id
+          model {
+            data {
+              ...ModelFragment
+            }
+          }
+        }
+      }
+      parts {
+        id
+        name
+        areaSize {
+          data {
+            ...MaterialAreaSizeFragment
+          }
+        }
+        materialGroup {
+          data {
+            ...MaterialGroupFragment
+          }
+        }
+        modelParts {
+          data {
+            ...ModelPartFragment
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,72 @@
+@use '~sass-rem' as *;
+
+.text-area,
+.select {
+    display: flex;
+    position: relative;
+    width: 100%;
+    align-items: center;
+}
+
+.field__input,
+.select__select,
+.customer .field input,
+.customer select {
+    appearance: none;
+    background-color: $white;
+    color: $black;
+    font-size: rem(24px);
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 0;
+    height: rem(53px);
+    position: relative;
+    border: 0;
+    padding: rem(16px);
+
+    &--display {
+        font-family: $displayFont;
+        padding: rem(20px) rem(16px) rem(12px);
+    }
+
+    &--border {
+        border: 1px solid $midGrey;
+    }
+}
+
+/* Select */
+
+.select .icon-chevron,
+.customer select + svg {
+    height: rem(16px);
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+}
+
+.select {
+    .icon-chevron {
+        transform: rotate(90deg);
+    }
+
+    &--border {
+        border: 1px solid $midGrey;
+        padding: rem(20px) rem(16px) rem(12px);
+
+        .icon-chevron {
+            right: rem(16px);
+        }
+    }
+
+    &__select {
+        padding: 0;
+        line-height: 1;
+        margin-top: 5px;
+    }
+}
+
+.select__select,
+.customer select {
+    cursor: pointer;
+    font-family: $displayFont;
+}

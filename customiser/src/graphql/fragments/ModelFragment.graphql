@@ -1,0 +1,16 @@
+fragment ModelFragment on ModelEntity {
+  id
+  attributes {
+    name
+    model {
+      data {
+        ...FileFragment
+      }
+    }
+    parts {
+      data {
+        ...ModelPartFragment
+      }
+    }
+  }
+}

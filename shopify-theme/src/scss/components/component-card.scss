@@ -1,0 +1,43 @@
+@use '~sass-rem' as *;
+
+@import '../variables';
+
+.card {
+    color: inherit;
+
+    .media {
+        padding-bottom: 100%;
+        margin-bottom: rem(23px);
+
+        img {
+            transition: transform 0.2s ease-in-out;
+        }
+    }
+
+    &__content {
+        h3,
+        h4 {
+            margin: 0;
+        }
+
+        h4 {
+            color: $red;
+        }
+    }
+
+    &__heading {
+        color: $black;
+    }
+
+    .card-information {
+        color: $grey;
+    }
+
+    &:hover {
+        .media {
+            img {
+                transform: scale(1.1);
+            }
+        }
+    }
+}

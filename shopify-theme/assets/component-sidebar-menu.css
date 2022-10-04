@@ -1,0 +1,28 @@
+.sidebar-menu {
+  padding: 1.25rem 0;
+  border-top: 1px solid #dddddd;
+}
+.sidebar-menu__menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  padding-top: 0.9375rem;
+}
+.sidebar-menu__item {
+  display: block;
+  font-family: bebas-neue-by-fontfabric, sans-serif;
+  color: #696969;
+  text-decoration: none;
+  font-size: 1.375rem;
+  font-weight: 900;
+  line-height: 1;
+}
+.sidebar-menu__item--active, .sidebar-menu__item:hover {
+  color: #cc0101;
+}
+.sidebar-menu__item--large {
+  font-size: 1.75rem;
+}
+.sidebar-menu .details[open] .accordion__content {
+  padding-top: 0;
+}

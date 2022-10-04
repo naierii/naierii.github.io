@@ -1,0 +1,64 @@
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "settings": {
+        "color_scheme": "yellow"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "blocks": {
+        "620283da-d41d-4692-8612-3c98b525c897": {
+          "type": "link_list",
+          "settings": {
+            "menu": "custom-fightwear-all",
+            "show_title": false,
+            "collapse": false
+          }
+        },
+        "52cc8fad-c873-43d9-adce-2973f275b52c": {
+          "type": "link_list",
+          "settings": {
+            "menu": "custom-fightwear",
+            "show_title": true,
+            "collapse": false
+          }
+        },
+        "5597f1fa-a65b-48fb-b1a0-c7eb5e210f08": {
+          "type": "link_list",
+          "settings": {
+            "menu": "custom-equipment",
+            "show_title": true,
+            "collapse": false
+          }
+        },
+        "5b6aa3c1-41ea-4484-812e-75e54dcc6c8c": {
+          "type": "link_list",
+          "settings": {
+            "menu": "",
+            "show_title": true,
+            "collapse": true
+          }
+        }
+      },
+      "block_order": [
+        "620283da-d41d-4692-8612-3c98b525c897",
+        "52cc8fad-c873-43d9-adce-2973f275b52c",
+        "5597f1fa-a65b-48fb-b1a0-c7eb5e210f08",
+        "5b6aa3c1-41ea-4484-812e-75e54dcc6c8c"
+      ],
+      "settings": {
+        "products_per_page": 24,
+        "custom": true,
+        "enable_quick_add": false,
+        "enable_filtering": false,
+        "enable_sorting": true
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "product-grid"
+  ]
+}

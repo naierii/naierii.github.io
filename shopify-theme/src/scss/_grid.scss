@@ -1,0 +1,112 @@
+@use '~sass-mq/mq' as *;
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    padding: 0;
+    list-style: none;
+    column-gap: var(--grid-horizontal-spacing);
+    row-gap: var(--grid-vertical-spacing);
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &__item {
+        width: calc(25% - var(--grid-horizontal-spacing) * 3 / 4);
+        max-width: calc(50% - var(--grid-horizontal-spacing) / 2);
+        flex-grow: 1;
+        flex-shrink: 0;
+
+        .grid--1-col & {
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .grid--2-col & {
+            width: calc(50% - var(--grid-horizontal-spacing) / 2);
+        }
+
+        .grid--3-col & {
+            width: calc(33.33% - var(--grid-horizontal-spacing) * 2 / 3);
+        }
+
+        .grid--4-col-tablet & {
+            @include mq($from: tablet) {
+                width: calc(25% - var(--grid-horizontal-spacing) * 3 / 4);
+            }
+        }
+
+        .grid--3-col-tablet & {
+            @include mq($from: tablet) {
+                width: calc(33.33% - var(--grid-horizontal-spacing) * 2 / 3);
+            }
+        }
+
+        .grid--2-col-tablet & {
+            @include mq($from: tablet) {
+                width: calc(50% - var(--grid-horizontal-spacing) / 2);
+            }
+        }
+
+        .grid--6-col-desktop & {
+            @include mq($from: desktop) {
+                width: calc(16.66% - var(--grid-horizontal-spacing) * 5 / 6);
+                max-width: calc(
+                    16.66% - var(--grid-horizontal-spacing) * 5 / 6
+                );
+            }
+        }
+
+        .grid--5-col-desktop & {
+            @include mq($from: desktop) {
+                width: calc(20% - var(--grid-horizontal-spacing) * 4 / 5);
+                max-width: calc(20% - var(--grid-horizontal-spacing) * 4 / 5);
+            }
+        }
+
+        .grid--4-col-desktop & {
+            @include mq($from: desktop) {
+                width: calc(25% - var(--grid-horizontal-spacing) * 3 / 4);
+                max-width: calc(25% - var(--grid-horizontal-spacing) * 3 / 4);
+            }
+        }
+
+        .grid--3-col-desktop & {
+            @include mq($from: desktop) {
+                width: calc(33.33% - var(--grid-horizontal-spacing) * 2 / 3);
+                max-width: calc(
+                    33.33% - var(--grid-horizontal-spacing) * 2 / 3
+                );
+            }
+        }
+
+        .grid--2-col-desktop & {
+            @include mq($from: desktop) {
+                width: calc(50% - var(--grid-horizontal-spacing) / 2);
+                max-width: calc(50% - var(--grid-horizontal-spacing) / 2);
+            }
+        }
+
+        .grid--1-col-desktop {
+            @include mq($from: desktop) {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+
+        .grid--1-col-desktop & {
+            @include mq($from: desktop) {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+    }
+
+    &--gapless.grid {
+        column-gap: 0;
+        row-gap: 0;
+    }
+}

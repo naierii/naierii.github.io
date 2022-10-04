@@ -1,0 +1,38 @@
+@use '~sass-rem' as *;
+
+@import '../variables';
+
+.sidebar-menu {
+    padding: rem(20px) 0;
+    border-top: 1px solid $midGrey;
+
+    &__menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        padding-top: rem(15px);
+    }
+
+    &__item {
+        display: block;
+        font-family: $displayFont;
+        color: $darkGrey;
+        text-decoration: none;
+        font-size: rem(22px);
+        font-weight: 900;
+        line-height: 1;
+
+        &--active,
+        &:hover {
+            color: $red;
+        }
+
+        &--large {
+            font-size: rem(28px);
+        }
+    }
+
+    .details[open] .accordion__content {
+        padding-top: 0;
+    }
+}

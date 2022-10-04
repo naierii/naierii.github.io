@@ -1,0 +1,19 @@
+.product-grid {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2.5rem;
+}
+@media (min-width: 46.25em) {
+  .product-grid {
+    flex-direction: row;
+  }
+}
+@media (min-width: 46.25em) {
+  .product-grid__sidebar {
+    min-width: 15.625rem;
+    margin-right: 3.4375rem;
+  }
+}
+.product-grid__container {
+  width: 100%;
+}

@@ -1,0 +1,5 @@
+query GetCustomProductByShopifyId($id: String!) {
+  customProductByShopifyId(id: $id) {
+    ...CustomProductFragment
+  }
+}

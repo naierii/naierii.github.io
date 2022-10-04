@@ -1,0 +1,13 @@
+fragment ImageFragment on UploadFileEntity {
+  id
+  attributes {
+    url
+    size
+    width
+    height
+    ext
+    mime
+    name
+    formats
+  }
+}

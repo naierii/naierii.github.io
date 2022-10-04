@@ -1,0 +1,11 @@
+fragment MaterialGroupFragment on MaterialGroupEntity {
+  id
+  attributes {
+    name
+    materialTypes {
+      data {
+        ...MaterialTypeFragment
+      }
+    }
+  }
+}

@@ -1,0 +1,94 @@
+@use '~sass-rem' as *;
+
+@for $index from 1 through 6 {
+    h#{$index},
+    .h#{$index} {
+        font-family: $displayFont;
+        font-weight: 900;
+        padding-top: rem(5px);
+        margin-top: rem(-5px);
+        line-height: 1;
+        margin-bottom: 1rem;
+        word-break: break-word;
+        -webkit-text-stroke-width: 0;
+
+        .outlined {
+            color: transparent;
+            -webkit-text-stroke-width: 2px;
+        }
+
+        &.text-color-light {
+            color: $white;
+            text-shadow: 0 rem(3px) rem(20px) $black;
+
+            .outlined {
+                -webkit-text-stroke-color: $white;
+            }
+        }
+
+        &.text-color-dark {
+            color: $black;
+
+            .outlined {
+                -webkit-text-stroke-color: $black;
+            }
+        }
+    }
+}
+
+h1,
+.h1 {
+    @include fluidType(rem(48px), rem(72px));
+}
+
+h2,
+.h2 {
+    @include fluidType(rem(36px), rem(45px));
+}
+
+h3,
+.h3 {
+    font-size: rem(35px);
+}
+
+h4,
+.h4 {
+    font-size: rem(28px);
+}
+
+p {
+    color: $darkGrey;
+
+    .text--large & {
+        @include fluidType(rem(18px), rem(22px));
+    }
+}
+
+ul,
+ol {
+    li {
+        color: $darkGrey;
+    }
+}
+
+a {
+    > * + * {
+        text-decoration: none;
+    }
+}
+
+.link,
+.customer a {
+    cursor: pointer;
+    display: inline-block;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    color: $black;
+    font-size: 1.4rem;
+    font-family: inherit;
+}
+
+.link--text {
+    color: $black;
+}

@@ -1,0 +1,29 @@
+fragment MaterialFragment on MaterialEntity {
+  id
+  attributes {
+    name
+    type {
+      data {
+        ...MaterialTypeFragment
+      }
+    }
+    colourGroups {
+      data {
+        ...MaterialColourGroupFragment
+      }
+    }
+    price {
+      data {
+        ...MaterialPriceFragment
+      }
+    }
+    images {
+      mapType
+      image {
+        data {
+          ...ImageFragment
+        }
+      }
+    }
+  }
+}

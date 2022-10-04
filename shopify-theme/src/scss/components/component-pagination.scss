@@ -1,0 +1,87 @@
+@use '~sass-rem' as *;
+@use '~sass-mq/mq' as *;
+
+@import '../variables';
+@import '../helpers';
+
+.pagination-wrapper {
+    margin-top: 4rem;
+}
+
+.pagination {
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+
+        > li {
+            flex: 1 0 rem(30px);
+            max-width: rem(30px);
+
+            &:first-child {
+                margin-right: auto;
+            }
+
+            &:last-child {
+                margin-left: auto;
+            }
+        }
+    }
+
+    &__item {
+        color: $black;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        width: 100%;
+        padding: 0;
+        text-decoration: none;
+        font-size: rem(32px);
+        font-family: $displayFont;
+        font-weight: 900;
+
+        .icon-chevron {
+            height: rem(27px);
+        }
+
+        &--current {
+            color: $red;
+        }
+
+        &--disabled {
+            cursor: not-allowed;
+
+            svg {
+                opacity: 0.6;
+            }
+        }
+
+        &--next {
+            .icon {
+                margin-left: -0.2rem;
+                transform: rotate(-180deg);
+            }
+
+            &:hover {
+                .icon {
+                    transform: rotate(-180deg) scale(1.07);
+                }
+            }
+        }
+
+        &--prev {
+            .icon {
+                margin-right: -0.2rem;
+                transform: rotate(0deg);
+            }
+
+            &:hover {
+                .icon {
+                    transform: rotate(0deg) scale(1.07);
+                }
+            }
+        }
+    }
+}

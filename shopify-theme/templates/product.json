@@ -1,0 +1,91 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true
+          }
+        },
+        "5b64ed76-0a77-4593-9a25-ee146c7b9793": {
+          "type": "size_details",
+          "settings": {
+            "title": "Size details",
+            "description": "<p>To help us make sure the size you’ve selected is correct, enter your height and weight below.<\/p>",
+            "height": "Height",
+            "weight": "Weight"
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button"
+          }
+        },
+        "6de7734b-7ef8-4acf-bd9a-b12dddcba18a": {
+          "type": "customiser_text",
+          "settings": {
+            "title": "Add text",
+            "front_waist": "Front waist band",
+            "front_waist_product": "front-waist-band",
+            "back_waist": "Back waist band",
+            "back_waist_product": "back-waist-band",
+            "front_bottom_left": "Front bottom left",
+            "front_bottom_left_product": "front-bottom-left",
+            "front_bottom_right": "Front bottom right",
+            "front_bottom_right_product": "front-bottom-right"
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+          }
+        },
+        "collapsible-row-1": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping & Returns",
+            "icon": "truck",
+            "content": "",
+            "page": "shipping-returns"
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "price",
+        "quantity_selector",
+        "buy_buttons",
+        "5b64ed76-0a77-4593-9a25-ee146c7b9793",
+        "variant_picker",
+        "6de7734b-7ef8-4acf-bd9a-b12dddcba18a",
+        "description",
+        "collapsible-row-1"
+      ],
+      "settings": {
+        "media_size": "large",
+        "hide_variants": false
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

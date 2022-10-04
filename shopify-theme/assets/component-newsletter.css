@@ -1,0 +1,13 @@
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  position: relative;
+  margin-top: 1rem;
+}
+.newsletter-form .field {
+  gap: 1.875rem;
+  align-items: center;
+}

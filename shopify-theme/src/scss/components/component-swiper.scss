@@ -1,0 +1,44 @@
+@use '~sass-rem' as *;
+
+@import '~swiper/scss';
+@import '~swiper/scss/navigation';
+
+:root {
+    --swiper-navigation-size: 30px;
+}
+
+.swiper {
+    &--overflow-hidden {
+        overflow: hidden;
+    }
+
+    &--overflow-visible {
+        overflow: visible;
+    }
+}
+
+.swiper-button-wrapper {
+    display: flex;
+    gap: 10px;
+    margin-top: rem(24px);
+
+    .swiper-button-prev,
+    .swiper-button-next {
+        position: static;
+        margin-top: 0;
+        width: calc(var(--swiper-navigation-size) / 30 * 18);
+        height: var(--swiper-navigation-size);
+
+        &:after {
+            display: none;
+        }
+    }
+
+    .swiper-button-prev {
+        transform: rotate(180deg);
+    }
+}
+
+.swiper-button-wrapper-locked {
+    display: none;
+}

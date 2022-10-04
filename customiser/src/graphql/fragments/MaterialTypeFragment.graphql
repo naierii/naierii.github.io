@@ -1,0 +1,6 @@
+fragment MaterialTypeFragment on MaterialTypeEntity {
+  id
+  attributes {
+    name
+  }
+}

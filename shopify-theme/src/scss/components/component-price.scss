@@ -1,0 +1,99 @@
+@use '~sass-rem' as *;
+@use '~sass-mq/mq' as *;
+
+@import '../variables';
+@import '../helpers';
+
+.price {
+    text-transform: uppercase;
+    font-size: rem(18px);
+    color: $darkGrey;
+    font-weight: bold;
+    line-height: 1;
+
+    > * {
+        display: inline-block;
+        vertical-align: top;
+    }
+    .price-item {
+        margin: 0 1rem 0 0;
+    }
+    &:not(.price--show-badge) {
+        .price-item--last {
+            &:last-of-type {
+                margin: 0;
+            }
+        }
+    }
+    .price__badge-sale {
+        display: none;
+    }
+    .price__badge-sold-out {
+        display: none;
+    }
+
+    &--large {
+        font-size: rem(28px);
+    }
+}
+.price.price--unavailable {
+    visibility: hidden;
+}
+.price--end {
+    text-align: right;
+}
+.price__regular {
+    .price-item--regular {
+        margin-right: 0;
+    }
+    display: block;
+}
+
+.price--sold-out {
+    .price__availability {
+        display: block;
+    }
+    .price__badge-sold-out {
+        display: inline-block;
+    }
+}
+.price__sale {
+    display: none;
+}
+.price__availability {
+    display: none;
+}
+.price--on-sale {
+    .price__regular {
+        display: none;
+    }
+    .price__availability {
+        display: none;
+    }
+    .price__badge-sale {
+        display: inline-block;
+    }
+    .price__sale {
+        display: initial;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .price-item--regular {
+        text-decoration: line-through;
+        color: rgba(var(--color-foreground), 0.75);
+        font-size: 1.3rem;
+    }
+}
+.price--center {
+    display: initial;
+    justify-content: center;
+}
+.unit-price {
+    display: block;
+    font-size: 1.1rem;
+    letter-spacing: 0.04rem;
+    line-height: calc(1 + 0.2 / var(--font-body-scale));
+    margin-top: 0.2rem;
+    text-transform: uppercase;
+    color: rgba(var(--color-foreground), 0.7);
+}

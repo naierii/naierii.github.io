@@ -1,0 +1,48 @@
+@use '~sass-rem' as *;
+@use '~sass-mq/mq' as *;
+
+@import '../variables';
+@import '../helpers';
+
+.customiser-steps {
+    position: relative;
+
+    &__header,
+    &__content {
+        position: relative;
+    }
+
+    &__header {
+        padding-top: rem(143px);
+        padding-bottom: rem(60px);
+
+        @include mq($from: tablet) {
+            padding-top: rem(300px);
+            padding-bottom: rem(100px);
+        }
+
+        h2 {
+            margin-bottom: 0;
+            @include fluidType(rem(48px), rem(72px));
+        }
+
+        .button {
+            margin-top: rem(30px);
+        }
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: $yellow;
+        clip-path: polygon(0 0, 100% 15%, 100% 65%, 0 80%);
+
+        @include mq($from: tablet) {
+            clip-path: polygon(0 0, 100% 35%, 100% 55%, 0 90%);
+        }
+    }
+}

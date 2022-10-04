@@ -1,0 +1,282 @@
+@use '~sass-rem' as *;
+@use '~sass-mq/mq' as *;
+
+.header-wrapper {
+    display: block;
+    position: relative;
+}
+
+.header {
+    background: $black;
+    height: rem(82px);
+
+    @include mq($from: tabletLandscape) {
+        height: rem(122px);
+        background: linear-gradient(
+            to bottom,
+            $black 0,
+            $black 42px,
+            $white 42px,
+            $white 100%
+        );
+    }
+
+    *[tabindex='-1']:focus {
+        outline: none;
+    }
+
+    &__inner {
+        display: grid;
+        gap: 0px 0px;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: rem(82px);
+        grid-template-areas: 'hamburger logo top-icon';
+        align-items: center;
+
+        @include mq($from: tabletLandscape) {
+            grid-template-columns: 1fr 3fr;
+            grid-template-rows: rem(42px) rem(80px);
+            grid-template-areas:
+                'logo top-icon'
+                'logo menu';
+        }
+    }
+
+    &__heading {
+        margin: 0;
+        line-height: 0;
+    }
+
+    &__heading,
+    &__heading-link {
+        grid-area: logo;
+        justify-self: center;
+    }
+
+    &__heading-link {
+        line-height: 0;
+        display: block;
+        text-decoration: none;
+        word-break: break-word;
+        padding: rem(12px);
+
+        svg {
+            width: 100%;
+            max-width: rem(68px);
+            fill: $white;
+        }
+
+        @include mq($from: tabletLandscape) {
+            background-color: $white;
+            padding: rem(10px) rem(45px) rem(14px);
+            height: rem(122px);
+
+            svg {
+                max-width: none;
+                width: rem(115px);
+                fill: $black;
+            }
+        }
+    }
+
+    &__active-menu-item {
+        text-decoration: underline;
+        text-underline-offset: 0.3rem;
+    }
+
+    &__hamburger {
+        grid-area: hamburger;
+        justify-self: flex-start;
+        align-items: center;
+        display: flex;
+
+        @include mq($from: tabletLandscape) {
+            display: none;
+        }
+    }
+
+    &__menu {
+        position: fixed;
+        top: rem(82px);
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: $white;
+        padding: 1.5rem;
+        display: none;
+        flex-direction: column;
+
+        &.open {
+            display: flex;
+            animation-name: animateMenu;
+            animation-duration: 0.3s;
+            animation-timing-function: ease-in-out;
+        }
+
+        &.close {
+            animation-name: animateMenu;
+            animation-duration: 0.3s;
+            animation-timing-function: ease-in-out;
+            animation-direction: reverse;
+        }
+
+        @include mq($from: tabletLandscape) {
+            background-color: transparent;
+            position: static;
+            width: auto;
+            height: auto;
+            grid-area: menu;
+            justify-self: flex-end;
+            align-items: center;
+            display: flex;
+            padding: 0;
+            flex-direction: row;
+        }
+
+        .list-social {
+            margin-top: rem(21px);
+
+            &__link {
+                width: rem(30px);
+                height: rem(30px);
+                fill: $black;
+            }
+
+            @include mq($from: tabletLandscape) {
+                margin-top: 0;
+                margin-left: rem(21px);
+            }
+        }
+
+        &-item {
+            text-decoration: none;
+            padding: rem(20px) 0;
+            @include mq($from: tabletLandscape) {
+                padding: 0 rem(21px);
+            }
+        }
+    }
+
+    &__inline-menu {
+        @include mq($from: tabletLandscape) {
+            height: 100%;
+        }
+        ul,
+        a {
+            @include mq($from: tabletLandscape) {
+                height: 100%;
+            }
+        }
+
+        a {
+            font-size: rem(20px);
+            font-family: $displayFont;
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            line-height: rem(20px);
+        }
+
+        .list-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            &__item {
+                display: flex;
+                align-items: center;
+            }
+
+            &--inline {
+                display: inline-flex;
+                flex-wrap: wrap;
+                flex-direction: column;
+                width: 100%;
+
+                @include mq($from: tabletLandscape) {
+                    flex-direction: row;
+                    width: auto;
+                }
+
+                li {
+                    border-top: 1px solid $midGrey;
+
+                    &:last-child {
+                        border-bottom: 1px solid $midGrey;
+
+                        @include mq($from: tabletLandscape) {
+                            border: 0;
+                        }
+                    }
+
+                    @include mq($from: tabletLandscape) {
+                        border: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    &__icons {
+        grid-area: top-icon;
+        align-self: center;
+        justify-self: flex-end;
+        display: flex;
+        gap: rem(18px);
+
+        @include mq($from: tabletLandscape) {
+            gap: rem(40px);
+        }
+
+        svg {
+            height: rem(26px);
+            width: auto;
+            fill: $white;
+
+            @include mq($from: tabletLandscape) {
+                height: rem(19px);
+            }
+        }
+    }
+
+    &__icon {
+        position: relative;
+    }
+}
+
+/* component-cart-count-bubble */
+.cart-count-bubble:empty {
+    display: none;
+}
+
+.cart-count-bubble {
+    position: absolute;
+    background-color: $red;
+    color: $white;
+    height: 1rem;
+    width: 1rem;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.6rem;
+    bottom: 0.8rem;
+    left: 1.1rem;
+}
+
+@keyframes animateMenu {
+    0% {
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    }
+    25% {
+        clip-path: polygon(0 0, 100% 0, 100% 25%, 0 0);
+    }
+    50% {
+        clip-path: polygon(0 0, 100% 0, 100% 50%, 0 25%);
+    }
+    75% {
+        clip-path: polygon(0 0, 100% 0, 100% 75%, 0 50%);
+    }
+    100% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+}

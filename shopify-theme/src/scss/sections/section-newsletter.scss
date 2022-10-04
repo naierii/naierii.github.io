@@ -1,0 +1,30 @@
+@use '~sass-rem' as *;
+
+@import '../variables';
+
+.newsletter {
+    background-color: $yellow;
+    position: relative;
+    padding-top: rem(40px);
+    margin-top: rem(40px);
+
+    p {
+        color: $black;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: rem(-39px);
+        left: 0;
+        width: 100%;
+        height: rem(40px);
+        background-color: $yellow;
+        clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+    }
+
+    &__wrapper {
+        padding-top: rem(50px);
+        padding-bottom: rem(80px);
+    }
+}

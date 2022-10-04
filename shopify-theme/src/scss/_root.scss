@@ -1,0 +1,14 @@
+@use '~sass-mq/mq' as *;
+@use '~sass-rem' as *;
+
+:root {
+    --grid-vertical-spacing: 30px;
+    --grid-horizontal-spacing: 30px;
+    --page-width: #{rem(1245px)};
+    --page-width-narrow: #{rem(782px)};
+
+    @include mq($from: tablet) {
+        --grid-vertical-spacing: 40px;
+        --grid-horizontal-spacing: 40px;
+    }
+}

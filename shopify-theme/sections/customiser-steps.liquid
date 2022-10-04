@@ -1,0 +1,141 @@
+{{ 'component-swiper.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'section-customiser-steps.css' | asset_url | stylesheet_tag }}
+
+<div
+  id="CustomiserSteps-{{ section.id }}"
+  class="customiser-steps swiper--overflow-hidden"
+>
+  <div class="customiser-steps__header page-width">
+    <h2 class="outlined">{{ section.settings.heading_1 }}</h2>
+    <h2>{{ section.settings.heading_2 }}</h2>
+    <a
+      {% if section.settings.button_link_1 == blank %}
+        role="link" aria-disabled="true"
+      {% else %}
+        href="{{ section.settings.button_link_1 }}"
+      {% endif %}
+      class="button button--color-black"
+    >
+      <span>
+        {{- section.settings.button_label_1 | escape -}}
+      </span>
+    </a>
+  </div>
+  <div class="customiser-steps__steps page-width">
+    <div class="swiper swiper--overflow-visible customiser-steps__swiper">
+      <div class="swiper-wrapper">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'step' %}
+              <div class="swiper-slide" {{ block.shopify_attributes }}>
+                {%- liquid
+                  assign image_height = block.settings.image.width | divided_by: block.settings.image.aspect_ratio
+                -%}
+
+                <div class="card">
+                  <div class="media card__media">
+                    {{
+                      block.settings.image
+                      | image_url: width: 1500
+                      | image_tag:
+                        loading: 'lazy',
+                        width: block.settings.image.width,
+                        height: image_height,
+                        sizes: '(min-width: 980px) calc((100vw - 7rem) / 3), (min-width: 740px) calc((100vw - 5rem) / 2), calc(100vw - 3rem)',
+                        widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+                        alt: section.settings.image.alt
+                      | escape
+                    }}
+                  </div>
+                  <div class="card__content">
+                    <h3 class="h2">{{ block.settings.title }}</h3>
+                    <h4>{{ block.settings.instructions }}</h4>
+                  </div>
+                </div>
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+      {% render 'swiper-navigation-wrapper' %}
+    </div>
+  </div>
+</div>
+
+<script defer src="{{ 'section-customiser-steps.js' | asset_url }}"></script>
+
+{% schema %}
+{
+  "name": "Customiser Steps",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading_1",
+      "default": "Take a look at",
+      "label": "Heading 1"
+    },
+    {
+      "type": "text",
+      "id": "heading_2",
+      "default": "our customiser",
+      "label": "Heading 2"
+    },
+    {
+      "type": "text",
+      "id": "button_label_1",
+      "default": "Button label",
+      "label": "Button",
+      "info": "Customiser steps CTA"
+    },
+    {
+      "type": "url",
+      "id": "button_link_1",
+      "label": "Link to customiser"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Step",
+      "type": "step",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Step",
+          "label": "Step title"
+        },
+        {
+          "type": "text",
+          "id": "instructions",
+          "default": "Step instructions",
+          "label": "Intructions"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customiser steps",
+      "blocks": [
+        {
+          "type": "step"
+        },
+        {
+          "type": "step"
+        },
+        {
+          "type": "step"
+        }
+      ]
+    }
+  ],
+  "templates": ["index"]
+}
+{% endschema %}

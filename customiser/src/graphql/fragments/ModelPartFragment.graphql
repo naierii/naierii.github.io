@@ -1,0 +1,6 @@
+fragment ModelPartFragment on ModelPartEntity {
+  id
+  attributes {
+    nodeId
+  }
+}

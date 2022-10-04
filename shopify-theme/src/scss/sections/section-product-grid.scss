@@ -1,0 +1,25 @@
+@use '~sass-rem' as *;
+@use '~sass-mq/mq' as *;
+
+@import '../variables';
+
+.product-grid {
+    display: flex;
+    flex-direction: column;
+    margin-top: rem(40px);
+
+    @include mq($from: tablet) {
+        flex-direction: row;
+    }
+
+    &__sidebar {
+        @include mq($from: tablet) {
+            min-width: rem(250px);
+            margin-right: rem(55px);
+        }
+    }
+
+    &__container {
+        width: 100%;
+    }
+}

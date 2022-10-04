@@ -1,0 +1,7 @@
+query GetMaterials($filters: MaterialFiltersInput) {
+  materials(filters: $filters) {
+    data {
+      ...MaterialFragment
+    }
+  }
+}

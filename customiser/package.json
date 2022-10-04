@@ -10,6 +10,7 @@
     "graphql-request": "^4.3.0",
     "hygen": "^6.2.7",
     "immer": "^9.0.15",
+    "laravel-mix": "^6.0.49",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-query": "^3.39.1",
@@ -23,6 +24,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
+    "build-mix": "npx mix --production",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
     "new:component": "hygen new component",
@@ -68,13 +70,16 @@
     "@types/three": "^0.144.0",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",
+    "clean-webpack-plugin": "^4.0.0",
     "eslint": "^8.17.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.30.0",
     "eslint-plugin-react-hooks": "^4.5.0",
+    "laravel-mix-clean": "^0.1.0",
     "prettier": "^2.6.2",
     "react-app-rewire-alias": "^1.1.7",
-    "react-app-rewired": "^2.2.1"
+    "react-app-rewired": "^2.2.1",
+    "ts-loader": "^9.4.1"
   }
 }

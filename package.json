@@ -4,9 +4,12 @@
   "description": "Shopify theme and customiser",
   "license": "MIT",
   "private": true,
-  "workspaces": [
-    "customiser",
-    "shopify-theme",
-    "packages/*"
-  ]
+  "workspaces": {
+    "packages": [
+      "customiser",
+      "shopify-theme",
+      "packages/*"
+    ],
+    "nohoist": ["**/three"]
+  }
 }

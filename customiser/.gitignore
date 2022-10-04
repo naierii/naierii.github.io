@@ -10,6 +10,7 @@
 
 # production
 /build
+/shopify-build
 
 # misc
 .DS_Store

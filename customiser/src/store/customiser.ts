@@ -64,6 +64,7 @@ const createCustomiser: StateCreator<
     set(
       produce((state: CustomiserState) => {
         const option = state.selectedModels.find((m) => m.optionId === id);
+
         if (option) {
           option.model = model;
         }

@@ -1,6 +1,6 @@
 import { Maybe, ModelEntity } from '@graphql/generated/graphql';
 import { useGLTF } from '@react-three/drei';
-import { Suspense } from 'react';
+import { Fragment, Suspense } from 'react';
 import { GLTF } from 'three-stdlib';
 import CustomiserMesh from '../CustomiserMesh';
 
@@ -20,20 +20,19 @@ const Model = ({ model }: CustomiserModelProps) => {
 
   return (
     <>
-      {model?.attributes?.parts?.data.map((part) => {
-        return (
-          <>
-            {part?.attributes?.nodeId && (
-              <Suspense key={part.attributes.nodeId} fallback={null}>
+        {model?.attributes?.parts?.data.map((part) => {
+          return (
+            <Fragment key={part.id}>
+              {part?.attributes?.nodeId && (
                 <CustomiserMesh
+                  key={part.attributes.nodeId}
                   node={nodes[part.attributes.nodeId]}
                   nodeId={part.attributes.nodeId}
                 />
-              </Suspense>
-            )}
-          </>
-        );
-      })}
+              )}
+            </Fragment>
+          );
+        })}
     </>
   );
 };

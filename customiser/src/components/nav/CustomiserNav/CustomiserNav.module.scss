@@ -1,4 +1,31 @@
 .root {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 73px 1fr 60px;
+  gap: 0px 0px;
+  grid-template-areas:
+    'header'
+    'content'
+    'actions';
+  background-color: white;
+}
+
+.header {
+  display: grid;
+  grid-auto-rows: 1fr;
+  grid-template-columns: 73px 1fr;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-template-areas: 'menu nav';
+  grid-area: header;
+}
+
+.content {
+  grid-area: content;
   display: flex;
   flex-direction: column;
+}
+
+.actions {
+  grid-area: actions;
 }

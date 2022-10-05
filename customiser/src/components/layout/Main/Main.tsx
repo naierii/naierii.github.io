@@ -1,5 +1,6 @@
 import CustomiserNav from '@components/nav/CustomiserNav';
 import CustomiserCanvas from '@components/three/CustomiserCanvas';
+import Button from '@components/ui/Button';
 import {
   CustomProductEntity,
   useGetCustomProductByShopifyIdQuery,
@@ -7,7 +8,7 @@ import {
 import graphQLClient from '@graphql/graphql-client';
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import styles from './Main.module.scss';
 
@@ -19,6 +20,7 @@ export interface MainProps {
 const Main = ({ className, product }: MainProps) => {
   // const id = 'gid://shopify/Product/7737134055648';
   // const id = 'gid://shopify/Product/7745243447520';
+  const [show, setShow] = useState(false);
 
   useCustomiserStore.persist.setOptions({
     name: `customiser-${product}`,
@@ -44,10 +46,17 @@ const Main = ({ className, product }: MainProps) => {
   }, [data]);
 
   return (
-    <div className={rootClassName}>
-      <CustomiserCanvas className={styles.customiser} />
-      <CustomiserNav className={styles.nav} data={data?.attributes} />
-    </div>
+    <>
+      {show ? (
+        <div className={rootClassName}>
+          <CustomiserNav className={styles.nav} data={data?.attributes} />
+          <CustomiserCanvas className={styles.model} />
+          <div className='header'></div>
+        </div>
+      ) : (
+        <Button onClick={() => setShow(true)}>Customise</Button>
+      )}
+    </>
   );
 };
 

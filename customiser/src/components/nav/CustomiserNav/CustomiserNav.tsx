@@ -19,20 +19,24 @@ const CustomiserNav = ({ className, data }: CustomiserNavProps) => {
 
   return (
     <div className={rootClassName}>
-      {selectedOption ? (
-        <NavOption option={selectedOption} />
-      ) : selectedPart ? (
-        <NavPart part={selectedPart} />
-      ) : (
-        <>
-          {data?.options?.map((o) => (
-            <NavItem key={o?.id} option={o} />
-          ))}
-          {data?.parts?.map((o) => (
-            <NavItem key={o?.id} part={o} />
-          ))}
-        </>
-      )}
+      <div className={styles.header}></div>
+      <div className={styles.content}>
+        {selectedOption ? (
+          <NavOption option={selectedOption} />
+        ) : selectedPart ? (
+          <NavPart part={selectedPart} />
+        ) : (
+          <>
+            {data?.options?.map((o) => (
+              <NavItem key={o?.id} option={o} />
+            ))}
+            {data?.parts?.map((o) => (
+              <NavItem key={o?.id} part={o} />
+            ))}
+          </>
+        )}
+      </div>
+      <div className={styles.actions}></div>
     </div>
   );
 };

@@ -1,14 +1,25 @@
 .root {
   display: grid;
-  grid-template-columns: 3fr 1fr;
-  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 2fr 80px;
+  grid-template-rows: 60px 60px 1fr 60px;
+  gap: 0px 0px;
+  grid-template-areas:
+    '. . .'
+    'nav header .'
+    'nav model .'
+    '. . .';
+  width: 100%;
   height: 100%;
-}
-
-.customiser {
-  grid-area: 1 / 1 / 2 / 2;
+  position: fixed;
+  background-color: #ededed;
 }
 
 .nav {
-  grid-area: 1 / 2 / 2 / 3;
+  grid-area: nav;
+}
+.model {
+  grid-area: model;
+}
+.header {
+  grid-area: header;
 }

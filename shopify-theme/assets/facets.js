@@ -310,8 +310,7 @@ var FacetFiltersForm = /*#__PURE__*/function (_HTMLElement) {
           url: url
         }]);
         FacetFiltersForm.renderFilters(html, event);
-        FacetFiltersForm.renderProductGridContainer(html);
-        FacetFiltersForm.renderProductCount(html);
+        FacetFiltersForm.renderProductGridContainer(html); // FacetFiltersForm.renderProductCount(html);
       });
     }
   }, {
@@ -319,8 +318,7 @@ var FacetFiltersForm = /*#__PURE__*/function (_HTMLElement) {
     value: function renderSectionFromCache(filterDataUrl, event) {
       var html = FacetFiltersForm.filterData.find(filterDataUrl).html;
       FacetFiltersForm.renderFilters(html, event);
-      FacetFiltersForm.renderProductGridContainer(html);
-      FacetFiltersForm.renderProductCount(html);
+      FacetFiltersForm.renderProductGridContainer(html); // FacetFiltersForm.renderProductCount(html);
     }
   }, {
     key: "renderProductGridContainer",
@@ -359,8 +357,8 @@ var FacetFiltersForm = /*#__PURE__*/function (_HTMLElement) {
       facetsToRender.forEach(function (element) {
         document.querySelector(".js-filter[data-index=\"".concat(element.dataset.index, "\"]")).innerHTML = element.innerHTML;
       });
-      FacetFiltersForm.renderActiveFacets(parsedHTML);
-      FacetFiltersForm.renderAdditionalElements(parsedHTML);
+      FacetFiltersForm.renderActiveFacets(parsedHTML); // FacetFiltersForm.renderAdditionalElements(parsedHTML);
+
       if (countsToRender) FacetFiltersForm.renderCounts(countsToRender, event.target.closest('.js-filter'));
     }
   }, {

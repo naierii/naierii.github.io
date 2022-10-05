@@ -18,6 +18,7 @@ mix.js('src/js/product-form.js', '');
 mix.sass('src/scss/components/component-accordion.scss', '');
 mix.sass('src/scss/components/component-card.scss', '');
 mix.sass('src/scss/components/component-collection-hero.scss', '');
+mix.sass('src/scss/components/component-media-gallery.scss', '');
 mix.sass('src/scss/components/component-newsletter.scss', '');
 mix.sass('src/scss/components/component-pagination.scss', '');
 mix.sass('src/scss/components/component-price.scss', '');

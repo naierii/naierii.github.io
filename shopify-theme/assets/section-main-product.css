@@ -32,7 +32,12 @@
 }
 
 .product {
-  margin: 2.5rem 0 0;
+  margin: 0 0 0;
+}
+@media (min-width: 46.25em) {
+  .product {
+    margin-top: 2.5rem;
+  }
 }
 .product--no-media {
   max-width: 57rem;
@@ -47,10 +52,6 @@
   .product__media-wrapper {
     width: calc(66.66% - var(--grid-horizontal-spacing) / 2);
   }
-}
-.product__media-item.is-active {
-  width: 100%;
-  max-width: none;
 }
 .product__info-wrapper {
   padding-left: 0;

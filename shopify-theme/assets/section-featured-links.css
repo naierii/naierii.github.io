@@ -18,10 +18,10 @@
   margin-bottom: 0;
   font-size: 3rem;
   font-size: clamp(
-        3rem,
-        2.3426966292rem + 2.6966292135vw,
-        4.5rem
-    );
+            3rem,
+            2.3426966292rem + 2.6966292135vw,
+            4.5rem
+        );
 }
 .featured-links__header .button {
   margin-top: 1.875rem;

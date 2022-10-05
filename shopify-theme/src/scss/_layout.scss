@@ -20,3 +20,11 @@
 .page-padding {
     padding-top: rem(90px);
 }
+
+#insta-feed {
+    padding: rem(130px) 0;
+
+    h2 {
+        @include fluidType(rem(36px), rem(45px), $content: !important);
+    }
+}

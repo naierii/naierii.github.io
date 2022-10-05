@@ -66,6 +66,8 @@ h5,
 }
 
 p {
+    margin-top: 0;
+
     .text--large & {
         @include fluidType(rem(18px), rem(22px));
     }

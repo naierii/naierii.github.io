@@ -725,10 +725,6 @@ class VariantSelects extends HTMLElement {
         this.addEventListener('change', this.onVariantChange);
     }
 
-    // connectedCallback() {
-    //     this.toggleAddButton(true, '', false);
-    // }
-
     onVariantChange() {
         this.updateOptions();
         this.updateMasterId();

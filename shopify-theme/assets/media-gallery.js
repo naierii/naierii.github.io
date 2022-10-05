@@ -180,103 +180,46 @@ if (!customElements.get('media-gallery')) {
 
       _this = _super.call(this);
       _this.elements = {
-        liveRegion: _this.querySelector('[id^="GalleryStatus"]'),
         viewer: _this.querySelector('[id^="GalleryViewer"]'),
         thumbnails: _this.querySelector('[id^="GalleryThumbnails"]')
       };
-      _this.mql = window.matchMedia('(min-width: 750px)');
       if (!_this.elements.thumbnails) return _possibleConstructorReturn(_this);
-
-      _this.elements.viewer.addEventListener('slideChanged', (0,_utils__WEBPACK_IMPORTED_MODULE_0__.debounce)(_this.onSlideChanged.bind(_assertThisInitialized(_this)), 500));
 
       _this.elements.thumbnails.querySelectorAll('[data-target]').forEach(function (mediaToSwitch) {
         mediaToSwitch.querySelector('button').addEventListener('click', _this.setActiveMedia.bind(_assertThisInitialized(_this), mediaToSwitch.dataset.target, false));
       });
 
-      if (_this.dataset.desktopLayout !== 'stacked' && _this.mql.matches) _this.removeListSemantic();
       return _this;
     }
 
     _createClass(MediaGallery, [{
-      key: "onSlideChanged",
-      value: function onSlideChanged(event) {
-        var thumbnail = this.elements.thumbnails.querySelector("[data-target=\"".concat(event.detail.currentElement.dataset.mediaId, "\"]"));
-        this.setActiveThumbnail(thumbnail);
-      }
-    }, {
       key: "setActiveMedia",
       value: function setActiveMedia(mediaId, prepend) {
-        var _this2 = this;
-
         var activeMedia = this.elements.viewer.querySelector("[data-media-id=\"".concat(mediaId, "\"]"));
         this.elements.viewer.querySelectorAll('[data-media-id]').forEach(function (element) {
           element.classList.remove('is-active');
         });
         activeMedia.classList.add('is-active');
-
-        if (prepend) {
-          activeMedia.parentElement.prepend(activeMedia);
-
-          if (this.elements.thumbnails) {
-            var _activeThumbnail = this.elements.thumbnails.querySelector("[data-target=\"".concat(mediaId, "\"]"));
-
-            _activeThumbnail.parentElement.prepend(_activeThumbnail);
-          }
-
-          if (this.elements.viewer.slider) this.elements.viewer.resetPages();
-        }
-
-        this.preventStickyHeader();
-        window.setTimeout(function () {
-          if (_this2.elements.thumbnails) {
-            activeMedia.parentElement.scrollTo({
-              left: activeMedia.offsetLeft
-            });
-          }
-
-          if (!_this2.elements.thumbnails || _this2.dataset.desktopLayout === 'stacked') {
-            activeMedia.scrollIntoView({
-              behavior: 'smooth'
-            });
-          }
-        });
         this.playActiveMedia(activeMedia);
         if (!this.elements.thumbnails) return;
-        var activeThumbnail = this.elements.thumbnails.querySelector("[data-target=\"".concat(mediaId, "\"]"));
+        var activeThumbnail = this.elements.thumbnails.querySelector("[data-media-id=\"".concat(mediaId, "\"]"));
         this.setActiveThumbnail(activeThumbnail);
-        this.announceLiveRegion(activeMedia, activeThumbnail.dataset.mediaPosition);
       }
     }, {
       key: "setActiveThumbnail",
       value: function setActiveThumbnail(thumbnail) {
         if (!this.elements.thumbnails || !thumbnail) return;
-        this.elements.thumbnails.querySelectorAll('button').forEach(function (element) {
-          return element.removeAttribute('aria-current');
+        this.elements.thumbnails.querySelectorAll('[data-media-id]').forEach(function (element) {
+          element.classList.remove('is-active');
         });
-        thumbnail.querySelector('button').setAttribute('aria-current', true);
-        if (this.elements.thumbnails.isSlideVisible(thumbnail, 10)) return;
-        this.elements.thumbnails.slider.scrollTo({
-          left: thumbnail.offsetLeft
-        });
-      }
-    }, {
-      key: "announceLiveRegion",
-      value: function announceLiveRegion(activeItem, position) {
-        var _this3 = this;
-
-        var image = activeItem.querySelector('.product__modal-opener--image img');
-        if (!image) return;
-
-        image.onload = function () {
-          _this3.elements.liveRegion.setAttribute('aria-hidden', false);
-
-          _this3.elements.liveRegion.innerHTML = window.accessibilityStrings.imageAvailable.replace('[index]', position);
-          setTimeout(function () {
-            _this3.elements.liveRegion.setAttribute('aria-hidden', true);
-          }, 2000);
-        };
-
-        image.src = image.src;
+        thumbnail.classList.add('is-active'); // this.elements.thumbnails
+        //     .querySelectorAll('button')
+        //     .forEach((element) =>
+        //         element.removeAttribute('aria-current')
+        //     );
+        // thumbnail
+        //     .querySelector('button')
+        //     .setAttribute('aria-current', true);
       }
     }, {
       key: "playActiveMedia",
@@ -284,22 +227,6 @@ if (!customElements.get('media-gallery')) {
         (0,_utils__WEBPACK_IMPORTED_MODULE_0__.pauseAllMedia)();
         var deferredMedia = activeItem.querySelector('.deferred-media');
         if (deferredMedia) deferredMedia.loadContent(false);
-      }
-    }, {
-      key: "preventStickyHeader",
-      value: function preventStickyHeader() {
-        this.stickyHeader = this.stickyHeader || document.querySelector('sticky-header');
-        if (!this.stickyHeader) return;
-        this.stickyHeader.dispatchEvent(new Event('preventHeaderReveal'));
-      }
-    }, {
-      key: "removeListSemantic",
-      value: function removeListSemantic() {
-        if (!this.elements.viewer.slider) return;
-        this.elements.viewer.slider.setAttribute('role', 'presentation');
-        this.elements.viewer.sliderItems.forEach(function (slide) {
-          return slide.setAttribute('role', 'presentation');
-        });
       }
     }]);
 

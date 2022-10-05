@@ -7,17 +7,33 @@
     $min-value,
     $max-value,
     $min-vw: rem(390px),
-    $max-vw: rem(1280px)
+    $max-vw: rem(1280px),
+    $content: null
 ) {
     $factor: 1 / ($max-vw - $min-vw) * ($max-value - $min-value);
     $calc-value: unquote(
         '#{ $min-value - ($min-vw * $factor) } + #{ 100vw * $factor }'
     );
 
-    font-size: $min-value;
+    font-size: $min-value $content;
     font-size: clamp(
-        #{if($min-value > $max-value, $max-value, $min-value)},
-        #{$calc-value},
-        #{if($min-value > $max-value, $min-value, $max-value)}
-    );
+            #{if($min-value > $max-value, $max-value, $min-value)},
+            #{$calc-value},
+            #{if($min-value > $max-value, $min-value, $max-value)}
+        )
+        $content;
+}
+
+@mixin breakContainer {
+    display: block;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+}
+
+@mixin resetBreakContainer {
+    display: block;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
 }

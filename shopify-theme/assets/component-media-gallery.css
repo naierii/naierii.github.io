@@ -1,0 +1,30 @@
+.media-gallery {
+  display: block;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+@media (min-width: 46.25em) {
+  .media-gallery {
+    display: block;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+.media-gallery__viewer .product__media-item {
+  width: 100%;
+  max-width: none;
+}
+.media-gallery__viewer .product__media-item:not(.is-active) {
+  display: none;
+}
+.media-gallery__thumbnails {
+  margin-top: 0.625rem;
+}
+.media-gallery__thumbnails .grid {
+  gap: 0.625rem;
+}
+.media-gallery__thumbnails .product__media-item.is-active {
+  display: none;
+}

@@ -6,7 +6,11 @@
 @import '../buttons';
 
 .product {
-    margin: rem(40px) 0 0;
+    margin: 0 0 0;
+
+    @include mq($from: tablet) {
+        margin-top: rem(40px);
+    }
 
     &--no-media {
         max-width: 57rem;
@@ -20,13 +24,6 @@
 
         @include mq($from: tablet) {
             width: calc(66.66% - var(--grid-horizontal-spacing) / 2);
-        }
-    }
-
-    &__media-item {
-        &.is-active {
-            width: 100%;
-            max-width: none;
         }
     }
 

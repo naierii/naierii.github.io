@@ -666,20 +666,20 @@ h1,
 .h1 {
   font-size: 3rem;
   font-size: clamp(
-        3rem,
-        2.3426966292rem + 2.6966292135vw,
-        4.5rem
-    );
+            3rem,
+            2.3426966292rem + 2.6966292135vw,
+            4.5rem
+        );
 }
 
 h2,
 .h2 {
   font-size: 2.25rem;
   font-size: clamp(
-        2.25rem,
-        2.003511236rem + 1.0112359551vw,
-        2.8125rem
-    );
+            2.25rem,
+            2.003511236rem + 1.0112359551vw,
+            2.8125rem
+        );
 }
 
 h3,
@@ -697,13 +697,16 @@ h5,
   font-size: 1.375rem;
 }
 
+p {
+  margin-top: 0;
+}
 .text--large p {
   font-size: 1.125rem;
   font-size: clamp(
-        1.125rem,
-        1.0154494382rem + 0.4494382022vw,
-        1.375rem
-    );
+            1.125rem,
+            1.0154494382rem + 0.4494382022vw,
+            1.375rem
+        );
 }
 
 ul li,
@@ -945,4 +948,16 @@ a > * + * {
 
 .page-padding {
   padding-top: 5.625rem;
+}
+
+#insta-feed {
+  padding: 8.125rem 0;
+}
+#insta-feed h2 {
+  font-size: 2.25rem !important;
+  font-size: clamp(
+            2.25rem,
+            2.003511236rem + 1.0112359551vw,
+            2.8125rem
+        ) !important;
 }

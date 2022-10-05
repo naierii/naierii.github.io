@@ -1,0 +1,38 @@
+@use '~sass-rem' as *;
+@use '~sass-mq/mq' as *;
+
+@import '../variables';
+@import '../helpers';
+
+.media-gallery {
+    @include breakContainer;
+
+    @include mq($from: tablet) {
+        @include resetBreakContainer;
+    }
+
+    &__viewer {
+        .product__media-item {
+            width: 100%;
+            max-width: none;
+
+            &:not(.is-active) {
+                display: none;
+            }
+        }
+    }
+
+    &__thumbnails {
+        margin-top: rem(10px);
+
+        .grid {
+            gap: rem(10px);
+        }
+
+        .product__media-item {
+            &.is-active {
+                display: none;
+            }
+        }
+    }
+}

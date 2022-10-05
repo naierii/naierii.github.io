@@ -9,7 +9,7 @@
     "/section-customiser-steps.js": "/section-customiser-steps.js",
     "/section-featured-links.js": "/section-featured-links.js",
     "/section-featured-collection.js": "/section-featured-collection.js",
-    "/component-newsletter.css": "/component-newsletter.css",
+    "/component-media-gallery.css": "/component-media-gallery.css",
     "/component-collection-hero.css": "/component-collection-hero.css",
     "/component-card.css": "/component-card.css",
     "/component-accordion.css": "/component-accordion.css",
@@ -27,5 +27,6 @@
     "/component-swiper.css": "/component-swiper.css",
     "/component-sidebar-menu.css": "/component-sidebar-menu.css",
     "/component-price.css": "/component-price.css",
-    "/component-pagination.css": "/component-pagination.css"
+    "/component-pagination.css": "/component-pagination.css",
+    "/component-newsletter.css": "/component-newsletter.css"
 }

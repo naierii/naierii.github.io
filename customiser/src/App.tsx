@@ -12,10 +12,8 @@ export interface AppProps {
 function App({ product }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <Suspense fallback={<div>Loading...</div>}>
-        {product && <Main product={product} />}
-      </Suspense>
-    <ReactQueryDevtools initialIsOpen={false} />
+      <Suspense fallback={<div>Loading...</div>}>{product && <Main product={product} />}</Suspense>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }

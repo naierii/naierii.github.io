@@ -1,4 +1,8 @@
 {
+    "eslint.workingDirectories": [
+        "./customiser",
+        "./shopify-theme/src"
+    ],
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "eslint.validate": [
@@ -14,11 +18,6 @@
         "editor.codeActionsOnSave": {
             "source.fixAll.stylelint": true
         }
-    },
-    "shopifyLiquid.formatterDevPreview": true,
-    "[liquid]": {
-        "editor.defaultFormatter": "Shopify.theme-check-vscode",
-        "editor.formatOnSave": true
     },
     "stylelint.validate": [
         "css",

@@ -33,6 +33,10 @@
                 -webkit-text-stroke-color: $black;
             }
         }
+
+        &.text-color-red {
+            color: $red;
+        }
     }
 }
 
@@ -60,7 +64,6 @@ h5,
 .h5 {
     font-size: rem(22px);
 }
-
 
 p {
     .text--large & {

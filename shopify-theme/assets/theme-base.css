@@ -467,6 +467,10 @@ h1.text-color-dark .outlined,
 .h1.text-color-dark .outlined {
   -webkit-text-stroke-color: #000000;
 }
+h1.text-color-red,
+.h1.text-color-red {
+  color: #cc0101;
+}
 
 h2,
 .h2 {
@@ -500,6 +504,10 @@ h2.text-color-dark,
 h2.text-color-dark .outlined,
 .h2.text-color-dark .outlined {
   -webkit-text-stroke-color: #000000;
+}
+h2.text-color-red,
+.h2.text-color-red {
+  color: #cc0101;
 }
 
 h3,
@@ -535,6 +543,10 @@ h3.text-color-dark .outlined,
 .h3.text-color-dark .outlined {
   -webkit-text-stroke-color: #000000;
 }
+h3.text-color-red,
+.h3.text-color-red {
+  color: #cc0101;
+}
 
 h4,
 .h4 {
@@ -568,6 +580,10 @@ h4.text-color-dark,
 h4.text-color-dark .outlined,
 .h4.text-color-dark .outlined {
   -webkit-text-stroke-color: #000000;
+}
+h4.text-color-red,
+.h4.text-color-red {
+  color: #cc0101;
 }
 
 h5,
@@ -603,6 +619,10 @@ h5.text-color-dark .outlined,
 .h5.text-color-dark .outlined {
   -webkit-text-stroke-color: #000000;
 }
+h5.text-color-red,
+.h5.text-color-red {
+  color: #cc0101;
+}
 
 h6,
 .h6 {
@@ -636,6 +656,10 @@ h6.text-color-dark,
 h6.text-color-dark .outlined,
 .h6.text-color-dark .outlined {
   -webkit-text-stroke-color: #000000;
+}
+h6.text-color-red,
+.h6.text-color-red {
+  color: #cc0101;
 }
 
 h1,

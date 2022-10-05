@@ -9,6 +9,7 @@ mix.sass('src/scss/theme-base.scss', '');
 mix.js('src/js/global.js', '');
 mix.js('src/js/site.js', '');
 mix.js('src/js/cart.js', '');
+mix.js('src/js/facets.js', '');
 mix.js('src/js/media-gallery.js', '');
 mix.js('src/js/product-addon.js', '');
 mix.js('src/js/product-form.js', '');
@@ -30,6 +31,10 @@ mix.js('src/js/sections/section-customiser-steps.js', '').sass(
 );
 mix.js('src/js/sections/section-featured-links.js', '').sass(
     'src/scss/sections/section-featured-links.scss',
+    ''
+);
+mix.js('src/js/sections/section-featured-collection.js', '').sass(
+    'src/scss/sections/section-featured-collection.scss',
     ''
 );
 mix.sass('src/scss/sections/section-image-banner.scss', '');

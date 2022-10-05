@@ -1,0 +1,14 @@
+@use '~sass-rem' as *;
+@use '~sass-mq/mq' as *;
+
+@import '../variables';
+@import '../helpers';
+
+.featured-collection {
+    padding: rem(115px) 0;
+    background-color: #ededed;
+
+    &__header {
+        margin-bottom: rem(40px);
+    }
+}

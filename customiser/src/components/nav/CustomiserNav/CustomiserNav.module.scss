@@ -1,3 +1,7 @@
+@use '~sass-rem' as *;
+
+@import '@styles/variables';
+
 .root {
   display: grid;
   grid-template-columns: 1fr;
@@ -10,20 +14,11 @@
   background-color: white;
 }
 
-.header {
-  display: grid;
-  grid-auto-rows: 1fr;
-  grid-template-columns: 73px 1fr;
-  grid-template-rows: 1fr;
-  gap: 0px 0px;
-  grid-template-areas: 'menu nav';
-  grid-area: header;
-}
-
 .content {
   grid-area: content;
   display: flex;
   flex-direction: column;
+  padding: rem(30px) rem(15px);
 }
 
 .actions {

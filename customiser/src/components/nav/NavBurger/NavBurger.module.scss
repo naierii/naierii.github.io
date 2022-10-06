@@ -1,0 +1,9 @@
+@use '~sass-rem' as *;
+
+.root {
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  width: rem(32px);
+}

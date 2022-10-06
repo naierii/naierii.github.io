@@ -10,6 +10,8 @@
       "shopify-theme",
       "packages/*"
     ],
-    "nohoist": ["**/three", "**/@react-three/**", "**/@tanstack"]
+    "nohoist": [
+      "customiser"
+    ]
   }
-} 
+}

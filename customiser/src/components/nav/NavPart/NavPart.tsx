@@ -1,8 +1,7 @@
-import { ComponentCustomiserCustomParts } from '@graphql/generated/graphql';
+import { ComponentCustomiserCustomParts, Maybe } from '@graphql/generated/graphql';
 import cn from 'classnames';
-import { Maybe } from 'graphql/jsutils/Maybe';
+import { Suspense } from 'react';
 import MaterialGroup from '../MaterialGroup';
-import NavBack from '../NavBack';
 
 import styles from './NavPart.module.scss';
 
@@ -14,10 +13,15 @@ export interface NavPartProps {
 const NavPart = ({ className, part }: NavPartProps) => {
   const rootClassName = cn(styles.root, className);
 
+  if (!part?.materialGroup?.data) {
+    return null;
+  }
+
   return (
     <div className={rootClassName}>
-      <NavBack />
-      <MaterialGroup materialGroup={part?.materialGroup?.data} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <MaterialGroup materialGroup={part.materialGroup.data} />
+      </Suspense>
     </div>
   );
 };

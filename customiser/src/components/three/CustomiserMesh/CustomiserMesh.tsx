@@ -28,8 +28,6 @@ const CustomiserMesh = ({ node, nodeId }: CustomiserMeshProps) => {
     ...materialTexture,
   };
 
-  console.log(materialTexture);
-
   return (
     <mesh {...meshProps}>
       <meshStandardMaterial {...materialProps} ref={materialRef} />

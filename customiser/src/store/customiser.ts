@@ -22,17 +22,27 @@ interface Part {
   material: MaterialEntity;
 }
 
+interface NavItem {
+  id?: Scalars['ID'];
+  name: Maybe<Scalars['String']>;
+  type: 'option' | 'part';
+  index?: number;
+}
+
 export interface CustomiserState {
   customProduct: Maybe<CustomProductEntity>;
   selectedModels: SelectedModel[];
   selectedOption: Maybe<ComponentCustomiserCustomOption>;
   selectedPart: Maybe<ComponentCustomiserCustomParts>;
+  navItems: NavItem[];
+  selectedNav: Maybe<NavItem>;
   parts: Part[];
   setSelectedModel: (optionId: Scalars['ID'], model?: Maybe<ModelEntity>) => void;
   setCustomProduct: (data: CustomProductEntity) => void;
   setOption: (data: ComponentCustomiserCustomOption) => void;
   setSelectedPart: (data: ComponentCustomiserCustomParts) => void;
   setPart: (part: ComponentCustomiserCustomParts, material: MaterialEntity) => void;
+  setSelectedNav: (index: number) => void;
   resetNav: () => void;
   texture: (nodeId: string) => MaterialTextureModel;
 }
@@ -46,8 +56,20 @@ const createCustomiser: StateCreator<
   customProduct: null,
   selectedOption: null,
   selectedPart: null,
+  navItems: [],
+  selectedNav: null,
   parts: [],
   setCustomProduct: (data) => {
+    let dataToSet: {
+      customProduct: CustomProductEntity;
+      selectedModels?: SelectedModel[];
+      selectedOption?: Maybe<ComponentCustomiserCustomOption>;
+      navItems?: NavItem[];
+      selectedNav?: NavItem;
+    } = {
+      customProduct: data,
+    };
+
     if (!get().selectedModels.length && data.attributes?.options) {
       const models: SelectedModel[] = [];
       data.attributes.options.forEach((option) => {
@@ -55,10 +77,36 @@ const createCustomiser: StateCreator<
           models.push({ optionId: option.id, model: option?.models[0]?.model?.data });
         }
       });
-      set({ customProduct: data, selectedModels: models });
-    } else {
-      set({ customProduct: data });
+
+      const navOptions: NavItem[] =
+        data.attributes.options?.map((o) => ({
+          id: o?.id ?? '',
+          name: o?.name ?? '',
+          type: 'option',
+        })) ?? [];
+
+      const navParts: NavItem[] =
+        data.attributes.parts?.map((o) => ({
+          id: o?.id ?? '',
+          name: o?.name ?? '',
+          type: 'part',
+        })) ?? [];
+
+      const navItems = [...navOptions, ...navParts].map((i, index) => {
+        i.index = index;
+        return i;
+      });
+
+      dataToSet = {
+        ...dataToSet,
+        selectedModels: models,
+        selectedOption: data.attributes.options[0],
+        navItems: navItems,
+        selectedNav: navItems[0],
+      };
     }
+
+    set(dataToSet);
   },
   setSelectedModel: (id, model) => {
     set(
@@ -85,6 +133,34 @@ const createCustomiser: StateCreator<
   },
   setOption: (data) => set({ selectedOption: data }),
   setSelectedPart: (data) => set({ selectedPart: data }),
+  setSelectedNav: (index) =>
+    set(
+      produce((state: CustomiserState) => {
+        const navItem = state.navItems.find((n) => n.index === index);
+
+        if (navItem) {
+          state.selectedNav = navItem;
+
+          if (navItem.type === 'option') {
+            const option = state.customProduct?.attributes?.options?.find(
+              (o) => o?.id === navItem.id,
+            );
+            if (option) {
+              state.selectedOption = option;
+              state.selectedPart = null;
+            }
+          }
+
+          if (navItem.type === 'part') {
+            const part = state.customProduct?.attributes?.parts?.find((o) => o?.id === navItem.id);
+            if (part) {
+              state.selectedOption = null;
+              state.selectedPart = part;
+            }
+          }
+        }
+      }),
+    ),
   resetNav: () => set({ selectedOption: null, selectedPart: null }),
   texture: (nodeId) => {
     const parts = get().parts;

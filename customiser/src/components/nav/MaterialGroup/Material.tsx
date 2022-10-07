@@ -24,7 +24,6 @@ export const Material = ({ className, material }: MaterialProps) => {
   return (
     <button className={rootClassName} onClick={onClick}>
       {mapImage && <img src={mapImage?.image?.data?.attributes?.formats['thumbnail'].url} />}
-      <h6>{material?.attributes?.name}</h6>
     </button>
   );
 };

@@ -1,3 +1,4 @@
+import Button from '@components/ui/Button';
 import {
   useGetMaterialsQuery,
   MaterialEntity,
@@ -14,42 +15,35 @@ import { useMaterialGroupStore } from './MaterialGroupState';
 
 export interface MaterialTypeProps {
   className?: string;
-  materialType: Maybe<MaterialTypeEntity>;
 }
 
-export const MaterialType = ({ className, materialType }: MaterialTypeProps) => {
+export const MaterialType = ({ className }: MaterialTypeProps) => {
   const rootClassName = cn(styles.materialType, className);
-  const setColourGroups = useMaterialGroupStore((state) => state.setColourGroups);
-
-  const { data } = useGetMaterialsQuery(
-    graphQLClient,
-    { filters: { type: { id: { eq: materialType?.id } } } },
-    {
-      select: (data) => data.materials?.data as MaterialEntity[],
-    },
-  );
-
-  const colourGroups = useMemo(
-    () => data?.flatMap((d) => d.attributes?.colourGroups?.data),
-    [data],
-  ) as MaterialColourGroupEntity[];
-
-  useEffect(() => {
-    if (colourGroups?.length) {
-      setColourGroups(colourGroups);
-    }
-  }, [colourGroups]);
-
-  if (!data?.length) {
-    return null;
-  }
-
+  const filteredMaterials = useMaterialGroupStore((state) => state.filteredMaterials());
+  const materialTypes = useMaterialGroupStore((state) => state.materialTypes);
+  const selectedMaterialType = useMaterialGroupStore((state) => state.selectedMaterialType);
+  const setMaterialType = useMaterialGroupStore((state) => state.setMaterialType);
   return (
     <div className={rootClassName}>
-      <h2>{materialType?.attributes?.name}</h2>
-      {data.map((m) => (
-        <Material key={m.id} material={m} />
-      ))}
+      <h3>Texture</h3>
+      <div className={styles.materialTypes}>
+        {materialTypes.map((mt) => (
+          <Button
+            className={cn(styles.pillButton, {
+              [styles.pillButtonSelected]: mt.id === selectedMaterialType?.id,
+            })}
+            key={mt.id}
+            onClick={() => setMaterialType(mt)}
+          >
+            {mt.attributes?.name}
+          </Button>
+        ))}
+      </div>
+      <div className={styles.materials}>
+        {filteredMaterials.map((m) => (
+          <Material key={m.id} material={m} />
+        ))}
+      </div>
     </div>
   );
 };

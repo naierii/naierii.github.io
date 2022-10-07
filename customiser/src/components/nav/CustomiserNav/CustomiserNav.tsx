@@ -1,7 +1,7 @@
 import { CustomProduct, Maybe } from '@graphql/generated/graphql';
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
-import { motion, useCycle } from 'framer-motion';
+import { m, useCycle } from 'framer-motion';
 import NavHeader from '../NavHeader';
 import NavItem from '../NavItem';
 import NavOption from '../NavOption';
@@ -21,7 +21,7 @@ const CustomiserNav = ({ className, data }: CustomiserNavProps) => {
   const selectedPart = useCustomiserStore((state) => state.selectedPart);
 
   return (
-    <motion.nav className={rootClassName} initial={'closed'} animate={isOpen ? 'open' : 'closed'}>
+    <m.nav className={rootClassName} initial={'closed'} animate={isOpen ? 'open' : 'closed'}>
       <NavHeader className={styles.header} toggle={() => toggleOpen()} />
       <div className={styles.content}>
         {selectedOption ? (
@@ -40,7 +40,7 @@ const CustomiserNav = ({ className, data }: CustomiserNavProps) => {
         )}
       </div>
       <div className={styles.actions}></div>
-    </motion.nav>
+    </m.nav>
   );
 };
 

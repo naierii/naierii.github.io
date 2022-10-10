@@ -42,7 +42,7 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
         linear
         flat
         camera={{
-          position: [-6.37546092557343, 2.1970893240496195e-15, 35.31024512625285],
+          position: [-6.37546092557343, 2.1970893240496195e-15, 25.31024512625285],
           fov: 20,
         }}
         gl={{ preserveDrawingBuffer: true }}
@@ -53,7 +53,7 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
         <Suspense fallback={<Loader />}>
           <Scene />
         </Suspense>
-        <OrbitControls enableZoom={true} />
+        <OrbitControls enableZoom={false} />
       </Canvas>
       {/* <button className={styles.save} onClick={saveImage}>
         Save Image

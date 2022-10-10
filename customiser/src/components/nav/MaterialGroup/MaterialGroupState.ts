@@ -5,9 +5,13 @@ import {
   MaterialColourGroupEntity,
   MaterialEntity,
   MaterialTypeEntity,
+  Maybe,
 } from '@graphql/generated/graphql';
 import { uniqBy } from 'lodash';
 
+const uniqueColourGroups = (array: MaterialColourGroupEntity[]) => uniqBy(array, 'id');
+const uniqueMaterialTypes = (array: MaterialTypeEntity[]) => uniqBy(array, 'id');
+const uniqueMaterials = (array: MaterialEntity[]) => uniqBy(array, 'id');
 interface MaterialGroupInitialState {
   colourGroups: MaterialColourGroupEntity[];
   materialTypes: MaterialTypeEntity[];
@@ -15,14 +19,13 @@ interface MaterialGroupInitialState {
   selectedColourGroup?: MaterialColourGroupEntity;
   selectedMaterialType?: MaterialTypeEntity;
 }
-
-const uniqueColourGroups = (array: MaterialColourGroupEntity[]) => uniqBy(array, 'id');
-const uniqueMaterialTypes = (array: MaterialTypeEntity[]) => uniqBy(array, 'id');
-const uniqueMaterials = (array: MaterialEntity[]) => uniqBy(array, 'id');
-
 export interface MaterialGroupState extends MaterialGroupInitialState {
   resetMaterialGroup: () => void;
-  setMaterials: (materials: MaterialEntity[]) => void;
+  setMaterials: (
+    materials: MaterialEntity[],
+    materialType?: Maybe<MaterialTypeEntity>,
+    colourGroup?: Maybe<MaterialColourGroupEntity>,
+  ) => void;
   filteredMaterials: () => MaterialEntity[];
   setColourGroup: (colourGroup: MaterialColourGroupEntity) => void;
   setMaterialType: (materialType: MaterialTypeEntity) => void;
@@ -51,14 +54,22 @@ const createMaterialGroup: StateCreator<MaterialGroupState, [['zustand/devtools'
     return filteredMaterials;
   },
   resetMaterialGroup: () => set(initialState),
-  setMaterials: (materials: MaterialEntity[]) => {
+  setMaterials: (
+    materials: MaterialEntity[],
+    materialType?: Maybe<MaterialTypeEntity>,
+    colourGroup?: Maybe<MaterialColourGroupEntity>,
+  ) => {
     set(
       produce((state: MaterialGroupState) => {
         const colourGroups = materials.flatMap(
           (d) => d.attributes?.colourGroups?.data,
         ) as MaterialColourGroupEntity[];
         state.colourGroups = uniqueColourGroups(colourGroups);
-        state.selectedColourGroup = state.colourGroups[0];
+        if (colourGroup) {
+          state.selectedColourGroup = colourGroup;
+        } else {
+          state.selectedColourGroup = state.colourGroups[0];
+        }
 
         const materialTypes = materials
           .filter((m) =>
@@ -66,7 +77,12 @@ const createMaterialGroup: StateCreator<MaterialGroupState, [['zustand/devtools'
           )
           .map((m) => m.attributes?.type?.data) as MaterialTypeEntity[];
         state.materialTypes = uniqueMaterialTypes(materialTypes);
-        state.selectedMaterialType = state.materialTypes[0];
+
+        if (materialType) {
+          state.selectedMaterialType = materialType;
+        } else {
+          state.selectedMaterialType = state.materialTypes[0];
+        }
 
         state.materials = uniqueMaterials(materials);
       }),

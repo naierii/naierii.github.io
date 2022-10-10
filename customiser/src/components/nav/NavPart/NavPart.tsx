@@ -20,7 +20,7 @@ const NavPart = ({ className, part }: NavPartProps) => {
   return (
     <div className={rootClassName}>
       <Suspense fallback={<div>Loading...</div>}>
-        <MaterialGroup materialGroup={part.materialGroup.data} />
+        <MaterialGroup materialGroup={part.materialGroup.data} part={part} />
       </Suspense>
     </div>
   );

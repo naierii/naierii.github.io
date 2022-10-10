@@ -1,0 +1,27 @@
+@use '~sass-rem' as *;
+
+@import '@styles/variables';
+
+.fittingOption {
+  margin-bottom: rem(30px);
+}
+
+.fittingButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: rem(15px);
+}
+
+.button {
+  font-family: $displayFont;
+  padding: rem(13px) rem(18px) rem(7px);
+  font-size: rem(22px);
+  border: 1px solid $midGrey;
+  font-weight: 900;
+  color: $grey;
+}
+
+.selected {
+  background-color: $black;
+  color: $white;
+}

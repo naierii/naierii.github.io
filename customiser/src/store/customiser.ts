@@ -25,14 +25,14 @@ interface Part {
 interface NavItem {
   id?: Scalars['ID'];
   name: Maybe<Scalars['String']>;
-  type: 'option' | 'part';
+  type: 'option' | 'part' | 'fitting' | 'size';
   index?: number;
 }
 
 export interface CustomiserState {
   customProduct: Maybe<CustomProductEntity>;
   selectedModels: SelectedModel[];
-  selectedOption: Maybe<ComponentCustomiserCustomOption>;
+  savedModels: SelectedModel[];
   selectedPart: Maybe<ComponentCustomiserCustomParts>;
   navItems: NavItem[];
   selectedNav: Maybe<NavItem>;
@@ -40,7 +40,6 @@ export interface CustomiserState {
   savedParts: Part[];
   setSelectedModel: (optionId: Scalars['ID'], model?: Maybe<ModelEntity>) => void;
   setCustomProduct: (data: CustomProductEntity) => void;
-  setOption: (data: ComponentCustomiserCustomOption) => void;
   setSelectedPart: (data: ComponentCustomiserCustomParts) => void;
   setPart: (part: ComponentCustomiserCustomParts, material: MaterialEntity) => void;
   setSelectedNav: (index: number, save?: boolean) => void;
@@ -55,8 +54,8 @@ const createCustomiser: StateCreator<
   []
 > = (set, get) => ({
   selectedModels: [],
+  savedModels: [],
   customProduct: null,
-  selectedOption: null,
   selectedPart: null,
   navItems: [],
   selectedNav: null,
@@ -66,7 +65,6 @@ const createCustomiser: StateCreator<
     let dataToSet: {
       customProduct: CustomProductEntity;
       selectedModels?: SelectedModel[];
-      selectedOption?: Maybe<ComponentCustomiserCustomOption>;
       navItems?: NavItem[];
       selectedNav?: NavItem;
     } = {
@@ -81,12 +79,10 @@ const createCustomiser: StateCreator<
         }
       });
 
-      const navOptions: NavItem[] =
-        data.attributes.options?.map((o) => ({
-          id: o?.id ?? '',
-          name: o?.name ?? '',
-          type: 'option',
-        })) ?? [];
+      const navFitting: NavItem = {
+        name: 'Fitting',
+        type: 'fitting',
+      };
 
       const navParts: NavItem[] =
         data.attributes.parts?.map((o) => ({
@@ -95,7 +91,7 @@ const createCustomiser: StateCreator<
           type: 'part',
         })) ?? [];
 
-      const navItems = [...navOptions, ...navParts].map((i, index) => {
+      const navItems = [navFitting, ...navParts].map((i, index) => {
         i.index = index;
         return i;
       });
@@ -103,7 +99,6 @@ const createCustomiser: StateCreator<
       dataToSet = {
         ...dataToSet,
         selectedModels: models,
-        selectedOption: data.attributes.options[0],
         navItems: navItems,
         selectedNav: navItems[0],
       };
@@ -134,7 +129,6 @@ const createCustomiser: StateCreator<
       }),
     );
   },
-  setOption: (data) => set({ selectedOption: data }),
   setSelectedPart: (data) => set({ selectedPart: data }),
   setSelectedNav: (index, save) =>
     set(
@@ -144,35 +138,28 @@ const createCustomiser: StateCreator<
         if (navItem) {
           state.selectedNav = navItem;
 
-          if (navItem.type === 'option') {
-            const option = state.customProduct?.attributes?.options?.find(
-              (o) => o?.id === navItem.id,
-            );
-            if (option) {
-              state.selectedOption = option;
-              state.selectedPart = null;
-            }
-          }
-
           if (navItem.type === 'part') {
             const part = state.customProduct?.attributes?.parts?.find((o) => o?.id === navItem.id);
             if (part) {
-              state.selectedOption = null;
               state.selectedPart = part;
             }
+          } else {
+            state.selectedPart = null;
           }
         }
 
         if (save) {
           state.savedParts = state.parts;
+          state.savedModels = state.selectedModels;
         }
       }),
     ),
-  resetNav: () => set({ selectedOption: null, selectedPart: null }),
+  resetNav: () => set({ selectedPart: null }),
   cancelPartChange: () =>
     set(
       produce((state: CustomiserState) => {
         state.parts = state.savedParts;
+        state.selectedModels = state.savedModels;
       }),
     ),
   texture: (nodeId) => {

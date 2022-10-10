@@ -5,7 +5,7 @@
 .root {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 73px 1fr 60px;
+  grid-template-rows: 73px 1fr 90px;
   gap: 0px 0px;
   grid-template-areas:
     'header'
@@ -23,4 +23,5 @@
 
 .actions {
   grid-area: actions;
+  padding: rem(15px);
 }

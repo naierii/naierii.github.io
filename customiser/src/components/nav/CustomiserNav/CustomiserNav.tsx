@@ -2,6 +2,7 @@ import { CustomProduct, Maybe } from '@graphql/generated/graphql';
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
 import { m, useCycle } from 'framer-motion';
+import NavButtons from '../NavButtons';
 import NavHeader from '../NavHeader';
 import NavItem from '../NavItem';
 import NavOption from '../NavOption';
@@ -39,7 +40,7 @@ const CustomiserNav = ({ className, data }: CustomiserNavProps) => {
           </>
         )}
       </div>
-      <div className={styles.actions}></div>
+      <NavButtons className={styles.actions} />
     </m.nav>
   );
 };

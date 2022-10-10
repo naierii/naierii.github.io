@@ -1,14 +1,4 @@
-import Button from '@components/ui/Button';
-import {
-  useGetMaterialsQuery,
-  MaterialEntity,
-  MaterialColourGroupEntity,
-  Maybe,
-  MaterialTypeEntity,
-} from '@graphql/generated/graphql';
-import graphQLClient from '@graphql/graphql-client';
 import cn from 'classnames';
-import { useEffect, useMemo } from 'react';
 import { Material } from './Material';
 import styles from './MaterialGroup.module.scss';
 import { useMaterialGroupStore } from './MaterialGroupState';
@@ -28,7 +18,7 @@ export const MaterialType = ({ className }: MaterialTypeProps) => {
       <h3>Texture</h3>
       <div className={styles.materialTypes}>
         {materialTypes.map((mt) => (
-          <Button
+          <button
             className={cn(styles.pillButton, {
               [styles.pillButtonSelected]: mt.id === selectedMaterialType?.id,
             })}
@@ -36,7 +26,7 @@ export const MaterialType = ({ className }: MaterialTypeProps) => {
             onClick={() => setMaterialType(mt)}
           >
             {mt.attributes?.name}
-          </Button>
+          </button>
         ))}
       </div>
       <div className={styles.materials}>

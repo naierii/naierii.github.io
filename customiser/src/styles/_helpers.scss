@@ -1,4 +1,5 @@
 @use '~sass-rem' as *;
+@use 'sass:math';
 
 // @include fluidType(20rem, 64rem, 1rem, 2rem);
 // https://chriskirknielsen.com/blog/modern-fluid-typography-with-clamp/
@@ -10,7 +11,7 @@
   $max-vw: rem(1280px),
   $content: null
 ) {
-  $factor: 1 / ($max-vw - $min-vw) * ($max-value - $min-value);
+  $factor: math.div(1, $max-vw - $min-vw) * ($max-value - $min-value);
   $calc-value: unquote('#{ $min-value - ($min-vw * $factor) } + #{ 100vw * $factor }');
 
   font-size: $min-value $content;

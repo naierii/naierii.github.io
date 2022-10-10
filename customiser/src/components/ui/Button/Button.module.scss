@@ -1,1 +1,33 @@
-.root {}
+@use '~sass-rem' as *;
+
+@import '@styles/variables';
+
+.root {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: 0;
+  text-decoration: none;
+  appearance: none;
+  cursor: pointer;
+  padding: rem(13px) rem(20px) rem(7px);
+  color: $white;
+  transform: skewX(-5deg);
+  background-color: $black;
+  font-family: $displayFont;
+  font-size: rem(28px);
+  font-weight: 900;
+  line-height: 1;
+
+  span {
+    transform: skewX(5deg);
+  }
+
+  &:disabled {
+    opacity: 0.25;
+  }
+}
+
+.red {
+  background-color: $red;
+}

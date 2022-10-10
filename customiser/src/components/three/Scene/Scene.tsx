@@ -8,7 +8,6 @@ const models = (state: CustomiserState) => state.selectedModels;
 
 const Scene = () => {
   const selectedModels = useCustomiserStore(models);
-
   return (
     <Center>
       {selectedModels.map((m) => (

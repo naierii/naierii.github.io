@@ -37,12 +37,14 @@ export interface CustomiserState {
   navItems: NavItem[];
   selectedNav: Maybe<NavItem>;
   parts: Part[];
+  savedParts: Part[];
   setSelectedModel: (optionId: Scalars['ID'], model?: Maybe<ModelEntity>) => void;
   setCustomProduct: (data: CustomProductEntity) => void;
   setOption: (data: ComponentCustomiserCustomOption) => void;
   setSelectedPart: (data: ComponentCustomiserCustomParts) => void;
   setPart: (part: ComponentCustomiserCustomParts, material: MaterialEntity) => void;
-  setSelectedNav: (index: number) => void;
+  setSelectedNav: (index: number, save?: boolean) => void;
+  cancelPartChange: () => void;
   resetNav: () => void;
   texture: (nodeId: string) => MaterialTextureModel;
 }
@@ -59,6 +61,7 @@ const createCustomiser: StateCreator<
   navItems: [],
   selectedNav: null,
   parts: [],
+  savedParts: [],
   setCustomProduct: (data) => {
     let dataToSet: {
       customProduct: CustomProductEntity;
@@ -133,7 +136,7 @@ const createCustomiser: StateCreator<
   },
   setOption: (data) => set({ selectedOption: data }),
   setSelectedPart: (data) => set({ selectedPart: data }),
-  setSelectedNav: (index) =>
+  setSelectedNav: (index, save) =>
     set(
       produce((state: CustomiserState) => {
         const navItem = state.navItems.find((n) => n.index === index);
@@ -159,12 +162,21 @@ const createCustomiser: StateCreator<
             }
           }
         }
+
+        if (save) {
+          state.savedParts = state.parts;
+        }
       }),
     ),
   resetNav: () => set({ selectedOption: null, selectedPart: null }),
+  cancelPartChange: () =>
+    set(
+      produce((state: CustomiserState) => {
+        state.parts = state.savedParts;
+      }),
+    ),
   texture: (nodeId) => {
     const parts = get().parts;
-
     let materials: MaterialTextureModel = {};
     for (const p of parts) {
       const test = p.part.modelParts?.data.map((mp) => mp?.attributes?.nodeId).indexOf(nodeId);

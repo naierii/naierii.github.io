@@ -4,7 +4,6 @@ import { useRef, useCallback, useEffect, useState, useMemo } from 'react';
 import { Box3, DoubleSide, Mesh, MeshStandardMaterial, RepeatWrapping, Vector3 } from 'three';
 import type { ThreeElements } from '@react-three/fiber';
 import { MaterialTextureMapModel } from '@models';
-
 export interface ClonedTextureMeshProps {
   node: Mesh;
   texture: MaterialTextureMapModel;
@@ -32,13 +31,13 @@ const ClonedTextureMesh = ({ node, texture }: ClonedTextureMeshProps) => {
         updatedTextures = { ...updatedTextures, [key]: clone };
       }
 
-      if (materialRef.current) {
-        materialRef.current.needsUpdate = true;
-      }
-
       setTextures(updatedTextures);
     }
   }, [clonedTextures]);
+
+  if (materialRef.current) {
+    materialRef.current.needsUpdate = true;
+  }
 
   const meshProps: ThreeElements['mesh'] = {
     geometry: node.geometry,

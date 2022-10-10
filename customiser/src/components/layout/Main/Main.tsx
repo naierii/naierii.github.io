@@ -9,6 +9,7 @@ import graphQLClient from '@graphql/graphql-client';
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
 import { useEffect, useState } from 'react';
+import Header from '../Header';
 
 import styles from './Main.module.scss';
 
@@ -50,8 +51,8 @@ const Main = ({ className, product }: MainProps) => {
       {show ? (
         <div className={rootClassName}>
           <CustomiserNav className={styles.nav} data={data?.attributes} />
+          <Header className={styles.header} />
           <CustomiserCanvas className={styles.model} />
-          <div className='header'></div>
         </div>
       ) : (
         <Button onClick={() => setShow(true)}>Customise</Button>

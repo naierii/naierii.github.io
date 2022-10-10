@@ -57,7 +57,7 @@ const createMaterialGroup: StateCreator<MaterialGroupState, [['zustand/devtools'
         const colourGroups = materials.flatMap(
           (d) => d.attributes?.colourGroups?.data,
         ) as MaterialColourGroupEntity[];
-        state.colourGroups = uniqueColourGroups([...state.colourGroups, ...colourGroups]);
+        state.colourGroups = uniqueColourGroups(colourGroups);
         state.selectedColourGroup = state.colourGroups[0];
 
         const materialTypes = materials
@@ -65,10 +65,10 @@ const createMaterialGroup: StateCreator<MaterialGroupState, [['zustand/devtools'
             m.attributes?.colourGroups?.data.find((g) => g.id === state.selectedColourGroup?.id),
           )
           .map((m) => m.attributes?.type?.data) as MaterialTypeEntity[];
-        state.materialTypes = uniqueMaterialTypes([...state.materialTypes, ...materialTypes]);
+        state.materialTypes = uniqueMaterialTypes(materialTypes);
         state.selectedMaterialType = state.materialTypes[0];
 
-        state.materials = uniqueMaterials([...state.materials, ...materials]);
+        state.materials = uniqueMaterials(materials);
       }),
     );
   },

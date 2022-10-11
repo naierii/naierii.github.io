@@ -5,7 +5,7 @@ const getSizeVariation = (
   weight: number,
   variations: Array<CustomiserProductVariant>,
 ) => {
-  let size: string;
+  let size = '';
   if (unit === 'KGS') {
     switch (true) {
       case 0 <= weight && weight < 10:
@@ -18,13 +18,13 @@ const getSizeVariation = (
         size = 'S-CHILD';
         break;
       case 22 <= weight && weight < 30:
-        size = 'M-CHILD)';
+        size = 'M-CHILD';
         break;
       case 30 <= weight && weight < 40:
         size = 'L-CHILD';
         break;
       case 40 <= weight && weight < 50:
-        size = '2XS';
+        size = 'YOUTH';
         break;
       case 50 <= weight && weight < 59:
         size = 'XS';
@@ -69,7 +69,7 @@ const getSizeVariation = (
         size = 'L-CHILD';
         break;
       case 88.2 <= weight && weight < 110.2:
-        size = '2XS';
+        size = 'YOUTH';
         break;
       case 110.2 <= weight && weight < 130:
         size = 'XS';
@@ -97,7 +97,8 @@ const getSizeVariation = (
         break;
     }
   }
-  return variations.find((v) => v.sku?.includes(size));
+
+  return variations.find((v) => v.sku?.endsWith(size));
 };
 
 export default getSizeVariation;

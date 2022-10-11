@@ -32,6 +32,11 @@ interface NavItem {
   index?: number;
 }
 
+interface SizingMeasurement {
+  value?: number;
+  unit?: string;
+}
+
 export type CustomiserProductVariant = Pick<
   ShopifyProductVariant,
   '__typename' | 'id' | 'title' | 'sku' | 'price'
@@ -46,6 +51,11 @@ export interface CustomiserState {
   parts: Part[];
   savedParts: Part[];
   variations: Array<CustomiserProductVariant>;
+  sizing?: {
+    height?: SizingMeasurement;
+    weight?: SizingMeasurement;
+    variation?: CustomiserProductVariant;
+  };
   setSelectedModel: (optionId: Scalars['ID'], model?: Maybe<ModelEntity>) => void;
   setCustomProduct: (
     customProduct: CustomProductEntity,
@@ -54,6 +64,11 @@ export interface CustomiserState {
   setSelectedPart: (data: ComponentCustomiserCustomParts) => void;
   setPart: (part: ComponentCustomiserCustomParts, material: MaterialEntity) => void;
   setSelectedNav: (index: number, save?: boolean) => void;
+  setSizing: (
+    height?: SizingMeasurement,
+    weight?: SizingMeasurement,
+    variation?: CustomiserProductVariant,
+  ) => void;
   cancelPartChange: () => void;
   resetNav: () => void;
   texture: (nodeId: string) => MaterialTextureModel;
@@ -73,6 +88,14 @@ const createCustomiser: StateCreator<
   parts: [],
   savedParts: [],
   variations: [],
+  sizing: {
+    height: {
+      unit: 'CMS',
+    },
+    weight: {
+      unit: 'KGS',
+    },
+  },
   setCustomProduct: (customProduct, shopifyProduct) => {
     let dataToSet: {
       customProduct: CustomProductEntity;
@@ -126,6 +149,21 @@ const createCustomiser: StateCreator<
     }
 
     set(dataToSet);
+  },
+  setSizing: (height, weight, variation) => {
+    set(
+      produce((state: CustomiserState) => {
+        if (height) {
+          state.sizing = { ...state.sizing, height };
+        }
+        if (weight) {
+          state.sizing = { ...state.sizing, weight };
+        }
+        if (variation) {
+          state.sizing = { ...state.sizing, variation };
+        }
+      }),
+    );
   },
   setSelectedModel: (id, model) => {
     set(

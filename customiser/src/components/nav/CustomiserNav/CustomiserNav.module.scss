@@ -19,6 +19,8 @@
   display: flex;
   flex-direction: column;
   padding: rem(30px) rem(15px);
+  overflow: scroll;
+  scroll-behavior: smooth;
 }
 
 .actions {

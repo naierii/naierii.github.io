@@ -13,7 +13,7 @@ const Loader = ({ className }: LoaderProps) => {
 
   return (
     <Html center>
-      <div className={rootClassName}>{progress.toFixed(2)} % loaded</div>
+      <div className={rootClassName}>{progress.toFixed(2)}%</div>
     </Html>
   );
 };

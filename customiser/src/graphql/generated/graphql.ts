@@ -709,6 +709,7 @@ export type MaterialPrice = {
   materialProducts?: Maybe<MaterialProductRelationResponseCollection>;
   name: Scalars['String'];
   price: Scalars['Float'];
+  priceValue: Scalars['Int'];
   sku: Scalars['String'];
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -745,7 +746,7 @@ export type MaterialPriceFiltersInput = {
   name?: InputMaybe<StringFilterInput>;
   not?: InputMaybe<MaterialPriceFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<MaterialPriceFiltersInput>>>;
-  price?: InputMaybe<FloatFilterInput>;
+  priceValue?: InputMaybe<IntFilterInput>;
   sku?: InputMaybe<StringFilterInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
@@ -753,7 +754,8 @@ export type MaterialPriceFiltersInput = {
 export type MaterialPriceInput = {
   materialProducts?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   name?: InputMaybe<Scalars['String']>;
-  price?: InputMaybe<Scalars['Float']>;
+  price: Scalars['Float'];
+  priceValue?: InputMaybe<Scalars['Int']>;
   sku?: InputMaybe<Scalars['String']>;
 };
 
@@ -2280,7 +2282,6 @@ export const useGetCustomProductByShopifyIdQuery = <
 useGetCustomProductByShopifyIdQuery.getKey = (variables: GetCustomProductByShopifyIdQueryVariables) => ['GetCustomProductByShopifyId', variables];
 ;
 
-useGetCustomProductByShopifyIdQuery.fetcher = (client: GraphQLClient, variables: GetCustomProductByShopifyIdQueryVariables, headers?: RequestInit['headers']) => fetcher<GetCustomProductByShopifyIdQuery, GetCustomProductByShopifyIdQueryVariables>(client, GetCustomProductByShopifyIdDocument, variables, headers);
 export const GetMaterialsDocument = /*#__PURE__*/ `
     query GetMaterials($filters: MaterialFiltersInput) {
   materials(filters: $filters) {
@@ -2311,5 +2312,3 @@ export const useGetMaterialsQuery = <
 
 useGetMaterialsQuery.getKey = (variables?: GetMaterialsQueryVariables) => variables === undefined ? ['GetMaterials'] : ['GetMaterials', variables];
 ;
-
-useGetMaterialsQuery.fetcher = (client: GraphQLClient, variables?: GetMaterialsQueryVariables, headers?: RequestInit['headers']) => fetcher<GetMaterialsQuery, GetMaterialsQueryVariables>(client, GetMaterialsDocument, variables, headers);

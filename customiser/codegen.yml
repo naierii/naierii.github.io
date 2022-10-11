@@ -1,6 +1,6 @@
 overwrite: true
 schema: "http://localhost:1337/graphql"
-documents: "./src/graphql/**/*.graphql"
+documents: "./src/graphql/boxxer/**/*.graphql"
 generates:
   ./src/graphql/generated/graphql.ts:
     plugins:
@@ -10,6 +10,5 @@ generates:
     config:
       pureMagicComment: true
       fetcher: graphql-request
-      exposeFetcher: true
       exposeQueryKeys: true
       dedupeFragments: true

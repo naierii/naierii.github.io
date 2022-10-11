@@ -1,16 +1,19 @@
-import create, { StateCreator } from 'zustand';
-import produce from 'immer';
-import { devtools, persist } from 'zustand/middleware';
-import { MaterialTextureModel } from '@models';
-import {
-  Scalars,
+import type {
+  ComponentCustomiserCustomParts,
+  CustomProductEntity,
+  MaterialEntity,
   Maybe,
   ModelEntity,
-  ComponentCustomiserCustomParts,
-  MaterialEntity,
-  CustomProductEntity,
-  ComponentCustomiserCustomOption,
+  Scalars,
 } from '@graphql/generated/graphql';
+import {
+  ShopifyProductVariant,
+  ShopifyShopifyGetProductByIdQuery,
+} from '@graphql/generated/graphql-shopify';
+import { MaterialTextureModel } from '@models';
+import produce from 'immer';
+import create, { StateCreator } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 
 interface SelectedModel {
   optionId: Scalars['ID'];
@@ -29,6 +32,10 @@ interface NavItem {
   index?: number;
 }
 
+export type CustomiserProductVariant = Pick<
+  ShopifyProductVariant,
+  '__typename' | 'id' | 'title' | 'sku' | 'price'
+>;
 export interface CustomiserState {
   customProduct: Maybe<CustomProductEntity>;
   selectedModels: SelectedModel[];
@@ -38,8 +45,12 @@ export interface CustomiserState {
   selectedNav: Maybe<NavItem>;
   parts: Part[];
   savedParts: Part[];
+  variations: Array<CustomiserProductVariant>;
   setSelectedModel: (optionId: Scalars['ID'], model?: Maybe<ModelEntity>) => void;
-  setCustomProduct: (data: CustomProductEntity) => void;
+  setCustomProduct: (
+    customProduct: CustomProductEntity,
+    shopifyProduct: ShopifyShopifyGetProductByIdQuery,
+  ) => void;
   setSelectedPart: (data: ComponentCustomiserCustomParts) => void;
   setPart: (part: ComponentCustomiserCustomParts, material: MaterialEntity) => void;
   setSelectedNav: (index: number, save?: boolean) => void;
@@ -61,19 +72,23 @@ const createCustomiser: StateCreator<
   selectedNav: null,
   parts: [],
   savedParts: [],
-  setCustomProduct: (data) => {
+  variations: [],
+  setCustomProduct: (customProduct, shopifyProduct) => {
     let dataToSet: {
       customProduct: CustomProductEntity;
       selectedModels?: SelectedModel[];
+      savedModels?: SelectedModel[];
       navItems?: NavItem[];
       selectedNav?: NavItem;
+      variations?: Array<CustomiserProductVariant>;
     } = {
-      customProduct: data,
+      customProduct,
+      variations: shopifyProduct.product?.variants.nodes,
     };
 
-    if (!get().selectedModels.length && data.attributes?.options) {
+    if (!get().selectedModels.length && customProduct.attributes?.options) {
       const models: SelectedModel[] = [];
-      data.attributes.options.forEach((option) => {
+      customProduct.attributes.options.forEach((option) => {
         if (option?.models?.length && option?.models[0]?.model?.data) {
           models.push({ optionId: option.id, model: option?.models[0]?.model?.data });
         }
@@ -85,13 +100,18 @@ const createCustomiser: StateCreator<
       };
 
       const navParts: NavItem[] =
-        data.attributes.parts?.map((o) => ({
+        customProduct.attributes.parts?.map((o) => ({
           id: o?.id ?? '',
           name: o?.name ?? '',
           type: 'part',
         })) ?? [];
 
-      const navItems = [navFitting, ...navParts].map((i, index) => {
+      const navSize: NavItem = {
+        name: 'Size',
+        type: 'size',
+      };
+
+      const navItems = [navFitting, ...navParts, navSize].map((i, index) => {
         i.index = index;
         return i;
       });
@@ -99,6 +119,7 @@ const createCustomiser: StateCreator<
       dataToSet = {
         ...dataToSet,
         selectedModels: models,
+        savedModels: models,
         navItems: navItems,
         selectedNav: navItems[0],
       };

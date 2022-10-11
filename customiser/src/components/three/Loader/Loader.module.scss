@@ -1,6 +1,18 @@
+@use '~sass-rem' as *;
+
+@import '@styles/variables';
+
 .root {
-  background-color: gray;
-  border-radius: 5px;
-  padding: 15px;
+  background-color: $red;
+  border-radius: rem(50px);
   text-align: center;
+  width: rem(100px);
+  height: rem(100px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $displayFont;
+  color: white;
+  font-size: rem(30px);
+  font-weight: 900;
 }

@@ -1,3 +1,4 @@
+import OptionButton from '@components/ui/OptionButton';
 import { ComponentCustomiserCustomOption, Maybe } from '@graphql/generated/graphql';
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
@@ -23,15 +24,13 @@ const FittingOption = ({ option }: FittingOptionProps) => {
       <h3>{option.name}</h3>
       <div className={styles.fittingButtons}>
         {option.models?.map((m) => (
-          <button
-            className={cn(styles.button, {
-              [styles.selected]: getSelected?.id === m?.model?.data?.id,
-            })}
+          <OptionButton
             key={m?.id}
+            selected={getSelected?.id === m?.model?.data?.id}
             onClick={() => setSelectedModel(option.id, m?.model?.data)}
           >
             {m?.model?.data?.attributes?.name}
-          </button>
+          </OptionButton>
         ))}
       </div>
     </div>

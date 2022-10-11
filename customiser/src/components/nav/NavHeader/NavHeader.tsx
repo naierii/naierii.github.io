@@ -42,7 +42,9 @@ const NavHeader = ({ className, toggle }: NavHeaderProps) => {
             </svg>
           </button>
         )}
-        <div className={styles.title}>{selectedNav?.name}</div>
+        <div className={styles.title}>
+          {currentIndex?.toString() ? `${currentIndex + 1}:` : null} {selectedNav?.name}
+        </div>
         {navItemsLength && (
           <button
             className={cn(styles.navIcon, styles.navIconNext)}

@@ -3,15 +3,5 @@
   "version": "1.0.0",
   "description": "Shopify theme and customiser",
   "license": "MIT",
-  "private": true,
-  "workspaces": {
-    "packages": [
-      "customiser",
-      "shopify-theme",
-      "packages/*"
-    ],
-    "nohoist": [
-      "customiser"
-    ]
-  }
+  "private": true
 }

@@ -56,6 +56,7 @@ export interface CustomiserState {
     weight?: SizingMeasurement;
     variation?: CustomiserProductVariant;
   };
+  total: () => string;
   setSelectedModel: (optionId: Scalars['ID'], model?: Maybe<ModelEntity>) => void;
   setCustomProduct: (
     customProduct: CustomProductEntity,
@@ -95,6 +96,22 @@ const createCustomiser: StateCreator<
     weight: {
       unit: 'KGS',
     },
+  },
+  total: () => {
+    let total = 0;
+    const variation = get().sizing?.variation;
+    if (variation?.price.amount) {
+      total = total + Number(variation.price.amount);
+    }
+
+    get().parts.forEach((part) => {
+      const priceAdjust = part.part.areaSize?.data?.attributes?.priceAdjust ?? 1;
+      const price = part.material.attributes?.price?.data?.attributes?.price ?? 0;
+      const sum = priceAdjust * price;
+      total = total + sum;
+    });
+
+    return total.toFixed(2);
   },
   setCustomProduct: (customProduct, shopifyProduct) => {
     let dataToSet: {

@@ -4,6 +4,7 @@ import { m, useCycle } from 'framer-motion';
 import NavButtons from '../NavButtons';
 import NavFitting from '../NavFitting';
 import NavHeader from '../NavHeader';
+import NavOptions from '../NavOptions';
 import NavPart from '../NavPart';
 import NavSize from '../NavSize';
 
@@ -21,9 +22,11 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
 
   return (
     <m.nav className={rootClassName} initial={'closed'} animate={isOpen ? 'open' : 'closed'}>
-      <NavHeader className={styles.header} toggle={() => toggleOpen()} />
+      <NavHeader className={styles.header} toggle={() => toggleOpen()} isOpen={isOpen} />
       <div className={styles.content}>
-        {selectedNav?.type === 'fitting' ? (
+        {isOpen ? (
+          <NavOptions toggle={() => toggleOpen()} />
+        ) : selectedNav?.type === 'fitting' ? (
           <NavFitting />
         ) : selectedNav?.type === 'size' ? (
           <NavSize />
@@ -31,7 +34,7 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
           <NavPart part={selectedPart} />
         ) : null}
       </div>
-      <NavButtons className={styles.actions} />
+      {!isOpen && <NavButtons className={styles.actions} />}
     </m.nav>
   );
 };

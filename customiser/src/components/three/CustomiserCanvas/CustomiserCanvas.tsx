@@ -53,7 +53,7 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
         <Suspense fallback={<Loader />}>
           <Scene />
         </Suspense>
-        <OrbitControls enableZoom={false} />
+        <OrbitControls enableZoom={true} />
       </Canvas>
       {/* <button className={styles.save} onClick={saveImage}>
         Save Image

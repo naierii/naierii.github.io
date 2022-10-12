@@ -10,7 +10,7 @@ import {
   ShopifyProductVariantFragment,
   ShopifyShopifyGetProductByIdQuery,
 } from '@graphql/generated/graphql-shopify';
-import { MaterialTextureModel } from '@models';
+import { MaterialTextureMapModel, MaterialTextureModel } from '@models';
 import produce from 'immer';
 import create, { StateCreator } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
@@ -26,11 +26,12 @@ interface Part {
   material: MaterialFragment;
 }
 
-interface NavItem {
+export interface NavItem {
   id?: Scalars['ID'];
   name: Maybe<Scalars['String']>;
   type: 'option' | 'part' | 'fitting' | 'size';
   index?: number;
+  required?: boolean;
 }
 
 interface SizingMeasurement {
@@ -133,6 +134,7 @@ const createCustomiser: StateCreator<
       const navFitting: NavItem = {
         name: 'Fitting',
         type: 'fitting',
+        required: true,
       };
 
       const navParts: NavItem[] =
@@ -140,11 +142,13 @@ const createCustomiser: StateCreator<
           id: o?.id ?? '',
           name: o?.name ?? '',
           type: 'part',
+          required: !o?.optional,
         })) ?? [];
 
       const navSize: NavItem = {
         name: 'Size',
         type: 'size',
+        required: true,
       };
 
       const navItems = [navFitting, ...navParts, navSize].map((i, index) => {
@@ -240,12 +244,13 @@ const createCustomiser: StateCreator<
     for (const p of parts) {
       const test = p.part.modelParts?.data.map((mp) => mp?.attributes?.nodeId).indexOf(nodeId);
       if (test != -1 && p?.material?.attributes?.images) {
-        materials = p.material.attributes.images?.reduce(
-          (obj, cur) => ({
-            [cur?.mapType as string]: cur?.image?.data?.attributes?.url as string,
-          }),
-          {},
-        );
+        p.material.attributes.images?.forEach((image) => {
+          materials = {
+            ...materials,
+            [image?.mapType as string]: image?.image?.data?.attributes?.url as string,
+          };
+        });
+
         break;
       }
     }

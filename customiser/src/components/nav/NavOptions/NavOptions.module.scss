@@ -1,0 +1,31 @@
+@use '~sass-rem' as *;
+
+@import '@styles/variables';
+
+.option {
+  display: flex;
+  padding: rem(15px) 0;
+  text-align: left;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $midGrey;
+  }
+}
+
+.optionTitle {
+  flex: 1;
+
+  h3 {
+    margin: 0;
+  }
+}
+
+.icon {
+  width: rem(26px);
+  align-self: flex-start;
+  fill: $midGrey;
+}
+
+.iconSelected {
+  fill: $red;
+}

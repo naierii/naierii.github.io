@@ -1,6 +1,7 @@
 fragment CustomProductPart on ComponentCustomiserCustomParts {
   id
   name
+  optional
   areaSize {
     data {
       ...MaterialAreaSize

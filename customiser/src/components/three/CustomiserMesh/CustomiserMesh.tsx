@@ -46,10 +46,20 @@ const ClonedTextureMesh = ({ node, texture }: ClonedTextureMeshProps) => {
 
   const materialProps: ThreeElements['meshStandardMaterial'] = {
     side: DoubleSide,
-    roughness: 0.4,
-    metalness: 0.05,
     ...textures,
   };
+
+  if (textures?.displacementMap) {
+    materialProps.displacementScale = 0.01;
+  }
+
+  if (!textures?.roughnessMap) {
+    materialProps.roughness = 0.4;
+  }
+
+  if (!textures?.metalnessMap) {
+    materialProps.metalness = 0.05;
+  }
 
   // if (hovered) {
   //   materialProps.color = '#ccc';

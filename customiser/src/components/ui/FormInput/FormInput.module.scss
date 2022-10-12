@@ -1,0 +1,47 @@
+@use '~sass-rem' as *;
+
+@import '@styles/variables';
+
+.root {
+  border: 1px solid $midGrey;
+  margin-bottom: rem(20px);
+  position: relative;
+  padding: 0 rem(16px);
+  display: flex;
+  column-gap: rem(16px);
+}
+
+.input {
+  appearance: none;
+  background-color: $white;
+  color: $black;
+  font-size: rem(20px);
+  padding: rem(20px) 0 rem(12px);
+  width: 100%;
+  border-radius: 0;
+  position: relative;
+  border: 0;
+  outline: none;
+
+  &:focus,
+  &:active,
+  &:not(:placeholder-shown) {
+    + .label {
+      font-size: rem(12px);
+      top: rem(10px);
+    }
+  }
+}
+
+.label {
+  position: absolute;
+  left: rem(16px);
+  top: 50%;
+  transform: translateY(calc(-50% + 2px));
+  font-family: $displayFont;
+  font-weight: 900;
+  font-size: rem(20px);
+  transition: all 0.2s ease-in-out;
+  pointer-events: none;
+  color: $grey;
+}

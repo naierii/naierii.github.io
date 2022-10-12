@@ -16,6 +16,11 @@ body,
   margin: 0;
   padding: 0;
 }
+
+* {
+  box-sizing: border-box;
+}
+
 @for $index from 1 through 6 {
   h#{$index},
   .h#{$index} {
@@ -113,20 +118,14 @@ button {
   }
 }
 
-input {
-  appearance: none;
-  background-color: $white;
-  color: $black;
-  font-size: rem(20px);
-  width: 100%;
-  box-sizing: border-box;
-  border-radius: 0;
-  height: rem(53px);
-  position: relative;
-  border: 0;
-  font-family: $displayFont;
-  padding: rem(20px) rem(16px) rem(12px);
-  border: 1px solid $midGrey;
-  margin-bottom: rem(20px);
-  font-weight: 900;
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
 }

@@ -14,6 +14,7 @@ import { MaterialTextureModel } from '@models';
 import produce from 'immer';
 import create, { StateCreator } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+import { UNIT } from './constants';
 
 interface SelectedModel {
   optionId: Scalars['ID'];
@@ -86,10 +87,10 @@ const createCustomiser: StateCreator<
   variations: [],
   sizing: {
     height: {
-      unit: 'CMS',
+      unit: UNIT.HEIGHT.CM,
     },
     weight: {
-      unit: 'KGS',
+      unit: UNIT.WEIGHT.KG,
     },
   },
   total: () => {

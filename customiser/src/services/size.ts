@@ -1,9 +1,9 @@
-import { CustomiserProductVariant } from '@store/customiser';
+import { ShopifyProductVariantFragment } from '@graphql/generated/graphql-shopify';
 
 const getSizeVariation = (
   unit: string,
   weight: number,
-  variations: Array<CustomiserProductVariant>,
+  variations: Array<ShopifyProductVariantFragment>,
 ) => {
   let size = '';
   if (unit === 'KGS') {

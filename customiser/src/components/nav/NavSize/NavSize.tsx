@@ -1,9 +1,9 @@
 import OptionButton from '@components/ui/OptionButton';
-import { CustomiserProductVariant, useCustomiserStore } from '@store/customiser';
+import { ShopifyProductVariantFragment } from '@graphql/generated/graphql-shopify';
+import getSizeVariation from '@services/size';
+import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
 import { ChangeEvent, useEffect } from 'react';
-import getSizeVariation from '@services/size';
-
 import styles from './NavSize.module.scss';
 
 export interface NavSizeProps {
@@ -33,7 +33,7 @@ const NavSize = ({ className }: NavSizeProps) => {
     setSizing(undefined, { value: Number(e.target.value), unit: 'KGS' });
   };
 
-  const onSetVariation = (clickedVariation: CustomiserProductVariant) => {
+  const onSetVariation = (clickedVariation: ShopifyProductVariantFragment) => {
     setSizing(undefined, undefined, clickedVariation);
   };
 

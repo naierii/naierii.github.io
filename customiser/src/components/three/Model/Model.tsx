@@ -1,11 +1,11 @@
-import { Maybe, ModelEntity } from '@graphql/generated/graphql';
+import { Maybe, ModelFragment } from '@graphql/generated/graphql';
 import { useGLTF } from '@react-three/drei';
 import { Fragment } from 'react';
 import { GLTF } from 'three-stdlib';
 import CustomiserMesh from '../CustomiserMesh';
 
 export interface CustomiserModelProps {
-  model?: Maybe<ModelEntity>;
+  model?: Maybe<ModelFragment>;
 }
 
 type GLTFResult = GLTF & {

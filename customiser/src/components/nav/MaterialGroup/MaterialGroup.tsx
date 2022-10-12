@@ -1,5 +1,5 @@
 import {
-  ComponentCustomiserCustomParts,
+  CustomProductPartFragment,
   InputMaybe,
   MaterialEntity,
   MaterialGroupEntity,
@@ -18,7 +18,7 @@ import { MaterialType } from './MaterialType';
 
 export interface MaterialGroupProps {
   className?: string;
-  part: ComponentCustomiserCustomParts;
+  part: CustomProductPartFragment;
   materialGroup?: Maybe<MaterialGroupEntity>;
 }
 

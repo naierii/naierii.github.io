@@ -1,13 +1,13 @@
 import type {
-  ComponentCustomiserCustomParts,
-  CustomProductEntity,
-  MaterialEntity,
+  CustomProductFragment,
+  CustomProductPartFragment,
+  MaterialFragment,
   Maybe,
-  ModelEntity,
+  ModelFragment,
   Scalars,
 } from '@graphql/generated/graphql';
 import {
-  ShopifyProductVariant,
+  ShopifyProductVariantFragment,
   ShopifyShopifyGetProductByIdQuery,
 } from '@graphql/generated/graphql-shopify';
 import { MaterialTextureModel } from '@models';
@@ -17,12 +17,12 @@ import { devtools, persist } from 'zustand/middleware';
 
 interface SelectedModel {
   optionId: Scalars['ID'];
-  model?: Maybe<ModelEntity>;
+  model?: Maybe<ModelFragment>;
 }
 
 interface Part {
-  part: ComponentCustomiserCustomParts;
-  material: MaterialEntity;
+  part: CustomProductPartFragment;
+  material: MaterialFragment;
 }
 
 interface NavItem {
@@ -37,38 +37,34 @@ interface SizingMeasurement {
   unit?: string;
 }
 
-export type CustomiserProductVariant = Pick<
-  ShopifyProductVariant,
-  '__typename' | 'id' | 'title' | 'sku' | 'price'
->;
 export interface CustomiserState {
-  customProduct: Maybe<CustomProductEntity>;
+  customProduct?: CustomProductFragment;
   selectedModels: SelectedModel[];
   savedModels: SelectedModel[];
-  selectedPart: Maybe<ComponentCustomiserCustomParts>;
+  selectedPart: Maybe<CustomProductPartFragment>;
   navItems: NavItem[];
   selectedNav: Maybe<NavItem>;
   parts: Part[];
   savedParts: Part[];
-  variations: Array<CustomiserProductVariant>;
+  variations: Array<ShopifyProductVariantFragment>;
   sizing?: {
     height?: SizingMeasurement;
     weight?: SizingMeasurement;
-    variation?: CustomiserProductVariant;
+    variation?: ShopifyProductVariantFragment;
   };
   total: () => string;
-  setSelectedModel: (optionId: Scalars['ID'], model?: Maybe<ModelEntity>) => void;
+  setSelectedModel: (optionId: Scalars['ID'], model?: Maybe<ModelFragment>) => void;
   setCustomProduct: (
-    customProduct: CustomProductEntity,
+    customProduct: CustomProductFragment,
     shopifyProduct: ShopifyShopifyGetProductByIdQuery,
   ) => void;
-  setSelectedPart: (data: ComponentCustomiserCustomParts) => void;
-  setPart: (part: ComponentCustomiserCustomParts, material: MaterialEntity) => void;
+  setSelectedPart: (data: CustomProductPartFragment) => void;
+  setPart: (part: CustomProductPartFragment, material: MaterialFragment) => void;
   setSelectedNav: (index: number, save?: boolean) => void;
   setSizing: (
     height?: SizingMeasurement,
     weight?: SizingMeasurement,
-    variation?: CustomiserProductVariant,
+    variation?: ShopifyProductVariantFragment,
   ) => void;
   cancelPartChange: () => void;
   resetNav: () => void;
@@ -82,7 +78,6 @@ const createCustomiser: StateCreator<
 > = (set, get) => ({
   selectedModels: [],
   savedModels: [],
-  customProduct: null,
   selectedPart: null,
   navItems: [],
   selectedNav: null,
@@ -115,12 +110,12 @@ const createCustomiser: StateCreator<
   },
   setCustomProduct: (customProduct, shopifyProduct) => {
     let dataToSet: {
-      customProduct: CustomProductEntity;
+      customProduct: CustomProductFragment;
       selectedModels?: SelectedModel[];
       savedModels?: SelectedModel[];
       navItems?: NavItem[];
       selectedNav?: NavItem;
-      variations?: Array<CustomiserProductVariant>;
+      variations?: Array<ShopifyProductVariantFragment>;
     } = {
       customProduct,
       variations: shopifyProduct.product?.variants.nodes,

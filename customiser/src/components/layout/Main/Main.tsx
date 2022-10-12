@@ -1,10 +1,7 @@
 import CustomiserNav from '@components/nav/CustomiserNav';
 import CustomiserCanvas from '@components/three/CustomiserCanvas';
 import Button from '@components/ui/Button';
-import {
-  CustomProductEntity,
-  useGetCustomProductByShopifyIdQuery,
-} from '@graphql/generated/graphql';
+import { useGetCustomProductByShopifyIdQuery } from '@graphql/generated/graphql';
 import { useShopifyGetProductByIdQuery } from '@graphql/generated/graphql-shopify';
 import graphQLClient, { graphQLClientShopify } from '@graphql/graphql-client';
 import { useCustomiserStore } from '@store/customiser';
@@ -28,7 +25,7 @@ const Main = ({ className, product }: MainProps) => {
   const { data: customProduct } = useGetCustomProductByShopifyIdQuery(
     graphQLClient,
     { id: product },
-    { select: (data) => data.customProductByShopifyId?.data as CustomProductEntity },
+    { select: (data) => data.customProductByShopifyId?.data },
   );
 
   const { data: shopifyProduct } = useShopifyGetProductByIdQuery(graphQLClientShopify, {

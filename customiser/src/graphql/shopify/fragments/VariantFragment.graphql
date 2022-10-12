@@ -1,0 +1,9 @@
+fragment ProductVariant on ProductVariant {
+  id
+  title
+  sku
+  price {
+    amount
+    currencyCode
+  }
+}

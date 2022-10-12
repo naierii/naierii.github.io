@@ -1,10 +1,10 @@
-fragment MaterialGroupFragment on MaterialGroupEntity {
+fragment MaterialGroup on MaterialGroupEntity {
   id
   attributes {
     name
     materialTypes {
       data {
-        ...MaterialTypeFragment
+        ...MaterialType
       }
     }
   }

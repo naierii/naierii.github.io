@@ -1,11 +1,11 @@
-import { MaterialEntity, Maybe } from '@graphql/generated/graphql';
+import { MaterialFragment } from '@graphql/generated/graphql';
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
 import styles from './MaterialGroup.module.scss';
 
 export interface MaterialProps {
   className?: string;
-  material: Maybe<MaterialEntity>;
+  material: MaterialFragment;
 }
 
 export const Material = ({ className, material }: MaterialProps) => {

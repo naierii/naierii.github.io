@@ -1,4 +1,4 @@
-fragment MaterialColourGroupFragment on MaterialColourGroupEntity {
+fragment MaterialColourGroup on MaterialColourGroupEntity {
   id
   attributes {
     name

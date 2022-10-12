@@ -1,15 +1,15 @@
-fragment ModelFragment on ModelEntity {
+fragment Model on ModelEntity {
   id
   attributes {
     name
     model {
       data {
-        ...FileFragment
+        ...File
       }
     }
     parts {
       data {
-        ...ModelPartFragment
+        ...ModelPart
       }
     }
   }

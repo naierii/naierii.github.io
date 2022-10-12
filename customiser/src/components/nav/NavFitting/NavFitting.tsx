@@ -1,12 +1,11 @@
 import OptionButton from '@components/ui/OptionButton';
-import { ComponentCustomiserCustomOption, Maybe } from '@graphql/generated/graphql';
+import { CustomProductOptionFragment } from '@graphql/generated/graphql';
 import { useCustomiserStore } from '@store/customiser';
-import cn from 'classnames';
 
 import styles from './NavFitting.module.scss';
 
 export interface FittingOptionProps {
-  option: Maybe<ComponentCustomiserCustomOption>;
+  option: CustomProductOptionFragment;
 }
 
 const FittingOption = ({ option }: FittingOptionProps) => {
@@ -38,7 +37,9 @@ const FittingOption = ({ option }: FittingOptionProps) => {
 };
 
 const NavFitting = () => {
-  const fittingOptions = useCustomiserStore((state) => state.customProduct?.attributes?.options);
+  const fittingOptions = useCustomiserStore(
+    (state) => state.customProduct?.attributes?.options,
+  ) as Array<CustomProductOptionFragment>;
 
   return (
     <>

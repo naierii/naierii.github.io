@@ -1,27 +1,27 @@
-fragment MaterialFragment on MaterialEntity {
+fragment Material on MaterialEntity {
   id
   attributes {
     name
     type {
       data {
-        ...MaterialTypeFragment
+        ...MaterialType
       }
     }
     colourGroups {
       data {
-        ...MaterialColourGroupFragment
+        ...MaterialColourGroup
       }
     }
     price {
       data {
-        ...MaterialPriceFragment
+        ...MaterialPrice
       }
     }
     images {
       mapType
       image {
         data {
-          ...ImageFragment
+          ...Image
         }
       }
     }

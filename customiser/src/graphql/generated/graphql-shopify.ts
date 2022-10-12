@@ -6792,6 +6792,8 @@ export enum ShopifyWeightUnit {
   Pounds = 'POUNDS'
 }
 
+export type ShopifyProductVariantFragment = { __typename?: 'ProductVariant', id: string, title: string, sku?: string | null, price: { __typename?: 'MoneyV2', amount: any, currencyCode: ShopifyCurrencyCode } };
+
 export type ShopifyShopifyGetProductByIdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -6799,25 +6801,29 @@ export type ShopifyShopifyGetProductByIdQueryVariables = Exact<{
 
 export type ShopifyShopifyGetProductByIdQuery = { __typename?: 'QueryRoot', product?: { __typename?: 'Product', title: string, variants: { __typename?: 'ProductVariantConnection', nodes: Array<{ __typename?: 'ProductVariant', id: string, title: string, sku?: string | null, price: { __typename?: 'MoneyV2', amount: any, currencyCode: ShopifyCurrencyCode } }> } } | null };
 
-
+export const ProductVariantFragmentDoc = /*#__PURE__*/ `
+    fragment ProductVariant on ProductVariant {
+  id
+  title
+  sku
+  price {
+    amount
+    currencyCode
+  }
+}
+    `;
 export const ShopifyGetProductByIdDocument = /*#__PURE__*/ `
     query ShopifyGetProductById($id: ID!) {
   product(id: $id) {
     title
     variants(first: 100) {
       nodes {
-        id
-        title
-        sku
-        price {
-          amount
-          currencyCode
-        }
+        ...ProductVariant
       }
     }
   }
 }
-    `;
+    ${ProductVariantFragmentDoc}`;
 export const useShopifyGetProductByIdQuery = <
       TData = ShopifyShopifyGetProductByIdQuery,
       TError = unknown

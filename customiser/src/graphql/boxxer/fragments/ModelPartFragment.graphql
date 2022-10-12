@@ -1,4 +1,4 @@
-fragment ModelPartFragment on ModelPartEntity {
+fragment ModelPart on ModelPartEntity {
   id
   attributes {
     nodeId

@@ -3,13 +3,7 @@ query ShopifyGetProductById($id: ID!) {
     title
     variants(first: 100) {
       nodes {
-        id
-        title
-        sku
-        price {
-          amount
-          currencyCode
-        }
+        ...ProductVariant
       }
     }
   }

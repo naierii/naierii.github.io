@@ -1,0 +1,12 @@
+fragment CustomProductOption on ComponentCustomiserCustomOption {
+  id
+  name
+  models {
+    id
+    model {
+      data {
+        ...Model
+      }
+    }
+  }
+}

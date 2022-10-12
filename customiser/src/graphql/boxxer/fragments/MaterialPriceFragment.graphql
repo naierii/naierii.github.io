@@ -1,4 +1,4 @@
-fragment MaterialPriceFragment on MaterialPriceEntity {
+fragment MaterialPrice on MaterialPriceEntity {
   id
   attributes {
     name

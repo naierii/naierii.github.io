@@ -1,4 +1,4 @@
-fragment MaterialTypeFragment on MaterialTypeEntity {
+fragment MaterialType on MaterialTypeEntity {
   id
   attributes {
     name

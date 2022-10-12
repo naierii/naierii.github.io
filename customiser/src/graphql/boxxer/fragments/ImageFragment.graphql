@@ -1,4 +1,4 @@
-fragment ImageFragment on UploadFileEntity {
+fragment Image on UploadFileEntity {
   id
   attributes {
     url

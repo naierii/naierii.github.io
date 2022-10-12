@@ -1,4 +1,4 @@
-import { ComponentCustomiserCustomParts, Maybe } from '@graphql/generated/graphql';
+import { CustomProductPartFragment } from '@graphql/generated/graphql';
 import cn from 'classnames';
 import { Suspense } from 'react';
 import MaterialGroup from '../MaterialGroup';
@@ -7,7 +7,7 @@ import styles from './NavPart.module.scss';
 
 export interface NavPartProps {
   className?: string;
-  part: Maybe<ComponentCustomiserCustomParts>;
+  part: CustomProductPartFragment;
 }
 
 const NavPart = ({ className, part }: NavPartProps) => {

@@ -1,4 +1,5 @@
 import FormInput from '@components/ui/FormInput';
+import FormSelect from '@components/ui/FormSelect';
 import OptionButton from '@components/ui/OptionButton';
 import { ShopifyProductVariantFragment } from '@graphql/generated/graphql-shopify';
 import getSizeVariation from '@services/size';
@@ -37,6 +38,12 @@ const NavSize = ({ className }: NavSizeProps) => {
 
   const onSetVariation = (clickedVariation: ShopifyProductVariantFragment) => {
     setSizing(undefined, undefined, clickedVariation);
+  };
+
+  const onVariationChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const id = e.target.value;
+    const selectedVariation = variations.find((v) => v.id === id);
+    setSizing(undefined, undefined, selectedVariation);
   };
 
   const setHeightUnit = (unit: string) => {
@@ -111,17 +118,13 @@ const NavSize = ({ className }: NavSizeProps) => {
         </div>
       </FormInput>
       <h3>Suggested Size</h3>
-      <div className={styles.variations}>
+      <FormSelect value={variation?.id} onChange={onVariationChange}>
         {variations.map((v) => (
-          <OptionButton
-            key={v.id}
-            selected={variation?.id === v.id}
-            onClick={() => onSetVariation(v)}
-          >
+          <option key={v.id} value={v.id}>
             {v.title}
-          </OptionButton>
+          </option>
         ))}
-      </div>
+      </FormSelect>
     </div>
   );
 };

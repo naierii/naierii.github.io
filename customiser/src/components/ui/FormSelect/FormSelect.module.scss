@@ -1,0 +1,29 @@
+@use '~sass-rem' as *;
+
+@import '@styles/variables';
+
+.root {
+  border: 1px solid $midGrey;
+  margin-bottom: rem(20px);
+  position: relative;
+}
+
+.select {
+  border: none;
+  appearance: none;
+  font-family: $displayFont;
+  font-weight: 900;
+  font-size: rem(20px);
+  outline: none;
+  width: 100%;
+  padding: rem(18px) rem(16px) rem(12px);
+}
+
+.icon {
+  height: rem(16px);
+  pointer-events: none;
+  position: absolute;
+  right: rem(16px);
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+}

@@ -1,7 +1,5 @@
 import FormInput from '@components/ui/FormInput';
 import FormSelect from '@components/ui/FormSelect';
-import OptionButton from '@components/ui/OptionButton';
-import { ShopifyProductVariantFragment } from '@graphql/generated/graphql-shopify';
 import getSizeVariation from '@services/size';
 import { UNIT } from '@store/constants';
 import { useCustomiserStore } from '@store/customiser';
@@ -34,10 +32,6 @@ const NavSize = ({ className }: NavSizeProps) => {
 
   const onWeightChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSizing(undefined, { value: Number(e.target.value), unit: 'KGS' });
-  };
-
-  const onSetVariation = (clickedVariation: ShopifyProductVariantFragment) => {
-    setSizing(undefined, undefined, clickedVariation);
   };
 
   const onVariationChange = (e: ChangeEvent<HTMLSelectElement>) => {

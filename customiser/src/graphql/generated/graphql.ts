@@ -360,6 +360,46 @@ export type FileInfoInput = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+export type Flag = {
+  __typename?: 'Flag';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  image: UploadFileEntityResponse;
+  name: Scalars['String'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type FlagEntity = {
+  __typename?: 'FlagEntity';
+  attributes?: Maybe<Flag>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type FlagEntityResponse = {
+  __typename?: 'FlagEntityResponse';
+  data?: Maybe<FlagEntity>;
+};
+
+export type FlagEntityResponseCollection = {
+  __typename?: 'FlagEntityResponseCollection';
+  data: Array<FlagEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type FlagFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<FlagFiltersInput>>>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  name?: InputMaybe<StringFilterInput>;
+  not?: InputMaybe<FlagFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<FlagFiltersInput>>>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type FlagInput = {
+  image?: InputMaybe<Scalars['ID']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
 export type FloatFilterInput = {
   and?: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
   between?: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
@@ -384,7 +424,7 @@ export type FloatFilterInput = {
   startsWith?: InputMaybe<Scalars['Float']>;
 };
 
-export type GenericMorph = ComponentCustomiserCustomOption | ComponentCustomiserCustomOptionModel | ComponentCustomiserCustomParts | ComponentMaterialMaterialMap | CustomDesign | CustomProduct | CustomProductStyle | CustomProductType | I18NLocale | Material | MaterialAreaSize | MaterialColourGroup | MaterialGroup | MaterialPrice | MaterialProduct | MaterialType | Model | ModelPart | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser;
+export type GenericMorph = ComponentCustomiserCustomOption | ComponentCustomiserCustomOptionModel | ComponentCustomiserCustomParts | ComponentMaterialMaterialMap | CustomDesign | CustomProduct | CustomProductStyle | CustomProductType | Flag | I18NLocale | Material | MaterialAreaSize | MaterialColourGroup | MaterialGroup | MaterialPrice | MaterialProduct | MaterialType | Model | ModelPart | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser;
 
 export type I18NLocale = {
   __typename?: 'I18NLocale';
@@ -958,6 +998,7 @@ export type Mutation = {
   createCustomProduct?: Maybe<CustomProductEntityResponse>;
   createCustomProductStyle?: Maybe<CustomProductStyleEntityResponse>;
   createCustomProductType?: Maybe<CustomProductTypeEntityResponse>;
+  createFlag?: Maybe<FlagEntityResponse>;
   createMaterial?: Maybe<MaterialEntityResponse>;
   createMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   createMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -977,6 +1018,7 @@ export type Mutation = {
   deleteCustomProduct?: Maybe<CustomProductEntityResponse>;
   deleteCustomProductStyle?: Maybe<CustomProductStyleEntityResponse>;
   deleteCustomProductType?: Maybe<CustomProductTypeEntityResponse>;
+  deleteFlag?: Maybe<FlagEntityResponse>;
   deleteMaterial?: Maybe<MaterialEntityResponse>;
   deleteMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   deleteMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1008,6 +1050,7 @@ export type Mutation = {
   updateCustomProductStyle?: Maybe<CustomProductStyleEntityResponse>;
   updateCustomProductType?: Maybe<CustomProductTypeEntityResponse>;
   updateFileInfo: UploadFileEntityResponse;
+  updateFlag?: Maybe<FlagEntityResponse>;
   updateMaterial?: Maybe<MaterialEntityResponse>;
   updateMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   updateMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1051,6 +1094,11 @@ export type MutationCreateCustomProductStyleArgs = {
 
 export type MutationCreateCustomProductTypeArgs = {
   data: CustomProductTypeInput;
+};
+
+
+export type MutationCreateFlagArgs = {
+  data: FlagInput;
 };
 
 
@@ -1135,6 +1183,11 @@ export type MutationDeleteCustomProductStyleArgs = {
 
 
 export type MutationDeleteCustomProductTypeArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationDeleteFlagArgs = {
   id: Scalars['ID'];
 };
 
@@ -1274,6 +1327,12 @@ export type MutationUpdateFileInfoArgs = {
 };
 
 
+export type MutationUpdateFlagArgs = {
+  data: FlagInput;
+  id: Scalars['ID'];
+};
+
+
 export type MutationUpdateMaterialArgs = {
   data: MaterialInput;
   id: Scalars['ID'];
@@ -1386,6 +1445,8 @@ export type Query = {
   customProductType?: Maybe<CustomProductTypeEntityResponse>;
   customProductTypes?: Maybe<CustomProductTypeEntityResponseCollection>;
   customProducts?: Maybe<CustomProductEntityResponseCollection>;
+  flag?: Maybe<FlagEntityResponse>;
+  flags?: Maybe<FlagEntityResponseCollection>;
   i18NLocale?: Maybe<I18NLocaleEntityResponse>;
   i18NLocales?: Maybe<I18NLocaleEntityResponseCollection>;
   material?: Maybe<MaterialEntityResponse>;
@@ -1466,6 +1527,18 @@ export type QueryCustomProductTypesArgs = {
 
 export type QueryCustomProductsArgs = {
   filters?: InputMaybe<CustomProductFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryFlagArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+
+export type QueryFlagsArgs = {
+  filters?: InputMaybe<FlagFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
@@ -2048,6 +2121,8 @@ export type CustomProductPartFragment = { __typename?: 'ComponentCustomiserCusto
 
 export type FileFragment = { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, size: number, ext?: string | null, mime: string, name: string } | null };
 
+export type FlagFragment = { __typename?: 'FlagEntity', id?: string | null, attributes?: { __typename?: 'Flag', name: string, image: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, size: number, width?: number | null, height?: number | null, ext?: string | null, mime: string, name: string, formats?: any | null } | null } | null } } | null };
+
 export type ImageFragment = { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, size: number, width?: number | null, height?: number | null, ext?: string | null, mime: string, name: string, formats?: any | null } | null };
 
 export type MaterialAreaSizeFragment = { __typename?: 'MaterialAreaSizeEntity', id?: string | null, attributes?: { __typename?: 'MaterialAreaSize', name: string, priceAdjust: number, sku: string } | null };
@@ -2072,6 +2147,14 @@ export type GetCustomProductByShopifyIdQueryVariables = Exact<{
 
 
 export type GetCustomProductByShopifyIdQuery = { __typename?: 'Query', customProductByShopifyId?: { __typename?: 'CustomProductEntityResponse', data?: { __typename?: 'CustomProductEntity', id?: string | null, attributes?: { __typename?: 'CustomProduct', name: string, shopifyProductId?: string | null, initPrice?: string | null, initSku?: string | null, options?: Array<{ __typename?: 'ComponentCustomiserCustomOption', id: string, name?: string | null, models?: Array<{ __typename?: 'ComponentCustomiserCustomOptionModel', id: string, model?: { __typename?: 'ModelEntityResponse', data?: { __typename?: 'ModelEntity', id?: string | null, attributes?: { __typename?: 'Model', name?: string | null, model?: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, size: number, ext?: string | null, mime: string, name: string } | null } | null } | null, parts?: { __typename?: 'ModelPartRelationResponseCollection', data: Array<{ __typename?: 'ModelPartEntity', id?: string | null, attributes?: { __typename?: 'ModelPart', nodeId: string } | null }> } | null } | null } | null } | null } | null> | null } | null> | null, parts?: Array<{ __typename?: 'ComponentCustomiserCustomParts', id: string, name?: string | null, optional?: boolean | null, areaSize?: { __typename?: 'MaterialAreaSizeEntityResponse', data?: { __typename?: 'MaterialAreaSizeEntity', id?: string | null, attributes?: { __typename?: 'MaterialAreaSize', name: string, priceAdjust: number, sku: string } | null } | null } | null, materialGroup?: { __typename?: 'MaterialGroupEntityResponse', data?: { __typename?: 'MaterialGroupEntity', id?: string | null, attributes?: { __typename?: 'MaterialGroup', name?: string | null, materialTypes?: { __typename?: 'MaterialTypeRelationResponseCollection', data: Array<{ __typename?: 'MaterialTypeEntity', id?: string | null, attributes?: { __typename?: 'MaterialType', name?: string | null } | null }> } | null } | null } | null } | null, modelParts?: { __typename?: 'ModelPartRelationResponseCollection', data: Array<{ __typename?: 'ModelPartEntity', id?: string | null, attributes?: { __typename?: 'ModelPart', nodeId: string } | null }> } | null } | null> | null } | null } | null } | null };
+
+export type GetFlagsQueryVariables = Exact<{
+  pagination?: InputMaybe<PaginationArg>;
+  filters?: InputMaybe<FlagFiltersInput>;
+}>;
+
+
+export type GetFlagsQuery = { __typename?: 'Query', flags?: { __typename?: 'FlagEntityResponseCollection', data: Array<{ __typename?: 'FlagEntity', id?: string | null, attributes?: { __typename?: 'Flag', name: string, image: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, size: number, width?: number | null, height?: number | null, ext?: string | null, mime: string, name: string, formats?: any | null } | null } | null } } | null }> } | null };
 
 export type GetMaterialsQueryVariables = Exact<{
   filters?: InputMaybe<MaterialFiltersInput>;
@@ -2202,6 +2285,34 @@ export const CustomProductFragmentDoc = /*#__PURE__*/ `
   }
 }
     `;
+export const ImageFragmentDoc = /*#__PURE__*/ `
+    fragment Image on UploadFileEntity {
+  id
+  attributes {
+    url
+    size
+    width
+    height
+    ext
+    mime
+    name
+    formats
+  }
+}
+    `;
+export const FlagFragmentDoc = /*#__PURE__*/ `
+    fragment Flag on FlagEntity {
+  id
+  attributes {
+    name
+    image {
+      data {
+        ...Image
+      }
+    }
+  }
+}
+    `;
 export const MaterialColourGroupFragmentDoc = /*#__PURE__*/ `
     fragment MaterialColourGroup on MaterialColourGroupEntity {
   id
@@ -2218,21 +2329,6 @@ export const MaterialPriceFragmentDoc = /*#__PURE__*/ `
     name
     price
     sku
-  }
-}
-    `;
-export const ImageFragmentDoc = /*#__PURE__*/ `
-    fragment Image on UploadFileEntity {
-  id
-  attributes {
-    url
-    size
-    width
-    height
-    ext
-    mime
-    name
-    formats
   }
 }
     `;
@@ -2300,6 +2396,34 @@ export const useGetCustomProductByShopifyIdQuery = <
     );
 
 useGetCustomProductByShopifyIdQuery.getKey = (variables: GetCustomProductByShopifyIdQueryVariables) => ['GetCustomProductByShopifyId', variables];
+;
+
+export const GetFlagsDocument = /*#__PURE__*/ `
+    query GetFlags($pagination: PaginationArg, $filters: FlagFiltersInput) {
+  flags(pagination: $pagination, filters: $filters) {
+    data {
+      ...Flag
+    }
+  }
+}
+    ${FlagFragmentDoc}
+${ImageFragmentDoc}`;
+export const useGetFlagsQuery = <
+      TData = GetFlagsQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables?: GetFlagsQueryVariables,
+      options?: UseQueryOptions<GetFlagsQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetFlagsQuery, TError, TData>(
+      variables === undefined ? ['GetFlags'] : ['GetFlags', variables],
+      fetcher<GetFlagsQuery, GetFlagsQueryVariables>(client, GetFlagsDocument, variables, headers),
+      options
+    );
+
+useGetFlagsQuery.getKey = (variables?: GetFlagsQueryVariables) => variables === undefined ? ['GetFlags'] : ['GetFlags', variables];
 ;
 
 export const GetMaterialsDocument = /*#__PURE__*/ `

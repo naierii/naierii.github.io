@@ -29,7 +29,7 @@ interface Part {
 export interface NavItem {
   id?: Scalars['ID'];
   name: Maybe<Scalars['String']>;
-  type: 'option' | 'part' | 'fitting' | 'size';
+  type: 'option' | 'part' | 'fitting' | 'size' | 'flags';
   index?: number;
   required?: boolean;
 }
@@ -151,7 +151,12 @@ const createCustomiser: StateCreator<
         required: true,
       };
 
-      const navItems = [navFitting, ...navParts, navSize].map((i, index) => {
+      const navFlags: NavItem = {
+        name: 'Flags',
+        type: 'flags',
+      };
+
+      const navItems = [navFitting, ...navParts, navFlags, navSize].map((i, index) => {
         i.index = index;
         return i;
       });

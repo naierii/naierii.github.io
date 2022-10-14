@@ -1,0 +1,13 @@
+@use '~sass-rem' as *;
+
+@import '@styles/variables';
+
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  gap: rem(14px);
+}
+
+.flag {
+  width: calc(25% - rem(14px) * 3 / 4);
+}

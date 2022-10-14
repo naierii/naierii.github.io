@@ -1,0 +1,11 @@
+fragment Flag on FlagEntity {
+  id
+  attributes {
+    name
+    image {
+      data {
+        ...Image
+      }
+    }
+  }
+}

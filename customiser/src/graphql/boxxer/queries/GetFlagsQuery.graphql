@@ -1,0 +1,7 @@
+query GetFlags($pagination: PaginationArg, $filters: FlagFiltersInput) {
+  flags(pagination: $pagination, filters: $filters) {
+    data {
+      ...Flag
+    }
+  }
+}

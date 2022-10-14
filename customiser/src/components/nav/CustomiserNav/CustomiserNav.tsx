@@ -3,6 +3,7 @@ import cn from 'classnames';
 import { AnimatePresence, m, useCycle } from 'framer-motion';
 import NavButtons from '../NavButtons';
 import NavFitting from '../NavFitting';
+import NavFlags from '../NavFlags';
 import NavHeader from '../NavHeader';
 import NavOptions from '../NavOptions';
 import NavPart from '../NavPart';
@@ -29,6 +30,8 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
             <NavOptions toggle={() => toggleOpen()} />
           ) : selectedNav?.type === 'fitting' ? (
             <NavFitting />
+          ) : selectedNav?.type === 'flags' ? (
+            <NavFlags />
           ) : selectedNav?.type === 'size' ? (
             <NavSize />
           ) : selectedPart ? (

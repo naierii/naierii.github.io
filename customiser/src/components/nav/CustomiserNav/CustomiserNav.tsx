@@ -1,6 +1,6 @@
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
-import { m, useCycle } from 'framer-motion';
+import { AnimatePresence, m, useCycle } from 'framer-motion';
 import NavButtons from '../NavButtons';
 import NavFitting from '../NavFitting';
 import NavHeader from '../NavHeader';
@@ -23,17 +23,19 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
   return (
     <m.nav className={rootClassName} initial={'closed'} animate={isOpen ? 'open' : 'closed'}>
       <NavHeader className={styles.header} toggle={() => toggleOpen()} isOpen={isOpen} />
-      <div className={styles.content}>
-        {isOpen ? (
-          <NavOptions toggle={() => toggleOpen()} />
-        ) : selectedNav?.type === 'fitting' ? (
-          <NavFitting />
-        ) : selectedNav?.type === 'size' ? (
-          <NavSize />
-        ) : selectedPart ? (
-          <NavPart part={selectedPart} />
-        ) : null}
-      </div>
+      <AnimatePresence initial={false}>
+        <div className={styles.content}>
+          {isOpen ? (
+            <NavOptions toggle={() => toggleOpen()} />
+          ) : selectedNav?.type === 'fitting' ? (
+            <NavFitting />
+          ) : selectedNav?.type === 'size' ? (
+            <NavSize />
+          ) : selectedPart ? (
+            <NavPart part={selectedPart} />
+          ) : null}
+        </div>
+      </AnimatePresence>
       {!isOpen && <NavButtons className={styles.actions} />}
     </m.nav>
   );

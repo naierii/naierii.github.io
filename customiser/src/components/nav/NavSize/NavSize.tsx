@@ -4,6 +4,7 @@ import getSizeVariation from '@services/size';
 import { UNIT } from '@store/constants';
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
+import { m } from 'framer-motion';
 import { ChangeEvent, useEffect } from 'react';
 import styles from './NavSize.module.scss';
 
@@ -49,7 +50,12 @@ const NavSize = ({ className }: NavSizeProps) => {
   };
 
   return (
-    <div className={rootClassName}>
+    <m.div
+      className={rootClassName}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <h3>Size Details</h3>
       <p>
         To help us make sure the size you’ve selected is correct, enter your height and weight
@@ -119,7 +125,7 @@ const NavSize = ({ className }: NavSizeProps) => {
           </option>
         ))}
       </FormSelect>
-    </div>
+    </m.div>
   );
 };
 

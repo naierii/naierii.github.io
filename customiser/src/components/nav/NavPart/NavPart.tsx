@@ -1,5 +1,6 @@
 import { CustomProductPartFragment } from '@graphql/generated/graphql';
 import cn from 'classnames';
+import { m } from 'framer-motion';
 import { Suspense } from 'react';
 import MaterialGroup from '../MaterialGroup';
 
@@ -18,11 +19,17 @@ const NavPart = ({ className, part }: NavPartProps) => {
   }
 
   return (
-    <div className={rootClassName}>
+    <m.div
+      key={part.id}
+      className={rootClassName}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <Suspense fallback={<div>Loading...</div>}>
         <MaterialGroup materialGroup={part.materialGroup.data} part={part} />
       </Suspense>
-    </div>
+    </m.div>
   );
 };
 

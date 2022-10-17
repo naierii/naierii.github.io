@@ -6,8 +6,14 @@
   display: flex;
   flex-wrap: wrap;
   gap: rem(14px);
+  align-items: stretch;
 }
 
 .flag {
-  width: calc(25% - rem(14px) * 3 / 4);
+  width: calc((100% / 7) - rem(14px) * 6 / 7);
+  padding: rem(5px);
+  background-color: $midGrey;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

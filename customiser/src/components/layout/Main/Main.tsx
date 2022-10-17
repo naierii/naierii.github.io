@@ -1,5 +1,6 @@
 import CustomiserNav from '@components/nav/CustomiserNav';
 import CustomiserCanvas from '@components/three/CustomiserCanvas';
+import FabricCanvas from '@components/three/FabricCanvas';
 import Button from '@components/ui/Button';
 import { useGetCustomProductByShopifyIdQuery } from '@graphql/generated/graphql';
 import { useShopifyGetProductByIdQuery } from '@graphql/generated/graphql-shopify';
@@ -49,6 +50,7 @@ const Main = ({ className, product }: MainProps) => {
           <CustomiserNav className={styles.nav} />
           <Header className={styles.header} />
           <CustomiserCanvas className={styles.model} />
+          <FabricCanvas className={styles.model} />
         </div>
       ) : (
         <Button onClick={() => setShow(true)}>Customise</Button>

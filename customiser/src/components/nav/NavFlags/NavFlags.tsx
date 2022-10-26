@@ -1,5 +1,4 @@
 import { useGetFlagsQuery } from '@graphql/generated/graphql';
-import graphQLClient from '@graphql/graphql-client';
 import cn from 'classnames';
 import Image from '@components/ui/Image';
 
@@ -13,7 +12,6 @@ const NavFlags = ({ className }: NavFlagsProps) => {
   const rootClassName = cn(styles.root, className);
 
   const { data: flags } = useGetFlagsQuery(
-    graphQLClient,
     {
       pagination: { limit: 500 },
     },

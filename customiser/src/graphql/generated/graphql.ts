@@ -1,5 +1,4 @@
-import { GraphQLClient } from 'graphql-request';
-import { RequestInit } from 'graphql-request/dist/types.dom';
+import { endpoint, fetchParams } from './../graphql-client';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -7,8 +6,24 @@ export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K]
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 
-function fetcher<TData, TVariables>(client: GraphQLClient, query: string, variables?: TVariables, headers?: RequestInit['headers']) {
-  return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
+function fetcher<TData, TVariables>(query: string, variables?: TVariables) {
+  return async (): Promise<TData> => {
+    const res = await fetch(endpoint as string, {
+      method: 'POST',
+      ...fetchParams,
+      body: JSON.stringify({ query, variables }),
+    });
+
+    const json = await res.json();
+
+    if (json.errors) {
+      const { message } = json.errors[0];
+
+      throw new Error(message);
+    }
+
+    return json.data;
+  };
 }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -52,7 +67,6 @@ export type ComponentCustomiserCustomOption = {
   models?: Maybe<Array<Maybe<ComponentCustomiserCustomOptionModel>>>;
   name?: Maybe<Scalars['String']>;
 };
-
 
 export type ComponentCustomiserCustomOptionModelsArgs = {
   filters?: InputMaybe<ComponentCustomiserCustomOptionModelFiltersInput>;
@@ -101,7 +115,6 @@ export type ComponentCustomiserCustomParts = {
   name?: Maybe<Scalars['String']>;
   optional?: Maybe<Scalars['Boolean']>;
 };
-
 
 export type ComponentCustomiserCustomPartsModelPartsArgs = {
   filters?: InputMaybe<ModelPartFiltersInput>;
@@ -199,13 +212,11 @@ export type CustomProduct = {
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
-
 export type CustomProductOptionsArgs = {
   filters?: InputMaybe<ComponentCustomiserCustomOptionFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
-
 
 export type CustomProductPartsArgs = {
   filters?: InputMaybe<ComponentCustomiserCustomPartsFiltersInput>;
@@ -424,7 +435,31 @@ export type FloatFilterInput = {
   startsWith?: InputMaybe<Scalars['Float']>;
 };
 
-export type GenericMorph = ComponentCustomiserCustomOption | ComponentCustomiserCustomOptionModel | ComponentCustomiserCustomParts | ComponentMaterialMaterialMap | CustomDesign | CustomProduct | CustomProductStyle | CustomProductType | Flag | I18NLocale | Material | MaterialAreaSize | MaterialColourGroup | MaterialGroup | MaterialPrice | MaterialProduct | MaterialType | Model | ModelPart | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser;
+export type GenericMorph =
+  | ComponentCustomiserCustomOption
+  | ComponentCustomiserCustomOptionModel
+  | ComponentCustomiserCustomParts
+  | ComponentMaterialMaterialMap
+  | CustomDesign
+  | CustomProduct
+  | CustomProductStyle
+  | CustomProductType
+  | Flag
+  | I18NLocale
+  | Material
+  | MaterialAreaSize
+  | MaterialColourGroup
+  | MaterialGroup
+  | MaterialPrice
+  | MaterialProduct
+  | MaterialType
+  | Model
+  | ModelPart
+  | UploadFile
+  | UploadFolder
+  | UsersPermissionsPermission
+  | UsersPermissionsRole
+  | UsersPermissionsUser;
 
 export type I18NLocale = {
   __typename?: 'I18NLocale';
@@ -545,13 +580,11 @@ export type Material = {
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
-
 export type MaterialColourGroupsArgs = {
   filters?: InputMaybe<MaterialColourGroupFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
-
 
 export type MaterialImagesArgs = {
   filters?: InputMaybe<ComponentMaterialMaterialMapFiltersInput>;
@@ -568,7 +601,6 @@ export type MaterialAreaSize = {
   sku: Scalars['String'];
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
-
 
 export type MaterialAreaSizeMaterialProductsArgs = {
   filters?: InputMaybe<MaterialProductFiltersInput>;
@@ -698,7 +730,6 @@ export type MaterialGroup = {
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
-
 export type MaterialGroupMaterialTypesArgs = {
   filters?: InputMaybe<MaterialTypeFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
@@ -756,7 +787,6 @@ export type MaterialPrice = {
   sku: Scalars['String'];
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
-
 
 export type MaterialPriceMaterialProductsArgs = {
   filters?: InputMaybe<MaterialProductFiltersInput>;
@@ -902,7 +932,6 @@ export type Model = {
   parts?: Maybe<ModelPartRelationResponseCollection>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
-
 
 export type ModelPartsArgs = {
   filters?: InputMaybe<ModelPartFiltersInput>;
@@ -1069,208 +1098,167 @@ export type Mutation = {
   upload: UploadFileEntityResponse;
 };
 
-
 export type MutationChangePasswordArgs = {
   currentPassword: Scalars['String'];
   password: Scalars['String'];
   passwordConfirmation: Scalars['String'];
 };
 
-
 export type MutationCreateCustomDesignArgs = {
   data: CustomDesignInput;
 };
-
 
 export type MutationCreateCustomProductArgs = {
   data: CustomProductInput;
 };
 
-
 export type MutationCreateCustomProductStyleArgs = {
   data: CustomProductStyleInput;
 };
-
 
 export type MutationCreateCustomProductTypeArgs = {
   data: CustomProductTypeInput;
 };
 
-
 export type MutationCreateFlagArgs = {
   data: FlagInput;
 };
-
 
 export type MutationCreateMaterialArgs = {
   data: MaterialInput;
 };
 
-
 export type MutationCreateMaterialAreaSizeArgs = {
   data: MaterialAreaSizeInput;
 };
-
 
 export type MutationCreateMaterialColourGroupArgs = {
   data: MaterialColourGroupInput;
 };
 
-
 export type MutationCreateMaterialGroupArgs = {
   data: MaterialGroupInput;
 };
-
 
 export type MutationCreateMaterialPriceArgs = {
   data: MaterialPriceInput;
 };
 
-
 export type MutationCreateMaterialProductArgs = {
   data: MaterialProductInput;
 };
-
 
 export type MutationCreateMaterialTypeArgs = {
   data: MaterialTypeInput;
 };
 
-
 export type MutationCreateModelArgs = {
   data: ModelInput;
 };
-
 
 export type MutationCreateModelPartArgs = {
   data: ModelPartInput;
 };
 
-
 export type MutationCreateUploadFileArgs = {
   data: UploadFileInput;
 };
-
 
 export type MutationCreateUploadFolderArgs = {
   data: UploadFolderInput;
 };
 
-
 export type MutationCreateUsersPermissionsRoleArgs = {
   data: UsersPermissionsRoleInput;
 };
-
 
 export type MutationCreateUsersPermissionsUserArgs = {
   data: UsersPermissionsUserInput;
 };
 
-
 export type MutationDeleteCustomDesignArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationDeleteCustomProductArgs = {
   id: Scalars['ID'];
 };
 
-
 export type MutationDeleteCustomProductStyleArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationDeleteCustomProductTypeArgs = {
   id: Scalars['ID'];
 };
 
-
 export type MutationDeleteFlagArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationDeleteMaterialArgs = {
   id: Scalars['ID'];
 };
 
-
 export type MutationDeleteMaterialAreaSizeArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationDeleteMaterialColourGroupArgs = {
   id: Scalars['ID'];
 };
 
-
 export type MutationDeleteMaterialGroupArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationDeleteMaterialPriceArgs = {
   id: Scalars['ID'];
 };
 
-
 export type MutationDeleteMaterialProductArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationDeleteMaterialTypeArgs = {
   id: Scalars['ID'];
 };
 
-
 export type MutationDeleteModelArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationDeleteModelPartArgs = {
   id: Scalars['ID'];
 };
 
-
 export type MutationDeleteUploadFileArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationDeleteUploadFolderArgs = {
   id: Scalars['ID'];
 };
 
-
 export type MutationDeleteUsersPermissionsRoleArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationDeleteUsersPermissionsUserArgs = {
   id: Scalars['ID'];
 };
 
-
 export type MutationEmailConfirmationArgs = {
   confirmation: Scalars['String'];
 };
-
 
 export type MutationForgotPasswordArgs = {
   email: Scalars['String'];
 };
 
-
 export type MutationLoginArgs = {
   input: UsersPermissionsLoginInput;
 };
-
 
 export type MutationMultipleUploadArgs = {
   field?: InputMaybe<Scalars['String']>;
@@ -1279,16 +1267,13 @@ export type MutationMultipleUploadArgs = {
   refId?: InputMaybe<Scalars['ID']>;
 };
 
-
 export type MutationRegisterArgs = {
   input: UsersPermissionsRegisterInput;
 };
 
-
 export type MutationRemoveFileArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationResetPasswordArgs = {
   code: Scalars['String'];
@@ -1296,120 +1281,100 @@ export type MutationResetPasswordArgs = {
   passwordConfirmation: Scalars['String'];
 };
 
-
 export type MutationUpdateCustomDesignArgs = {
   data: CustomDesignInput;
   id: Scalars['ID'];
 };
-
 
 export type MutationUpdateCustomProductArgs = {
   data: CustomProductInput;
   id: Scalars['ID'];
 };
 
-
 export type MutationUpdateCustomProductStyleArgs = {
   data: CustomProductStyleInput;
   id: Scalars['ID'];
 };
-
 
 export type MutationUpdateCustomProductTypeArgs = {
   data: CustomProductTypeInput;
   id: Scalars['ID'];
 };
 
-
 export type MutationUpdateFileInfoArgs = {
   id: Scalars['ID'];
   info?: InputMaybe<FileInfoInput>;
 };
-
 
 export type MutationUpdateFlagArgs = {
   data: FlagInput;
   id: Scalars['ID'];
 };
 
-
 export type MutationUpdateMaterialArgs = {
   data: MaterialInput;
   id: Scalars['ID'];
 };
-
 
 export type MutationUpdateMaterialAreaSizeArgs = {
   data: MaterialAreaSizeInput;
   id: Scalars['ID'];
 };
 
-
 export type MutationUpdateMaterialColourGroupArgs = {
   data: MaterialColourGroupInput;
   id: Scalars['ID'];
 };
-
 
 export type MutationUpdateMaterialGroupArgs = {
   data: MaterialGroupInput;
   id: Scalars['ID'];
 };
 
-
 export type MutationUpdateMaterialPriceArgs = {
   data: MaterialPriceInput;
   id: Scalars['ID'];
 };
-
 
 export type MutationUpdateMaterialProductArgs = {
   data: MaterialProductInput;
   id: Scalars['ID'];
 };
 
-
 export type MutationUpdateMaterialTypeArgs = {
   data: MaterialTypeInput;
   id: Scalars['ID'];
 };
-
 
 export type MutationUpdateModelArgs = {
   data: ModelInput;
   id: Scalars['ID'];
 };
 
-
 export type MutationUpdateModelPartArgs = {
   data: ModelPartInput;
   id: Scalars['ID'];
 };
-
 
 export type MutationUpdateUploadFileArgs = {
   data: UploadFileInput;
   id: Scalars['ID'];
 };
 
-
 export type MutationUpdateUploadFolderArgs = {
   data: UploadFolderInput;
   id: Scalars['ID'];
 };
-
 
 export type MutationUpdateUsersPermissionsRoleArgs = {
   data: UsersPermissionsRoleInput;
   id: Scalars['ID'];
 };
 
-
 export type MutationUpdateUsersPermissionsUserArgs = {
   data: UsersPermissionsUserInput;
   id: Scalars['ID'];
 };
-
 
 export type MutationUploadArgs = {
   field?: InputMaybe<Scalars['String']>;
@@ -1478,11 +1443,9 @@ export type Query = {
   usersPermissionsUsers?: Maybe<UsersPermissionsUserEntityResponseCollection>;
 };
 
-
 export type QueryCustomDesignArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryCustomDesignsArgs = {
   filters?: InputMaybe<CustomDesignFiltersInput>;
@@ -1490,21 +1453,17 @@ export type QueryCustomDesignsArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryCustomProductArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryCustomProductByShopifyIdArgs = {
   id: Scalars['String'];
 };
 
-
 export type QueryCustomProductStyleArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryCustomProductStylesArgs = {
   filters?: InputMaybe<CustomProductStyleFiltersInput>;
@@ -1512,11 +1471,9 @@ export type QueryCustomProductStylesArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryCustomProductTypeArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryCustomProductTypesArgs = {
   filters?: InputMaybe<CustomProductTypeFiltersInput>;
@@ -1524,18 +1481,15 @@ export type QueryCustomProductTypesArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryCustomProductsArgs = {
   filters?: InputMaybe<CustomProductFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryFlagArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryFlagsArgs = {
   filters?: InputMaybe<FlagFiltersInput>;
@@ -1543,11 +1497,9 @@ export type QueryFlagsArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryI18NLocaleArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryI18NLocalesArgs = {
   filters?: InputMaybe<I18NLocaleFiltersInput>;
@@ -1555,16 +1507,13 @@ export type QueryI18NLocalesArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryMaterialArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
-
 export type QueryMaterialAreaSizeArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryMaterialAreaSizesArgs = {
   filters?: InputMaybe<MaterialAreaSizeFiltersInput>;
@@ -1572,11 +1521,9 @@ export type QueryMaterialAreaSizesArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryMaterialColourGroupArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryMaterialColourGroupsArgs = {
   filters?: InputMaybe<MaterialColourGroupFiltersInput>;
@@ -1584,11 +1531,9 @@ export type QueryMaterialColourGroupsArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryMaterialGroupArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryMaterialGroupsArgs = {
   filters?: InputMaybe<MaterialGroupFiltersInput>;
@@ -1596,11 +1541,9 @@ export type QueryMaterialGroupsArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryMaterialPriceArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryMaterialPricesArgs = {
   filters?: InputMaybe<MaterialPriceFiltersInput>;
@@ -1608,11 +1551,9 @@ export type QueryMaterialPricesArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryMaterialProductArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryMaterialProductsArgs = {
   filters?: InputMaybe<MaterialProductFiltersInput>;
@@ -1620,11 +1561,9 @@ export type QueryMaterialProductsArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryMaterialTypeArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryMaterialTypesArgs = {
   filters?: InputMaybe<MaterialTypeFiltersInput>;
@@ -1632,23 +1571,19 @@ export type QueryMaterialTypesArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryMaterialsArgs = {
   filters?: InputMaybe<MaterialFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryModelArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
-
 export type QueryModelPartArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryModelPartsArgs = {
   filters?: InputMaybe<ModelPartFiltersInput>;
@@ -1656,18 +1591,15 @@ export type QueryModelPartsArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryModelsArgs = {
   filters?: InputMaybe<ModelFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryUploadFileArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryUploadFilesArgs = {
   filters?: InputMaybe<UploadFileFiltersInput>;
@@ -1675,11 +1607,9 @@ export type QueryUploadFilesArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryUploadFolderArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryUploadFoldersArgs = {
   filters?: InputMaybe<UploadFolderFiltersInput>;
@@ -1687,11 +1617,9 @@ export type QueryUploadFoldersArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryUsersPermissionsRoleArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryUsersPermissionsRolesArgs = {
   filters?: InputMaybe<UsersPermissionsRoleFiltersInput>;
@@ -1699,11 +1627,9 @@ export type QueryUsersPermissionsRolesArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryUsersPermissionsUserArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryUsersPermissionsUsersArgs = {
   filters?: InputMaybe<UsersPermissionsUserFiltersInput>;
@@ -1839,13 +1765,11 @@ export type UploadFolder = {
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
-
 export type UploadFolderChildrenArgs = {
   filters?: InputMaybe<UploadFolderFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
-
 
 export type UploadFolderFilesArgs = {
   filters?: InputMaybe<UploadFileFiltersInput>;
@@ -1991,13 +1915,11 @@ export type UsersPermissionsRole = {
   users?: Maybe<UsersPermissionsUserRelationResponseCollection>;
 };
 
-
 export type UsersPermissionsRolePermissionsArgs = {
   filters?: InputMaybe<UsersPermissionsPermissionFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
-
 
 export type UsersPermissionsRoleUsersArgs = {
   filters?: InputMaybe<UsersPermissionsUserFiltersInput>;
@@ -2113,55 +2035,620 @@ export type UsersPermissionsUserRelationResponseCollection = {
   data: Array<UsersPermissionsUserEntity>;
 };
 
-export type CustomProductFragment = { __typename?: 'CustomProductEntity', id?: string | null, attributes?: { __typename?: 'CustomProduct', name: string, shopifyProductId?: string | null, initPrice?: string | null, initSku?: string | null, options?: Array<{ __typename?: 'ComponentCustomiserCustomOption', id: string, name?: string | null, models?: Array<{ __typename?: 'ComponentCustomiserCustomOptionModel', id: string, model?: { __typename?: 'ModelEntityResponse', data?: { __typename?: 'ModelEntity', id?: string | null, attributes?: { __typename?: 'Model', name?: string | null, model?: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, size: number, ext?: string | null, mime: string, name: string } | null } | null } | null, parts?: { __typename?: 'ModelPartRelationResponseCollection', data: Array<{ __typename?: 'ModelPartEntity', id?: string | null, attributes?: { __typename?: 'ModelPart', nodeId: string } | null }> } | null } | null } | null } | null } | null> | null } | null> | null, parts?: Array<{ __typename?: 'ComponentCustomiserCustomParts', id: string, name?: string | null, optional?: boolean | null, areaSize?: { __typename?: 'MaterialAreaSizeEntityResponse', data?: { __typename?: 'MaterialAreaSizeEntity', id?: string | null, attributes?: { __typename?: 'MaterialAreaSize', name: string, priceAdjust: number, sku: string } | null } | null } | null, materialGroup?: { __typename?: 'MaterialGroupEntityResponse', data?: { __typename?: 'MaterialGroupEntity', id?: string | null, attributes?: { __typename?: 'MaterialGroup', name?: string | null, materialTypes?: { __typename?: 'MaterialTypeRelationResponseCollection', data: Array<{ __typename?: 'MaterialTypeEntity', id?: string | null, attributes?: { __typename?: 'MaterialType', name?: string | null } | null }> } | null } | null } | null } | null, modelParts?: { __typename?: 'ModelPartRelationResponseCollection', data: Array<{ __typename?: 'ModelPartEntity', id?: string | null, attributes?: { __typename?: 'ModelPart', nodeId: string } | null }> } | null } | null> | null } | null };
+export type CustomProductFragment = {
+  __typename?: 'CustomProductEntity';
+  id?: string | null;
+  attributes?: {
+    __typename?: 'CustomProduct';
+    name: string;
+    shopifyProductId?: string | null;
+    initPrice?: string | null;
+    initSku?: string | null;
+    options?: Array<{
+      __typename?: 'ComponentCustomiserCustomOption';
+      id: string;
+      name?: string | null;
+      models?: Array<{
+        __typename?: 'ComponentCustomiserCustomOptionModel';
+        id: string;
+        model?: {
+          __typename?: 'ModelEntityResponse';
+          data?: {
+            __typename?: 'ModelEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'Model';
+              name?: string | null;
+              model?: {
+                __typename?: 'UploadFileEntityResponse';
+                data?: {
+                  __typename?: 'UploadFileEntity';
+                  id?: string | null;
+                  attributes?: {
+                    __typename?: 'UploadFile';
+                    url: string;
+                    size: number;
+                    ext?: string | null;
+                    mime: string;
+                    name: string;
+                  } | null;
+                } | null;
+              } | null;
+              parts?: {
+                __typename?: 'ModelPartRelationResponseCollection';
+                data: Array<{
+                  __typename?: 'ModelPartEntity';
+                  id?: string | null;
+                  attributes?: { __typename?: 'ModelPart'; nodeId: string } | null;
+                }>;
+              } | null;
+            } | null;
+          } | null;
+        } | null;
+      } | null> | null;
+    } | null> | null;
+    parts?: Array<{
+      __typename?: 'ComponentCustomiserCustomParts';
+      id: string;
+      name?: string | null;
+      optional?: boolean | null;
+      areaSize?: {
+        __typename?: 'MaterialAreaSizeEntityResponse';
+        data?: {
+          __typename?: 'MaterialAreaSizeEntity';
+          id?: string | null;
+          attributes?: {
+            __typename?: 'MaterialAreaSize';
+            name: string;
+            priceAdjust: number;
+            sku: string;
+          } | null;
+        } | null;
+      } | null;
+      materialGroup?: {
+        __typename?: 'MaterialGroupEntityResponse';
+        data?: {
+          __typename?: 'MaterialGroupEntity';
+          id?: string | null;
+          attributes?: {
+            __typename?: 'MaterialGroup';
+            name?: string | null;
+            materialTypes?: {
+              __typename?: 'MaterialTypeRelationResponseCollection';
+              data: Array<{
+                __typename?: 'MaterialTypeEntity';
+                id?: string | null;
+                attributes?: { __typename?: 'MaterialType'; name?: string | null } | null;
+              }>;
+            } | null;
+          } | null;
+        } | null;
+      } | null;
+      modelParts?: {
+        __typename?: 'ModelPartRelationResponseCollection';
+        data: Array<{
+          __typename?: 'ModelPartEntity';
+          id?: string | null;
+          attributes?: { __typename?: 'ModelPart'; nodeId: string } | null;
+        }>;
+      } | null;
+    } | null> | null;
+  } | null;
+};
 
-export type CustomProductOptionFragment = { __typename?: 'ComponentCustomiserCustomOption', id: string, name?: string | null, models?: Array<{ __typename?: 'ComponentCustomiserCustomOptionModel', id: string, model?: { __typename?: 'ModelEntityResponse', data?: { __typename?: 'ModelEntity', id?: string | null, attributes?: { __typename?: 'Model', name?: string | null, model?: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, size: number, ext?: string | null, mime: string, name: string } | null } | null } | null, parts?: { __typename?: 'ModelPartRelationResponseCollection', data: Array<{ __typename?: 'ModelPartEntity', id?: string | null, attributes?: { __typename?: 'ModelPart', nodeId: string } | null }> } | null } | null } | null } | null } | null> | null };
+export type CustomProductOptionFragment = {
+  __typename?: 'ComponentCustomiserCustomOption';
+  id: string;
+  name?: string | null;
+  models?: Array<{
+    __typename?: 'ComponentCustomiserCustomOptionModel';
+    id: string;
+    model?: {
+      __typename?: 'ModelEntityResponse';
+      data?: {
+        __typename?: 'ModelEntity';
+        id?: string | null;
+        attributes?: {
+          __typename?: 'Model';
+          name?: string | null;
+          model?: {
+            __typename?: 'UploadFileEntityResponse';
+            data?: {
+              __typename?: 'UploadFileEntity';
+              id?: string | null;
+              attributes?: {
+                __typename?: 'UploadFile';
+                url: string;
+                size: number;
+                ext?: string | null;
+                mime: string;
+                name: string;
+              } | null;
+            } | null;
+          } | null;
+          parts?: {
+            __typename?: 'ModelPartRelationResponseCollection';
+            data: Array<{
+              __typename?: 'ModelPartEntity';
+              id?: string | null;
+              attributes?: { __typename?: 'ModelPart'; nodeId: string } | null;
+            }>;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+  } | null> | null;
+};
 
-export type CustomProductPartFragment = { __typename?: 'ComponentCustomiserCustomParts', id: string, name?: string | null, optional?: boolean | null, areaSize?: { __typename?: 'MaterialAreaSizeEntityResponse', data?: { __typename?: 'MaterialAreaSizeEntity', id?: string | null, attributes?: { __typename?: 'MaterialAreaSize', name: string, priceAdjust: number, sku: string } | null } | null } | null, materialGroup?: { __typename?: 'MaterialGroupEntityResponse', data?: { __typename?: 'MaterialGroupEntity', id?: string | null, attributes?: { __typename?: 'MaterialGroup', name?: string | null, materialTypes?: { __typename?: 'MaterialTypeRelationResponseCollection', data: Array<{ __typename?: 'MaterialTypeEntity', id?: string | null, attributes?: { __typename?: 'MaterialType', name?: string | null } | null }> } | null } | null } | null } | null, modelParts?: { __typename?: 'ModelPartRelationResponseCollection', data: Array<{ __typename?: 'ModelPartEntity', id?: string | null, attributes?: { __typename?: 'ModelPart', nodeId: string } | null }> } | null };
+export type CustomProductPartFragment = {
+  __typename?: 'ComponentCustomiserCustomParts';
+  id: string;
+  name?: string | null;
+  optional?: boolean | null;
+  areaSize?: {
+    __typename?: 'MaterialAreaSizeEntityResponse';
+    data?: {
+      __typename?: 'MaterialAreaSizeEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'MaterialAreaSize';
+        name: string;
+        priceAdjust: number;
+        sku: string;
+      } | null;
+    } | null;
+  } | null;
+  materialGroup?: {
+    __typename?: 'MaterialGroupEntityResponse';
+    data?: {
+      __typename?: 'MaterialGroupEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'MaterialGroup';
+        name?: string | null;
+        materialTypes?: {
+          __typename?: 'MaterialTypeRelationResponseCollection';
+          data: Array<{
+            __typename?: 'MaterialTypeEntity';
+            id?: string | null;
+            attributes?: { __typename?: 'MaterialType'; name?: string | null } | null;
+          }>;
+        } | null;
+      } | null;
+    } | null;
+  } | null;
+  modelParts?: {
+    __typename?: 'ModelPartRelationResponseCollection';
+    data: Array<{
+      __typename?: 'ModelPartEntity';
+      id?: string | null;
+      attributes?: { __typename?: 'ModelPart'; nodeId: string } | null;
+    }>;
+  } | null;
+};
 
-export type FileFragment = { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, size: number, ext?: string | null, mime: string, name: string } | null };
+export type FileFragment = {
+  __typename?: 'UploadFileEntity';
+  id?: string | null;
+  attributes?: {
+    __typename?: 'UploadFile';
+    url: string;
+    size: number;
+    ext?: string | null;
+    mime: string;
+    name: string;
+  } | null;
+};
 
-export type FlagFragment = { __typename?: 'FlagEntity', id?: string | null, attributes?: { __typename?: 'Flag', name: string, image: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, size: number, width?: number | null, height?: number | null, ext?: string | null, mime: string, name: string, formats?: any | null } | null } | null } } | null };
+export type FlagFragment = {
+  __typename?: 'FlagEntity';
+  id?: string | null;
+  attributes?: {
+    __typename?: 'Flag';
+    name: string;
+    image: {
+      __typename?: 'UploadFileEntityResponse';
+      data?: {
+        __typename?: 'UploadFileEntity';
+        id?: string | null;
+        attributes?: {
+          __typename?: 'UploadFile';
+          url: string;
+          size: number;
+          width?: number | null;
+          height?: number | null;
+          ext?: string | null;
+          mime: string;
+          name: string;
+          formats?: any | null;
+        } | null;
+      } | null;
+    };
+  } | null;
+};
 
-export type ImageFragment = { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, size: number, width?: number | null, height?: number | null, ext?: string | null, mime: string, name: string, formats?: any | null } | null };
+export type ImageFragment = {
+  __typename?: 'UploadFileEntity';
+  id?: string | null;
+  attributes?: {
+    __typename?: 'UploadFile';
+    url: string;
+    size: number;
+    width?: number | null;
+    height?: number | null;
+    ext?: string | null;
+    mime: string;
+    name: string;
+    formats?: any | null;
+  } | null;
+};
 
-export type MaterialAreaSizeFragment = { __typename?: 'MaterialAreaSizeEntity', id?: string | null, attributes?: { __typename?: 'MaterialAreaSize', name: string, priceAdjust: number, sku: string } | null };
+export type MaterialAreaSizeFragment = {
+  __typename?: 'MaterialAreaSizeEntity';
+  id?: string | null;
+  attributes?: {
+    __typename?: 'MaterialAreaSize';
+    name: string;
+    priceAdjust: number;
+    sku: string;
+  } | null;
+};
 
-export type MaterialColourGroupFragment = { __typename?: 'MaterialColourGroupEntity', id?: string | null, attributes?: { __typename?: 'MaterialColourGroup', name: string, colour: string } | null };
+export type MaterialColourGroupFragment = {
+  __typename?: 'MaterialColourGroupEntity';
+  id?: string | null;
+  attributes?: { __typename?: 'MaterialColourGroup'; name: string; colour: string } | null;
+};
 
-export type MaterialFragment = { __typename?: 'MaterialEntity', id?: string | null, attributes?: { __typename?: 'Material', name?: string | null, type?: { __typename?: 'MaterialTypeEntityResponse', data?: { __typename?: 'MaterialTypeEntity', id?: string | null, attributes?: { __typename?: 'MaterialType', name?: string | null } | null } | null } | null, colourGroups?: { __typename?: 'MaterialColourGroupRelationResponseCollection', data: Array<{ __typename?: 'MaterialColourGroupEntity', id?: string | null, attributes?: { __typename?: 'MaterialColourGroup', name: string, colour: string } | null }> } | null, price?: { __typename?: 'MaterialPriceEntityResponse', data?: { __typename?: 'MaterialPriceEntity', id?: string | null, attributes?: { __typename?: 'MaterialPrice', name: string, price: number, sku: string } | null } | null } | null, images?: Array<{ __typename?: 'ComponentMaterialMaterialMap', mapType?: string | null, image: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, size: number, width?: number | null, height?: number | null, ext?: string | null, mime: string, name: string, formats?: any | null } | null } | null } } | null> | null } | null };
+export type MaterialFragment = {
+  __typename?: 'MaterialEntity';
+  id?: string | null;
+  attributes?: {
+    __typename?: 'Material';
+    name?: string | null;
+    type?: {
+      __typename?: 'MaterialTypeEntityResponse';
+      data?: {
+        __typename?: 'MaterialTypeEntity';
+        id?: string | null;
+        attributes?: { __typename?: 'MaterialType'; name?: string | null } | null;
+      } | null;
+    } | null;
+    colourGroups?: {
+      __typename?: 'MaterialColourGroupRelationResponseCollection';
+      data: Array<{
+        __typename?: 'MaterialColourGroupEntity';
+        id?: string | null;
+        attributes?: { __typename?: 'MaterialColourGroup'; name: string; colour: string } | null;
+      }>;
+    } | null;
+    price?: {
+      __typename?: 'MaterialPriceEntityResponse';
+      data?: {
+        __typename?: 'MaterialPriceEntity';
+        id?: string | null;
+        attributes?: {
+          __typename?: 'MaterialPrice';
+          name: string;
+          price: number;
+          sku: string;
+        } | null;
+      } | null;
+    } | null;
+    images?: Array<{
+      __typename?: 'ComponentMaterialMaterialMap';
+      mapType?: string | null;
+      image: {
+        __typename?: 'UploadFileEntityResponse';
+        data?: {
+          __typename?: 'UploadFileEntity';
+          id?: string | null;
+          attributes?: {
+            __typename?: 'UploadFile';
+            url: string;
+            size: number;
+            width?: number | null;
+            height?: number | null;
+            ext?: string | null;
+            mime: string;
+            name: string;
+            formats?: any | null;
+          } | null;
+        } | null;
+      };
+    } | null> | null;
+  } | null;
+};
 
-export type MaterialGroupFragment = { __typename?: 'MaterialGroupEntity', id?: string | null, attributes?: { __typename?: 'MaterialGroup', name?: string | null, materialTypes?: { __typename?: 'MaterialTypeRelationResponseCollection', data: Array<{ __typename?: 'MaterialTypeEntity', id?: string | null, attributes?: { __typename?: 'MaterialType', name?: string | null } | null }> } | null } | null };
+export type MaterialGroupFragment = {
+  __typename?: 'MaterialGroupEntity';
+  id?: string | null;
+  attributes?: {
+    __typename?: 'MaterialGroup';
+    name?: string | null;
+    materialTypes?: {
+      __typename?: 'MaterialTypeRelationResponseCollection';
+      data: Array<{
+        __typename?: 'MaterialTypeEntity';
+        id?: string | null;
+        attributes?: { __typename?: 'MaterialType'; name?: string | null } | null;
+      }>;
+    } | null;
+  } | null;
+};
 
-export type MaterialPriceFragment = { __typename?: 'MaterialPriceEntity', id?: string | null, attributes?: { __typename?: 'MaterialPrice', name: string, price: number, sku: string } | null };
+export type MaterialPriceFragment = {
+  __typename?: 'MaterialPriceEntity';
+  id?: string | null;
+  attributes?: { __typename?: 'MaterialPrice'; name: string; price: number; sku: string } | null;
+};
 
-export type MaterialTypeFragment = { __typename?: 'MaterialTypeEntity', id?: string | null, attributes?: { __typename?: 'MaterialType', name?: string | null } | null };
+export type MaterialTypeFragment = {
+  __typename?: 'MaterialTypeEntity';
+  id?: string | null;
+  attributes?: { __typename?: 'MaterialType'; name?: string | null } | null;
+};
 
-export type ModelFragment = { __typename?: 'ModelEntity', id?: string | null, attributes?: { __typename?: 'Model', name?: string | null, model?: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, size: number, ext?: string | null, mime: string, name: string } | null } | null } | null, parts?: { __typename?: 'ModelPartRelationResponseCollection', data: Array<{ __typename?: 'ModelPartEntity', id?: string | null, attributes?: { __typename?: 'ModelPart', nodeId: string } | null }> } | null } | null };
+export type ModelFragment = {
+  __typename?: 'ModelEntity';
+  id?: string | null;
+  attributes?: {
+    __typename?: 'Model';
+    name?: string | null;
+    model?: {
+      __typename?: 'UploadFileEntityResponse';
+      data?: {
+        __typename?: 'UploadFileEntity';
+        id?: string | null;
+        attributes?: {
+          __typename?: 'UploadFile';
+          url: string;
+          size: number;
+          ext?: string | null;
+          mime: string;
+          name: string;
+        } | null;
+      } | null;
+    } | null;
+    parts?: {
+      __typename?: 'ModelPartRelationResponseCollection';
+      data: Array<{
+        __typename?: 'ModelPartEntity';
+        id?: string | null;
+        attributes?: { __typename?: 'ModelPart'; nodeId: string } | null;
+      }>;
+    } | null;
+  } | null;
+};
 
-export type ModelPartFragment = { __typename?: 'ModelPartEntity', id?: string | null, attributes?: { __typename?: 'ModelPart', nodeId: string } | null };
+export type ModelPartFragment = {
+  __typename?: 'ModelPartEntity';
+  id?: string | null;
+  attributes?: { __typename?: 'ModelPart'; nodeId: string } | null;
+};
 
 export type GetCustomProductByShopifyIdQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-
-export type GetCustomProductByShopifyIdQuery = { __typename?: 'Query', customProductByShopifyId?: { __typename?: 'CustomProductEntityResponse', data?: { __typename?: 'CustomProductEntity', id?: string | null, attributes?: { __typename?: 'CustomProduct', name: string, shopifyProductId?: string | null, initPrice?: string | null, initSku?: string | null, options?: Array<{ __typename?: 'ComponentCustomiserCustomOption', id: string, name?: string | null, models?: Array<{ __typename?: 'ComponentCustomiserCustomOptionModel', id: string, model?: { __typename?: 'ModelEntityResponse', data?: { __typename?: 'ModelEntity', id?: string | null, attributes?: { __typename?: 'Model', name?: string | null, model?: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, size: number, ext?: string | null, mime: string, name: string } | null } | null } | null, parts?: { __typename?: 'ModelPartRelationResponseCollection', data: Array<{ __typename?: 'ModelPartEntity', id?: string | null, attributes?: { __typename?: 'ModelPart', nodeId: string } | null }> } | null } | null } | null } | null } | null> | null } | null> | null, parts?: Array<{ __typename?: 'ComponentCustomiserCustomParts', id: string, name?: string | null, optional?: boolean | null, areaSize?: { __typename?: 'MaterialAreaSizeEntityResponse', data?: { __typename?: 'MaterialAreaSizeEntity', id?: string | null, attributes?: { __typename?: 'MaterialAreaSize', name: string, priceAdjust: number, sku: string } | null } | null } | null, materialGroup?: { __typename?: 'MaterialGroupEntityResponse', data?: { __typename?: 'MaterialGroupEntity', id?: string | null, attributes?: { __typename?: 'MaterialGroup', name?: string | null, materialTypes?: { __typename?: 'MaterialTypeRelationResponseCollection', data: Array<{ __typename?: 'MaterialTypeEntity', id?: string | null, attributes?: { __typename?: 'MaterialType', name?: string | null } | null }> } | null } | null } | null } | null, modelParts?: { __typename?: 'ModelPartRelationResponseCollection', data: Array<{ __typename?: 'ModelPartEntity', id?: string | null, attributes?: { __typename?: 'ModelPart', nodeId: string } | null }> } | null } | null> | null } | null } | null } | null };
+export type GetCustomProductByShopifyIdQuery = {
+  __typename?: 'Query';
+  customProductByShopifyId?: {
+    __typename?: 'CustomProductEntityResponse';
+    data?: {
+      __typename?: 'CustomProductEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'CustomProduct';
+        name: string;
+        shopifyProductId?: string | null;
+        initPrice?: string | null;
+        initSku?: string | null;
+        options?: Array<{
+          __typename?: 'ComponentCustomiserCustomOption';
+          id: string;
+          name?: string | null;
+          models?: Array<{
+            __typename?: 'ComponentCustomiserCustomOptionModel';
+            id: string;
+            model?: {
+              __typename?: 'ModelEntityResponse';
+              data?: {
+                __typename?: 'ModelEntity';
+                id?: string | null;
+                attributes?: {
+                  __typename?: 'Model';
+                  name?: string | null;
+                  model?: {
+                    __typename?: 'UploadFileEntityResponse';
+                    data?: {
+                      __typename?: 'UploadFileEntity';
+                      id?: string | null;
+                      attributes?: {
+                        __typename?: 'UploadFile';
+                        url: string;
+                        size: number;
+                        ext?: string | null;
+                        mime: string;
+                        name: string;
+                      } | null;
+                    } | null;
+                  } | null;
+                  parts?: {
+                    __typename?: 'ModelPartRelationResponseCollection';
+                    data: Array<{
+                      __typename?: 'ModelPartEntity';
+                      id?: string | null;
+                      attributes?: { __typename?: 'ModelPart'; nodeId: string } | null;
+                    }>;
+                  } | null;
+                } | null;
+              } | null;
+            } | null;
+          } | null> | null;
+        } | null> | null;
+        parts?: Array<{
+          __typename?: 'ComponentCustomiserCustomParts';
+          id: string;
+          name?: string | null;
+          optional?: boolean | null;
+          areaSize?: {
+            __typename?: 'MaterialAreaSizeEntityResponse';
+            data?: {
+              __typename?: 'MaterialAreaSizeEntity';
+              id?: string | null;
+              attributes?: {
+                __typename?: 'MaterialAreaSize';
+                name: string;
+                priceAdjust: number;
+                sku: string;
+              } | null;
+            } | null;
+          } | null;
+          materialGroup?: {
+            __typename?: 'MaterialGroupEntityResponse';
+            data?: {
+              __typename?: 'MaterialGroupEntity';
+              id?: string | null;
+              attributes?: {
+                __typename?: 'MaterialGroup';
+                name?: string | null;
+                materialTypes?: {
+                  __typename?: 'MaterialTypeRelationResponseCollection';
+                  data: Array<{
+                    __typename?: 'MaterialTypeEntity';
+                    id?: string | null;
+                    attributes?: { __typename?: 'MaterialType'; name?: string | null } | null;
+                  }>;
+                } | null;
+              } | null;
+            } | null;
+          } | null;
+          modelParts?: {
+            __typename?: 'ModelPartRelationResponseCollection';
+            data: Array<{
+              __typename?: 'ModelPartEntity';
+              id?: string | null;
+              attributes?: { __typename?: 'ModelPart'; nodeId: string } | null;
+            }>;
+          } | null;
+        } | null> | null;
+      } | null;
+    } | null;
+  } | null;
+};
 
 export type GetFlagsQueryVariables = Exact<{
   pagination?: InputMaybe<PaginationArg>;
   filters?: InputMaybe<FlagFiltersInput>;
 }>;
 
-
-export type GetFlagsQuery = { __typename?: 'Query', flags?: { __typename?: 'FlagEntityResponseCollection', data: Array<{ __typename?: 'FlagEntity', id?: string | null, attributes?: { __typename?: 'Flag', name: string, image: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, size: number, width?: number | null, height?: number | null, ext?: string | null, mime: string, name: string, formats?: any | null } | null } | null } } | null }> } | null };
+export type GetFlagsQuery = {
+  __typename?: 'Query';
+  flags?: {
+    __typename?: 'FlagEntityResponseCollection';
+    data: Array<{
+      __typename?: 'FlagEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'Flag';
+        name: string;
+        image: {
+          __typename?: 'UploadFileEntityResponse';
+          data?: {
+            __typename?: 'UploadFileEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'UploadFile';
+              url: string;
+              size: number;
+              width?: number | null;
+              height?: number | null;
+              ext?: string | null;
+              mime: string;
+              name: string;
+              formats?: any | null;
+            } | null;
+          } | null;
+        };
+      } | null;
+    }>;
+  } | null;
+};
 
 export type GetMaterialsQueryVariables = Exact<{
   filters?: InputMaybe<MaterialFiltersInput>;
 }>;
 
-
-export type GetMaterialsQuery = { __typename?: 'Query', materials?: { __typename?: 'MaterialEntityResponseCollection', data: Array<{ __typename?: 'MaterialEntity', id?: string | null, attributes?: { __typename?: 'Material', name?: string | null, type?: { __typename?: 'MaterialTypeEntityResponse', data?: { __typename?: 'MaterialTypeEntity', id?: string | null, attributes?: { __typename?: 'MaterialType', name?: string | null } | null } | null } | null, colourGroups?: { __typename?: 'MaterialColourGroupRelationResponseCollection', data: Array<{ __typename?: 'MaterialColourGroupEntity', id?: string | null, attributes?: { __typename?: 'MaterialColourGroup', name: string, colour: string } | null }> } | null, price?: { __typename?: 'MaterialPriceEntityResponse', data?: { __typename?: 'MaterialPriceEntity', id?: string | null, attributes?: { __typename?: 'MaterialPrice', name: string, price: number, sku: string } | null } | null } | null, images?: Array<{ __typename?: 'ComponentMaterialMaterialMap', mapType?: string | null, image: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', id?: string | null, attributes?: { __typename?: 'UploadFile', url: string, size: number, width?: number | null, height?: number | null, ext?: string | null, mime: string, name: string, formats?: any | null } | null } | null } } | null> | null } | null }> } | null };
+export type GetMaterialsQuery = {
+  __typename?: 'Query';
+  materials?: {
+    __typename?: 'MaterialEntityResponseCollection';
+    data: Array<{
+      __typename?: 'MaterialEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'Material';
+        name?: string | null;
+        type?: {
+          __typename?: 'MaterialTypeEntityResponse';
+          data?: {
+            __typename?: 'MaterialTypeEntity';
+            id?: string | null;
+            attributes?: { __typename?: 'MaterialType'; name?: string | null } | null;
+          } | null;
+        } | null;
+        colourGroups?: {
+          __typename?: 'MaterialColourGroupRelationResponseCollection';
+          data: Array<{
+            __typename?: 'MaterialColourGroupEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'MaterialColourGroup';
+              name: string;
+              colour: string;
+            } | null;
+          }>;
+        } | null;
+        price?: {
+          __typename?: 'MaterialPriceEntityResponse';
+          data?: {
+            __typename?: 'MaterialPriceEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'MaterialPrice';
+              name: string;
+              price: number;
+              sku: string;
+            } | null;
+          } | null;
+        } | null;
+        images?: Array<{
+          __typename?: 'ComponentMaterialMaterialMap';
+          mapType?: string | null;
+          image: {
+            __typename?: 'UploadFileEntityResponse';
+            data?: {
+              __typename?: 'UploadFileEntity';
+              id?: string | null;
+              attributes?: {
+                __typename?: 'UploadFile';
+                url: string;
+                size: number;
+                width?: number | null;
+                height?: number | null;
+                ext?: string | null;
+                mime: string;
+                name: string;
+                formats?: any | null;
+              } | null;
+            } | null;
+          };
+        } | null> | null;
+      } | null;
+    }>;
+  } | null;
+};
 
 export const FileFragmentDoc = /*#__PURE__*/ `
     fragment File on UploadFileEntity {
@@ -2381,23 +2868,24 @@ ${MaterialAreaSizeFragmentDoc}
 ${MaterialGroupFragmentDoc}
 ${MaterialTypeFragmentDoc}`;
 export const useGetCustomProductByShopifyIdQuery = <
-      TData = GetCustomProductByShopifyIdQuery,
-      TError = unknown
-    >(
-      client: GraphQLClient,
-      variables: GetCustomProductByShopifyIdQueryVariables,
-      options?: UseQueryOptions<GetCustomProductByShopifyIdQuery, TError, TData>,
-      headers?: RequestInit['headers']
-    ) =>
-    useQuery<GetCustomProductByShopifyIdQuery, TError, TData>(
-      ['GetCustomProductByShopifyId', variables],
-      fetcher<GetCustomProductByShopifyIdQuery, GetCustomProductByShopifyIdQueryVariables>(client, GetCustomProductByShopifyIdDocument, variables, headers),
-      options
-    );
+  TData = GetCustomProductByShopifyIdQuery,
+  TError = unknown,
+>(
+  variables: GetCustomProductByShopifyIdQueryVariables,
+  options?: UseQueryOptions<GetCustomProductByShopifyIdQuery, TError, TData>,
+) =>
+  useQuery<GetCustomProductByShopifyIdQuery, TError, TData>(
+    ['GetCustomProductByShopifyId', variables],
+    fetcher<GetCustomProductByShopifyIdQuery, GetCustomProductByShopifyIdQueryVariables>(
+      GetCustomProductByShopifyIdDocument,
+      variables,
+    ),
+    options,
+  );
 
-useGetCustomProductByShopifyIdQuery.getKey = (variables: GetCustomProductByShopifyIdQueryVariables) => ['GetCustomProductByShopifyId', variables];
-;
-
+useGetCustomProductByShopifyIdQuery.getKey = (
+  variables: GetCustomProductByShopifyIdQueryVariables,
+) => ['GetCustomProductByShopifyId', variables];
 export const GetFlagsDocument = /*#__PURE__*/ `
     query GetFlags($pagination: PaginationArg, $filters: FlagFiltersInput) {
   flags(pagination: $pagination, filters: $filters) {
@@ -2408,24 +2896,18 @@ export const GetFlagsDocument = /*#__PURE__*/ `
 }
     ${FlagFragmentDoc}
 ${ImageFragmentDoc}`;
-export const useGetFlagsQuery = <
-      TData = GetFlagsQuery,
-      TError = unknown
-    >(
-      client: GraphQLClient,
-      variables?: GetFlagsQueryVariables,
-      options?: UseQueryOptions<GetFlagsQuery, TError, TData>,
-      headers?: RequestInit['headers']
-    ) =>
-    useQuery<GetFlagsQuery, TError, TData>(
-      variables === undefined ? ['GetFlags'] : ['GetFlags', variables],
-      fetcher<GetFlagsQuery, GetFlagsQueryVariables>(client, GetFlagsDocument, variables, headers),
-      options
-    );
+export const useGetFlagsQuery = <TData = GetFlagsQuery, TError = unknown>(
+  variables?: GetFlagsQueryVariables,
+  options?: UseQueryOptions<GetFlagsQuery, TError, TData>,
+) =>
+  useQuery<GetFlagsQuery, TError, TData>(
+    variables === undefined ? ['GetFlags'] : ['GetFlags', variables],
+    fetcher<GetFlagsQuery, GetFlagsQueryVariables>(GetFlagsDocument, variables),
+    options,
+  );
 
-useGetFlagsQuery.getKey = (variables?: GetFlagsQueryVariables) => variables === undefined ? ['GetFlags'] : ['GetFlags', variables];
-;
-
+useGetFlagsQuery.getKey = (variables?: GetFlagsQueryVariables) =>
+  variables === undefined ? ['GetFlags'] : ['GetFlags', variables];
 export const GetMaterialsDocument = /*#__PURE__*/ `
     query GetMaterials($filters: MaterialFiltersInput) {
   materials(filters: $filters) {
@@ -2439,20 +2921,15 @@ ${MaterialTypeFragmentDoc}
 ${MaterialColourGroupFragmentDoc}
 ${MaterialPriceFragmentDoc}
 ${ImageFragmentDoc}`;
-export const useGetMaterialsQuery = <
-      TData = GetMaterialsQuery,
-      TError = unknown
-    >(
-      client: GraphQLClient,
-      variables?: GetMaterialsQueryVariables,
-      options?: UseQueryOptions<GetMaterialsQuery, TError, TData>,
-      headers?: RequestInit['headers']
-    ) =>
-    useQuery<GetMaterialsQuery, TError, TData>(
-      variables === undefined ? ['GetMaterials'] : ['GetMaterials', variables],
-      fetcher<GetMaterialsQuery, GetMaterialsQueryVariables>(client, GetMaterialsDocument, variables, headers),
-      options
-    );
+export const useGetMaterialsQuery = <TData = GetMaterialsQuery, TError = unknown>(
+  variables?: GetMaterialsQueryVariables,
+  options?: UseQueryOptions<GetMaterialsQuery, TError, TData>,
+) =>
+  useQuery<GetMaterialsQuery, TError, TData>(
+    variables === undefined ? ['GetMaterials'] : ['GetMaterials', variables],
+    fetcher<GetMaterialsQuery, GetMaterialsQueryVariables>(GetMaterialsDocument, variables),
+    options,
+  );
 
-useGetMaterialsQuery.getKey = (variables?: GetMaterialsQueryVariables) => variables === undefined ? ['GetMaterials'] : ['GetMaterials', variables];
-;
+useGetMaterialsQuery.getKey = (variables?: GetMaterialsQueryVariables) =>
+  variables === undefined ? ['GetMaterials'] : ['GetMaterials', variables];

@@ -4,7 +4,6 @@ import FabricCanvas from '@components/three/FabricCanvas';
 import Button from '@components/ui/Button';
 import { useGetCustomProductByShopifyIdQuery } from '@graphql/generated/graphql';
 import { useShopifyGetProductByIdQuery } from '@graphql/generated/graphql-shopify';
-import graphQLClient, { graphQLClientShopify } from '@graphql/graphql-client';
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
 import { useEffect, useState } from 'react';
@@ -24,12 +23,11 @@ const Main = ({ className, product }: MainProps) => {
   const rootClassName = cn(styles.root, className);
 
   const { data: customProduct } = useGetCustomProductByShopifyIdQuery(
-    graphQLClient,
     { id: product },
     { select: (data) => data.customProductByShopifyId?.data },
   );
 
-  const { data: shopifyProduct } = useShopifyGetProductByIdQuery(graphQLClientShopify, {
+  const { data: shopifyProduct } = useShopifyGetProductByIdQuery({
     id: product,
   });
 

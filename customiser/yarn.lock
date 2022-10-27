@@ -11927,6 +11927,11 @@ three-mesh-bvh@^0.5.15:
   resolved "https://registry.yarnpkg.com/three-mesh-bvh/-/three-mesh-bvh-0.5.17.tgz#1f9bdcd7992e86dc3665664c1fe5cedd7be4bd9f"
   integrity sha512-0iyqZe0Op6tH7nqVI4L2Ae1tACiYliJvx0cFvehrVzzfZRW8p4c9GYnqGPPN5+x7Q8L5WjJC8kgoA8Z+/+1oAQ==
 
+three-projected-material@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/three-projected-material/-/three-projected-material-2.1.2.tgz#1c0aab98b09297de477ac4c9fb67793c247e8610"
+  integrity sha512-RDrwt3ZQH+PQrDS0jG1jyYQRTD4v8LN/lq+FnxAjTGq+sMWHpMhG/keCxRS8tjWMJdnLMJETQTenpInClg7F+Q==
+
 three-stdlib@^2.17.3:
   version "2.17.3"
   resolved "https://registry.yarnpkg.com/three-stdlib/-/three-stdlib-2.17.3.tgz#f92d322810d81379a51344b21e0a2e941b84cb8f"

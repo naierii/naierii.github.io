@@ -12,10 +12,10 @@ import {
 } from '@graphql/generated/graphql-shopify';
 import { MaterialTextureMapModel, MaterialTextureModel } from '@models';
 import produce from 'immer';
+import { MeshPhongMaterial } from 'three';
 import create, { StateCreator } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { UNIT } from './constants';
-
 interface SelectedModel {
   optionId: Scalars['ID'];
   model?: Maybe<ModelFragment>;
@@ -39,7 +39,19 @@ interface SizingMeasurement {
   unit?: string;
 }
 
+export interface FabricObject {
+  canvas: HTMLCanvasElement;
+  editMode: string;
+  freeze: boolean;
+  material: MeshPhongMaterial;
+}
+
 export interface CustomiserState {
+  canvas?: {
+    width: number;
+    height: number;
+  };
+  graphic?: FabricObject;
   customProduct?: CustomProductFragment;
   selectedModels: SelectedModel[];
   savedModels: SelectedModel[];
@@ -55,6 +67,7 @@ export interface CustomiserState {
     variation?: ShopifyProductVariantFragment;
   };
   total: () => string;
+  setGraphic: (graphic: FabricObject) => void;
   setSelectedModel: (optionId: Scalars['ID'], model?: Maybe<ModelFragment>) => void;
   setCustomProduct: (
     customProduct: CustomProductFragment,
@@ -63,6 +76,7 @@ export interface CustomiserState {
   setSelectedPart: (data: CustomProductPartFragment) => void;
   setPart: (part: CustomProductPartFragment, material: MaterialFragment) => void;
   setSelectedNav: (index: number, save?: boolean) => void;
+  setCanvasSize: (width: number, height: number) => void;
   setSizing: (
     height?: SizingMeasurement,
     weight?: SizingMeasurement,
@@ -73,11 +87,10 @@ export interface CustomiserState {
   texture: (nodeId: string) => MaterialTextureModel;
 }
 
-const createCustomiser: StateCreator<
-  CustomiserState,
-  [['zustand/devtools', never], ['zustand/persist', unknown]],
-  []
-> = (set, get) => ({
+const createCustomiser: StateCreator<CustomiserState, [['zustand/devtools', never]], []> = (
+  set,
+  get,
+) => ({
   selectedModels: [],
   savedModels: [],
   selectedPart: null,
@@ -172,6 +185,20 @@ const createCustomiser: StateCreator<
 
     set(dataToSet);
   },
+  setCanvasSize: (width, height) => {
+    set(
+      produce((state: CustomiserState) => {
+        state.canvas = { width, height };
+      }),
+    );
+  },
+  setGraphic: (graphic) => {
+    set(
+      produce((state: CustomiserState) => {
+        state.graphic = graphic;
+      }),
+    );
+  },
   setSizing: (height, weight, variation) => {
     set(
       produce((state: CustomiserState) => {
@@ -265,8 +292,9 @@ const createCustomiser: StateCreator<
 
 export const useCustomiserStore = create<CustomiserState>()(
   devtools(
-    persist((...a) => ({
-      ...createCustomiser(...a),
-    })),
+    createCustomiser,
+    // persist((...a) => ({
+    //   ...createCustomiser(...a),
+    // })),
   ),
 );

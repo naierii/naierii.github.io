@@ -8,3 +8,8 @@ export const UNIT = {
     LB: 'LB',
   },
 };
+
+export const EDIT_MODE = {
+  EDIT_2D: '2d',
+  EDIT_3D: '3d',
+};

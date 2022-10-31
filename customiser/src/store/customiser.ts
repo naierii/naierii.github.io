@@ -15,7 +15,7 @@ import produce from 'immer';
 import { MeshPhongMaterial } from 'three';
 import create, { StateCreator } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { UNIT } from './constants';
+import { EDIT_MODE, UNIT } from './constants';
 interface SelectedModel {
   optionId: Scalars['ID'];
   model?: Maybe<ModelFragment>;
@@ -40,10 +40,10 @@ interface SizingMeasurement {
 }
 
 export interface FabricObject {
-  canvas: HTMLCanvasElement;
+  canvas?: HTMLCanvasElement;
   editMode: string;
   freeze: boolean;
-  material: MeshPhongMaterial;
+  material: MeshPhongMaterial | null;
 }
 
 export interface CustomiserState {
@@ -51,7 +51,7 @@ export interface CustomiserState {
     width: number;
     height: number;
   };
-  graphic?: FabricObject;
+  graphic: FabricObject;
   customProduct?: CustomProductFragment;
   selectedModels: SelectedModel[];
   savedModels: SelectedModel[];
@@ -68,6 +68,8 @@ export interface CustomiserState {
   };
   total: () => string;
   setGraphic: (graphic: FabricObject) => void;
+  setFreeze: (freeze: boolean) => void;
+  setGraphicCanavas: (canvas: HTMLCanvasElement) => void;
   setSelectedModel: (optionId: Scalars['ID'], model?: Maybe<ModelFragment>) => void;
   setCustomProduct: (
     customProduct: CustomProductFragment,
@@ -92,6 +94,11 @@ const createCustomiser: StateCreator<CustomiserState, [['zustand/devtools', neve
   get,
 ) => ({
   selectedModels: [],
+  graphic: {
+    editMode: EDIT_MODE.EDIT_2D,
+    freeze: false,
+    material: null,
+  },
   savedModels: [],
   selectedPart: null,
   navItems: [],
@@ -196,6 +203,20 @@ const createCustomiser: StateCreator<CustomiserState, [['zustand/devtools', neve
     set(
       produce((state: CustomiserState) => {
         state.graphic = graphic;
+      }),
+    );
+  },
+  setFreeze: (freeze) => {
+    set(
+      produce((state: CustomiserState) => {
+        state.graphic.freeze = freeze;
+      }),
+    );
+  },
+  setGraphicCanavas: (canvas) => {
+    set(
+      produce((state: CustomiserState) => {
+        state.graphic.canvas = canvas;
       }),
     );
   },

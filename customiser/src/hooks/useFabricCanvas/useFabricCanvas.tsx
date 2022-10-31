@@ -1,11 +1,12 @@
-import { CanvasHTMLAttributes, useCallback, useEffect, useRef } from 'react';
-import { fabric } from 'fabric';
-import { FabricObject, useCustomiserStore } from '@store/customiser';
 import { EDIT_MODE } from '@store/constants';
+import { useCustomiserStore } from '@store/customiser';
+import { fabric } from 'fabric';
+import { CanvasHTMLAttributes, useCallback, useEffect, useRef } from 'react';
+import { CurrentGraphic, useCurrentGraphics } from '../../context/CurrentGraphicsContext';
 
 interface UseFabricCanvasProps {
-  fabricObject: FabricObject;
-  contextObject: FabricObject;
+  fabricObject: CurrentGraphic;
+  contextObject: CurrentGraphic;
 }
 
 export const useFabricCanvas = ({ fabricObject, contextObject }: UseFabricCanvasProps) => {
@@ -13,12 +14,14 @@ export const useFabricCanvas = ({ fabricObject, contextObject }: UseFabricCanvas
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricRef = useRef<fabric.Canvas>();
   const dimension = useCustomiserStore((state) => state.canvas);
+  const { setGraphic } = useCurrentGraphics();
 
   const renderFabric = useCallback(() => {
     if (fabricRef.current) {
       fabricRef.current.renderAll();
-
-      if (material && material.map) material.map.needsUpdate = true;
+      if (material && material.map) {
+        material.map.needsUpdate = true;
+      }
     }
   }, [fabricRef, material]);
 
@@ -26,14 +29,13 @@ export const useFabricCanvas = ({ fabricObject, contextObject }: UseFabricCanvas
    * Initialize FabricJS
    */
   useEffect(() => {
-    console.log(canvasRef, fabricRef, fabricObject);
     if (canvasRef.current && !fabricRef.current) {
       const fCanvas = new fabric.Canvas(canvasRef.current);
 
       fCanvas.setBackgroundColor('transparent', fCanvas.renderAll.bind(fCanvas));
 
       fabricRef.current = fCanvas;
-      fabricObject.canvas = canvasRef.current;
+      setGraphic({ canvas: canvasRef.current });
     }
   }, [canvasRef, fabricRef]);
 
@@ -53,6 +55,20 @@ export const useFabricCanvas = ({ fabricObject, contextObject }: UseFabricCanvas
       renderFabric();
     }
   }, [dimension, fabricRef]);
+
+  /**
+   * Ensure fabric selection controls do not get rendered in
+   * 3D material
+   */
+  useEffect(() => {
+    if (contextObject && contextObject.editMode && fabricRef.current) {
+      if (contextObject.editMode === EDIT_MODE.EDIT_3D) {
+        fabricRef.current.discardActiveObject();
+
+        renderFabric();
+      }
+    }
+  }, [contextObject, fabricRef]);
 
   /**
    * Ensure fabric selection controls do not get rendered in

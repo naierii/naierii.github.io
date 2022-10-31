@@ -7,5 +7,13 @@ const { alias, configPaths } = require('react-app-rewire-alias');
  */
 module.exports = function override(config) {
   alias(configPaths('./tsconfig.paths.json'))(config);
+
+  config.module.rules[1].oneOf.splice(2, 0, {
+    test: /\.(glsl|vs|fs|vert|frag)$/,
+    exclude: /node_modules/,
+    use: ['raw-loader', 'glslify-loader'],
+  });
+
+  console.log(config);
   return config;
 };

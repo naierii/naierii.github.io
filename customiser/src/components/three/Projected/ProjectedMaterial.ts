@@ -1,6 +1,6 @@
 import { shaderMaterial } from '@react-three/drei';
-import { extend, Object3DNode } from '@react-three/fiber';
-import { CanvasTexture, ShaderMaterial, Texture } from 'three';
+import { extend, MaterialNode } from '@react-three/fiber';
+import { ShaderMaterial } from 'three';
 
 const ProjectedMaterial = shaderMaterial(
   {},
@@ -25,34 +25,28 @@ const ProjectedMaterial = shaderMaterial(
   `uniform vec3 color;
   uniform sampler2D textture;
   uniform vec3 projPosition;
-
   varying vec3 vNormal;
   varying vec4 vWorldPosition;
   varying vec4 vTexCoords;
 
   void main() {
     vec2 uv = (vTexCoords.xy / vTexCoords.w) * 0.5 + 0.5;
-
     vec4 outColor = texture(textture, uv);
-
     // this makes sure we don't render the textture also on the back of the object
     vec3 projectorDirection = normalize(projPosition - vWorldPosition.xyz);
     float dotProduct = dot(vNormal, projectorDirection);
     if (dotProduct < 0.0) {
       outColor = vec4(color, 1.0);
     }
-
     gl_FragColor = outColor;
   }
   `,
 );
 
-// extend({ ProjectedMaterial });
+extend({ ProjectedMaterial });
 
-// export type ProjectedMaterialImpl = JSX.IntrinsicElements['shaderMaterial'];
-
-// declare module '@react-three/fiber' {
-//   interface ThreeElements {
-//     projectedMaterial: ProjectedMaterialImpl;
-//   }
-// }
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    projectedMaterial: MaterialNode<ShaderMaterial, typeof ProjectedMaterial>;
+  }
+}

@@ -1,14 +1,18 @@
 import { useFabricCanvas } from '@hooks';
+import { EDIT_MODE } from '@store/constants';
+import { useCustomiserStore } from '@store/customiser';
 import { fabric } from 'fabric';
 import { useEffect, useRef } from 'react';
-import { FabricObject, useCustomiserStore } from '@store/customiser';
+import { CurrentGraphic } from './../../../context/CurrentGraphicsContext';
 
 export interface GraphicsCanvasProps {
   className?: string;
-  graphic: FabricObject;
+  graphic: CurrentGraphic;
 }
 
 const GraphicsCanvas = ({ className, graphic }: GraphicsCanvasProps) => {
+  console.log('GraphicsCanvas');
+
   const fImageRef = useRef<fabric.Image | string>();
   const dimension = useCustomiserStore((state) => state.canvas);
 
@@ -21,30 +25,41 @@ const GraphicsCanvas = ({ className, graphic }: GraphicsCanvasProps) => {
    * Initialize fabric object
    */
   useEffect(() => {
-    if (fabricRef.current && !fImageRef.current && dimension) {
+    if (fabricRef.current && !fImageRef.current && dimension && graphic.imageurl) {
       const { width, height } = dimension;
-
-      fImageRef.current = 'loading';
-
       fabric.Image.fromURL(
-        '/sample.jpeg',
+        graphic.imageurl,
         function (oImg) {
-          if (fabricRef.current) fabricRef.current.add(oImg);
-          fImageRef.current = oImg;
+          if (fabricRef.current && !fImageRef.current) {
+            fabricRef.current.add(oImg);
+            fImageRef.current = oImg;
+          }
         },
         {
           left: width / 2,
           top: height / 2,
           originX: 'center',
           originY: 'center',
-          width: 100,
+          width: 150,
           height: 100,
+          crossOrigin: 'anonymous',
         },
       );
     }
-  }, [fabricRef]);
+  }, [fabricRef, fImageRef, dimension, graphic]);
 
-  return <FabricCanvas className={className}></FabricCanvas>;
+  return (
+    <div
+      className={className}
+      style={{
+        position: 'absolute',
+        zIndex: 1000,
+        display: graphic && graphic.editMode == EDIT_MODE.EDIT_2D ? 'block' : 'none',
+      }}
+    >
+      <FabricCanvas></FabricCanvas>
+    </div>
+  );
 };
 
 export default GraphicsCanvas;

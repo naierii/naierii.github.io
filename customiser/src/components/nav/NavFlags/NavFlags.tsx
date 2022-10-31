@@ -3,6 +3,7 @@ import cn from 'classnames';
 import Image from '@components/ui/Image';
 
 import styles from './NavFlags.module.scss';
+import { useCurrentGraphics } from '../../../context/CurrentGraphicsContext';
 
 export interface NavFlagsProps {
   className?: string;
@@ -10,6 +11,7 @@ export interface NavFlagsProps {
 
 const NavFlags = ({ className }: NavFlagsProps) => {
   const rootClassName = cn(styles.root, className);
+  const { setGraphic } = useCurrentGraphics();
 
   const { data: flags } = useGetFlagsQuery(
     {
@@ -23,7 +25,13 @@ const NavFlags = ({ className }: NavFlagsProps) => {
   return (
     <div className={rootClassName}>
       {flags?.map((f) => (
-        <div className={styles.flag} key={f.id}>
+        <div
+          className={styles.flag}
+          key={f.id}
+          onClick={() =>
+            setGraphic ? setGraphic({ imageurl: f.attributes?.image.data?.attributes?.url }) : null
+          }
+        >
           <Image image={f.attributes?.image.data} />
         </div>
       ))}

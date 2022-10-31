@@ -3,6 +3,7 @@ import { useTexture } from '@react-three/drei';
 import type { ThreeElements, ThreeEvent } from '@react-three/fiber';
 import { useCustomiserStore } from '@store/customiser';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCurrentGraphics } from '../../../context/CurrentGraphicsContext';
 import { Box3, DoubleSide, Mesh, MeshStandardMaterial, RepeatWrapping, Vector3 } from 'three';
 export interface ClonedTextureMeshProps {
   node: Mesh;
@@ -10,6 +11,7 @@ export interface ClonedTextureMeshProps {
 }
 
 const ClonedTextureMesh = ({ node, texture }: ClonedTextureMeshProps) => {
+  const { graphic } = useCurrentGraphics();
   const [hovered, setHovered] = useState(false);
   const [textures, setTextures] = useState<MaterialTextureMapModel>();
   const materialRef = useRef<MeshStandardMaterial>(null);
@@ -61,10 +63,6 @@ const ClonedTextureMesh = ({ node, texture }: ClonedTextureMeshProps) => {
     materialProps.metalness = 0.05;
   }
 
-  // if (hovered) {
-  //   materialProps.color = '#ccc';
-  // }
-
   const onPointerEnter = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     setHovered(true);
@@ -75,15 +73,25 @@ const ClonedTextureMesh = ({ node, texture }: ClonedTextureMeshProps) => {
     setHovered(false);
   };
 
+  const graphicProps: ThreeElements['mesh'] = {
+    geometry: node.geometry,
+    material: graphic?.material ?? undefined,
+  };
+
   return (
-    <mesh
-      {...meshProps}
-      ref={meshRef}
-      onPointerEnter={onPointerEnter}
-      onPointerLeave={onPointerLeave}
-    >
-      <meshStandardMaterial {...materialProps} ref={materialRef} />
-    </mesh>
+    <>
+      <mesh
+        {...meshProps}
+        ref={meshRef}
+        onPointerEnter={onPointerEnter}
+        onPointerLeave={onPointerLeave}
+      >
+        <meshStandardMaterial {...materialProps} ref={materialRef} />
+      </mesh>
+      {graphic?.material && graphic.freeze && (
+        <mesh name={`texture_${node.id}`} scale={[1.007, 1.007, 1.007]} {...graphicProps}></mesh>
+      )}
+    </>
   );
 };
 export interface CustomiserMeshProps {

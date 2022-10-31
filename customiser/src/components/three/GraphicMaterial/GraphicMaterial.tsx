@@ -1,34 +1,47 @@
-/* eslint-disable react/no-unknown-property */
 import { ThreeElements } from '@react-three/fiber';
-import { useCustomiserStore } from '@store/customiser';
+import { useEffect, useRef } from 'react';
+import { MeshPhongMaterial } from 'three';
+import { useCurrentGraphics } from '../../../context/CurrentGraphicsContext';
+import ProjectedMaterial from '../ProjectedMaterial/ProjectedMaterial';
 
 export interface GraphicMaterialProps {
   test?: string;
 }
 
-const GraphicMaterial = ({ test }: GraphicMaterialProps) => {
-  const graphic = useCustomiserStore((state) => state.graphic);
+const GraphicMaterial = ({ ...rest }: GraphicMaterialProps) => {
+  const materialRef = useRef<MeshPhongMaterial>(null);
+  const { graphic, setGraphic } = useCurrentGraphics();
+
+  useEffect(() => {
+    if (materialRef.current) {
+      materialRef.current.needsUpdate = true;
+    }
+
+    if (graphic && !graphic.material && materialRef.current) {
+      setGraphic({ material: materialRef.current });
+    }
+  }, [materialRef, graphic]);
 
   if (!graphic) {
     return null;
   }
 
-  const textureProps: ThreeElements['canvasTexture'] = graphic
+  const textureProps: ThreeElements['canvasTexture'] = graphic?.canvas
     ? {
         image: graphic.canvas,
         needsUpdate: true,
+        attach: 'map',
       }
     : {};
 
-  // const meshProps: ThreeElements['mesh'] = {
-  //   position: [0, 5, 0],
-  // };
+  if (!graphic.canvas) {
+    return null;
+  }
 
   return (
-    <mesh>
-      {/* <projectedMaterial ref={shaderMat} camera={camera} texture={texture} /> */}
-      {/* <canvasTexture ref={textureRef} {...textureProps} /> */}
-    </mesh>
+    <ProjectedMaterial ref={materialRef} transparent={true} {...rest} freeze={graphic.freeze}>
+      <canvasTexture {...textureProps} />
+    </ProjectedMaterial>
   );
 };
 

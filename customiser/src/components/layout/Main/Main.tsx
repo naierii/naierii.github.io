@@ -1,6 +1,5 @@
 import CustomiserNav from '@components/nav/CustomiserNav';
 import CustomiserCanvas from '@components/three/CustomiserCanvas';
-import FabricCanvas from '@components/three/FabricCanvas';
 import GraphicsCanvas from '@components/three/GraphicsCanvas';
 import Button from '@components/ui/Button';
 import { useGetCustomProductByShopifyIdQuery } from '@graphql/generated/graphql';
@@ -8,6 +7,7 @@ import { useShopifyGetProductByIdQuery } from '@graphql/generated/graphql-shopif
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
 import { useEffect, useState } from 'react';
+import { useCurrentGraphics } from '../../../context/CurrentGraphicsContext';
 import Header from '../Header';
 
 import styles from './Main.module.scss';
@@ -19,7 +19,8 @@ export interface MainProps {
 
 const Main = ({ className, product }: MainProps) => {
   const [show, setShow] = useState(false);
-  const graphic = useCustomiserStore((state) => state.graphic);
+  const { graphic } = useCurrentGraphics();
+
   const setCustomProduct = useCustomiserStore((state) => state.setCustomProduct);
   const rootClassName = cn(styles.root, className);
 
@@ -48,8 +49,10 @@ const Main = ({ className, product }: MainProps) => {
         <div className={rootClassName}>
           <CustomiserNav className={styles.nav} />
           <Header className={styles.header} />
-          {graphic && <GraphicsCanvas graphic={graphic} className={styles.model} />}
           <CustomiserCanvas className={styles.model} />
+          {graphic && graphic.imageurl && (
+            <GraphicsCanvas graphic={graphic} className={styles.model} />
+          )}
         </div>
       ) : (
         <Button onClick={() => setShow(true)}>Customise</Button>

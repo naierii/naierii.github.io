@@ -10,9 +10,8 @@ import {
   ShopifyProductVariantFragment,
   ShopifyShopifyGetProductByIdQuery,
 } from '@graphql/generated/graphql-shopify';
-import { MaterialTextureMapModel, MaterialTextureModel } from '@models';
+import { MaterialTextureModel } from '@models';
 import produce from 'immer';
-import { MeshPhongMaterial } from 'three';
 import create, { StateCreator } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { EDIT_MODE, UNIT } from './constants';
@@ -33,25 +32,15 @@ export interface NavItem {
   index?: number;
   required?: boolean;
 }
-
 interface SizingMeasurement {
   value?: number;
   unit?: string;
 }
-
-export interface FabricObject {
-  canvas?: HTMLCanvasElement;
-  editMode: string;
-  freeze: boolean;
-  material: MeshPhongMaterial | null;
-}
-
 export interface CustomiserState {
   canvas?: {
     width: number;
     height: number;
   };
-  graphic: FabricObject;
   customProduct?: CustomProductFragment;
   selectedModels: SelectedModel[];
   savedModels: SelectedModel[];
@@ -67,9 +56,6 @@ export interface CustomiserState {
     variation?: ShopifyProductVariantFragment;
   };
   total: () => string;
-  setGraphic: (graphic: FabricObject) => void;
-  setFreeze: (freeze: boolean) => void;
-  setGraphicCanavas: (canvas: HTMLCanvasElement) => void;
   setSelectedModel: (optionId: Scalars['ID'], model?: Maybe<ModelFragment>) => void;
   setCustomProduct: (
     customProduct: CustomProductFragment,
@@ -94,11 +80,6 @@ const createCustomiser: StateCreator<CustomiserState, [['zustand/devtools', neve
   get,
 ) => ({
   selectedModels: [],
-  graphic: {
-    editMode: EDIT_MODE.EDIT_2D,
-    freeze: false,
-    material: null,
-  },
   savedModels: [],
   selectedPart: null,
   navItems: [],
@@ -196,27 +177,6 @@ const createCustomiser: StateCreator<CustomiserState, [['zustand/devtools', neve
     set(
       produce((state: CustomiserState) => {
         state.canvas = { width, height };
-      }),
-    );
-  },
-  setGraphic: (graphic) => {
-    set(
-      produce((state: CustomiserState) => {
-        state.graphic = graphic;
-      }),
-    );
-  },
-  setFreeze: (freeze) => {
-    set(
-      produce((state: CustomiserState) => {
-        state.graphic.freeze = freeze;
-      }),
-    );
-  },
-  setGraphicCanavas: (canvas) => {
-    set(
-      produce((state: CustomiserState) => {
-        state.graphic.canvas = canvas;
       }),
     );
   },

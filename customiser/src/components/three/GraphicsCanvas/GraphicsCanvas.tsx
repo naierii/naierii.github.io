@@ -11,8 +11,6 @@ export interface GraphicsCanvasProps {
 }
 
 const GraphicsCanvas = ({ className, graphic }: GraphicsCanvasProps) => {
-  console.log('GraphicsCanvas');
-
   const fImageRef = useRef<fabric.Image | string>();
   const dimension = useCustomiserStore((state) => state.canvas);
 

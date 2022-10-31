@@ -13,11 +13,18 @@ export interface HeaderProps {
 const Header = ({ className }: HeaderProps) => {
   const rootClassName = cn(styles.root, className);
   const total = useCustomiserStore((state) => state.total());
-  const { setGraphic } = useCurrentGraphics();
+  const { graphic, setGraphic } = useCurrentGraphics();
 
   return (
     <div className={rootClassName}>
-      <Button onClick={() => setGraphic({ freeze: true, editMode: EDIT_MODE.EDIT_3D })}>
+      <Button
+        onClick={() =>
+          setGraphic({
+            freeze: !graphic?.freeze,
+            editMode: !graphic?.freeze ? EDIT_MODE.EDIT_3D : EDIT_MODE.EDIT_2D,
+          })
+        }
+      >
         Freeze
       </Button>
       <div className={styles.total}>

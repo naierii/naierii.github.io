@@ -31,9 +31,6 @@ const CurrentGraphicsContextProvider = ({ children }: CurrentGraphicsProviderPro
 
   const setGraphic = useCallback(
     (graphic: CurrentGraphic) => {
-      console.log('setGraphic');
-      console.log(graphic);
-      console.log({ ...currentGraphic, ...graphic });
       setCurrentGraphic({ ...currentGraphic, ...graphic });
     },
     [currentGraphic],

@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { ThreeElements, useThree } from '@react-three/fiber';
+import { MeshPhongMaterialProps, ThreeElements, useThree } from '@react-three/fiber';
 import { forwardRef, useCallback, useEffect, useRef } from 'react';
 import { IUniform, MeshPhongMaterial } from 'three';
 
@@ -12,8 +12,6 @@ interface UniformProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [uniform: string]: IUniform<any>;
 }
-
-type MeshPhongMaterialProps = ThreeElements['meshPhongMaterial'];
 
 export interface ProjectedMaterialProps extends MeshPhongMaterialProps {
   freeze?: boolean;
@@ -58,7 +56,6 @@ const ProjectedMaterial = forwardRef<MeshPhongMaterial, ProjectedMaterialProps>(
 
     const materialProps: ThreeElements['meshPhongMaterial'] = {
       onBeforeCompile: (shader) => {
-        console.log('onBeforeCompile');
         if (uniforms.current) {
           shader.uniforms = uniforms.current;
         } else {

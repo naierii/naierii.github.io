@@ -89,7 +89,7 @@ const ClonedTextureMesh = ({ node, texture }: ClonedTextureMeshProps) => {
         <meshStandardMaterial {...materialProps} ref={materialRef} />
       </mesh>
       {graphic?.material && graphic.freeze && (
-        <mesh name={`texture_${node.id}`} scale={[1.007, 1.007, 1.007]} {...graphicProps}></mesh>
+        <mesh name={`texture_${node.id}`} scale={[1, 1, 1]} {...graphicProps}></mesh>
       )}
     </>
   );

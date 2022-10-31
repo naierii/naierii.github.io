@@ -2,7 +2,7 @@ import { EDIT_MODE } from '@store/constants';
 import { useCustomiserStore } from '@store/customiser';
 import { fabric } from 'fabric';
 import { CanvasHTMLAttributes, useCallback, useEffect, useRef } from 'react';
-import { CurrentGraphic, useCurrentGraphics } from '../../context/CurrentGraphicsContext';
+import { CurrentGraphic, useCurrentGraphics } from '@context/CurrentGraphicsContext';
 
 interface UseFabricCanvasProps {
   fabricObject: CurrentGraphic;

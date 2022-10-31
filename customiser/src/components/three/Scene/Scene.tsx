@@ -1,7 +1,7 @@
 import { Center } from '@react-three/drei';
 import { ThreeElements } from '@react-three/fiber';
 import { CustomiserState, useCustomiserStore } from '@store/customiser';
-import { useCurrentGraphics } from '../../../context/CurrentGraphicsContext';
+import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
 import GraphicMaterial from '../GraphicMaterial';
 import Model from '../Model';
 

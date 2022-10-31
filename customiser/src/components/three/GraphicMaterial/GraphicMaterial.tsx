@@ -1,7 +1,7 @@
 import { ThreeElements } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import { MeshPhongMaterial } from 'three';
-import { useCurrentGraphics } from '../../../context/CurrentGraphicsContext';
+import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
 import ProjectedMaterial from '../ProjectedMaterial/ProjectedMaterial';
 
 export interface GraphicMaterialProps {

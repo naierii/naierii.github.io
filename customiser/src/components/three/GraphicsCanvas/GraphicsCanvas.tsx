@@ -3,7 +3,7 @@ import { EDIT_MODE } from '@store/constants';
 import { useCustomiserStore } from '@store/customiser';
 import { fabric } from 'fabric';
 import { useEffect, useRef } from 'react';
-import { CurrentGraphic } from './../../../context/CurrentGraphicsContext';
+import { CurrentGraphic } from '@context/CurrentGraphicsContext';
 
 export interface GraphicsCanvasProps {
   className?: string;

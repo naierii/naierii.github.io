@@ -7,7 +7,7 @@ import { useShopifyGetProductByIdQuery } from '@graphql/generated/graphql-shopif
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
 import { useEffect, useState } from 'react';
-import { useCurrentGraphics } from '../../../context/CurrentGraphicsContext';
+import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
 import Header from '../Header';
 
 import styles from './Main.module.scss';

@@ -3,7 +3,7 @@ import { useTexture } from '@react-three/drei';
 import type { ThreeElements, ThreeEvent } from '@react-three/fiber';
 import { useCustomiserStore } from '@store/customiser';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useCurrentGraphics } from '../../../context/CurrentGraphicsContext';
+import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
 import { Box3, DoubleSide, Mesh, MeshStandardMaterial, RepeatWrapping, Vector3 } from 'three';
 export interface ClonedTextureMeshProps {
   node: Mesh;

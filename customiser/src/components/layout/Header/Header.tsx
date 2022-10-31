@@ -2,7 +2,7 @@ import Button from '@components/ui/Button';
 import { EDIT_MODE } from '@store/constants';
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
-import { useCurrentGraphics } from '../../../context/CurrentGraphicsContext';
+import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
 
 import styles from './Header.module.scss';
 

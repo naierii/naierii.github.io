@@ -3,7 +3,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { LazyMotion } from 'framer-motion';
 import { lazy, Suspense } from 'react';
-import CurrentGraphicsContextProvider from './context/CurrentGraphicsContext';
+import CurrentGraphicsContextProvider from '@context/CurrentGraphicsContext';
 
 const Main = lazy(() => import('@components/layout/Main'));
 

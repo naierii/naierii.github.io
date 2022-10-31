@@ -3,7 +3,7 @@ import cn from 'classnames';
 import Image from '@components/ui/Image';
 
 import styles from './NavFlags.module.scss';
-import { useCurrentGraphics } from '../../../context/CurrentGraphicsContext';
+import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
 
 export interface NavFlagsProps {
   className?: string;

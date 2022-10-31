@@ -20,8 +20,19 @@ const Header = ({ className }: HeaderProps) => {
       <Button
         onClick={() =>
           setGraphic({
-            freeze: !graphic?.freeze,
-            editMode: !graphic?.freeze ? EDIT_MODE.EDIT_3D : EDIT_MODE.EDIT_2D,
+            freeze: false,
+            editMode:
+              graphic?.editMode === EDIT_MODE.EDIT_2D ? EDIT_MODE.EDIT_3D : EDIT_MODE.EDIT_2D,
+          })
+        }
+      >
+        Edit Mode {graphic?.editMode}
+      </Button>
+      <Button
+        onClick={() =>
+          setGraphic({
+            freeze: true,
+            editMode: EDIT_MODE.EDIT_3D,
           })
         }
       >

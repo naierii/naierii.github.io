@@ -29,7 +29,9 @@ const NavFlags = ({ className }: NavFlagsProps) => {
           className={styles.flag}
           key={f.id}
           onClick={() =>
-            setGraphic ? setGraphic({ imageurl: f.attributes?.image.data?.attributes?.url }) : null
+            setGraphic({
+              imageurl: f.attributes?.image.data?.attributes?.url,
+            })
           }
         >
           <Image image={f.attributes?.image.data} />

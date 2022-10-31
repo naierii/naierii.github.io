@@ -14,6 +14,5 @@ module.exports = function override(config) {
     use: ['raw-loader', 'glslify-loader'],
   });
 
-  console.log(config);
   return config;
 };

@@ -17,6 +17,8 @@ export const useFabricCanvas = ({ fabricObject, contextObject }: UseFabricCanvas
   const { setGraphic } = useCurrentGraphics();
 
   const renderFabric = useCallback(() => {
+    console.log('renderFabric');
+
     if (fabricRef.current) {
       fabricRef.current.renderAll();
       if (material && material.map) {
@@ -55,20 +57,6 @@ export const useFabricCanvas = ({ fabricObject, contextObject }: UseFabricCanvas
       renderFabric();
     }
   }, [dimension, fabricRef]);
-
-  /**
-   * Ensure fabric selection controls do not get rendered in
-   * 3D material
-   */
-  useEffect(() => {
-    if (contextObject && contextObject.editMode && fabricRef.current) {
-      if (contextObject.editMode === EDIT_MODE.EDIT_3D) {
-        fabricRef.current.discardActiveObject();
-
-        renderFabric();
-      }
-    }
-  }, [contextObject, fabricRef]);
 
   /**
    * Ensure fabric selection controls do not get rendered in

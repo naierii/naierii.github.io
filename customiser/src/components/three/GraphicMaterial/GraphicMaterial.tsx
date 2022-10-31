@@ -1,7 +1,7 @@
+import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
 import { ThreeElements } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import { MeshPhongMaterial } from 'three';
-import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
 import ProjectedMaterial from '../ProjectedMaterial/ProjectedMaterial';
 
 export interface GraphicMaterialProps {
@@ -22,21 +22,15 @@ const GraphicMaterial = ({ ...rest }: GraphicMaterialProps) => {
     }
   }, [materialRef, graphic]);
 
-  if (!graphic) {
+  if (!graphic?.canvas) {
     return null;
   }
 
-  const textureProps: ThreeElements['canvasTexture'] = graphic?.canvas
-    ? {
-        image: graphic.canvas,
-        needsUpdate: true,
-        attach: 'map',
-      }
-    : {};
-
-  if (!graphic.canvas) {
-    return null;
-  }
+  const textureProps: ThreeElements['canvasTexture'] = {
+    image: graphic.canvas,
+    needsUpdate: true,
+    attach: 'map',
+  };
 
   return (
     <ProjectedMaterial ref={materialRef} transparent={true} {...rest} freeze={graphic.freeze}>

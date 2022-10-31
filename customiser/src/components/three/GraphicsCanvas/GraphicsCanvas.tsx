@@ -25,10 +25,12 @@ const GraphicsCanvas = ({ className, graphic }: GraphicsCanvasProps) => {
   useEffect(() => {
     if (fabricRef.current && !fImageRef.current && dimension && graphic.imageurl) {
       const { width, height } = dimension;
+
       fabric.Image.fromURL(
         graphic.imageurl,
         function (oImg) {
           if (fabricRef.current && !fImageRef.current) {
+            oImg.scaleToHeight(100);
             fabricRef.current.add(oImg);
             fImageRef.current = oImg;
           }
@@ -38,8 +40,6 @@ const GraphicsCanvas = ({ className, graphic }: GraphicsCanvasProps) => {
           top: height / 2,
           originX: 'center',
           originY: 'center',
-          width: 150,
-          height: 100,
           crossOrigin: 'anonymous',
         },
       );

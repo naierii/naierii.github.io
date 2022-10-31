@@ -27,11 +27,7 @@ const ProjectedMaterial = forwardRef<MeshPhongMaterial, ProjectedMaterialProps>(
     const uniforms = useRef<UniformProps>();
 
     const getCameraMatrixWorldInverse = useCallback(() => {
-      if (freeze) {
-        return camera.matrixWorldInverse.clone();
-      }
-
-      return camera.matrixWorldInverse;
+      return freeze ? camera.matrixWorldInverse.clone() : camera.matrixWorldInverse;
     }, [freeze, camera]);
 
     const getCameraPosition = useCallback(() => {
@@ -41,18 +37,25 @@ const ProjectedMaterial = forwardRef<MeshPhongMaterial, ProjectedMaterialProps>(
     const getMeshMatrix = useCallback(() => {
       if (meshGroup) {
         meshGroup.updateMatrixWorld();
-
         return freeze ? meshGroup.matrixWorld.clone() : meshGroup.matrixWorld;
       }
     }, [freeze, meshGroup]);
 
     useEffect(() => {
-      if (uniforms.current) {
+      if (uniforms.current && freeze) {
+        console.log('update camera position');
         uniforms.current.viewMatrixCamera.value = getCameraMatrixWorldInverse();
         uniforms.current.projPosition.value = getCameraPosition();
         uniforms.current.meshMatrix.value = getMeshMatrix();
+        setTimeout(() => {
+          if (uniforms.current) {
+            uniforms.current.viewMatrixCamera.value = getCameraMatrixWorldInverse();
+            uniforms.current.projPosition.value = getCameraPosition();
+            uniforms.current.meshMatrix.value = getMeshMatrix();
+          }
+        }, 100);
       }
-    }, [uniforms]);
+    }, [camera, freeze, uniforms, meshGroup]);
 
     const materialProps: ThreeElements['meshPhongMaterial'] = {
       onBeforeCompile: (shader) => {
@@ -83,9 +86,6 @@ const ProjectedMaterial = forwardRef<MeshPhongMaterial, ProjectedMaterialProps>(
 
           uniforms.current = _uniforms;
           shader.uniforms = _uniforms;
-
-          // TEMP
-          // materialRef.current.userData.uniforms = _uniforms;
         }
 
         shader.vertexShader = shader.vertexShader.replace(
@@ -105,8 +105,8 @@ const ProjectedMaterial = forwardRef<MeshPhongMaterial, ProjectedMaterialProps>(
           outputFragment,
         );
       },
-      ...props,
       needsUpdate: true,
+      ...props,
     };
 
     return <meshPhongMaterial ref={materialRef} {...materialProps}></meshPhongMaterial>;

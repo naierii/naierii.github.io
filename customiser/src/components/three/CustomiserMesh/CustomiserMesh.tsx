@@ -1,9 +1,10 @@
+import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
 import { MaterialTextureMapModel } from '@models';
 import { useTexture } from '@react-three/drei';
-import type { ThreeElements, ThreeEvent } from '@react-three/fiber';
+import type { ThreeElements } from '@react-three/fiber';
+import { EDIT_MODE } from '@store/constants';
 import { useCustomiserStore } from '@store/customiser';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
 import { Box3, DoubleSide, Mesh, MeshStandardMaterial, RepeatWrapping, Vector3 } from 'three';
 export interface ClonedTextureMeshProps {
   node: Mesh;
@@ -12,7 +13,7 @@ export interface ClonedTextureMeshProps {
 
 const ClonedTextureMesh = ({ node, texture }: ClonedTextureMeshProps) => {
   const { graphic } = useCurrentGraphics();
-  const [hovered, setHovered] = useState(false);
+  // const [hovered, setHovered] = useState(false);
   const [textures, setTextures] = useState<MaterialTextureMapModel>();
   const materialRef = useRef<MeshStandardMaterial>(null);
   const meshRef = useRef<Mesh>(null);
@@ -63,32 +64,35 @@ const ClonedTextureMesh = ({ node, texture }: ClonedTextureMeshProps) => {
     materialProps.metalness = 0.05;
   }
 
-  const onPointerEnter = (e: ThreeEvent<PointerEvent>) => {
-    e.stopPropagation();
-    setHovered(true);
-  };
+  // const onPointerEnter = (e: ThreeEvent<PointerEvent>) => {
+  //   e.stopPropagation();
+  //   setHovered(true);
+  // };
 
-  const onPointerLeave = (e: ThreeEvent<PointerEvent>) => {
-    e.stopPropagation();
-    setHovered(false);
-  };
+  // const onPointerLeave = (e: ThreeEvent<PointerEvent>) => {
+  //   e.stopPropagation();
+  //   setHovered(false);
+  // };
+
+  if (graphic?.material && graphic.editMode === EDIT_MODE.EDIT_2D && !graphic.freeze) {
+    graphic.material.opacity = 0;
+  } else if (graphic?.material) {
+    graphic.material.opacity = 1;
+  }
 
   const graphicProps: ThreeElements['mesh'] = {
     geometry: node.geometry,
     material: graphic?.material ?? undefined,
   };
 
+  console.log(graphic?.material?.opacity);
+
   return (
     <>
-      <mesh
-        {...meshProps}
-        ref={meshRef}
-        onPointerEnter={onPointerEnter}
-        onPointerLeave={onPointerLeave}
-      >
+      <mesh {...meshProps} ref={meshRef}>
         <meshStandardMaterial {...materialProps} ref={materialRef} />
       </mesh>
-      {graphic?.material && graphic.freeze && (
+      {graphic?.material && (
         <mesh name={`texture_${node.id}`} scale={[1, 1, 1]} {...graphicProps}></mesh>
       )}
     </>

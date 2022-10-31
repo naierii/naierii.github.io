@@ -1,14 +1,15 @@
-import { OrbitControls } from '@react-three/drei';
+import Lights from '@components/three/Lights';
+import Loader from '@components/three/Loader';
+import Scene from '@components/three/Scene';
+import { OrbitControls, useContextBridge } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import cn from 'classnames';
 import { Suspense, useRef } from 'react';
-import Lights from '@components/three/Lights';
-import Scene from '@components/three/Scene';
-import Loader from '@components/three/Loader';
 
-import styles from './CustomiserCanvas.module.scss';
-import { Camera } from 'three';
 import { useCustomiserStore } from '@store/customiser';
+import { Camera } from 'three';
+import styles from './CustomiserCanvas.module.scss';
+import { CurrentGraphicsContext } from '@context/CurrentGraphicsContext';
 
 export interface CustomiserCanvasProps {
   className?: string;
@@ -19,6 +20,8 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
   const rootClassName = cn(styles.root, className);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const cameraRef = useRef<Camera | null>(null);
+
+  const ContextBridge = useContextBridge(CurrentGraphicsContext);
 
   // const saveImage = useCallback(() => {
   //   const camera = cameraRef.current;
@@ -55,10 +58,12 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
         }}
       >
         <Lights />
-        <Suspense fallback={<Loader />}>
+
+        <ContextBridge>
           <Scene />
-        </Suspense>
-        <OrbitControls enableZoom={true} />
+        </ContextBridge>
+
+        <OrbitControls enableZoom={false} />
       </Canvas>
       {/* <button className={styles.save} onClick={saveImage}>
         Save Image

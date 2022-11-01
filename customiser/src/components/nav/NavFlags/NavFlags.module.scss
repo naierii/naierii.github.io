@@ -1,12 +1,10 @@
 @use '~sass-rem' as *;
-
 @import '@styles/variables';
 
-.root {
+.flags {
   display: flex;
   flex-wrap: wrap;
   gap: rem(14px);
-  align-items: stretch;
 }
 
 .flag {
@@ -16,4 +14,28 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  cursor: pointer;
+}
+
+.flagItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: rem(20px);
+}
+
+.flagItemImage {
+  width: rem(50px);
+  margin-right: auto;
+}
+
+.flagItemButtons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: rem(13px);
+
+  button {
+    svg {
+      width: rem(23px);
+    }
+  }
 }

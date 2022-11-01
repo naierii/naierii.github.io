@@ -1,6 +1,8 @@
 import Button from '@components/ui/Button';
+import { usePortalRef } from '@hooks';
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
+import ReactDOM from 'react-dom';
 
 import styles from './NavButtons.module.scss';
 
@@ -13,6 +15,7 @@ const NavButtons = ({ className }: NavButtonsProps) => {
   const selectedNav = useCustomiserStore((state) => state.selectedNav);
   const setSelectedNav = useCustomiserStore((state) => state.setSelectedNav);
   const cancelPartChange = useCustomiserStore((state) => state.cancelPartChange);
+  const portalRef = usePortalRef('CustomiserNavActions');
 
   if (!selectedNav) {
     return null;
@@ -21,13 +24,18 @@ const NavButtons = ({ className }: NavButtonsProps) => {
   const currentIndex = selectedNav.index;
   const next = currentIndex || currentIndex === 0 ? currentIndex + 1 : 0;
 
-  return (
+  if (!portalRef) {
+    return null;
+  }
+
+  return ReactDOM.createPortal(
     <div className={rootClassName}>
       <Button onClick={() => cancelPartChange()}>Cancel</Button>
       <Button colour='red' onClick={() => setSelectedNav(next, true)}>
         Save & Next
       </Button>
-    </div>
+    </div>,
+    portalRef,
   );
 };
 

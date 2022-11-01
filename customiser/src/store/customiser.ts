@@ -17,6 +17,8 @@ import produce from 'immer';
 import { IUniform } from 'three';
 import create, { StateCreator } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+import { v4 as uuidv4 } from 'uuid';
+
 import { UNIT } from './constants';
 interface SelectedModel {
   optionId: Scalars['ID'];
@@ -28,19 +30,19 @@ interface Part {
   material: MaterialFragment;
 }
 
-interface Flag {
-  editMode: boolean;
-  canvasPosition: {
+export interface FlagCustomiser {
+  key: string;
+  editMode?: boolean;
+  canvasPosition?: {
     x: number;
     y: number;
     rotation: number;
   };
-  uniforms: {
+  uniforms?: {
     [uniform: string]: IUniform<any>;
   };
-  flag: FlagFragment;
+  flag?: FlagFragment;
 }
-
 export interface NavItem {
   id?: Scalars['ID'];
   name: Maybe<Scalars['String']>;
@@ -65,7 +67,7 @@ export interface CustomiserState {
   selectedNav: Maybe<NavItem>;
   parts: Part[];
   savedParts: Part[];
-  flags: Flag[];
+  flags: FlagCustomiser[];
   variations: Array<ShopifyProductVariantFragment>;
   sizing?: {
     height?: SizingMeasurement;
@@ -88,6 +90,10 @@ export interface CustomiserState {
     variation?: ShopifyProductVariantFragment,
   ) => void;
   cancelPartChange: () => void;
+  addFlag: (flag: FlagFragment) => void;
+  deleteFlag: (key: string) => void;
+  selectFlag: (key: string) => void;
+  deselectFlag: () => void;
   resetNav: () => void;
   texture: (nodeId: string) => MaterialTextureModel;
 }
@@ -286,6 +292,50 @@ const createCustomiser: StateCreator<CustomiserState, [['zustand/devtools', neve
       }
     }
     return materials;
+  },
+  addFlag: (flag) => {
+    const newKey = uuidv4();
+    set(
+      produce((state: CustomiserState) => {
+        state.flags = [
+          ...state.flags.map((f) => ({ ...f, editMode: false })),
+          { flag, editMode: true, key: newKey },
+        ];
+      }),
+    );
+  },
+  deleteFlag: (key) => {
+    set(
+      produce((state: CustomiserState) => {
+        state.flags = [...state.flags.filter((f) => f.key !== key)];
+      }),
+    );
+  },
+  selectFlag: (key) => {
+    set(
+      produce((state: CustomiserState) => {
+        state.flags = [
+          ...state.flags.map((f) => {
+            if (f.key === key) {
+              f.editMode = true;
+              return f;
+            }
+            return { ...f, editMode: false };
+          }),
+        ];
+      }),
+    );
+  },
+  deselectFlag: () => {
+    set(
+      produce((state: CustomiserState) => {
+        state.flags = [
+          ...state.flags.map((f) => {
+            return { ...f, editMode: false };
+          }),
+        ];
+      }),
+    );
   },
 });
 

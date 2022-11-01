@@ -3,6 +3,7 @@ import cn from 'classnames';
 import { m } from 'framer-motion';
 import { Suspense } from 'react';
 import MaterialGroup from '../MaterialGroup';
+import NavButtons from '../NavButtons';
 
 import styles from './NavPart.module.scss';
 
@@ -19,17 +20,20 @@ const NavPart = ({ className, part }: NavPartProps) => {
   }
 
   return (
-    <m.div
-      key={part.id}
-      className={rootClassName}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <Suspense fallback={<div>Loading...</div>}>
-        <MaterialGroup materialGroup={part.materialGroup.data} part={part} />
-      </Suspense>
-    </m.div>
+    <>
+      <m.div
+        key={part.id}
+        className={rootClassName}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <Suspense fallback={<div>Loading...</div>}>
+          <MaterialGroup materialGroup={part.materialGroup.data} part={part} />
+        </Suspense>
+      </m.div>
+      <NavButtons />
+    </>
   );
 };
 

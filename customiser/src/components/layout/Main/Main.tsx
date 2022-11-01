@@ -11,6 +11,7 @@ import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
 import Header from '../Header';
 
 import styles from './Main.module.scss';
+import GraphicsWrapper from '@components/three/GraphicsWrapper';
 
 export interface MainProps {
   className?: string;
@@ -20,7 +21,8 @@ export interface MainProps {
 const Main = ({ className, product }: MainProps) => {
   const [show, setShow] = useState(false);
   const { graphic } = useCurrentGraphics();
-
+  const flags = useCustomiserStore((state) => state.flags);
+  const editFlag = flags.find((f) => f.editMode);
   const setCustomProduct = useCustomiserStore((state) => state.setCustomProduct);
   const rootClassName = cn(styles.root, className);
 
@@ -50,9 +52,11 @@ const Main = ({ className, product }: MainProps) => {
           <CustomiserNav className={styles.nav} />
           <Header className={styles.header} />
           <CustomiserCanvas className={styles.model} />
-          {graphic && graphic.imageurl && (
+          {editFlag?.flag && <GraphicsWrapper graphic={editFlag} className={styles.model} />}
+
+          {/* {graphic && graphic.imageurl && (
             <GraphicsCanvas graphic={graphic} className={styles.model} />
-          )}
+          )} */}
         </div>
       ) : (
         <Button onClick={() => setShow(true)}>Customise</Button>

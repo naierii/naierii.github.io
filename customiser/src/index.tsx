@@ -4,7 +4,7 @@ import App from './App';
 import './index.scss';
 
 const container = document.getElementById('BoxxerCustomiser') as Element;
-const product = container.getAttribute('data-product')?.toString()
+const product = container.getAttribute('data-product')?.toString();
 
 const root = createRoot(container);
 
@@ -13,4 +13,3 @@ root.render(
     <App product={product} />
   </React.StrictMode>,
 );
-

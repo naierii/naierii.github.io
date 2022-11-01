@@ -1,43 +1,48 @@
-import { useGetFlagsQuery } from '@graphql/generated/graphql';
-import cn from 'classnames';
-import Image from '@components/ui/Image';
+import { FlagCustomiser, useCustomiserStore } from '@store/customiser';
+import { useEffect, useState } from 'react';
+import { NavFlagsSelect } from './NavFlagsSelect';
 
 import styles from './NavFlags.module.scss';
-import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
+import Button from '@components/ui/Button';
+import { NavFlagsFlag } from './NavFlagsFlag';
+import NavButtons from '../NavButtons';
+import NavEditButtons from '../NavEditButtons';
 
-export interface NavFlagsProps {
-  className?: string;
-}
+// export interface NavFlagsProps {
 
-const NavFlags = ({ className }: NavFlagsProps) => {
-  const rootClassName = cn(styles.root, className);
-  const { setGraphic } = useCurrentGraphics();
+// }
 
-  const { data: flags } = useGetFlagsQuery(
-    {
-      pagination: { limit: 500 },
-    },
-    {
-      select: (data) => data?.flags?.data,
-    },
-  );
+const NavFlags = () => {
+  const flags = useCustomiserStore((state) => state.flags);
+  const editFlag = flags.find((f) => f.editMode);
+  const [selectModel, setSelectModel] = useState(false);
+
+  const addFlag = () => {
+    setSelectModel(true);
+  };
 
   return (
-    <div className={rootClassName}>
-      {flags?.map((f) => (
-        <div
-          className={styles.flag}
-          key={f.id}
-          onClick={() =>
-            setGraphic({
-              imageurl: f.attributes?.image.data?.attributes?.url,
-            })
-          }
-        >
-          <Image image={f.attributes?.image.data} />
-        </div>
-      ))}
-    </div>
+    <>
+      {selectModel ? (
+        <>
+          <NavFlagsSelect editFlag={editFlag} setSelectModel={setSelectModel} />
+          <NavEditButtons editFlag={editFlag} setSelectModel={setSelectModel} />
+        </>
+      ) : (
+        <>
+          <div className={styles.customiserFlags}>
+            <h3>Your Flags</h3>
+            {flags.map((flag) => (
+              <NavFlagsFlag key={flag.key} flag={flag} setSelectModel={setSelectModel} />
+            ))}
+            <Button colour='red' onClick={addFlag}>
+              Add Flag
+            </Button>
+          </div>
+          <NavButtons />
+        </>
+      )}
+    </>
   );
 };
 

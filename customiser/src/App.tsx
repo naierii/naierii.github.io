@@ -23,9 +23,7 @@ function App({ product }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <LazyMotion features={loadFeatures} strict>
         <CurrentGraphicsContextProvider>
-          <Suspense fallback={<div>Loading...</div>}>
-            {product && <Main product={product} />}
-          </Suspense>
+          {product && <Main product={product} />}
         </CurrentGraphicsContextProvider>
       </LazyMotion>
       <ReactQueryDevtools initialIsOpen={false} />

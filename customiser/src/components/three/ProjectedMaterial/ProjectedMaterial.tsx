@@ -7,7 +7,6 @@ import outputFragment from './shaders/output_fragment.glsl';
 import uvParsFragment from './shaders/uv_pars_fragment.glsl';
 import uvParsVertex from './shaders/uv_pars_vertex.glsl';
 import uvVertex from './shaders/uv_vertex.glsl';
-import { monkeyPatch } from './three-utils';
 
 interface UniformProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -57,6 +56,8 @@ const ProjectedMaterial = forwardRef<MeshPhongMaterial, ProjectedMaterialProps>(
             uniforms.current.viewMatrixCamera.value = getCameraMatrixWorldInverse();
             uniforms.current.projPosition.value = getCameraPosition();
             uniforms.current.meshMatrix.value = getMeshMatrix();
+
+            console.log(uniforms.current);
           }
         }, 100);
       }

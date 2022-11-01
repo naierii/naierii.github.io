@@ -16,6 +16,7 @@ const Scene = () => {
   const selectedModels = useCustomiserStore(models);
   const { graphic } = useCurrentGraphics();
   const { camera } = useThree();
+
   const cameraRef = useRef(camera);
   // useHelper(cameraRef, CameraHelper);
 

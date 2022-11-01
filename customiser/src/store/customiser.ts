@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type {
   CustomProductFragment,
   CustomProductPartFragment,
+  FlagFragment,
   MaterialFragment,
   Maybe,
   ModelFragment,
@@ -12,9 +14,10 @@ import {
 } from '@graphql/generated/graphql-shopify';
 import { MaterialTextureModel } from '@models';
 import produce from 'immer';
+import { IUniform } from 'three';
 import create, { StateCreator } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { EDIT_MODE, UNIT } from './constants';
+import { UNIT } from './constants';
 interface SelectedModel {
   optionId: Scalars['ID'];
   model?: Maybe<ModelFragment>;
@@ -23,6 +26,19 @@ interface SelectedModel {
 interface Part {
   part: CustomProductPartFragment;
   material: MaterialFragment;
+}
+
+interface Flag {
+  editMode: boolean;
+  canvasPosition: {
+    x: number;
+    y: number;
+    rotation: number;
+  };
+  uniforms: {
+    [uniform: string]: IUniform<any>;
+  };
+  flag: FlagFragment;
 }
 
 export interface NavItem {
@@ -49,6 +65,7 @@ export interface CustomiserState {
   selectedNav: Maybe<NavItem>;
   parts: Part[];
   savedParts: Part[];
+  flags: Flag[];
   variations: Array<ShopifyProductVariantFragment>;
   sizing?: {
     height?: SizingMeasurement;
@@ -86,6 +103,7 @@ const createCustomiser: StateCreator<CustomiserState, [['zustand/devtools', neve
   selectedNav: null,
   parts: [],
   savedParts: [],
+  flags: [],
   variations: [],
   sizing: {
     height: {

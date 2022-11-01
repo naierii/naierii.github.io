@@ -1,7 +1,7 @@
 import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
 import { ThreeElements } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
-import { MeshPhongMaterial } from 'three';
+import { CanvasTexture, MeshPhongMaterial } from 'three';
 import ProjectedMaterial from '../ProjectedMaterial/ProjectedMaterial';
 
 export interface GraphicMaterialProps {
@@ -10,6 +10,7 @@ export interface GraphicMaterialProps {
 
 const GraphicMaterial = ({ ...rest }: GraphicMaterialProps) => {
   const materialRef = useRef<MeshPhongMaterial>(null);
+  const textureRef = useRef<CanvasTexture>(null);
   const { graphic, setGraphic } = useCurrentGraphics();
 
   useEffect(() => {
@@ -33,8 +34,14 @@ const GraphicMaterial = ({ ...rest }: GraphicMaterialProps) => {
   };
 
   return (
-    <ProjectedMaterial ref={materialRef} transparent={true} {...rest} freeze={graphic.freeze}>
-      <canvasTexture {...textureProps} />
+    <ProjectedMaterial
+      ref={materialRef}
+      transparent={true}
+      {...rest}
+      freeze={graphic.freeze}
+      texture={textureRef.current}
+    >
+      <canvasTexture {...textureProps} ref={textureRef} />
     </ProjectedMaterial>
   );
 };

@@ -7,12 +7,5 @@
 
     varying vec3 vNormal2;
     varying vec4 vWorldPosition;
-    vec4 vTexCoords;
-
-	#ifdef UVS_VERTEX_ONLY
-		vec2 vUv;
-	#else
-		varying vec2 vUv;
-	#endif
-	uniform mat3 uvTransform;
+    varying vec4 vTexCoords;
 #endif

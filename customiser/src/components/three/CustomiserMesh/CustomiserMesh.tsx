@@ -12,7 +12,6 @@ export interface ClonedTextureMeshProps {
 }
 
 const ClonedTextureMesh = ({ node, texture }: ClonedTextureMeshProps) => {
-  const { graphic } = useCurrentGraphics();
   // const [hovered, setHovered] = useState(false);
   const [textures, setTextures] = useState<MaterialTextureMapModel>();
   const materialRef = useRef<MeshStandardMaterial>(null);
@@ -74,27 +73,11 @@ const ClonedTextureMesh = ({ node, texture }: ClonedTextureMeshProps) => {
   //   setHovered(false);
   // };
 
-  if (graphic?.material && graphic.editMode === EDIT_MODE.EDIT_2D && !graphic.freeze) {
-    graphic.material.opacity = 0;
-  } else if (graphic?.material) {
-    graphic.material.opacity = 1;
-  }
-
-  const graphicProps: ThreeElements['mesh'] = {
-    geometry: node.geometry,
-    material: graphic?.material ?? undefined,
-  };
-
-  console.log(graphic?.material?.opacity);
-
   return (
     <>
       <mesh {...meshProps} ref={meshRef}>
         <meshStandardMaterial {...materialProps} ref={materialRef} />
       </mesh>
-      {graphic?.material && (
-        <mesh name={`texture_${node.id}`} scale={[1, 1, 1]} {...graphicProps}></mesh>
-      )}
     </>
   );
 };

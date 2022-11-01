@@ -1,12 +1,13 @@
 /* eslint-disable react/no-unknown-property */
 import { MeshPhongMaterialProps, ThreeElements, useThree } from '@react-three/fiber';
 import { forwardRef, useCallback, useEffect, useRef } from 'react';
-import { IUniform, MeshPhongMaterial } from 'three';
+import { CanvasTexture, IUniform, MeshPhongMaterial } from 'three';
 
 import outputFragment from './shaders/output_fragment.glsl';
 import uvParsFragment from './shaders/uv_pars_fragment.glsl';
 import uvParsVertex from './shaders/uv_pars_vertex.glsl';
 import uvVertex from './shaders/uv_vertex.glsl';
+import { monkeyPatch } from './three-utils';
 
 interface UniformProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -15,10 +16,11 @@ interface UniformProps {
 
 export interface ProjectedMaterialProps extends MeshPhongMaterialProps {
   freeze?: boolean;
+  texture: CanvasTexture | null;
 }
 
 const ProjectedMaterial = forwardRef<MeshPhongMaterial, ProjectedMaterialProps>(
-  ({ freeze, ...props }: ProjectedMaterialProps, materialRef) => {
+  ({ freeze, texture, ...props }: ProjectedMaterialProps, materialRef) => {
     const { camera, scene } = useThree();
 
     const meshGroup = scene.getObjectByName('meshGroup');
@@ -42,6 +44,9 @@ const ProjectedMaterial = forwardRef<MeshPhongMaterial, ProjectedMaterialProps>(
     }, [freeze, meshGroup]);
 
     useEffect(() => {
+      if (uniforms.current) {
+        uniforms.current.isTextureProjected.value = freeze;
+      }
       if (uniforms.current && freeze) {
         console.log('update camera position');
         uniforms.current.viewMatrixCamera.value = getCameraMatrixWorldInverse();
@@ -68,6 +73,7 @@ const ProjectedMaterial = forwardRef<MeshPhongMaterial, ProjectedMaterialProps>(
 
           const _uniforms = {
             ...shader.uniforms,
+            projectedTexture: { value: texture },
             viewMatrixCamera: {
               type: 'm4',
               value: getCameraMatrixWorldInverse(),
@@ -82,6 +88,11 @@ const ProjectedMaterial = forwardRef<MeshPhongMaterial, ProjectedMaterialProps>(
               type: 'mat4',
               value: getMeshMatrix(),
             },
+            isTextureLoaded: { value: true },
+            isTextureProjected: { value: false },
+            widthScaled: { value: 1 },
+            heightScaled: { value: 1 },
+            frontFacesOnly: { value: true },
           };
 
           uniforms.current = _uniforms;

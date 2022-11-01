@@ -1,15 +1,14 @@
 import Lights from '@components/three/Lights';
-import Loader from '@components/three/Loader';
 import Scene from '@components/three/Scene';
 import { OrbitControls, useContextBridge } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import cn from 'classnames';
-import { Suspense, useRef } from 'react';
+import { useRef } from 'react';
 
+import { GraphicsContext } from '@context/GraphicsContext';
 import { useCustomiserStore } from '@store/customiser';
 import { Camera } from 'three';
 import styles from './CustomiserCanvas.module.scss';
-import { CurrentGraphicsContext } from '@context/CurrentGraphicsContext';
 
 export interface CustomiserCanvasProps {
   className?: string;
@@ -21,7 +20,7 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const cameraRef = useRef<Camera | null>(null);
 
-  const ContextBridge = useContextBridge(CurrentGraphicsContext);
+  const ContextBridge = useContextBridge(GraphicsContext);
 
   // const saveImage = useCallback(() => {
   //   const camera = cameraRef.current;

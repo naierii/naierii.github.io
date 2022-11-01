@@ -1,12 +1,10 @@
-import { Center, useHelper } from '@react-three/drei';
-import { ThreeElements, useThree } from '@react-three/fiber';
+import { useGraphics } from '@context/GraphicsContext';
+import { Center } from '@react-three/drei';
+import { useThree } from '@react-three/fiber';
 import { CustomiserState, useCustomiserStore } from '@store/customiser';
-import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
+import { useRef } from 'react';
 import GraphicMaterial from '../GraphicMaterial';
 import Model from '../Model';
-import { CameraHelper } from 'three';
-import { useEffect, useRef } from 'react';
-import { EDIT_MODE } from '@store/constants';
 
 // export interface SceneProps {}
 
@@ -14,7 +12,7 @@ const models = (state: CustomiserState) => state.selectedModels;
 
 const Scene = () => {
   const selectedModels = useCustomiserStore(models);
-  const { graphic } = useCurrentGraphics();
+  const { graphics } = useGraphics();
   const { camera } = useThree();
 
   const cameraRef = useRef(camera);
@@ -23,7 +21,9 @@ const Scene = () => {
   return (
     <Center>
       <group name='meshGroup'>
-        {graphic && graphic.imageurl && <GraphicMaterial />}
+        {graphics?.map((graphic) => (
+          <GraphicMaterial key={graphic.key} graphic={graphic} />
+        ))}
 
         {selectedModels.map((m) => (
           <Model key={m.model?.id} model={m.model} />

@@ -1,9 +1,9 @@
+import GraphicsContextProvider from '@context/GraphicsContext';
 import { queryClient } from '@graphql/graphql-client';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { LazyMotion } from 'framer-motion';
-import { lazy, Suspense } from 'react';
-import CurrentGraphicsContextProvider from '@context/CurrentGraphicsContext';
+import { lazy } from 'react';
 
 const Main = lazy(() => import('@components/layout/Main'));
 
@@ -22,9 +22,7 @@ function App({ product }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <LazyMotion features={loadFeatures} strict>
-        <CurrentGraphicsContextProvider>
-          {product && <Main product={product} />}
-        </CurrentGraphicsContextProvider>
+        <GraphicsContextProvider>{product && <Main product={product} />}</GraphicsContextProvider>
       </LazyMotion>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

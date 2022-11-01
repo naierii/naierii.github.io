@@ -1,8 +1,8 @@
 import Button from '@components/ui/Button';
-import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
+import { CurrentGraphic, useGraphics } from '@context/GraphicsContext';
 import { usePortalRef } from '@hooks';
 import { EDIT_MODE } from '@store/constants';
-import { FlagCustomiser, useCustomiserStore } from '@store/customiser';
+import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
 import { Dispatch, SetStateAction } from 'react';
 import ReactDOM from 'react-dom';
@@ -11,14 +11,15 @@ import styles from './NavEditButtons.module.scss';
 
 export interface NavEditButtonsProps {
   className?: string;
-  editFlag?: FlagCustomiser;
+  editFlag?: CurrentGraphic;
   setSelectModel: Dispatch<SetStateAction<boolean>>;
 }
 
 const NavEditButtons = ({ className, editFlag, setSelectModel }: NavEditButtonsProps) => {
   const rootClassName = cn(styles.root, className);
   const deselectFlag = useCustomiserStore((state) => state.deselectFlag);
-  const { graphic, setGraphic } = useCurrentGraphics();
+  const { updateGraphic } = useGraphics();
+
   const portalRef = usePortalRef('CustomiserNavActions');
 
   if (!portalRef) {
@@ -26,28 +27,36 @@ const NavEditButtons = ({ className, editFlag, setSelectModel }: NavEditButtonsP
   }
 
   const applyGraphic = () => {
-    setGraphic({
-      freeze: true,
-      editMode: EDIT_MODE.EDIT_3D,
-    });
+    if (editFlag?.key) {
+      updateGraphic(editFlag.key, {
+        freeze: true,
+        editMode: EDIT_MODE.EDIT_3D,
+        edit: false,
+      });
+    }
+
     setSelectModel(false);
     deselectFlag();
   };
 
   return ReactDOM.createPortal(
     <div className={rootClassName}>
-      <Button
-        onClick={() =>
-          setGraphic({
-            freeze: false,
-            editMode:
-              graphic?.editMode === EDIT_MODE.EDIT_2D ? EDIT_MODE.EDIT_3D : EDIT_MODE.EDIT_2D,
-          })
-        }
-        disabled={!editFlag}
-      >
-        {graphic?.editMode === EDIT_MODE.EDIT_2D ? 'Move Graphic' : 'Move Model'}
-      </Button>
+      {editFlag?.key && (
+        <Button
+          onClick={() =>
+            updateGraphic(editFlag.key as string, {
+              freeze: false,
+              editMode:
+                editFlag?.editMode === EDIT_MODE.EDIT_2D ? EDIT_MODE.EDIT_3D : EDIT_MODE.EDIT_2D,
+              edit: true,
+            })
+          }
+          disabled={!editFlag}
+        >
+          {editFlag?.editMode === EDIT_MODE.EDIT_2D ? 'Move Graphic' : 'Move Model'}
+        </Button>
+      )}
+
       <Button onClick={applyGraphic} disabled={!editFlag}>
         Apply to model
       </Button>

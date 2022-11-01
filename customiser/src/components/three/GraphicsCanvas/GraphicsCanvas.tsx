@@ -1,9 +1,9 @@
+import { CurrentGraphic } from '@context/GraphicsContext';
 import { useFabricCanvas } from '@hooks';
 import { EDIT_MODE } from '@store/constants';
 import { useCustomiserStore } from '@store/customiser';
 import { fabric } from 'fabric';
 import { useEffect, useRef } from 'react';
-import { CurrentGraphic } from '@context/CurrentGraphicsContext';
 
 export interface GraphicsCanvasProps {
   className?: string;
@@ -23,26 +23,29 @@ const GraphicsCanvas = ({ className, graphic }: GraphicsCanvasProps) => {
    * Initialize fabric object
    */
   useEffect(() => {
-    if (fabricRef.current && !fImageRef.current && dimension && graphic.imageurl) {
+    if (fabricRef.current && !fImageRef.current && dimension && graphic.flag) {
       const { width, height } = dimension;
+      const imageurl = graphic.flag ? graphic.flag.attributes?.image.data?.attributes?.url : '';
 
-      fabric.Image.fromURL(
-        graphic.imageurl,
-        function (oImg) {
-          if (fabricRef.current && !fImageRef.current) {
-            oImg.scaleToHeight(100);
-            fabricRef.current.add(oImg);
-            fImageRef.current = oImg;
-          }
-        },
-        {
-          left: width / 2,
-          top: height / 2,
-          originX: 'center',
-          originY: 'center',
-          crossOrigin: 'anonymous',
-        },
-      );
+      if (imageurl) {
+        fabric.Image.fromURL(
+          imageurl,
+          function (oImg) {
+            if (fabricRef.current && !fImageRef.current) {
+              oImg.scaleToHeight(100);
+              fabricRef.current.add(oImg);
+              fImageRef.current = oImg;
+            }
+          },
+          {
+            left: width / 2,
+            top: height / 2,
+            originX: 'center',
+            originY: 'center',
+            crossOrigin: 'anonymous',
+          },
+        );
+      }
     }
   }, [fabricRef, fImageRef, dimension, graphic]);
 

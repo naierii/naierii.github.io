@@ -7,11 +7,10 @@ import { useShopifyGetProductByIdQuery } from '@graphql/generated/graphql-shopif
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
 import { useEffect, useState } from 'react';
-import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
 import Header from '../Header';
 
+import { useGraphics } from '@context/GraphicsContext';
 import styles from './Main.module.scss';
-import GraphicsWrapper from '@components/three/GraphicsWrapper';
 
 export interface MainProps {
   className?: string;
@@ -20,7 +19,7 @@ export interface MainProps {
 
 const Main = ({ className, product }: MainProps) => {
   const [show, setShow] = useState(false);
-  const { graphic } = useCurrentGraphics();
+  const { graphics } = useGraphics();
   const flags = useCustomiserStore((state) => state.flags);
   const editFlag = flags.find((f) => f.editMode);
   const setCustomProduct = useCustomiserStore((state) => state.setCustomProduct);
@@ -45,6 +44,8 @@ const Main = ({ className, product }: MainProps) => {
     }
   }, [customProduct, shopifyProduct]);
 
+  console.log({ graphics });
+
   return (
     <>
       {show ? (
@@ -52,11 +53,9 @@ const Main = ({ className, product }: MainProps) => {
           <CustomiserNav className={styles.nav} />
           <Header className={styles.header} />
           <CustomiserCanvas className={styles.model} />
-          {editFlag?.flag && <GraphicsWrapper graphic={editFlag} className={styles.model} />}
-
-          {/* {graphic && graphic.imageurl && (
-            <GraphicsCanvas graphic={graphic} className={styles.model} />
-          )} */}
+          {graphics?.map((graphic) => (
+            <GraphicsCanvas key={graphic.key} graphic={graphic} className={styles.model} />
+          ))}
         </div>
       ) : (
         <Button onClick={() => setShow(true)}>Customise</Button>

@@ -1,8 +1,8 @@
+import { CurrentGraphic, useGraphics } from '@context/GraphicsContext';
 import { EDIT_MODE } from '@store/constants';
 import { useCustomiserStore } from '@store/customiser';
 import { fabric } from 'fabric';
 import { CanvasHTMLAttributes, useCallback, useEffect, useRef } from 'react';
-import { CurrentGraphic, useCurrentGraphics } from '@context/CurrentGraphicsContext';
 
 interface UseFabricCanvasProps {
   fabricObject: CurrentGraphic;
@@ -14,7 +14,7 @@ export const useFabricCanvas = ({ fabricObject, contextObject }: UseFabricCanvas
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricRef = useRef<fabric.Canvas>();
   const dimension = useCustomiserStore((state) => state.canvas);
-  const { setGraphic } = useCurrentGraphics();
+  const { updateGraphic } = useGraphics();
 
   const renderFabric = useCallback(() => {
     console.log('renderFabric');
@@ -37,7 +37,9 @@ export const useFabricCanvas = ({ fabricObject, contextObject }: UseFabricCanvas
       fCanvas.setBackgroundColor('transparent', fCanvas.renderAll.bind(fCanvas));
 
       fabricRef.current = fCanvas;
-      setGraphic({ canvas: canvasRef.current });
+      if (fabricObject.key) {
+        updateGraphic(fabricObject.key, { canvas: canvasRef.current });
+      }
     }
   }, [canvasRef, fabricRef]);
 

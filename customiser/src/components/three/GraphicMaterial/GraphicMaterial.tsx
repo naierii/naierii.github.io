@@ -1,25 +1,26 @@
-import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
+import { CurrentGraphic, useGraphics } from '@context/GraphicsContext';
 import { ThreeElements } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import { CanvasTexture, MeshPhongMaterial } from 'three';
 import ProjectedMaterial from '../ProjectedMaterial/ProjectedMaterial';
 
 export interface GraphicMaterialProps {
-  test?: string;
+  graphic: CurrentGraphic;
 }
 
-const GraphicMaterial = ({ ...rest }: GraphicMaterialProps) => {
+const GraphicMaterial = ({ graphic, ...rest }: GraphicMaterialProps) => {
   const materialRef = useRef<MeshPhongMaterial>(null);
   const textureRef = useRef<CanvasTexture>(null);
-  const { graphic, setGraphic } = useCurrentGraphics();
+  const { updateGraphic } = useGraphics();
 
   useEffect(() => {
     if (materialRef.current) {
       materialRef.current.needsUpdate = true;
     }
 
-    if (graphic && !graphic.material && materialRef.current) {
-      setGraphic({ material: materialRef.current });
+    if (graphic && !graphic.material && materialRef.current && graphic.key) {
+      updateGraphic(graphic.key, { material: materialRef.current });
+      // setGraphic({ material: materialRef.current });
     }
   }, [materialRef, graphic]);
 

@@ -1,8 +1,6 @@
-import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
 import { MaterialTextureMapModel } from '@models';
 import { useTexture } from '@react-three/drei';
 import type { ThreeElements } from '@react-three/fiber';
-import { EDIT_MODE } from '@store/constants';
 import { useCustomiserStore } from '@store/customiser';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Box3, DoubleSide, Mesh, MeshStandardMaterial, RepeatWrapping, Vector3 } from 'three';

@@ -1,20 +1,20 @@
-import { FlagCustomiser, useCustomiserStore } from '@store/customiser';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { NavFlagsSelect } from './NavFlagsSelect';
 
-import styles from './NavFlags.module.scss';
 import Button from '@components/ui/Button';
-import { NavFlagsFlag } from './NavFlagsFlag';
+import { useGraphics } from '@context/GraphicsContext';
 import NavButtons from '../NavButtons';
 import NavEditButtons from '../NavEditButtons';
+import styles from './NavFlags.module.scss';
+import { NavFlagsFlag } from './NavFlagsFlag';
 
 // export interface NavFlagsProps {
 
 // }
 
 const NavFlags = () => {
-  const flags = useCustomiserStore((state) => state.flags);
-  const editFlag = flags.find((f) => f.editMode);
+  const { graphics } = useGraphics();
+  const editGraphic = graphics?.find((g) => g.edit);
   const [selectModel, setSelectModel] = useState(false);
 
   const addFlag = () => {
@@ -25,14 +25,14 @@ const NavFlags = () => {
     <>
       {selectModel ? (
         <>
-          <NavFlagsSelect editFlag={editFlag} setSelectModel={setSelectModel} />
-          <NavEditButtons editFlag={editFlag} setSelectModel={setSelectModel} />
+          <NavFlagsSelect editFlag={editGraphic} setSelectModel={setSelectModel} />
+          <NavEditButtons editFlag={editGraphic} setSelectModel={setSelectModel} />
         </>
       ) : (
         <>
           <div className={styles.customiserFlags}>
             <h3>Your Flags</h3>
-            {flags.map((flag) => (
+            {graphics?.map((flag) => (
               <NavFlagsFlag key={flag.key} flag={flag} setSelectModel={setSelectModel} />
             ))}
             <Button colour='red' onClick={addFlag}>

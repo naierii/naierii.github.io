@@ -1,18 +1,18 @@
 import Image from '@components/ui/Image';
-import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
+import { CurrentGraphic, useGraphics } from '@context/GraphicsContext';
 import { FlagFragment, useGetFlagsQuery } from '@graphql/generated/graphql';
 import { FlagCustomiser, useCustomiserStore } from '@store/customiser';
 
 import styles from './NavFlags.module.scss';
 
 export interface NavFlagsSelectProps {
-  editFlag?: FlagCustomiser;
+  editFlag?: CurrentGraphic;
   setSelectModel: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const NavFlagsSelect = ({ editFlag, setSelectModel }: NavFlagsSelectProps) => {
   const addFlag = useCustomiserStore((state) => state.addFlag);
-  const { setGraphic } = useCurrentGraphics();
+  const { addGraphic } = useGraphics();
 
   const { data: flags } = useGetFlagsQuery(
     {
@@ -25,8 +25,9 @@ export const NavFlagsSelect = ({ editFlag, setSelectModel }: NavFlagsSelectProps
 
   const flagSelected = (flag: FlagFragment) => {
     addFlag(flag);
-    setGraphic({
+    addGraphic({
       imageurl: flag.attributes?.image.data?.attributes?.url,
+      flag: flag,
     });
   };
 

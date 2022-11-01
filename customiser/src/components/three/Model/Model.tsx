@@ -1,12 +1,13 @@
+import { CurrentGraphic, useGraphics } from '@context/GraphicsContext';
 import { Maybe, ModelFragment } from '@graphql/generated/graphql';
 import { useGLTF } from '@react-three/drei';
-import { Fragment, useMemo } from 'react';
-import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
-import { GLTF } from 'three-stdlib';
-import CustomiserMesh from '../CustomiserMesh';
-import { useCurrentGraphics } from '@context/CurrentGraphicsContext';
 import { ThreeElements } from '@react-three/fiber';
 import { EDIT_MODE } from '@store/constants';
+import { Fragment, useMemo } from 'react';
+import { BufferGeometry } from 'three';
+import { GLTF } from 'three-stdlib';
+import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
+import CustomiserMesh from '../CustomiserMesh';
 export interface CustomiserModelProps {
   model?: Maybe<ModelFragment>;
 }
@@ -16,8 +17,22 @@ type GLTFResult = GLTF & {
   materials: { [name: string]: THREE.Material };
 };
 
+const getGraphicProps = (graphic: CurrentGraphic, geom: BufferGeometry) => {
+  if (graphic?.material && graphic.editMode === EDIT_MODE.EDIT_2D && !graphic.freeze) {
+    graphic.material.opacity = 0;
+  } else if (graphic?.material) {
+    graphic.material.opacity = 1;
+  }
+
+  const graphicProps: ThreeElements['mesh'] = {
+    geometry: geom,
+    material: graphic?.material ?? undefined,
+  };
+  return graphicProps;
+};
+
 const Model = ({ model }: CustomiserModelProps) => {
-  const { graphic } = useCurrentGraphics();
+  const { graphics } = useGraphics();
   const { nodes } = useGLTF(
     model?.attributes?.model?.data?.attributes?.url as string,
   ) as unknown as GLTFResult;
@@ -35,17 +50,6 @@ const Model = ({ model }: CustomiserModelProps) => {
     return merged;
   }, [nodes]);
 
-  if (graphic?.material && graphic.editMode === EDIT_MODE.EDIT_2D && !graphic.freeze) {
-    graphic.material.opacity = 0;
-  } else if (graphic?.material) {
-    graphic.material.opacity = 1;
-  }
-
-  const graphicProps: ThreeElements['mesh'] = {
-    geometry: geom,
-    material: graphic?.material ?? undefined,
-  };
-
   return (
     <>
       {model?.attributes?.parts?.data.map((part) => {
@@ -61,7 +65,14 @@ const Model = ({ model }: CustomiserModelProps) => {
           </Fragment>
         );
       })}
-      {graphic?.material && <mesh name={'texture'} scale={[1, 1, 1]} {...graphicProps}></mesh>}
+      {graphics?.map((graphic) => (
+        <mesh
+          key={graphic.key}
+          name={'texture'}
+          scale={[1, 1, 1]}
+          {...getGraphicProps(graphic, geom)}
+        ></mesh>
+      ))}
     </>
   );
 };

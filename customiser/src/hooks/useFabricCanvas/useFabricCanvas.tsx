@@ -1,12 +1,12 @@
-import { CurrentGraphic, useGraphics } from '@context/GraphicsContext';
+import { GraphicsContextGraphic, useGraphics } from '@context/GraphicsContext';
 import { EDIT_MODE } from '@store/constants';
 import { useCustomiserStore } from '@store/customiser';
 import { fabric } from 'fabric';
 import { CanvasHTMLAttributes, useCallback, useEffect, useRef } from 'react';
 
 interface UseFabricCanvasProps {
-  fabricObject: CurrentGraphic;
-  contextObject: CurrentGraphic;
+  fabricObject: GraphicsContextGraphic;
+  contextObject: GraphicsContextGraphic;
 }
 
 export const useFabricCanvas = ({ fabricObject, contextObject }: UseFabricCanvasProps) => {

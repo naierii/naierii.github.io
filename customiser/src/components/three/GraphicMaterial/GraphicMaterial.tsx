@@ -1,11 +1,11 @@
-import { CurrentGraphic, useGraphics } from '@context/GraphicsContext';
+import { GraphicsContextGraphic, useGraphics } from '@context/GraphicsContext';
 import { ThreeElements } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import { CanvasTexture, MeshPhongMaterial } from 'three';
 import ProjectedMaterial from '../ProjectedMaterial/ProjectedMaterial';
 
 export interface GraphicMaterialProps {
-  graphic: CurrentGraphic;
+  graphic: GraphicsContextGraphic;
 }
 
 const GraphicMaterial = ({ graphic, ...rest }: GraphicMaterialProps) => {

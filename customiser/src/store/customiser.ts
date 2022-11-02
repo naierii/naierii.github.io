@@ -46,7 +46,7 @@ export interface FlagCustomiser {
 export interface NavItem {
   id?: Scalars['ID'];
   name: Maybe<Scalars['String']>;
-  type: 'option' | 'part' | 'fitting' | 'size' | 'flags';
+  type: 'option' | 'part' | 'fitting' | 'size' | 'flags' | 'names';
   index?: number;
   required?: boolean;
 }
@@ -181,7 +181,12 @@ const createCustomiser: StateCreator<CustomiserState, [['zustand/devtools', neve
         type: 'flags',
       };
 
-      const navItems = [navFitting, ...navParts, navFlags, navSize].map((i, index) => {
+      const navNames: NavItem = {
+        name: 'Text',
+        type: 'names',
+      };
+
+      const navItems = [navFitting, ...navParts, navNames, navFlags, navSize].map((i, index) => {
         i.index = index;
         return i;
       });

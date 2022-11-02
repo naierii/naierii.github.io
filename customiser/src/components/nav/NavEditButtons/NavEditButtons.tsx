@@ -1,5 +1,5 @@
 import Button from '@components/ui/Button';
-import { CurrentGraphic, useGraphics } from '@context/GraphicsContext';
+import { GraphicsContextGraphic, useGraphics } from '@context/GraphicsContext';
 import { usePortalRef } from '@hooks';
 import { EDIT_MODE } from '@store/constants';
 import { useCustomiserStore } from '@store/customiser';
@@ -11,11 +11,15 @@ import styles from './NavEditButtons.module.scss';
 
 export interface NavEditButtonsProps {
   className?: string;
-  editFlag?: CurrentGraphic;
-  setSelectModel: Dispatch<SetStateAction<boolean>>;
+  editFlag?: GraphicsContextGraphic;
+  setShowSelector: Dispatch<SetStateAction<boolean>>;
 }
 
-const NavEditButtons = ({ className, editFlag, setSelectModel }: NavEditButtonsProps) => {
+const NavEditButtons = ({
+  className,
+  editFlag,
+  setShowSelector: setSelectModel,
+}: NavEditButtonsProps) => {
   const rootClassName = cn(styles.root, className);
   const deselectFlag = useCustomiserStore((state) => state.deselectFlag);
   const { updateGraphic } = useGraphics();

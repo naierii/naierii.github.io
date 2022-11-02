@@ -5,7 +5,7 @@ import { createContext, ReactNode, useCallback, useContext, useState } from 'rea
 import { IUniform, MeshPhongMaterial } from 'three';
 import { v4 as uuidv4 } from 'uuid';
 
-export interface CurrentGraphic {
+export interface GraphicsContextGraphic {
   key?: string;
   flag?: FlagFragment;
   canvas?: HTMLCanvasElement;
@@ -19,13 +19,13 @@ export interface CurrentGraphic {
 }
 
 interface GraphicsContextInterface {
-  graphics?: CurrentGraphic[];
-  addGraphic: (graphic: CurrentGraphic) => void;
-  updateGraphic: (key: string, graphic: CurrentGraphic) => void;
+  graphics?: GraphicsContextGraphic[];
+  addGraphic: (graphic: GraphicsContextGraphic) => void;
+  updateGraphic: (key: string, graphic: GraphicsContextGraphic) => void;
   deleteGraphic: (key: string) => void;
 }
 
-interface CurrentGraphicsProviderProps {
+interface GraphicsContextProviderProps {
   children: ReactNode;
 }
 
@@ -36,11 +36,11 @@ export const GraphicsContext = createContext<GraphicsContextInterface>({
   deleteGraphic: () => console.log(''),
 });
 
-const GraphicsContextProvider = ({ children }: CurrentGraphicsProviderProps) => {
-  const [graphics, setGraphics] = useState<CurrentGraphic[]>([]);
+const GraphicsContextProvider = ({ children }: GraphicsContextProviderProps) => {
+  const [graphics, setGraphics] = useState<GraphicsContextGraphic[]>([]);
 
   const addGraphic = useCallback(
-    (graphic: CurrentGraphic) => {
+    (graphic: GraphicsContextGraphic) => {
       const newKey = uuidv4();
       setGraphics([
         ...graphics,
@@ -51,7 +51,7 @@ const GraphicsContextProvider = ({ children }: CurrentGraphicsProviderProps) => 
   );
 
   const updateGraphic = useCallback(
-    (key: string, graphic: CurrentGraphic) => {
+    (key: string, graphic: GraphicsContextGraphic) => {
       setGraphics((graphics) =>
         graphics.map((g) => {
           if (g.key === key) {

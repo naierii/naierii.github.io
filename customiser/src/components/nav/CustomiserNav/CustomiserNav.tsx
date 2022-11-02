@@ -9,6 +9,7 @@ import NavHeader from '../NavHeader';
 import NavOptions from '../NavOptions';
 import NavPart from '../NavPart';
 import NavSize from '../NavSize';
+import NavText from '../NavText';
 
 import styles from './CustomiserNav.module.scss';
 
@@ -32,6 +33,8 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
               <NavOptions toggle={() => toggleOpen()} />
             ) : selectedNav?.type === 'fitting' ? (
               <NavFitting />
+            ) : selectedNav?.type === 'names' ? (
+              <NavText />
             ) : selectedNav?.type === 'flags' ? (
               <NavFlags />
             ) : selectedNav?.type === 'size' ? (

@@ -1,4 +1,4 @@
-import { CurrentGraphic, useGraphics } from '@context/GraphicsContext';
+import { GraphicsContextGraphic, useGraphics } from '@context/GraphicsContext';
 import { Maybe, ModelFragment } from '@graphql/generated/graphql';
 import { useGLTF } from '@react-three/drei';
 import { ThreeElements } from '@react-three/fiber';
@@ -17,7 +17,7 @@ type GLTFResult = GLTF & {
   materials: { [name: string]: THREE.Material };
 };
 
-const getGraphicProps = (graphic: CurrentGraphic, geom: BufferGeometry) => {
+const getGraphicProps = (graphic: GraphicsContextGraphic, geom: BufferGeometry) => {
   if (graphic?.material && graphic.editMode === EDIT_MODE.EDIT_2D && !graphic.freeze) {
     graphic.material.opacity = 0;
   } else if (graphic?.material) {

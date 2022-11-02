@@ -15,25 +15,25 @@ import { NavFlagsFlag } from './NavFlagsFlag';
 const NavFlags = () => {
   const { graphics } = useGraphics();
   const editGraphic = graphics?.find((g) => g.edit);
-  const [selectModel, setSelectModel] = useState(false);
+  const [showSelector, setShowSelector] = useState(false);
 
   const addFlag = () => {
-    setSelectModel(true);
+    setShowSelector(true);
   };
 
   return (
     <>
-      {selectModel ? (
+      {showSelector ? (
         <>
-          <NavFlagsSelect editFlag={editGraphic} setSelectModel={setSelectModel} />
-          <NavEditButtons editFlag={editGraphic} setSelectModel={setSelectModel} />
+          <NavFlagsSelect editFlag={editGraphic} setShowSelector={setShowSelector} />
+          <NavEditButtons editFlag={editGraphic} setShowSelector={setShowSelector} />
         </>
       ) : (
         <>
           <div className={styles.customiserFlags}>
             <h3>Your Flags</h3>
             {graphics?.map((flag) => (
-              <NavFlagsFlag key={flag.key} flag={flag} setSelectModel={setSelectModel} />
+              <NavFlagsFlag key={flag.key} flag={flag} setShowSelector={setShowSelector} />
             ))}
             <Button colour='red' onClick={addFlag}>
               Add Flag

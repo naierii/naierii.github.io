@@ -1,5 +1,5 @@
 import Image from '@components/ui/Image';
-import { CurrentGraphic, useGraphics } from '@context/GraphicsContext';
+import { GraphicsContextGraphic, useGraphics } from '@context/GraphicsContext';
 import { FlagFragment, useGetFlagsQuery } from '@graphql/generated/graphql';
 import { EDIT_MODE } from '@store/constants';
 import { FlagCustomiser, useCustomiserStore } from '@store/customiser';
@@ -7,11 +7,14 @@ import { FlagCustomiser, useCustomiserStore } from '@store/customiser';
 import styles from './NavFlags.module.scss';
 
 export interface NavFlagsSelectProps {
-  editFlag?: CurrentGraphic;
-  setSelectModel: React.Dispatch<React.SetStateAction<boolean>>;
+  editFlag?: GraphicsContextGraphic;
+  setShowSelector: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const NavFlagsSelect = ({ editFlag, setSelectModel }: NavFlagsSelectProps) => {
+export const NavFlagsSelect = ({
+  editFlag,
+  setShowSelector: setSelectModel,
+}: NavFlagsSelectProps) => {
   const addFlag = useCustomiserStore((state) => state.addFlag);
   const { addGraphic, updateGraphic } = useGraphics();
 

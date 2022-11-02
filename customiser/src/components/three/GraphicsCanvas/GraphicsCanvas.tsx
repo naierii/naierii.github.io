@@ -1,4 +1,4 @@
-import { CurrentGraphic } from '@context/GraphicsContext';
+import { GraphicsContextGraphic } from '@context/GraphicsContext';
 import { useFabricCanvas } from '@hooks';
 import { EDIT_MODE } from '@store/constants';
 import { useCustomiserStore } from '@store/customiser';
@@ -7,7 +7,7 @@ import { useEffect, useRef } from 'react';
 
 export interface GraphicsCanvasProps {
   className?: string;
-  graphic: CurrentGraphic;
+  graphic: GraphicsContextGraphic;
 }
 
 const GraphicsCanvas = ({ className, graphic }: GraphicsCanvasProps) => {

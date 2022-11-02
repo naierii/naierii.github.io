@@ -1,16 +1,16 @@
 import Image from '@components/ui/Image';
 import { useCustomiserStore } from '@store/customiser';
 
-import { CurrentGraphic, useGraphics } from '@context/GraphicsContext';
+import { GraphicsContextGraphic, useGraphics } from '@context/GraphicsContext';
 import { Dispatch, SetStateAction } from 'react';
 import styles from './NavFlags.module.scss';
 
 export interface NavFlagsFlagProps {
-  flag: CurrentGraphic;
-  setSelectModel: Dispatch<SetStateAction<boolean>>;
+  flag: GraphicsContextGraphic;
+  setShowSelector: Dispatch<SetStateAction<boolean>>;
 }
 
-export const NavFlagsFlag = ({ flag, setSelectModel }: NavFlagsFlagProps) => {
+export const NavFlagsFlag = ({ flag, setShowSelector: setSelectModel }: NavFlagsFlagProps) => {
   // const deleteFlag = useCustomiserStore((state) => state.deleteFlag);
   // const selectFlag = useCustomiserStore((state) => state.selectFlag);
   const { updateGraphic, deleteGraphic } = useGraphics();

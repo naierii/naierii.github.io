@@ -1,6 +1,7 @@
 import Image from '@components/ui/Image';
 import { CurrentGraphic, useGraphics } from '@context/GraphicsContext';
 import { FlagFragment, useGetFlagsQuery } from '@graphql/generated/graphql';
+import { EDIT_MODE } from '@store/constants';
 import { FlagCustomiser, useCustomiserStore } from '@store/customiser';
 
 import styles from './NavFlags.module.scss';
@@ -12,7 +13,7 @@ export interface NavFlagsSelectProps {
 
 export const NavFlagsSelect = ({ editFlag, setSelectModel }: NavFlagsSelectProps) => {
   const addFlag = useCustomiserStore((state) => state.addFlag);
-  const { addGraphic } = useGraphics();
+  const { addGraphic, updateGraphic } = useGraphics();
 
   const { data: flags } = useGetFlagsQuery(
     {
@@ -25,10 +26,17 @@ export const NavFlagsSelect = ({ editFlag, setSelectModel }: NavFlagsSelectProps
 
   const flagSelected = (flag: FlagFragment) => {
     addFlag(flag);
-    addGraphic({
-      imageurl: flag.attributes?.image.data?.attributes?.url,
-      flag: flag,
-    });
+    if (editFlag?.key) {
+      updateGraphic(editFlag.key, {
+        flag: flag,
+        editMode: EDIT_MODE.EDIT_2D,
+        freeze: false,
+      });
+    } else {
+      addGraphic({
+        flag: flag,
+      });
+    }
   };
 
   return (

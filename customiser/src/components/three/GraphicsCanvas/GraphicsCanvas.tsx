@@ -11,10 +11,10 @@ export interface GraphicsCanvasProps {
 }
 
 const GraphicsCanvas = ({ className, graphic }: GraphicsCanvasProps) => {
-  const fImageRef = useRef<fabric.Image | string>();
+  const fImageRef = useRef<fabric.Image>();
   const dimension = useCustomiserStore((state) => state.canvas);
 
-  const { FabricCanvas, fabricRef } = useFabricCanvas({
+  const { FabricCanvas, fabricRef, renderFabric } = useFabricCanvas({
     fabricObject: graphic,
     contextObject: graphic,
   });
@@ -23,6 +23,8 @@ const GraphicsCanvas = ({ className, graphic }: GraphicsCanvasProps) => {
    * Initialize fabric object
    */
   useEffect(() => {
+    console.log(graphic.flag);
+
     if (fabricRef.current && !fImageRef.current && dimension && graphic.flag) {
       const { width, height } = dimension;
       const imageurl = graphic.flag ? graphic.flag.attributes?.image.data?.attributes?.url : '';
@@ -48,6 +50,21 @@ const GraphicsCanvas = ({ className, graphic }: GraphicsCanvasProps) => {
       }
     }
   }, [fabricRef, fImageRef, dimension, graphic]);
+
+  useEffect(() => {
+    if (fImageRef.current && graphic.flag && fabricRef.current) {
+      const imageurl = graphic.flag ? graphic.flag.attributes?.image.data?.attributes?.url : '';
+      if (imageurl) {
+        fImageRef.current.setSrc(
+          imageurl,
+          () => {
+            fabricRef.current?.renderAll();
+          },
+          { crossOrigin: 'anonymous' },
+        );
+      }
+    }
+  }, [fImageRef, fabricRef, graphic.flag]);
 
   return (
     <div

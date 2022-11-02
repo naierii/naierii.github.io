@@ -7,7 +7,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 export interface CurrentGraphic {
   key?: string;
-  imageurl?: string;
   flag?: FlagFragment;
   canvas?: HTMLCanvasElement;
   freeze?: boolean;

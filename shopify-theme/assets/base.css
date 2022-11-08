@@ -499,6 +499,7 @@ summary::-webkit-details-marker {
     color: rgb(var(--color-link));
     margin-top: 0;
     flex-shrink: 0;
+    padding-bottom: 17px;
 }
 
 .title-wrapper--no-top-margin {

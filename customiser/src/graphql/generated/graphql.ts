@@ -435,6 +435,58 @@ export type FloatFilterInput = {
   startsWith?: InputMaybe<Scalars['Float']>;
 };
 
+export type Gallery = {
+  __typename?: 'Gallery';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  customDesign?: Maybe<CustomDesignEntityResponse>;
+  media?: Maybe<UploadFileRelationResponseCollection>;
+  name?: Maybe<Scalars['String']>;
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type GalleryMediaArgs = {
+  filters?: InputMaybe<UploadFileFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type GalleryEntity = {
+  __typename?: 'GalleryEntity';
+  attributes?: Maybe<Gallery>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type GalleryEntityResponse = {
+  __typename?: 'GalleryEntityResponse';
+  data?: Maybe<GalleryEntity>;
+};
+
+export type GalleryEntityResponseCollection = {
+  __typename?: 'GalleryEntityResponseCollection';
+  data: Array<GalleryEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type GalleryFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<GalleryFiltersInput>>>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  customDesign?: InputMaybe<CustomDesignFiltersInput>;
+  id?: InputMaybe<IdFilterInput>;
+  name?: InputMaybe<StringFilterInput>;
+  not?: InputMaybe<GalleryFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<GalleryFiltersInput>>>;
+  publishedAt?: InputMaybe<DateTimeFilterInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type GalleryInput = {
+  customDesign?: InputMaybe<Scalars['ID']>;
+  media?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  name?: InputMaybe<Scalars['String']>;
+  publishedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
 export type GenericMorph =
   | ComponentCustomiserCustomOption
   | ComponentCustomiserCustomOptionModel
@@ -445,6 +497,7 @@ export type GenericMorph =
   | CustomProductStyle
   | CustomProductType
   | Flag
+  | Gallery
   | I18NLocale
   | Material
   | MaterialAreaSize
@@ -1028,6 +1081,7 @@ export type Mutation = {
   createCustomProductStyle?: Maybe<CustomProductStyleEntityResponse>;
   createCustomProductType?: Maybe<CustomProductTypeEntityResponse>;
   createFlag?: Maybe<FlagEntityResponse>;
+  createGallery?: Maybe<GalleryEntityResponse>;
   createMaterial?: Maybe<MaterialEntityResponse>;
   createMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   createMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1048,6 +1102,7 @@ export type Mutation = {
   deleteCustomProductStyle?: Maybe<CustomProductStyleEntityResponse>;
   deleteCustomProductType?: Maybe<CustomProductTypeEntityResponse>;
   deleteFlag?: Maybe<FlagEntityResponse>;
+  deleteGallery?: Maybe<GalleryEntityResponse>;
   deleteMaterial?: Maybe<MaterialEntityResponse>;
   deleteMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   deleteMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1080,6 +1135,7 @@ export type Mutation = {
   updateCustomProductType?: Maybe<CustomProductTypeEntityResponse>;
   updateFileInfo: UploadFileEntityResponse;
   updateFlag?: Maybe<FlagEntityResponse>;
+  updateGallery?: Maybe<GalleryEntityResponse>;
   updateMaterial?: Maybe<MaterialEntityResponse>;
   updateMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   updateMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1122,6 +1178,10 @@ export type MutationCreateCustomProductTypeArgs = {
 
 export type MutationCreateFlagArgs = {
   data: FlagInput;
+};
+
+export type MutationCreateGalleryArgs = {
+  data: GalleryInput;
 };
 
 export type MutationCreateMaterialArgs = {
@@ -1193,6 +1253,10 @@ export type MutationDeleteCustomProductTypeArgs = {
 };
 
 export type MutationDeleteFlagArgs = {
+  id: Scalars['ID'];
+};
+
+export type MutationDeleteGalleryArgs = {
   id: Scalars['ID'];
 };
 
@@ -1311,6 +1375,11 @@ export type MutationUpdateFlagArgs = {
   id: Scalars['ID'];
 };
 
+export type MutationUpdateGalleryArgs = {
+  data: GalleryInput;
+  id: Scalars['ID'];
+};
+
 export type MutationUpdateMaterialArgs = {
   data: MaterialInput;
   id: Scalars['ID'];
@@ -1399,6 +1468,11 @@ export type PaginationArg = {
   start?: InputMaybe<Scalars['Int']>;
 };
 
+export enum PublicationState {
+  Live = 'LIVE',
+  Preview = 'PREVIEW',
+}
+
 export type Query = {
   __typename?: 'Query';
   customDesign?: Maybe<CustomDesignEntityResponse>;
@@ -1412,6 +1486,8 @@ export type Query = {
   customProducts?: Maybe<CustomProductEntityResponseCollection>;
   flag?: Maybe<FlagEntityResponse>;
   flags?: Maybe<FlagEntityResponseCollection>;
+  galleries?: Maybe<GalleryEntityResponseCollection>;
+  gallery?: Maybe<GalleryEntityResponse>;
   i18NLocale?: Maybe<I18NLocaleEntityResponse>;
   i18NLocales?: Maybe<I18NLocaleEntityResponseCollection>;
   material?: Maybe<MaterialEntityResponse>;
@@ -1495,6 +1571,17 @@ export type QueryFlagsArgs = {
   filters?: InputMaybe<FlagFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type QueryGalleriesArgs = {
+  filters?: InputMaybe<GalleryFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type QueryGalleryArgs = {
+  id?: InputMaybe<Scalars['ID']>;
 };
 
 export type QueryI18NLocaleArgs = {
@@ -2578,6 +2665,7 @@ export type GetFlagsQuery = {
 
 export type GetMaterialsQueryVariables = Exact<{
   filters?: InputMaybe<MaterialFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
 }>;
 
 export type GetMaterialsQuery = {
@@ -2909,8 +2997,8 @@ export const useGetFlagsQuery = <TData = GetFlagsQuery, TError = unknown>(
 useGetFlagsQuery.getKey = (variables?: GetFlagsQueryVariables) =>
   variables === undefined ? ['GetFlags'] : ['GetFlags', variables];
 export const GetMaterialsDocument = /*#__PURE__*/ `
-    query GetMaterials($filters: MaterialFiltersInput) {
-  materials(filters: $filters) {
+    query GetMaterials($filters: MaterialFiltersInput, $pagination: PaginationArg) {
+  materials(filters: $filters, pagination: $pagination) {
     data {
       ...Material
     }

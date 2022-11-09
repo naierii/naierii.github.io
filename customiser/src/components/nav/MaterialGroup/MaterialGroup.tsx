@@ -35,7 +35,7 @@ const MaterialGroup = ({ className, materialGroup, part }: MaterialGroupProps) =
     : [];
 
   const { data: materials } = useGetMaterialsQuery(
-    { filters: { type: { id: { in: typeIds } } } },
+    { filters: { type: { id: { in: typeIds } } }, pagination: { pageSize: 200 } },
     {
       select: (data) => data.materials?.data as MaterialEntity[],
     },

@@ -5,6 +5,7 @@ import { CustomiserState, useCustomiserStore } from '@store/customiser';
 import { useRef } from 'react';
 import GraphicMaterial from '../GraphicMaterial';
 import Model from '../Model';
+import Tassels from '../Tassels';
 
 // export interface SceneProps {}
 
@@ -15,7 +16,7 @@ const Scene = () => {
   const { graphics } = useGraphics();
   const { camera } = useThree();
 
-  const cameraRef = useRef(camera);
+  // const cameraRef = useRef(camera);
   // useHelper(cameraRef, CameraHelper);
 
   return (
@@ -28,6 +29,7 @@ const Scene = () => {
         {selectedModels.map((m) => (
           <Model key={m.model?.id} model={m.model} />
         ))}
+        {/* <Tassels /> */}
       </group>
     </Center>
   );

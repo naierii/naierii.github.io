@@ -1,5 +1,5 @@
-query GetMaterials($filters: MaterialFiltersInput) {
-  materials(filters: $filters) {
+query GetMaterials($filters: MaterialFiltersInput, $pagination: PaginationArg) {
+  materials(filters: $filters, pagination: $pagination) {
     data {
       ...Material
     }

@@ -62,7 +62,7 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
           <Scene />
         </ContextBridge>
 
-        <OrbitControls enableZoom={false} />
+        <OrbitControls enableZoom={true} />
       </Canvas>
       {/* <button className={styles.save} onClick={saveImage}>
         Save Image

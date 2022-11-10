@@ -13,6 +13,11 @@
           "settings": {
           }
         },
+        "e63b1a84-51f7-410f-8ff5-f89663c9df5c": {
+          "type": "customiser",
+          "settings": {
+          }
+        },
         "ab4370f6-f64b-4dbe-893c-ba168b85cecf": {
           "type": "description",
           "settings": {
@@ -31,14 +36,12 @@
       "block_order": [
         "title",
         "price",
+        "e63b1a84-51f7-410f-8ff5-f89663c9df5c",
         "ab4370f6-f64b-4dbe-893c-ba168b85cecf",
         "collapsible-row-0"
       ],
       "settings": {
-        "gallery_layout": "stacked",
-        "media_size": "large",
-        "mobile_thumbnails": "hide",
-        "hide_variants": true
+        "media_size": "large"
       }
     }
   },

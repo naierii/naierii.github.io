@@ -1,1 +1,67 @@
-document.querySelectorAll(".product-addon-group").forEach((function(t){var e=t.querySelectorAll("[data-addon-product]"),r=t.dataset.form,a=t.dataset.parentProduct,n=document.querySelector("form#".concat(r)).querySelector(".addon-hidden"),o=(new Date).getTime();if(!n.querySelector("input#product-property-".concat(a))){var c=document.createElement("INPUT");c.setAttribute("type","hidden"),c.setAttribute("name","[properties][_parent]"),c.setAttribute("value","".concat(a,"-").concat(o)),c.setAttribute("form",r),c.setAttribute("id","product-property-".concat(a)),n.append(c)}if(!n.querySelector("input#product-parent-property-".concat(a))){var d=document.createElement("INPUT");d.setAttribute("type","hidden"),d.setAttribute("name","[properties][_is_parent]"),d.setAttribute("value",!0),d.setAttribute("form",r),d.setAttribute("id","product-parent-property-".concat(a)),n.append(d)}e.forEach((function(t){var e=t.dataset.addonProduct,c=t.dataset.addonIndex;t.addEventListener("input",(function(t){var d=n.querySelector("input#addon-".concat(e)),u=n.querySelector("input#addon-property-".concat(e));if(t.target.value.length>0&&!d){var i=document.createElement("INPUT");i.setAttribute("type","hidden"),i.setAttribute("name","items[".concat(c,"][id]")),i.setAttribute("value",e),i.setAttribute("form",r),i.setAttribute("id","addon-".concat(e)),n.append(i);var p=document.createElement("INPUT");p.setAttribute("type","hidden"),p.setAttribute("name","items[".concat(c,"][properties][_parent]")),p.setAttribute("value","".concat(a,"-").concat(o)),p.setAttribute("form",r),p.setAttribute("id","addon-property-".concat(e)),n.append(p)}else 0===t.target.value.length&&(d.remove(),u.remove())}))}))}));
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!*********************************!*\
+  !*** ./src/js/product-addon.js ***!
+  \*********************************/
+var productAddonGroups = document.querySelectorAll('.product-addon-group');
+productAddonGroups.forEach(function (group) {
+  var productAddons = group.querySelectorAll('[data-addon-product]');
+  var form = group.dataset.form;
+  var parentProduct = group.dataset.parentProduct;
+  var addonHidden = document.querySelector("form#".concat(form)).querySelector('.addon-hidden');
+  var uniq = new Date().getTime();
+  var getProductProperty = addonHidden.querySelector("input#product-property-".concat(parentProduct));
+
+  if (!getProductProperty) {
+    var productProperty = document.createElement('INPUT');
+    productProperty.setAttribute('type', 'hidden');
+    productProperty.setAttribute('name', "[properties][_parent]");
+    productProperty.setAttribute('value', "".concat(parentProduct, "-").concat(uniq));
+    productProperty.setAttribute('form', form);
+    productProperty.setAttribute('id', "product-property-".concat(parentProduct));
+    addonHidden.append(productProperty);
+  }
+
+  var getProductParentProperty = addonHidden.querySelector("input#product-parent-property-".concat(parentProduct));
+
+  if (!getProductParentProperty) {
+    var productParentProperty = document.createElement('INPUT');
+    productParentProperty.setAttribute('type', 'hidden');
+    productParentProperty.setAttribute('name', "[properties][_is_parent]");
+    productParentProperty.setAttribute('value', true);
+    productParentProperty.setAttribute('form', form);
+    productParentProperty.setAttribute('id', "product-parent-property-".concat(parentProduct));
+    addonHidden.append(productParentProperty);
+  }
+
+  productAddons.forEach(function (addon) {
+    var product = addon.dataset.addonProduct;
+    var index = addon.dataset.addonIndex;
+    addon.addEventListener('input', function (e) {
+      var getInput = addonHidden.querySelector("input#addon-".concat(product));
+      var getProperty = addonHidden.querySelector("input#addon-property-".concat(product));
+
+      if (e.target.value.length > 0 && !getInput) {
+        var input = document.createElement('INPUT');
+        input.setAttribute('type', 'hidden');
+        input.setAttribute('name', "items[".concat(index, "][id]"));
+        input.setAttribute('value', product);
+        input.setAttribute('form', form);
+        input.setAttribute('id', "addon-".concat(product));
+        addonHidden.append(input);
+        var property = document.createElement('INPUT');
+        property.setAttribute('type', 'hidden');
+        property.setAttribute('name', "items[".concat(index, "][properties][_parent]"));
+        property.setAttribute('value', "".concat(parentProduct, "-").concat(uniq));
+        property.setAttribute('form', form);
+        property.setAttribute('id', "addon-property-".concat(product));
+        addonHidden.append(property);
+      } else if (e.target.value.length === 0) {
+        getInput.remove();
+        getProperty.remove();
+      }
+    });
+  });
+});
+/******/ })()
+;

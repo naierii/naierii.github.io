@@ -80,8 +80,7 @@
         "collapsible-row-1"
       ],
       "settings": {
-        "media_size": "large",
-        "hide_variants": false
+        "media_size": "large"
       }
     }
   },

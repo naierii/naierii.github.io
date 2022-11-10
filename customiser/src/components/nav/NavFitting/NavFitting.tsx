@@ -1,7 +1,7 @@
 import OptionButton from '@components/ui/OptionButton';
 import { CustomProductOptionFragment } from '@graphql/generated/graphql';
 import { useCustomiserStore } from '@store/customiser';
-import { m } from 'framer-motion';
+import { motion } from 'framer-motion';
 import NavButtons from '../NavButtons';
 import styles from './NavFitting.module.scss';
 
@@ -21,7 +21,7 @@ const FittingOption = ({ option }: FittingOptionProps) => {
 
   return (
     <>
-      <m.div
+      <motion.div
         className={styles.fittingOption}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -39,7 +39,7 @@ const FittingOption = ({ option }: FittingOptionProps) => {
             </OptionButton>
           ))}
         </div>
-      </m.div>
+      </motion.div>
     </>
   );
 };

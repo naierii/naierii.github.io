@@ -47,7 +47,6 @@ const ProjectedMaterial = forwardRef<MeshPhongMaterial, ProjectedMaterialProps>(
         uniforms.current.isTextureProjected.value = freeze;
       }
       if (uniforms.current && freeze) {
-        console.log('update camera position');
         uniforms.current.viewMatrixCamera.value = getCameraMatrixWorldInverse();
         uniforms.current.projPosition.value = getCameraPosition();
         uniforms.current.meshMatrix.value = getMeshMatrix();
@@ -56,8 +55,6 @@ const ProjectedMaterial = forwardRef<MeshPhongMaterial, ProjectedMaterialProps>(
             uniforms.current.viewMatrixCamera.value = getCameraMatrixWorldInverse();
             uniforms.current.projPosition.value = getCameraPosition();
             uniforms.current.meshMatrix.value = getMeshMatrix();
-
-            console.log(uniforms.current);
           }
         }, 100);
       }

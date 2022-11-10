@@ -4,7 +4,7 @@ import getSizeVariation from '@services/size';
 import { UNIT } from '@store/constants';
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
-import { m } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ChangeEvent, useEffect } from 'react';
 import NavButtons from '../NavButtons';
 import styles from './NavSize.module.scss';
@@ -52,7 +52,7 @@ const NavSize = ({ className }: NavSizeProps) => {
 
   return (
     <>
-      <m.div
+      <motion.div
         className={rootClassName}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -127,7 +127,7 @@ const NavSize = ({ className }: NavSizeProps) => {
             </option>
           ))}
         </FormSelect>
-      </m.div>
+      </motion.div>
       <NavButtons />
     </>
   );

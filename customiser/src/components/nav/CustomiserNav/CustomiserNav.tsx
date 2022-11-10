@@ -1,6 +1,6 @@
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
-import { AnimatePresence, m, useCycle } from 'framer-motion';
+import { AnimatePresence, motion, useCycle } from 'framer-motion';
 import { Suspense } from 'react';
 import NavButtons from '../NavButtons';
 import NavFitting from '../NavFitting';
@@ -24,7 +24,7 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
   const selectedNav = useCustomiserStore((state) => state.selectedNav);
 
   return (
-    <m.nav className={rootClassName} initial={'closed'} animate={isOpen ? 'open' : 'closed'}>
+    <motion.nav className={rootClassName} initial={'closed'} animate={isOpen ? 'open' : 'closed'}>
       <NavHeader className={styles.header} toggle={() => toggleOpen()} isOpen={isOpen} />
       <Suspense fallback={<div>Loading...</div>}>
         <AnimatePresence initial={false}>
@@ -47,7 +47,7 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
       </Suspense>
       <div id='CustomiserNavActions' className={styles.actions}></div>
       {/* {!isOpen && <NavButtons className={styles.actions} />} */}
-    </m.nav>
+    </motion.nav>
   );
 };
 

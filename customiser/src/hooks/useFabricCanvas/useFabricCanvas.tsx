@@ -17,8 +17,6 @@ export const useFabricCanvas = ({ fabricObject, contextObject }: UseFabricCanvas
   const { updateGraphic } = useGraphics();
 
   const renderFabric = useCallback(() => {
-    console.log('renderFabric');
-
     if (fabricRef.current) {
       fabricRef.current.renderAll();
       if (material && material.map) {

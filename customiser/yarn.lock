@@ -2311,11 +2311,6 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
-"@lume/three-projected-material@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@lume/three-projected-material/-/three-projected-material-0.2.3.tgz#517998da5b0e586fbd24fc2209f1c9cde6416f86"
-  integrity sha512-C5rDi3MXNXmByQXqAOuWq3uvXpsSvl4Qu6jH1hBUxCsi9IL9eTq/uyHiDOY3sgqRKK8iYmKEHdsMuxCjy1Rv2Q==
-
 "@mapbox/node-pre-gyp@^1.0.0":
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/@mapbox/node-pre-gyp/-/node-pre-gyp-1.0.10.tgz#8e6735ccebbb1581e5a7e652244cadc8a844d03c"
@@ -11542,9 +11537,9 @@ sass-rem@^3.0.0:
   integrity sha512-tgK/2ojS/z4OjlJT6J/Gc3TgN97W/4tTWuEdVXO1/P46L/Ud4iG3t+s007KTHP+BX9tqLgFPl3fgstUsva5rtg==
 
 sass@^1.52.3:
-  version "1.56.0"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.56.0.tgz#134032075a3223c8d49cb5c35e091e5ba1de8e0a"
-  integrity sha512-WFJ9XrpkcnqZcYuLRJh5qiV6ibQOR4AezleeEjTjMsCocYW59dEG19U3fwTTXxzi2Ed3yjPBp727hbbj53pHFw==
+  version "1.56.1"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.56.1.tgz#94d3910cd468fd075fa87f5bb17437a0b617d8a7"
+  integrity sha512-VpEyKpyBPCxE7qGDtOcdJ6fFbcpOM+Emu7uZLxVrkX8KVU/Dp5UF7WLvzqRuUhB6mqqQt1xffLoG+AndxTZrCQ==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
@@ -12416,11 +12411,6 @@ three-mesh-bvh@^0.5.15:
   version "0.5.17"
   resolved "https://registry.yarnpkg.com/three-mesh-bvh/-/three-mesh-bvh-0.5.17.tgz#1f9bdcd7992e86dc3665664c1fe5cedd7be4bd9f"
   integrity sha512-0iyqZe0Op6tH7nqVI4L2Ae1tACiYliJvx0cFvehrVzzfZRW8p4c9GYnqGPPN5+x7Q8L5WjJC8kgoA8Z+/+1oAQ==
-
-three-projected-material@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/three-projected-material/-/three-projected-material-2.1.2.tgz#1c0aab98b09297de477ac4c9fb67793c247e8610"
-  integrity sha512-RDrwt3ZQH+PQrDS0jG1jyYQRTD4v8LN/lq+FnxAjTGq+sMWHpMhG/keCxRS8tjWMJdnLMJETQTenpInClg7F+Q==
 
 three-stdlib@^2.17.3:
   version "2.17.3"

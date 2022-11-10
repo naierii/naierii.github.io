@@ -13,6 +13,9 @@
   height: 100%;
   position: fixed;
   background-color: #ededed;
+  top: 0;
+  left: 0;
+  z-index: 999;
 
   @include mq($from: tablet) {
     grid-template-columns: 33.33% calc(66.66% - 80px) 80px;

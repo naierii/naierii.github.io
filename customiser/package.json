@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@lume/three-projected-material": "^0.2.3",
     "@react-three/drei": "^9.28.3",
     "@react-three/fiber": "^8.7.2",
     "@tanstack/react-query": "^4.10.1",
@@ -24,7 +23,6 @@
     "sass-mq": "^6.0.0",
     "sass-rem": "^3.0.0",
     "three": "^0.141.0",
-    "three-projected-material": "^2.1.2",
     "typescript": "^4.6.0",
     "uuid": "^9.0.0",
     "web-vitals": "^2.1.0",
@@ -34,6 +32,7 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "build-mix": "npx mix --production",
+    "build-watch": "npx mix watch",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
     "new:component": "hygen new component",

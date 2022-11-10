@@ -8,7 +8,6 @@ import { BufferGeometry } from 'three';
 import { GLTF } from 'three-stdlib';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
 import CustomiserMesh from '../CustomiserMesh';
-import Tassels from '../Tassels';
 export interface CustomiserModelProps {
   model?: Maybe<ModelFragment>;
 }

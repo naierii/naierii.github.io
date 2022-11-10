@@ -1,17 +1,18 @@
 import { QueryClient } from '@tanstack/react-query';
+import { EnvVars } from './env';
 
-export const endpoint = process.env.REACT_APP_API_URL as string;
+export const endpoint = EnvVars.API_URL as string;
 export const fetchParams = {
   headers: {
-    Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN as string}`,
+    Authorization: `Bearer ${EnvVars.API_TOKEN as string}`,
     'Content-Type': 'application/json',
   },
 };
 
-export const endpointShopify = process.env.REACT_APP_STOREFRONT_URL as string;
+export const endpointShopify = EnvVars.STOREFRONT_URL as string;
 export const fetchParamsShopify = {
   headers: {
-    'X-Shopify-Storefront-Access-Token': process.env.REACT_APP_STOREFRONT_TOKEN as string,
+    'X-Shopify-Storefront-Access-Token': EnvVars.STOREFRONT_TOKEN as string,
     'Content-Type': 'application/json',
   },
 };

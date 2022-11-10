@@ -23,8 +23,6 @@ const GraphicsCanvas = ({ className, graphic }: GraphicsCanvasProps) => {
    * Initialize fabric object
    */
   useEffect(() => {
-    console.log(graphic.flag);
-
     if (fabricRef.current && !fImageRef.current && dimension && graphic.flag) {
       const { width, height } = dimension;
       const imageurl = graphic.flag ? graphic.flag.attributes?.image.data?.attributes?.url : '';

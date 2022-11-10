@@ -446,6 +446,8 @@
                                     placeholder='{{block.settings.weight}}'
                                 >
                             </fieldset>
+                        {%- when 'customiser' -%}
+                              {% render 'customiser' %}
                         {%- when 'customiser_text' -%}
                             <fieldset
                                 class='js product-form__input product-addon-group'

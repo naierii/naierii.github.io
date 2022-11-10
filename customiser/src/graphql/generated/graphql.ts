@@ -2663,6 +2663,32 @@ export type GetFlagsQuery = {
   } | null;
 };
 
+export type GetGalleriesQueryVariables = Exact<{
+  pagination?: InputMaybe<PaginationArg>;
+}>;
+
+export type GetGalleriesQuery = {
+  __typename?: 'Query';
+  galleries?: {
+    __typename?: 'GalleryEntityResponseCollection';
+    data: Array<{
+      __typename?: 'GalleryEntity';
+      attributes?: {
+        __typename?: 'Gallery';
+        name?: string | null;
+        media?: {
+          __typename?: 'UploadFileRelationResponseCollection';
+          data: Array<{
+            __typename?: 'UploadFileEntity';
+            id?: string | null;
+            attributes?: { __typename?: 'UploadFile'; formats?: any | null } | null;
+          }>;
+        } | null;
+      } | null;
+    }>;
+  } | null;
+};
+
 export type GetMaterialsQueryVariables = Exact<{
   filters?: InputMaybe<MaterialFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
@@ -2996,6 +3022,37 @@ export const useGetFlagsQuery = <TData = GetFlagsQuery, TError = unknown>(
 
 useGetFlagsQuery.getKey = (variables?: GetFlagsQueryVariables) =>
   variables === undefined ? ['GetFlags'] : ['GetFlags', variables];
+export const GetGalleriesDocument = /*#__PURE__*/ `
+    query GetGalleries($pagination: PaginationArg) {
+  galleries(pagination: $pagination) {
+    data {
+      attributes {
+        name
+        media {
+          data {
+            id
+            attributes {
+              formats
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+export const useGetGalleriesQuery = <TData = GetGalleriesQuery, TError = unknown>(
+  variables?: GetGalleriesQueryVariables,
+  options?: UseQueryOptions<GetGalleriesQuery, TError, TData>,
+) =>
+  useQuery<GetGalleriesQuery, TError, TData>(
+    variables === undefined ? ['GetGalleries'] : ['GetGalleries', variables],
+    fetcher<GetGalleriesQuery, GetGalleriesQueryVariables>(GetGalleriesDocument, variables),
+    options,
+  );
+
+useGetGalleriesQuery.getKey = (variables?: GetGalleriesQueryVariables) =>
+  variables === undefined ? ['GetGalleries'] : ['GetGalleries', variables];
 export const GetMaterialsDocument = /*#__PURE__*/ `
     query GetMaterials($filters: MaterialFiltersInput, $pagination: PaginationArg) {
   materials(filters: $filters, pagination: $pagination) {

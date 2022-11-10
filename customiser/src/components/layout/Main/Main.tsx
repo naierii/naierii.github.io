@@ -24,20 +24,15 @@ const Main = ({ className, product }: MainProps) => {
   const editFlag = flags.find((f) => f.editMode);
   const setCustomProduct = useCustomiserStore((state) => state.setCustomProduct);
   const rootClassName = cn(styles.root, className);
-  console.log(product);
 
   const { data: customProduct } = useGetCustomProductByShopifyIdQuery(
     { id: product },
     { select: (data) => data.customProductByShopifyId?.data },
   );
 
-  console.log(customProduct);
-
   const { data: shopifyProduct } = useShopifyGetProductByIdQuery({
     id: product,
   });
-
-  console.log(shopifyProduct);
 
   useEffect(() => {
     // async function rehydrate() {
@@ -59,6 +54,9 @@ const Main = ({ className, product }: MainProps) => {
           {graphics?.map((graphic) => (
             <GraphicsCanvas key={graphic.key} graphic={graphic} className={styles.model} />
           ))}
+          <Button className={styles.close} onClick={() => setShow(false)}>
+            Close
+          </Button>
         </div>
       ) : (
         <Button colour='red' onClick={() => setShow(true)}>

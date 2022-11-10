@@ -71,8 +71,8 @@
   margin: 0;
 }
 .product__price .price {
-  color: #cc0101;
   font-weight: 900;
+  font-family: bebas-neue-by-fontfabric, sans-serif;
 }
 
 /* Product form */

@@ -37,3 +37,10 @@
 .header {
   grid-area: header;
 }
+
+.close {
+  grid-area: model;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}

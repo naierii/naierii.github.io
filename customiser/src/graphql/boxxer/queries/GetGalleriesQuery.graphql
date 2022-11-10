@@ -1,0 +1,17 @@
+query GetGalleries($pagination: PaginationArg) {
+  galleries(pagination: $pagination) {
+    data {
+      attributes {
+        name
+        media {
+          data {
+            id
+            attributes {
+              formats
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,6 @@
 import cn from 'classnames';
+import { motion } from 'framer-motion';
+import { useRef } from 'react';
 import { Material } from './Material';
 import styles from './MaterialGroup.module.scss';
 import { useMaterialGroupStore } from './MaterialGroupState';
@@ -29,6 +31,7 @@ export const MaterialType = ({ className }: MaterialTypeProps) => {
           </button>
         ))}
       </div>
+
       <div className={styles.materials}>
         {filteredMaterials.map((m) => (
           <Material key={m.id} material={m} />

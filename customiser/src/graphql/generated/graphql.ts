@@ -1,5 +1,5 @@
 import { endpoint, fetchParams } from './../graphql-client';
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { useMutation, useQuery, UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -34,6 +34,7 @@ export type Scalars = {
   Float: number;
   DateTime: any;
   JSON: any;
+  Long: any;
   Upload: any;
 };
 
@@ -59,6 +60,36 @@ export type BooleanFilterInput = {
   null?: InputMaybe<Scalars['Boolean']>;
   or?: InputMaybe<Array<InputMaybe<Scalars['Boolean']>>>;
   startsWith?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type ComponentCustomiserCustomDesignPart = {
+  __typename?: 'ComponentCustomiserCustomDesignPart';
+  areaSize?: Maybe<MaterialAreaSizeEntityResponse>;
+  id: Scalars['ID'];
+  material?: Maybe<MaterialEntityResponse>;
+  name?: Maybe<Scalars['String']>;
+  price?: Maybe<Scalars['Long']>;
+  shopifyVariantId?: Maybe<Scalars['String']>;
+};
+
+export type ComponentCustomiserCustomDesignPartFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignPartFiltersInput>>>;
+  areaSize?: InputMaybe<MaterialAreaSizeFiltersInput>;
+  material?: InputMaybe<MaterialFiltersInput>;
+  name?: InputMaybe<StringFilterInput>;
+  not?: InputMaybe<ComponentCustomiserCustomDesignPartFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignPartFiltersInput>>>;
+  price?: InputMaybe<LongFilterInput>;
+  shopifyVariantId?: InputMaybe<StringFilterInput>;
+};
+
+export type ComponentCustomiserCustomDesignPartInput = {
+  areaSize?: InputMaybe<Scalars['ID']>;
+  id?: InputMaybe<Scalars['ID']>;
+  material?: InputMaybe<Scalars['ID']>;
+  name?: InputMaybe<Scalars['String']>;
+  price?: InputMaybe<Scalars['Long']>;
+  shopifyVariantId?: InputMaybe<Scalars['String']>;
 };
 
 export type ComponentCustomiserCustomOption = {
@@ -166,7 +197,21 @@ export type CustomDesign = {
   __typename?: 'CustomDesign';
   createdAt?: Maybe<Scalars['DateTime']>;
   customProduct?: Maybe<CustomProductEntityResponse>;
+  images?: Maybe<UploadFileRelationResponseCollection>;
+  parts?: Maybe<Array<Maybe<ComponentCustomiserCustomDesignPart>>>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type CustomDesignImagesArgs = {
+  filters?: InputMaybe<UploadFileFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type CustomDesignPartsArgs = {
+  filters?: InputMaybe<ComponentCustomiserCustomDesignPartFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type CustomDesignEntity = {
@@ -193,11 +238,14 @@ export type CustomDesignFiltersInput = {
   id?: InputMaybe<IdFilterInput>;
   not?: InputMaybe<CustomDesignFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<CustomDesignFiltersInput>>>;
+  parts?: InputMaybe<ComponentCustomiserCustomDesignPartFiltersInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
 
 export type CustomDesignInput = {
   customProduct?: InputMaybe<Scalars['ID']>;
+  images?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  parts?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignPartInput>>>;
 };
 
 export type CustomProduct = {
@@ -488,6 +536,7 @@ export type GalleryInput = {
 };
 
 export type GenericMorph =
+  | ComponentCustomiserCustomDesignPart
   | ComponentCustomiserCustomOption
   | ComponentCustomiserCustomOptionModel
   | ComponentCustomiserCustomParts
@@ -620,6 +669,30 @@ export type JsonFilterInput = {
   null?: InputMaybe<Scalars['Boolean']>;
   or?: InputMaybe<Array<InputMaybe<Scalars['JSON']>>>;
   startsWith?: InputMaybe<Scalars['JSON']>;
+};
+
+export type LongFilterInput = {
+  and?: InputMaybe<Array<InputMaybe<Scalars['Long']>>>;
+  between?: InputMaybe<Array<InputMaybe<Scalars['Long']>>>;
+  contains?: InputMaybe<Scalars['Long']>;
+  containsi?: InputMaybe<Scalars['Long']>;
+  endsWith?: InputMaybe<Scalars['Long']>;
+  eq?: InputMaybe<Scalars['Long']>;
+  eqi?: InputMaybe<Scalars['Long']>;
+  gt?: InputMaybe<Scalars['Long']>;
+  gte?: InputMaybe<Scalars['Long']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['Long']>>>;
+  lt?: InputMaybe<Scalars['Long']>;
+  lte?: InputMaybe<Scalars['Long']>;
+  ne?: InputMaybe<Scalars['Long']>;
+  not?: InputMaybe<LongFilterInput>;
+  notContains?: InputMaybe<Scalars['Long']>;
+  notContainsi?: InputMaybe<Scalars['Long']>;
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['Long']>>>;
+  notNull?: InputMaybe<Scalars['Boolean']>;
+  null?: InputMaybe<Scalars['Boolean']>;
+  or?: InputMaybe<Array<InputMaybe<Scalars['Long']>>>;
+  startsWith?: InputMaybe<Scalars['Long']>;
 };
 
 export type Material = {
@@ -2514,6 +2587,42 @@ export type ModelPartFragment = {
   attributes?: { __typename?: 'ModelPart'; nodeId: string } | null;
 };
 
+export type CreateCustomDesignMutationVariables = Exact<{
+  data: CustomDesignInput;
+}>;
+
+export type CreateCustomDesignMutation = {
+  __typename?: 'Mutation';
+  createCustomDesign?: {
+    __typename?: 'CustomDesignEntityResponse';
+    data?: {
+      __typename?: 'CustomDesignEntity';
+      attributes?: {
+        __typename?: 'CustomDesign';
+        parts?: Array<{
+          __typename?: 'ComponentCustomiserCustomDesignPart';
+          shopifyVariantId?: string | null;
+        } | null> | null;
+      } | null;
+    } | null;
+  } | null;
+};
+
+export type UploadMultipleFilesMutationVariables = Exact<{
+  refId?: InputMaybe<Scalars['ID']>;
+  ref?: InputMaybe<Scalars['String']>;
+  field?: InputMaybe<Scalars['String']>;
+  files: Array<InputMaybe<Scalars['Upload']>> | InputMaybe<Scalars['Upload']>;
+}>;
+
+export type UploadMultipleFilesMutation = {
+  __typename?: 'Mutation';
+  multipleUpload: Array<{
+    __typename?: 'UploadFileEntityResponse';
+    data?: { __typename?: 'UploadFileEntity'; id?: string | null } | null;
+  } | null>;
+};
+
 export type GetCustomProductByShopifyIdQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -2964,6 +3073,62 @@ export const MaterialFragmentDoc = /*#__PURE__*/ `
   }
 }
     `;
+export const CreateCustomDesignDocument = /*#__PURE__*/ `
+    mutation CreateCustomDesign($data: CustomDesignInput!) {
+  createCustomDesign(data: $data) {
+    data {
+      attributes {
+        parts {
+          shopifyVariantId
+        }
+      }
+    }
+  }
+}
+    `;
+export const useCreateCustomDesignMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    CreateCustomDesignMutation,
+    TError,
+    CreateCustomDesignMutationVariables,
+    TContext
+  >,
+) =>
+  useMutation<CreateCustomDesignMutation, TError, CreateCustomDesignMutationVariables, TContext>(
+    ['CreateCustomDesign'],
+    (variables?: CreateCustomDesignMutationVariables) =>
+      fetcher<CreateCustomDesignMutation, CreateCustomDesignMutationVariables>(
+        CreateCustomDesignDocument,
+        variables,
+      )(),
+    options,
+  );
+export const UploadMultipleFilesDocument = /*#__PURE__*/ `
+    mutation UploadMultipleFiles($refId: ID, $ref: String, $field: String, $files: [Upload]!) {
+  multipleUpload(refId: $refId, ref: $ref, field: $field, files: $files) {
+    data {
+      id
+    }
+  }
+}
+    `;
+export const useUploadMultipleFilesMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    UploadMultipleFilesMutation,
+    TError,
+    UploadMultipleFilesMutationVariables,
+    TContext
+  >,
+) =>
+  useMutation<UploadMultipleFilesMutation, TError, UploadMultipleFilesMutationVariables, TContext>(
+    ['UploadMultipleFiles'],
+    (variables?: UploadMultipleFilesMutationVariables) =>
+      fetcher<UploadMultipleFilesMutation, UploadMultipleFilesMutationVariables>(
+        UploadMultipleFilesDocument,
+        variables,
+      )(),
+    options,
+  );
 export const GetCustomProductByShopifyIdDocument = /*#__PURE__*/ `
     query GetCustomProductByShopifyId($id: String!) {
   customProductByShopifyId(id: $id) {

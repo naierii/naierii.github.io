@@ -17,10 +17,19 @@
 }
 
 .materialTypes {
+  margin-bottom: rem(20px);
+  overflow-x: auto;
+  scroll-behavior: smooth;
   display: flex;
   column-gap: rem(6px);
   row-gap: rem(10px);
-  margin-bottom: rem(20px);
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .materials {
@@ -52,9 +61,10 @@
 }
 
 .pillButton {
-  padding: rem(12px);
+  padding: rem(12px) rem(24px);
   border-radius: 50vw;
-  border: 1px solid $black;
+  border: 2px solid $black;
+  white-space: nowrap;
 }
 
 .pillButtonSelected {

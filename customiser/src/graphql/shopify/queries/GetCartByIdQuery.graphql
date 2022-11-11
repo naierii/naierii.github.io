@@ -1,0 +1,5 @@
+query ShopifyGetCartById($id: ID!) {
+  cart(id: $id) {
+    id
+  }
+}

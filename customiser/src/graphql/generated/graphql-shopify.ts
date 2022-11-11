@@ -6731,6 +6731,15 @@ export type ShopifyProductVariantFragment = {
   price: { __typename?: 'MoneyV2'; amount: any; currencyCode: ShopifyCurrencyCode };
 };
 
+export type ShopifyShopifyGetCartByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type ShopifyShopifyGetCartByIdQuery = {
+  __typename?: 'QueryRoot';
+  cart?: { __typename?: 'Cart'; id: string } | null;
+};
+
 export type ShopifyShopifyGetProductByIdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -6764,6 +6773,33 @@ export const ProductVariantFragmentDoc = /*#__PURE__*/ `
   }
 }
     `;
+export const ShopifyGetCartByIdDocument = /*#__PURE__*/ `
+    query ShopifyGetCartById($id: ID!) {
+  cart(id: $id) {
+    id
+  }
+}
+    `;
+export const useShopifyGetCartByIdQuery = <
+  TData = ShopifyShopifyGetCartByIdQuery,
+  TError = unknown,
+>(
+  variables: ShopifyShopifyGetCartByIdQueryVariables,
+  options?: UseQueryOptions<ShopifyShopifyGetCartByIdQuery, TError, TData>,
+) =>
+  useQuery<ShopifyShopifyGetCartByIdQuery, TError, TData>(
+    ['ShopifyGetCartById', variables],
+    fetcher<ShopifyShopifyGetCartByIdQuery, ShopifyShopifyGetCartByIdQueryVariables>(
+      ShopifyGetCartByIdDocument,
+      variables,
+    ),
+    options,
+  );
+
+useShopifyGetCartByIdQuery.getKey = (variables: ShopifyShopifyGetCartByIdQueryVariables) => [
+  'ShopifyGetCartById',
+  variables,
+];
 export const ShopifyGetProductByIdDocument = /*#__PURE__*/ `
     query ShopifyGetProductById($id: ID!) {
   product(id: $id) {

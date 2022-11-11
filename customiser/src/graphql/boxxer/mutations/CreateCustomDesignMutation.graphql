@@ -1,0 +1,11 @@
+mutation CreateCustomDesign($data: CustomDesignInput!) {
+  createCustomDesign(data: $data) {
+    data {
+      attributes {
+        parts {
+          shopifyVariantId
+        }
+      }
+    }
+  }
+}

@@ -55,6 +55,8 @@ interface SizingMeasurement {
   unit?: string;
 }
 export interface CustomiserState {
+  addingToCart: boolean;
+  modelRotation: number;
   canvas?: {
     width: number;
     height: number;
@@ -96,12 +98,16 @@ export interface CustomiserState {
   deselectFlag: () => void;
   resetNav: () => void;
   texture: (nodeId: string) => MaterialTextureModel;
+  setAddingToCart: () => void;
+  setModelRotation: (rotation: number) => void;
 }
 
 const createCustomiser: StateCreator<CustomiserState, [['zustand/devtools', never]], []> = (
   set,
   get,
 ) => ({
+  addingToCart: false,
+  modelRotation: 0,
   selectedModels: [],
   savedModels: [],
   selectedPart: null,
@@ -339,6 +345,21 @@ const createCustomiser: StateCreator<CustomiserState, [['zustand/devtools', neve
             return { ...f, editMode: false };
           }),
         ];
+      }),
+    );
+  },
+  setAddingToCart: () => {
+    set(
+      produce((state: CustomiserState) => {
+        state.addingToCart = true;
+        state.modelRotation = 0;
+      }),
+    );
+  },
+  setModelRotation: (rotation) => {
+    set(
+      produce((state: CustomiserState) => {
+        state.modelRotation = rotation;
       }),
     );
   },

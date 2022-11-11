@@ -3,7 +3,7 @@ import Scene from '@components/three/Scene';
 import { OrbitControls, useContextBridge } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import cn from 'classnames';
-import { useRef } from 'react';
+import { MutableRefObject, RefObject, useRef } from 'react';
 
 import { GraphicsContext } from '@context/GraphicsContext';
 import { useCustomiserStore } from '@store/customiser';
@@ -12,13 +12,17 @@ import styles from './CustomiserCanvas.module.scss';
 
 export interface CustomiserCanvasProps {
   className?: string;
+  cameraRef: MutableRefObject<Camera | null>;
+  canvasRef: RefObject<HTMLCanvasElement>;
 }
 
-const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => {
+const CustomiserCanvas = ({
+  className,
+  cameraRef,
+  canvasRef,
+}: CustomiserCanvasProps): JSX.Element => {
   const setCanvasSize = useCustomiserStore((state) => state.setCanvasSize);
   const rootClassName = cn(styles.root, className);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const cameraRef = useRef<Camera | null>(null);
 
   const ContextBridge = useContextBridge(GraphicsContext);
 
@@ -46,7 +50,7 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
         linear
         flat
         camera={{
-          position: [-6.37546092557343, 2.1970893240496195e-15, 25.31024512625285],
+          position: [0, 2.1970893240496195e-15, 25.31024512625285],
           fov: 20,
         }}
         gl={{ preserveDrawingBuffer: true }}
@@ -62,7 +66,7 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
           <Scene />
         </ContextBridge>
 
-        <OrbitControls enableZoom={true} />
+        <OrbitControls enableZoom={false} />
       </Canvas>
       {/* <button className={styles.save} onClick={saveImage}>
         Save Image

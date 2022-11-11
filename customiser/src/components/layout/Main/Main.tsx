@@ -3,14 +3,18 @@ import CustomiserCanvas from '@components/three/CustomiserCanvas';
 import GraphicsCanvas from '@components/three/GraphicsCanvas';
 import Button from '@components/ui/Button';
 import { useGetCustomProductByShopifyIdQuery } from '@graphql/generated/graphql';
-import { useShopifyGetProductByIdQuery } from '@graphql/generated/graphql-shopify';
+import {
+  useShopifyGetCartByIdQuery,
+  useShopifyGetProductByIdQuery,
+} from '@graphql/generated/graphql-shopify';
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Header from '../Header';
 
 import { useGraphics } from '@context/GraphicsContext';
 import styles from './Main.module.scss';
+import { Camera } from 'three';
 
 export interface MainProps {
   className?: string;
@@ -18,6 +22,8 @@ export interface MainProps {
 }
 
 const Main = ({ className, product }: MainProps) => {
+  const cameraRef = useRef<Camera | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [show, setShow] = useState(false);
   const { graphics } = useGraphics();
   const flags = useCustomiserStore((state) => state.flags);
@@ -49,8 +55,8 @@ const Main = ({ className, product }: MainProps) => {
       {show ? (
         <div className={rootClassName}>
           <CustomiserNav className={styles.nav} />
-          <Header className={styles.header} />
-          <CustomiserCanvas className={styles.model} />
+          <Header className={styles.header} cameraRef={cameraRef} canvasRef={canvasRef} />
+          <CustomiserCanvas className={styles.model} cameraRef={cameraRef} canvasRef={canvasRef} />
           {graphics?.map((graphic) => (
             <GraphicsCanvas key={graphic.key} graphic={graphic} className={styles.model} />
           ))}

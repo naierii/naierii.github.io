@@ -11,6 +11,7 @@ export interface GraphicsContextGraphic {
   canvas?: HTMLCanvasElement;
   freeze?: boolean;
   material?: MeshPhongMaterial | null;
+  materialJSON?: any;
   edit?: boolean;
   editMode?: string;
   uniforms?: {
@@ -54,6 +55,7 @@ const GraphicsContextProvider = ({ children }: GraphicsContextProviderProps) => 
     (key: string, graphic: GraphicsContextGraphic) => {
       setGraphics((graphics) =>
         graphics.map((g) => {
+          g.materialJSON = g.material?.toJSON();
           if (g.key === key) {
             return { ...g, ...graphic };
           }

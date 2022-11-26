@@ -13,6 +13,7 @@
     "framer-motion": "^7.5.2",
     "framer-motion-3d": "^7.5.3",
     "graphql": "^16.5.0",
+    "graphql-request": "^4.2.0",
     "hygen": "^6.2.7",
     "immer": "^9.0.15",
     "laravel-mix": "^6.0.49",

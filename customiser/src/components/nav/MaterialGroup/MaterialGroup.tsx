@@ -6,6 +6,7 @@ import {
   Maybe,
   useGetMaterialsQuery,
 } from '@graphql/generated/graphql';
+import { graphQLClient } from '@graphql/graphql-client';
 import { useCustomiserStore } from '@store/customiser';
 
 import cn from 'classnames';
@@ -35,6 +36,7 @@ const MaterialGroup = ({ className, materialGroup, part }: MaterialGroupProps) =
     : [];
 
   const { data: materials } = useGetMaterialsQuery(
+    graphQLClient,
     { filters: { type: { id: { in: typeIds } } }, pagination: { pageSize: 200 } },
     {
       select: (data) => data.materials?.data as MaterialEntity[],

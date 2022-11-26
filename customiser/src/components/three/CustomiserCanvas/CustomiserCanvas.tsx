@@ -3,7 +3,7 @@ import Scene from '@components/three/Scene';
 import { OrbitControls, useContextBridge } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import cn from 'classnames';
-import { MutableRefObject, RefObject, useRef } from 'react';
+import { MutableRefObject, RefObject, useEffect, useRef } from 'react';
 
 import { GraphicsContext } from '@context/GraphicsContext';
 import { useCustomiserStore } from '@store/customiser';
@@ -65,7 +65,6 @@ const CustomiserCanvas = ({
         <ContextBridge>
           <Scene />
         </ContextBridge>
-
         <OrbitControls enableZoom={false} />
       </Canvas>
       {/* <button className={styles.save} onClick={saveImage}>

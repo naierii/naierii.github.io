@@ -1,4 +1,5 @@
-import { endpoint, fetchParams } from './../graphql-client';
+import { GraphQLClient } from 'graphql-request';
+import { RequestInit } from 'graphql-request/dist/types.dom';
 import { useMutation, useQuery, UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -6,24 +7,13 @@ export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K]
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 
-function fetcher<TData, TVariables>(query: string, variables?: TVariables) {
-  return async (): Promise<TData> => {
-    const res = await fetch(endpoint as string, {
-      method: 'POST',
-      ...fetchParams,
-      body: JSON.stringify({ query, variables }),
-    });
-
-    const json = await res.json();
-
-    if (json.errors) {
-      const { message } = json.errors[0];
-
-      throw new Error(message);
-    }
-
-    return json.data;
-  };
+function fetcher<TData, TVariables>(
+  client: GraphQLClient,
+  query: string,
+  variables?: TVariables,
+  headers?: RequestInit['headers'],
+) {
+  return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
 }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -487,16 +477,81 @@ export type Gallery = {
   __typename?: 'Gallery';
   createdAt?: Maybe<Scalars['DateTime']>;
   customDesign?: Maybe<CustomDesignEntityResponse>;
+  description?: Maybe<Scalars['String']>;
+  galleryCategories?: Maybe<GalleryCategoryRelationResponseCollection>;
   media?: Maybe<UploadFileRelationResponseCollection>;
   name?: Maybe<Scalars['String']>;
   publishedAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
+export type GalleryGalleryCategoriesArgs = {
+  filters?: InputMaybe<GalleryCategoryFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
 export type GalleryMediaArgs = {
   filters?: InputMaybe<UploadFileFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type GalleryCategory = {
+  __typename?: 'GalleryCategory';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  galleryCategory?: Maybe<GalleryRelationResponseCollection>;
+  name: Scalars['String'];
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type GalleryCategoryGalleryCategoryArgs = {
+  filters?: InputMaybe<GalleryFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type GalleryCategoryEntity = {
+  __typename?: 'GalleryCategoryEntity';
+  attributes?: Maybe<GalleryCategory>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type GalleryCategoryEntityResponse = {
+  __typename?: 'GalleryCategoryEntityResponse';
+  data?: Maybe<GalleryCategoryEntity>;
+};
+
+export type GalleryCategoryEntityResponseCollection = {
+  __typename?: 'GalleryCategoryEntityResponseCollection';
+  data: Array<GalleryCategoryEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type GalleryCategoryFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<GalleryCategoryFiltersInput>>>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  galleryCategory?: InputMaybe<GalleryFiltersInput>;
+  id?: InputMaybe<IdFilterInput>;
+  name?: InputMaybe<StringFilterInput>;
+  not?: InputMaybe<GalleryCategoryFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<GalleryCategoryFiltersInput>>>;
+  publishedAt?: InputMaybe<DateTimeFilterInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type GalleryCategoryInput = {
+  galleryCategory?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  name?: InputMaybe<Scalars['String']>;
+  publishedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type GalleryCategoryRelationResponseCollection = {
+  __typename?: 'GalleryCategoryRelationResponseCollection';
+  data: Array<GalleryCategoryEntity>;
 };
 
 export type GalleryEntity = {
@@ -520,6 +575,8 @@ export type GalleryFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<GalleryFiltersInput>>>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
   customDesign?: InputMaybe<CustomDesignFiltersInput>;
+  description?: InputMaybe<StringFilterInput>;
+  galleryCategories?: InputMaybe<GalleryCategoryFiltersInput>;
   id?: InputMaybe<IdFilterInput>;
   name?: InputMaybe<StringFilterInput>;
   not?: InputMaybe<GalleryFiltersInput>;
@@ -530,9 +587,16 @@ export type GalleryFiltersInput = {
 
 export type GalleryInput = {
   customDesign?: InputMaybe<Scalars['ID']>;
+  description?: InputMaybe<Scalars['String']>;
+  galleryCategories?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   media?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   name?: InputMaybe<Scalars['String']>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type GalleryRelationResponseCollection = {
+  __typename?: 'GalleryRelationResponseCollection';
+  data: Array<GalleryEntity>;
 };
 
 export type GenericMorph =
@@ -547,6 +611,7 @@ export type GenericMorph =
   | CustomProductType
   | Flag
   | Gallery
+  | GalleryCategory
   | I18NLocale
   | Material
   | MaterialAreaSize
@@ -1155,6 +1220,7 @@ export type Mutation = {
   createCustomProductType?: Maybe<CustomProductTypeEntityResponse>;
   createFlag?: Maybe<FlagEntityResponse>;
   createGallery?: Maybe<GalleryEntityResponse>;
+  createGalleryCategory?: Maybe<GalleryCategoryEntityResponse>;
   createMaterial?: Maybe<MaterialEntityResponse>;
   createMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   createMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1176,6 +1242,7 @@ export type Mutation = {
   deleteCustomProductType?: Maybe<CustomProductTypeEntityResponse>;
   deleteFlag?: Maybe<FlagEntityResponse>;
   deleteGallery?: Maybe<GalleryEntityResponse>;
+  deleteGalleryCategory?: Maybe<GalleryCategoryEntityResponse>;
   deleteMaterial?: Maybe<MaterialEntityResponse>;
   deleteMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   deleteMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1209,6 +1276,7 @@ export type Mutation = {
   updateFileInfo: UploadFileEntityResponse;
   updateFlag?: Maybe<FlagEntityResponse>;
   updateGallery?: Maybe<GalleryEntityResponse>;
+  updateGalleryCategory?: Maybe<GalleryCategoryEntityResponse>;
   updateMaterial?: Maybe<MaterialEntityResponse>;
   updateMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   updateMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1255,6 +1323,10 @@ export type MutationCreateFlagArgs = {
 
 export type MutationCreateGalleryArgs = {
   data: GalleryInput;
+};
+
+export type MutationCreateGalleryCategoryArgs = {
+  data: GalleryCategoryInput;
 };
 
 export type MutationCreateMaterialArgs = {
@@ -1330,6 +1402,10 @@ export type MutationDeleteFlagArgs = {
 };
 
 export type MutationDeleteGalleryArgs = {
+  id: Scalars['ID'];
+};
+
+export type MutationDeleteGalleryCategoryArgs = {
   id: Scalars['ID'];
 };
 
@@ -1453,6 +1529,11 @@ export type MutationUpdateGalleryArgs = {
   id: Scalars['ID'];
 };
 
+export type MutationUpdateGalleryCategoryArgs = {
+  data: GalleryCategoryInput;
+  id: Scalars['ID'];
+};
+
 export type MutationUpdateMaterialArgs = {
   data: MaterialInput;
   id: Scalars['ID'];
@@ -1561,6 +1642,8 @@ export type Query = {
   flags?: Maybe<FlagEntityResponseCollection>;
   galleries?: Maybe<GalleryEntityResponseCollection>;
   gallery?: Maybe<GalleryEntityResponse>;
+  galleryCategories?: Maybe<GalleryCategoryEntityResponseCollection>;
+  galleryCategory?: Maybe<GalleryCategoryEntityResponse>;
   i18NLocale?: Maybe<I18NLocaleEntityResponse>;
   i18NLocales?: Maybe<I18NLocaleEntityResponseCollection>;
   material?: Maybe<MaterialEntityResponse>;
@@ -1654,6 +1737,17 @@ export type QueryGalleriesArgs = {
 };
 
 export type QueryGalleryArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type QueryGalleryCategoriesArgs = {
+  filters?: InputMaybe<GalleryCategoryFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type QueryGalleryCategoryArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
@@ -3087,19 +3181,23 @@ export const CreateCustomDesignDocument = /*#__PURE__*/ `
 }
     `;
 export const useCreateCustomDesignMutation = <TError = unknown, TContext = unknown>(
+  client: GraphQLClient,
   options?: UseMutationOptions<
     CreateCustomDesignMutation,
     TError,
     CreateCustomDesignMutationVariables,
     TContext
   >,
+  headers?: RequestInit['headers'],
 ) =>
   useMutation<CreateCustomDesignMutation, TError, CreateCustomDesignMutationVariables, TContext>(
     ['CreateCustomDesign'],
     (variables?: CreateCustomDesignMutationVariables) =>
       fetcher<CreateCustomDesignMutation, CreateCustomDesignMutationVariables>(
+        client,
         CreateCustomDesignDocument,
         variables,
+        headers,
       )(),
     options,
   );
@@ -3113,19 +3211,23 @@ export const UploadMultipleFilesDocument = /*#__PURE__*/ `
 }
     `;
 export const useUploadMultipleFilesMutation = <TError = unknown, TContext = unknown>(
+  client: GraphQLClient,
   options?: UseMutationOptions<
     UploadMultipleFilesMutation,
     TError,
     UploadMultipleFilesMutationVariables,
     TContext
   >,
+  headers?: RequestInit['headers'],
 ) =>
   useMutation<UploadMultipleFilesMutation, TError, UploadMultipleFilesMutationVariables, TContext>(
     ['UploadMultipleFiles'],
     (variables?: UploadMultipleFilesMutationVariables) =>
       fetcher<UploadMultipleFilesMutation, UploadMultipleFilesMutationVariables>(
+        client,
         UploadMultipleFilesDocument,
         variables,
+        headers,
       )(),
     options,
   );
@@ -3150,14 +3252,18 @@ export const useGetCustomProductByShopifyIdQuery = <
   TData = GetCustomProductByShopifyIdQuery,
   TError = unknown,
 >(
+  client: GraphQLClient,
   variables: GetCustomProductByShopifyIdQueryVariables,
   options?: UseQueryOptions<GetCustomProductByShopifyIdQuery, TError, TData>,
+  headers?: RequestInit['headers'],
 ) =>
   useQuery<GetCustomProductByShopifyIdQuery, TError, TData>(
     ['GetCustomProductByShopifyId', variables],
     fetcher<GetCustomProductByShopifyIdQuery, GetCustomProductByShopifyIdQueryVariables>(
+      client,
       GetCustomProductByShopifyIdDocument,
       variables,
+      headers,
     ),
     options,
   );
@@ -3176,12 +3282,14 @@ export const GetFlagsDocument = /*#__PURE__*/ `
     ${FlagFragmentDoc}
 ${ImageFragmentDoc}`;
 export const useGetFlagsQuery = <TData = GetFlagsQuery, TError = unknown>(
+  client: GraphQLClient,
   variables?: GetFlagsQueryVariables,
   options?: UseQueryOptions<GetFlagsQuery, TError, TData>,
+  headers?: RequestInit['headers'],
 ) =>
   useQuery<GetFlagsQuery, TError, TData>(
     variables === undefined ? ['GetFlags'] : ['GetFlags', variables],
-    fetcher<GetFlagsQuery, GetFlagsQueryVariables>(GetFlagsDocument, variables),
+    fetcher<GetFlagsQuery, GetFlagsQueryVariables>(client, GetFlagsDocument, variables, headers),
     options,
   );
 
@@ -3207,12 +3315,19 @@ export const GetGalleriesDocument = /*#__PURE__*/ `
 }
     `;
 export const useGetGalleriesQuery = <TData = GetGalleriesQuery, TError = unknown>(
+  client: GraphQLClient,
   variables?: GetGalleriesQueryVariables,
   options?: UseQueryOptions<GetGalleriesQuery, TError, TData>,
+  headers?: RequestInit['headers'],
 ) =>
   useQuery<GetGalleriesQuery, TError, TData>(
     variables === undefined ? ['GetGalleries'] : ['GetGalleries', variables],
-    fetcher<GetGalleriesQuery, GetGalleriesQueryVariables>(GetGalleriesDocument, variables),
+    fetcher<GetGalleriesQuery, GetGalleriesQueryVariables>(
+      client,
+      GetGalleriesDocument,
+      variables,
+      headers,
+    ),
     options,
   );
 
@@ -3232,12 +3347,19 @@ ${MaterialColourGroupFragmentDoc}
 ${MaterialPriceFragmentDoc}
 ${ImageFragmentDoc}`;
 export const useGetMaterialsQuery = <TData = GetMaterialsQuery, TError = unknown>(
+  client: GraphQLClient,
   variables?: GetMaterialsQueryVariables,
   options?: UseQueryOptions<GetMaterialsQuery, TError, TData>,
+  headers?: RequestInit['headers'],
 ) =>
   useQuery<GetMaterialsQuery, TError, TData>(
     variables === undefined ? ['GetMaterials'] : ['GetMaterials', variables],
-    fetcher<GetMaterialsQuery, GetMaterialsQueryVariables>(GetMaterialsDocument, variables),
+    fetcher<GetMaterialsQuery, GetMaterialsQueryVariables>(
+      client,
+      GetMaterialsDocument,
+      variables,
+      headers,
+    ),
     options,
   );
 

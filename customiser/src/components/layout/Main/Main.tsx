@@ -15,6 +15,7 @@ import Header from '../Header';
 import { useGraphics } from '@context/GraphicsContext';
 import styles from './Main.module.scss';
 import { Camera } from 'three';
+import { graphQLClient } from '@graphql/graphql-client';
 
 export interface MainProps {
   className?: string;
@@ -32,6 +33,7 @@ const Main = ({ className, product }: MainProps) => {
   const rootClassName = cn(styles.root, className);
 
   const { data: customProduct } = useGetCustomProductByShopifyIdQuery(
+    graphQLClient,
     { id: product },
     { select: (data) => data.customProductByShopifyId?.data },
   );

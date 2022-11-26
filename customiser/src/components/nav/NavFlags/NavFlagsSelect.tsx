@@ -1,6 +1,7 @@
 import Image from '@components/ui/Image';
 import { GraphicsContextGraphic, useGraphics } from '@context/GraphicsContext';
 import { FlagFragment, useGetFlagsQuery } from '@graphql/generated/graphql';
+import { graphQLClient } from '@graphql/graphql-client';
 import { EDIT_MODE } from '@store/constants';
 import { FlagCustomiser, useCustomiserStore } from '@store/customiser';
 
@@ -19,6 +20,7 @@ export const NavFlagsSelect = ({
   const { addGraphic, updateGraphic } = useGraphics();
 
   const { data: flags } = useGetFlagsQuery(
+    graphQLClient,
     {
       pagination: { limit: 500 },
     },

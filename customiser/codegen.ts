@@ -9,21 +9,9 @@ const config: CodegenConfig = {
   },
   generates: {
     './src/graphql/generated/graphql.ts': {
-      plugins: [
-        {
-          add: {
-            content: 'import { endpoint, fetchParams } from "./../graphql-client";',
-          },
-        },
-        'typescript',
-        'typescript-operations',
-        'typescript-react-query',
-      ],
+      plugins: ['typescript', 'typescript-operations', 'typescript-react-query'],
       config: {
-        fetcher: {
-          endpoint: 'endpoint',
-          fetchParams: 'fetchParams',
-        },
+        fetcher: 'graphql-request',
         pureMagicComment: true,
         exposeQueryKeys: true,
         dedupeFragments: true,

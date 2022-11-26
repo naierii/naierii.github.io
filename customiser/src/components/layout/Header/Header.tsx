@@ -8,8 +8,8 @@ import { CustomiserState, useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
 import { MutableRefObject, RefObject, useCallback, useEffect, useRef } from 'react';
 import { Camera } from 'three';
-import { Buffer } from 'buffer';
 
+import { graphQLClient } from '@graphql/graphql-client';
 import styles from './Header.module.scss';
 
 export interface HeaderProps {
@@ -18,13 +18,14 @@ export interface HeaderProps {
   canvasRef: RefObject<HTMLCanvasElement>;
 }
 
-const getCustomDesignData = (state: CustomiserState): CustomDesignInput => ({
+const getCustomDesignData = (state: CustomiserState, files: string[]): CustomDesignInput => ({
   customProduct: state.customProduct?.id,
   parts: state.savedParts.map((p) => ({
     name: p.part.name,
     areaSize: p.part.areaSize?.data?.id,
     material: p.material.id,
   })),
+  images: files,
 });
 
 const Header = ({ className, cameraRef, canvasRef }: HeaderProps) => {
@@ -37,15 +38,16 @@ const Header = ({ className, cameraRef, canvasRef }: HeaderProps) => {
   const setModelRotation = useCustomiserStore((state) => state.setModelRotation);
   const state = useCustomiserStore((state) => state);
 
-  const { mutate } = useCreateCustomDesignMutation({
+  const { mutate } = useCreateCustomDesignMutation(graphQLClient, {
     onSuccess(data) {
       console.log(data.createCustomDesign?.data?.attributes?.parts);
     },
   });
 
-  const { mutateAsync } = useUploadMultipleFilesMutation({
+  const { mutateAsync } = useUploadMultipleFilesMutation(graphQLClient, {
     onSuccess(data) {
-      console.log(data.multipleUpload);
+      const fileIDs = data.multipleUpload.map((f) => f?.data?.id) as string[];
+      mutate({ data: getCustomDesignData(state, fileIDs) });
     },
   });
 
@@ -62,10 +64,8 @@ const Header = ({ className, cameraRef, canvasRef }: HeaderProps) => {
       }, 50);
     } else if (addingToCart) {
       const upload = async () => {
-        console.log(images.current);
         await mutateAsync({ files: images.current });
       };
-
       upload();
     }
   }, [modelRotation, addingToCart, images]);

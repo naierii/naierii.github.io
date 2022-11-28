@@ -21,7 +21,6 @@ const NavEditButtons = ({
   setShowSelector: setSelectModel,
 }: NavEditButtonsProps) => {
   const rootClassName = cn(styles.root, className);
-  const deselectFlag = useCustomiserStore((state) => state.deselectFlag);
   const { updateGraphic } = useGraphics();
 
   const portalRef = usePortalRef('CustomiserNavActions');
@@ -40,7 +39,6 @@ const NavEditButtons = ({
     }
 
     setSelectModel(false);
-    deselectFlag();
   };
 
   return ReactDOM.createPortal(

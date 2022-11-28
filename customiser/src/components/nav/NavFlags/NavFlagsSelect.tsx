@@ -16,7 +16,6 @@ export const NavFlagsSelect = ({
   editFlag,
   setShowSelector: setSelectModel,
 }: NavFlagsSelectProps) => {
-  const addFlag = useCustomiserStore((state) => state.addFlag);
   const { addGraphic, updateGraphic } = useGraphics();
 
   const { data: flags } = useGetFlagsQuery(
@@ -30,7 +29,6 @@ export const NavFlagsSelect = ({
   );
 
   const flagSelected = (flag: FlagFragment) => {
-    addFlag(flag);
     if (editFlag?.key) {
       updateGraphic(editFlag.key, {
         flag: flag,

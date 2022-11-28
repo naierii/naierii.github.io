@@ -3,7 +3,7 @@ import Scene from '@components/three/Scene';
 import { OrbitControls, useContextBridge } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import cn from 'classnames';
-import { MutableRefObject, RefObject, useEffect, useRef } from 'react';
+import { MutableRefObject, RefObject } from 'react';
 
 import { GraphicsContext } from '@context/GraphicsContext';
 import { useCustomiserStore } from '@store/customiser';
@@ -25,24 +25,6 @@ const CustomiserCanvas = ({
   const rootClassName = cn(styles.root, className);
 
   const ContextBridge = useContextBridge(GraphicsContext);
-
-  // const saveImage = useCallback(() => {
-  //   const camera = cameraRef.current;
-  //   if (!camera) {
-  //     return;
-  //   }
-  //   camera.position.set(-6.37546092557343, 2.1970893240496195e-15, 35.3102451262528);
-  //   setTimeout(() => {
-  //     const downloadLink = document.createElement('a');
-  //     downloadLink.download = 'download.png';
-  //     const dataURL = canvasRef?.current?.toDataURL('image/png');
-  //     if (dataURL) {
-  //       const url = dataURL.replace(/^data:image\/png/, 'data:application/octet-stream');
-  //       downloadLink.href = url;
-  //       downloadLink.click();
-  //     }
-  //   }, 0);
-  // }, []);
 
   return (
     <div className={rootClassName}>

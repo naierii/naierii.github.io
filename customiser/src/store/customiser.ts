@@ -14,10 +14,8 @@ import {
 } from '@graphql/generated/graphql-shopify';
 import { MaterialTextureModel } from '@models';
 import produce from 'immer';
-import { IUniform } from 'three';
 import create, { StateCreator } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { v4 as uuidv4 } from 'uuid';
 
 import { UNIT } from './constants';
 interface SelectedModel {
@@ -32,16 +30,9 @@ interface Part {
 
 export interface FlagCustomiser {
   key: string;
-  editMode?: boolean;
-  canvasPosition?: {
-    x: number;
-    y: number;
-    rotation: number;
-  };
-  uniforms?: {
-    [uniform: string]: IUniform<any>;
-  };
   flag?: FlagFragment;
+  canvasJSON?: any;
+  materialJSON?: any;
 }
 export interface NavItem {
   id?: Scalars['ID'];
@@ -92,20 +83,20 @@ export interface CustomiserState {
     variation?: ShopifyProductVariantFragment,
   ) => void;
   cancelPartChange: () => void;
-  addFlag: (flag: FlagFragment) => void;
+  addFlag: (flag: FlagCustomiser) => void;
+  updateFlag: (flag: FlagCustomiser) => void;
   deleteFlag: (key: string) => void;
-  selectFlag: (key: string) => void;
-  deselectFlag: () => void;
   resetNav: () => void;
   texture: (nodeId: string) => MaterialTextureModel;
   setAddingToCart: () => void;
   setModelRotation: (rotation: number) => void;
 }
 
-const createCustomiser: StateCreator<CustomiserState, [['zustand/devtools', never]], []> = (
-  set,
-  get,
-) => ({
+const createCustomiser: StateCreator<
+  CustomiserState,
+  [['zustand/devtools', never], ['zustand/persist', unknown]],
+  []
+> = (set, get) => ({
   addingToCart: false,
   modelRotation: 0,
   selectedModels: [],
@@ -305,12 +296,25 @@ const createCustomiser: StateCreator<CustomiserState, [['zustand/devtools', neve
     return materials;
   },
   addFlag: (flag) => {
-    const newKey = uuidv4();
+    set(
+      produce((state: CustomiserState) => {
+        const hasFlag = state.flags.find((f) => f.key === flag.key);
+        if (!hasFlag) {
+          state.flags = [...state.flags, { ...flag }];
+        }
+      }),
+    );
+  },
+  updateFlag: (flag) => {
     set(
       produce((state: CustomiserState) => {
         state.flags = [
-          ...state.flags.map((f) => ({ ...f, editMode: false })),
-          { flag, editMode: true, key: newKey },
+          ...state.flags.map((f) => {
+            if (f.key === flag.key) {
+              return { ...f, ...flag };
+            }
+            return f;
+          }),
         ];
       }),
     );
@@ -319,32 +323,6 @@ const createCustomiser: StateCreator<CustomiserState, [['zustand/devtools', neve
     set(
       produce((state: CustomiserState) => {
         state.flags = [...state.flags.filter((f) => f.key !== key)];
-      }),
-    );
-  },
-  selectFlag: (key) => {
-    set(
-      produce((state: CustomiserState) => {
-        state.flags = [
-          ...state.flags.map((f) => {
-            if (f.key === key) {
-              f.editMode = true;
-              return f;
-            }
-            return { ...f, editMode: false };
-          }),
-        ];
-      }),
-    );
-  },
-  deselectFlag: () => {
-    set(
-      produce((state: CustomiserState) => {
-        state.flags = [
-          ...state.flags.map((f) => {
-            return { ...f, editMode: false };
-          }),
-        ];
       }),
     );
   },
@@ -367,9 +345,8 @@ const createCustomiser: StateCreator<CustomiserState, [['zustand/devtools', neve
 
 export const useCustomiserStore = create<CustomiserState>()(
   devtools(
-    createCustomiser,
-    // persist((...a) => ({
-    //   ...createCustomiser(...a),
-    // })),
+    persist((...a) => ({
+      ...createCustomiser(...a),
+    })),
   ),
 );

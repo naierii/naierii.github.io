@@ -8,6 +8,7 @@ import { BufferGeometry } from 'three';
 import { GLTF } from 'three-stdlib';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
 import CustomiserMesh from '../CustomiserMesh';
+import DecalGraphic from '../DecalGraphic';
 export interface CustomiserModelProps {
   model?: Maybe<ModelFragment>;
 }
@@ -28,6 +29,7 @@ const getGraphicProps = (graphic: GraphicsContextGraphic, geom: BufferGeometry) 
     geometry: geom,
     material: graphic?.material ?? undefined,
   };
+
   return graphicProps;
 };
 
@@ -49,6 +51,15 @@ const Model = ({ model }: CustomiserModelProps) => {
 
     return merged;
   }, [nodes]);
+
+  const graphicProps: ThreeElements['mesh'] = {
+    geometry: geom,
+    renderOrder: 1000,
+  };
+
+  const graphicMaterialProps: ThreeElements['meshStandardMaterial'] = {
+    transparent: true,
+  };
 
   return (
     <>
@@ -73,6 +84,12 @@ const Model = ({ model }: CustomiserModelProps) => {
           {...getGraphicProps(graphic, geom)}
         ></mesh>
       ))}
+      {/* {graphics?.map((graphic) => (
+        <mesh key={graphic.key} {...graphicProps}>
+          <meshStandardMaterial {...graphicMaterialProps} />
+          <DecalGraphic graphic={graphic} />
+        </mesh>
+      ))} */}
     </>
   );
 };

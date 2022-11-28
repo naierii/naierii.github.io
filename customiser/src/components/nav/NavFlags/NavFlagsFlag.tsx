@@ -1,5 +1,4 @@
 import Image from '@components/ui/Image';
-import { useCustomiserStore } from '@store/customiser';
 
 import { GraphicsContextGraphic, useGraphics } from '@context/GraphicsContext';
 import { Dispatch, SetStateAction } from 'react';
@@ -11,8 +10,6 @@ export interface NavFlagsFlagProps {
 }
 
 export const NavFlagsFlag = ({ flag, setShowSelector: setSelectModel }: NavFlagsFlagProps) => {
-  // const deleteFlag = useCustomiserStore((state) => state.deleteFlag);
-  // const selectFlag = useCustomiserStore((state) => state.selectFlag);
   const { updateGraphic, deleteGraphic } = useGraphics();
 
   const editFlag = () => {

@@ -3,7 +3,7 @@ import { useFabricCanvas } from '@hooks';
 import { EDIT_MODE } from '@store/constants';
 import { useCustomiserStore } from '@store/customiser';
 import { fabric } from 'fabric';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 export interface GraphicsCanvasProps {
   className?: string;
@@ -11,10 +11,9 @@ export interface GraphicsCanvasProps {
 }
 
 const GraphicsCanvas = ({ className, graphic }: GraphicsCanvasProps) => {
-  const fImageRef = useRef<fabric.Image>();
   const dimension = useCustomiserStore((state) => state.canvas);
 
-  const { FabricCanvas, fabricRef, renderFabric } = useFabricCanvas({
+  const { FabricCanvas, fabricRef, fImageRef } = useFabricCanvas({
     fabricObject: graphic,
     contextObject: graphic,
   });

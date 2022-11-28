@@ -1,6 +1,5 @@
 import { useGraphics } from '@context/GraphicsContext';
 import { Center } from '@react-three/drei';
-import { useThree } from '@react-three/fiber';
 import { CustomiserState, useCustomiserStore } from '@store/customiser';
 import { useEffect, useRef } from 'react';
 import { Group, MathUtils } from 'three';
@@ -15,16 +14,8 @@ const Scene = () => {
   const groupRef = useRef<Group>(null);
   const selectedModels = useCustomiserStore(models);
   const { graphics } = useGraphics();
-  const { camera, scene } = useThree();
   const modelRotation = useCustomiserStore((state) => state.modelRotation);
   const addingToCart = useCustomiserStore((state) => state.addingToCart);
-
-  // const cameraRef = useRef(camera);
-  // useHelper(cameraRef, CameraHelper);
-
-  // const groupProps: ThreeElements['group'] = {
-  //   rotation:
-  // };
 
   useEffect(() => {
     if (addingToCart && groupRef.current) {

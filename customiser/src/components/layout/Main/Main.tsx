@@ -3,19 +3,17 @@ import CustomiserCanvas from '@components/three/CustomiserCanvas';
 import GraphicsCanvas from '@components/three/GraphicsCanvas';
 import Button from '@components/ui/Button';
 import { useGetCustomProductByShopifyIdQuery } from '@graphql/generated/graphql';
-import {
-  useShopifyGetCartByIdQuery,
-  useShopifyGetProductByIdQuery,
-} from '@graphql/generated/graphql-shopify';
+import { useShopifyGetProductByIdQuery } from '@graphql/generated/graphql-shopify';
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import Header from '../Header';
 
 import { useGraphics } from '@context/GraphicsContext';
-import styles from './Main.module.scss';
-import { Camera } from 'three';
 import { graphQLClient } from '@graphql/graphql-client';
+import { useHydration } from '@hooks';
+import { Camera } from 'three';
+import styles from './Main.module.scss';
 
 export interface MainProps {
   className?: string;
@@ -25,11 +23,12 @@ export interface MainProps {
 const Main = ({ className, product }: MainProps) => {
   const cameraRef = useRef<Camera | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [show, setShow] = useState(false);
-  const { graphics } = useGraphics();
-  const flags = useCustomiserStore((state) => state.flags);
-  const editFlag = flags.find((f) => f.editMode);
+  const { graphics, loadGraphic } = useGraphics();
   const setCustomProduct = useCustomiserStore((state) => state.setCustomProduct);
+  const flags = useCustomiserStore((state) => state.flags);
+  const isHydrated = useHydration();
   const rootClassName = cn(styles.root, className);
 
   const { data: customProduct } = useGetCustomProductByShopifyIdQuery(
@@ -43,10 +42,21 @@ const Main = ({ className, product }: MainProps) => {
   });
 
   useEffect(() => {
-    // async function rehydrate() {
-    //   await useCustomiserStore.persist.rehydrate();
-    // }
-    // rehydrate();
+    if (isHydrated && flags.length !== graphics?.length && !dataLoaded) {
+      for (const flag of flags) {
+        if (flag.materialJSON) {
+          loadGraphic(flag);
+        }
+      }
+      setDataLoaded(true);
+    }
+  }, [isHydrated, flags, graphics]);
+
+  useEffect(() => {
+    async function rehydrate() {
+      await useCustomiserStore.persist.rehydrate();
+    }
+    rehydrate();
     if (customProduct && shopifyProduct) {
       setCustomProduct(customProduct, shopifyProduct);
     }

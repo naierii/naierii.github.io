@@ -4,7 +4,7 @@ import { ThreeElements } from '@react-three/fiber';
 import { DoubleSide } from 'three';
 
 export interface DecalGraphicProps {
-  graphic: GraphicsContextGraphic;
+  graphic?: GraphicsContextGraphic;
 }
 
 const DecalGraphic = ({ graphic }: DecalGraphicProps) => {
@@ -14,35 +14,36 @@ const DecalGraphic = ({ graphic }: DecalGraphicProps) => {
 
   console.log({ image });
 
-  const textureProps: ThreeElements['canvasTexture'] = {
-    image: graphic.canvas,
-    needsUpdate: true,
-    attach: 'map',
-  };
+  // const textureProps: ThreeElements['canvasTexture'] = {
+  //   image: graphic.canvas,
+  //   needsUpdate: true,
+  //   attach: 'map',
+  // };
 
-  const materialProps: ThreeElements['meshPhongMaterial'] = {
-    transparent: true,
-    side: DoubleSide,
-  };
+  // const materialProps: ThreeElements['meshPhongMaterial'] = {
+  //   transparent: true,
+  //   side: DoubleSide,
+  // };
 
-  console.log(graphic);
+  // console.log(graphic);
 
   return (
-    <Decal
-      position={[0, 0, 0]}
-      rotation={0}
-      scale={1}
-      map={image}
-      // map-anisotropy={16}
-      // wireframe={true}
-      // depthTest={true}
-      // depthWrite={false}
-      // side={DoubleSide}
-    >
-      <meshPhongMaterial {...materialProps}>
-        <canvasTexture {...textureProps} />
-      </meshPhongMaterial>
-    </Decal>
+    <Decal position={[-1.1071517066036387, -5.8812294024124867, -1.250402941840271]} map={image} />
+    // <Decal
+    //   position={[0, 0, 0]}
+    //   rotation={0}
+    //   scale={1}
+    //   map={image}
+    //   // map-anisotropy={16}
+    //   // wireframe={true}
+    //   // depthTest={true}
+    //   // depthWrite={false}
+    //   // side={DoubleSide}
+    // >
+    //   <meshPhongMaterial {...materialProps}>
+    //     <canvasTexture {...textureProps} />
+    //   </meshPhongMaterial>
+    // </Decal>
   );
 };
 

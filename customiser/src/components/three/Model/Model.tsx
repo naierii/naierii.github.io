@@ -84,6 +84,10 @@ const Model = ({ model }: CustomiserModelProps) => {
           {...getGraphicProps(graphic, geom)}
         ></mesh>
       ))}
+      {/* <mesh {...graphicProps}>
+        <meshStandardMaterial {...graphicMaterialProps} />
+        <DecalGraphic />
+      </mesh> */}
       {/* {graphics?.map((graphic) => (
         <mesh key={graphic.key} {...graphicProps}>
           <meshStandardMaterial {...graphicMaterialProps} />

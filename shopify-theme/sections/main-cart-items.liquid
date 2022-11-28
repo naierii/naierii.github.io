@@ -77,6 +77,13 @@
                   {% if item.properties._parent %}
                     data-custom-id="{{ item.properties._parent }}"
                   {% endif %}
+                  {% if item.properties._customDesign %}
+                    data-custom-id="{{ item.properties._customDesign }}"
+                    isparent
+                  {% endif %}
+                  {% if item.properties._customDesignAddon %}
+                    data-custom-id="{{ item.properties._customDesignAddon }}"
+                  {% endif %}
                   {% if item.properties._is_parent %}
                     isparent
                   {% endif %}
@@ -250,8 +257,17 @@
                           id="Quantity-{{ item.index | plus: 1 }}"
                           data-index="{{ item.index | plus: 1 }}"
                           data-key="{{ item.key }}"
+                          {% if item.properties._customDesignQuantity %}
+                            data-quantity="{{ item.properties._customDesignQuantity }}"
+                          {% endif %}
                           {% if item.properties._parent %}
                             data-custom-id="{{ item.properties._parent }}"
+                          {% endif %}
+                          {% if item.properties._customDesign %}
+                            data-custom-id="{{ item.properties._customDesign }}"
+                          {% endif %}
+                          {% if item.properties._customDesignAddon %}
+                            data-custom-id="{{ item.properties._customDesignAddon }}"
                           {% endif %}
                         >
                         <button class="quantity__button no-js-hidden" name="plus" type="button">
@@ -267,6 +283,12 @@
                         data-index="{{ item.index | plus: 1 }}"
                         {% if item.properties._parent %}
                           data-custom-id="{{ item.properties._parent }}"
+                        {% endif %}
+                        {% if item.properties._customDesign %}
+                          data-custom-id="{{ item.properties._customDesign }}"
+                        {% endif %}
+                        {% if item.properties._customDesignAddon %}
+                          data-custom-id="{{ item.properties._customDesignAddon }}"
                         {% endif %}
                       >
                         <a

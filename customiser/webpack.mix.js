@@ -20,6 +20,7 @@ mix.webpackConfig({
       '@styles': path.resolve(__dirname, 'src/styles/'),
       '@context': path.resolve(__dirname, 'src/context/'),
       '@services': path.resolve(__dirname, 'src/services/'),
+      '@lib': path.resolve(__dirname, 'src/lib/'),
     },
   },
 });

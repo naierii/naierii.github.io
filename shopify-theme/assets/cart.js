@@ -354,12 +354,21 @@ var CartItems = /*#__PURE__*/function (_HTMLElement2) {
     key: "onChange",
     value: function onChange(event) {
       if (event.target.dataset.customId) {
+        console.log(event.target);
         var productAddons = this.querySelectorAll("input[data-custom-id='".concat(event.target.dataset.customId, "']"));
         var updates = {};
         productAddons.forEach(function (addon) {
           var key = addon.dataset.key;
-          updates = _objectSpread(_objectSpread({}, updates), {}, _defineProperty({}, key, event.target.value));
+
+          if (key === event.target.dataset.key) {
+            updates = _objectSpread(_objectSpread({}, updates), {}, _defineProperty({}, key, event.target.value));
+          } else {
+            var originalQty = addon.dataset.quantity;
+            var newQty = originalQty / (1 / event.target.value);
+            updates = _objectSpread(_objectSpread({}, updates), {}, _defineProperty({}, key, newQty));
+          }
         });
+        console.log(updates);
         this.updateQuantity(null, event.target.value, document.activeElement.getAttribute('name'), updates);
       } else {
         this.updateQuantity(event.target.dataset.index, event.target.value, document.activeElement.getAttribute('name'));

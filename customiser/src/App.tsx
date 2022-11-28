@@ -4,12 +4,6 @@ import { queryClient } from '@graphql/graphql-client';
 import { useCustomiserStore } from '@store/customiser';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-// import { LazyMotion } from 'framer-motion';
-// import { lazy } from 'react';
-
-// const Main = lazy(() => import('@components/layout/Main'));
-
-// const loadFeatures = () => import('./lib/framerFeatures').then((res) => res.default);
 
 export interface AppProps {
   product?: string;

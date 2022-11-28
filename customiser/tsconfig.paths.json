@@ -17,6 +17,9 @@
             "@models/*": [
                 "./src/models/*"
             ],
+            "@lib/*": [
+                "./src/lib/*"
+            ],
             "@graphql/*": [
                 "./src/graphql/*"
             ],

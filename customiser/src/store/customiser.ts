@@ -46,8 +46,6 @@ interface SizingMeasurement {
   unit?: string;
 }
 export interface CustomiserState {
-  addingToCart: boolean;
-  modelRotation: number;
   canvas?: {
     width: number;
     height: number;
@@ -67,6 +65,9 @@ export interface CustomiserState {
     weight?: SizingMeasurement;
     variation?: ShopifyProductVariantFragment;
   };
+}
+
+export interface CustomiserActions {
   total: () => string;
   setSelectedModel: (optionId: Scalars['ID'], model?: Maybe<ModelFragment>) => void;
   setCustomProduct: (
@@ -88,17 +89,10 @@ export interface CustomiserState {
   deleteFlag: (key: string) => void;
   resetNav: () => void;
   texture: (nodeId: string) => MaterialTextureModel;
-  setAddingToCart: () => void;
-  setModelRotation: (rotation: number) => void;
+  reset: () => void;
 }
 
-const createCustomiser: StateCreator<
-  CustomiserState,
-  [['zustand/devtools', never], ['zustand/persist', unknown]],
-  []
-> = (set, get) => ({
-  addingToCart: false,
-  modelRotation: 0,
+const initialState: CustomiserState = {
   selectedModels: [],
   savedModels: [],
   selectedPart: null,
@@ -116,6 +110,14 @@ const createCustomiser: StateCreator<
       unit: UNIT.WEIGHT.KG,
     },
   },
+};
+
+const createCustomiser: StateCreator<
+  CustomiserState & CustomiserActions,
+  [['zustand/devtools', never], ['zustand/persist', unknown]],
+  []
+> = (set, get) => ({
+  ...initialState,
   total: () => {
     let total = 0;
     const variation = get().sizing?.variation;
@@ -326,24 +328,17 @@ const createCustomiser: StateCreator<
       }),
     );
   },
-  setAddingToCart: () => {
-    set(
-      produce((state: CustomiserState) => {
-        state.addingToCart = true;
-        state.modelRotation = 0;
-      }),
-    );
-  },
-  setModelRotation: (rotation) => {
-    set(
-      produce((state: CustomiserState) => {
-        state.modelRotation = rotation;
-      }),
-    );
+  reset: () => {
+    set((state) => {
+      useCustomiserStore.persist.clearStorage();
+      return {
+        ...initialState,
+      };
+    });
   },
 });
 
-export const useCustomiserStore = create<CustomiserState>()(
+export const useCustomiserStore = create<CustomiserState & CustomiserActions>()(
   devtools(
     persist((...a) => ({
       ...createCustomiser(...a),

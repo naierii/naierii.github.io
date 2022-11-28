@@ -79,14 +79,24 @@ class CartItems extends HTMLElement {
 
     onChange(event) {
         if (event.target.dataset.customId) {
+            console.log(event.target);
+
             const productAddons = this.querySelectorAll(
                 `input[data-custom-id='${event.target.dataset.customId}']`
             );
+
             let updates = {};
             productAddons.forEach((addon) => {
                 const key = addon.dataset.key;
-                updates = { ...updates, [key]: event.target.value };
+                if (key === event.target.dataset.key) {
+                    updates = { ...updates, [key]: event.target.value };
+                } else {
+                    const originalQty = addon.dataset.quantity;
+                    const newQty = originalQty / (1 / event.target.value);
+                    updates = { ...updates, [key]: newQty };
+                }
             });
+            console.log(updates);
             this.updateQuantity(
                 null,
                 event.target.value,

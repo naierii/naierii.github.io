@@ -1,7 +1,11 @@
 mutation CreateCustomDesign($data: CustomDesignInput!) {
   createCustomDesign(data: $data) {
     data {
+      id
       attributes {
+        sizing {
+          shopifyVariantId
+        }
         parts {
           shopifyVariantId
         }

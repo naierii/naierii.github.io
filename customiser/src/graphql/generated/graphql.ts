@@ -82,6 +82,36 @@ export type ComponentCustomiserCustomDesignPartInput = {
   shopifyVariantId?: InputMaybe<Scalars['String']>;
 };
 
+export type ComponentCustomiserCustomDesignSizing = {
+  __typename?: 'ComponentCustomiserCustomDesignSizing';
+  height?: Maybe<Scalars['String']>;
+  heightUnit?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  shopifyVariantId?: Maybe<Scalars['String']>;
+  weight?: Maybe<Scalars['Float']>;
+  weightUnit?: Maybe<Scalars['String']>;
+};
+
+export type ComponentCustomiserCustomDesignSizingFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignSizingFiltersInput>>>;
+  height?: InputMaybe<StringFilterInput>;
+  heightUnit?: InputMaybe<StringFilterInput>;
+  not?: InputMaybe<ComponentCustomiserCustomDesignSizingFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignSizingFiltersInput>>>;
+  shopifyVariantId?: InputMaybe<StringFilterInput>;
+  weight?: InputMaybe<FloatFilterInput>;
+  weightUnit?: InputMaybe<StringFilterInput>;
+};
+
+export type ComponentCustomiserCustomDesignSizingInput = {
+  height?: InputMaybe<Scalars['String']>;
+  heightUnit?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  shopifyVariantId?: InputMaybe<Scalars['String']>;
+  weight?: InputMaybe<Scalars['Float']>;
+  weightUnit?: InputMaybe<Scalars['String']>;
+};
+
 export type ComponentCustomiserCustomOption = {
   __typename?: 'ComponentCustomiserCustomOption';
   id: Scalars['ID'];
@@ -189,6 +219,7 @@ export type CustomDesign = {
   customProduct?: Maybe<CustomProductEntityResponse>;
   images?: Maybe<UploadFileRelationResponseCollection>;
   parts?: Maybe<Array<Maybe<ComponentCustomiserCustomDesignPart>>>;
+  sizing?: Maybe<ComponentCustomiserCustomDesignSizing>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
@@ -229,6 +260,7 @@ export type CustomDesignFiltersInput = {
   not?: InputMaybe<CustomDesignFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<CustomDesignFiltersInput>>>;
   parts?: InputMaybe<ComponentCustomiserCustomDesignPartFiltersInput>;
+  sizing?: InputMaybe<ComponentCustomiserCustomDesignSizingFiltersInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
 
@@ -236,6 +268,7 @@ export type CustomDesignInput = {
   customProduct?: InputMaybe<Scalars['ID']>;
   images?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   parts?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignPartInput>>>;
+  sizing?: InputMaybe<ComponentCustomiserCustomDesignSizingInput>;
 };
 
 export type CustomProduct = {
@@ -601,6 +634,7 @@ export type GalleryRelationResponseCollection = {
 
 export type GenericMorph =
   | ComponentCustomiserCustomDesignPart
+  | ComponentCustomiserCustomDesignSizing
   | ComponentCustomiserCustomOption
   | ComponentCustomiserCustomOptionModel
   | ComponentCustomiserCustomParts
@@ -1029,6 +1063,7 @@ export type MaterialProduct = {
   materialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   materialPrice?: Maybe<MaterialPriceEntityResponse>;
   shopifyProductId?: Maybe<Scalars['String']>;
+  shopifyVariantId?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
@@ -1058,6 +1093,7 @@ export type MaterialProductFiltersInput = {
   not?: InputMaybe<MaterialProductFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<MaterialProductFiltersInput>>>;
   shopifyProductId?: InputMaybe<StringFilterInput>;
+  shopifyVariantId?: InputMaybe<StringFilterInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
 
@@ -1065,6 +1101,7 @@ export type MaterialProductInput = {
   materialAreaSize?: InputMaybe<Scalars['ID']>;
   materialPrice?: InputMaybe<Scalars['ID']>;
   shopifyProductId?: InputMaybe<Scalars['String']>;
+  shopifyVariantId?: InputMaybe<Scalars['String']>;
 };
 
 export type MaterialProductRelationResponseCollection = {
@@ -2691,8 +2728,13 @@ export type CreateCustomDesignMutation = {
     __typename?: 'CustomDesignEntityResponse';
     data?: {
       __typename?: 'CustomDesignEntity';
+      id?: string | null;
       attributes?: {
         __typename?: 'CustomDesign';
+        sizing?: {
+          __typename?: 'ComponentCustomiserCustomDesignSizing';
+          shopifyVariantId?: string | null;
+        } | null;
         parts?: Array<{
           __typename?: 'ComponentCustomiserCustomDesignPart';
           shopifyVariantId?: string | null;
@@ -3171,7 +3213,11 @@ export const CreateCustomDesignDocument = /*#__PURE__*/ `
     mutation CreateCustomDesign($data: CustomDesignInput!) {
   createCustomDesign(data: $data) {
     data {
+      id
       attributes {
+        sizing {
+          shopifyVariantId
+        }
         parts {
           shopifyVariantId
         }

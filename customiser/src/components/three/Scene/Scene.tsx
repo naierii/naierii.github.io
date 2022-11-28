@@ -1,6 +1,7 @@
 import { useGraphics } from '@context/GraphicsContext';
 import { Center } from '@react-three/drei';
 import { CustomiserState, useCustomiserStore } from '@store/customiser';
+import { useDesignStore } from '@store/design';
 import { useEffect, useRef } from 'react';
 import { Group, MathUtils } from 'three';
 import GraphicMaterial from '../GraphicMaterial';
@@ -14,8 +15,8 @@ const Scene = () => {
   const groupRef = useRef<Group>(null);
   const selectedModels = useCustomiserStore(models);
   const { graphics } = useGraphics();
-  const modelRotation = useCustomiserStore((state) => state.modelRotation);
-  const addingToCart = useCustomiserStore((state) => state.addingToCart);
+  const modelRotation = useDesignStore((state) => state.modelRotation);
+  const addingToCart = useDesignStore((state) => state.addingToCart);
 
   useEffect(() => {
     if (addingToCart && groupRef.current) {

@@ -1,16 +1,18 @@
 import { GraphicsContextGraphic, useGraphics } from '@context/GraphicsContext';
 import { Maybe, ModelFragment } from '@graphql/generated/graphql';
 import { useGLTF } from '@react-three/drei';
-import { ThreeElements } from '@react-three/fiber';
+import { ThreeElements, ThreeEvent } from '@react-three/fiber';
 import { EDIT_MODE } from '@store/constants';
-import { Fragment, useMemo } from 'react';
-import { BufferGeometry } from 'three';
+import { useCustomiserStore } from '@store/customiser';
+import { Dispatch, Fragment, SetStateAction, useEffect, useMemo, useRef } from 'react';
+import { BufferGeometry, DoubleSide, Mesh } from 'three';
 import { GLTF } from 'three-stdlib';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
 import CustomiserMesh from '../CustomiserMesh';
 import DecalGraphic from '../DecalGraphic';
 export interface CustomiserModelProps {
   model?: Maybe<ModelFragment>;
+  setMerged: Dispatch<SetStateAction<BufferGeometry[]>>;
 }
 
 type GLTFResult = GLTF & {
@@ -33,8 +35,12 @@ const getGraphicProps = (graphic: GraphicsContextGraphic, geom: BufferGeometry) 
   return graphicProps;
 };
 
-const Model = ({ model }: CustomiserModelProps) => {
+const Model = ({ model, setMerged }: CustomiserModelProps) => {
+  const meshRef = useRef<Mesh>(null);
   const { graphics } = useGraphics();
+  const decalPosition = useCustomiserStore((state) => state.decalPosition);
+  const decalRotation = useCustomiserStore((state) => state.decalRotation);
+  const decalFreeze = useCustomiserStore((state) => state.decalFreeze);
   const { nodes } = useGLTF(
     model?.attributes?.model?.data?.attributes?.url as string,
   ) as unknown as GLTFResult;
@@ -52,13 +58,24 @@ const Model = ({ model }: CustomiserModelProps) => {
     return merged;
   }, [nodes]);
 
+  useEffect(() => {
+    const geometries: BufferGeometry[] = [];
+    for (const [, node] of Object.entries(nodes)) {
+      if (node.isMesh) {
+        geometries.push(node.geometry);
+      }
+    }
+    setMerged((merged) => [...merged, ...geometries]);
+    // const mergedNodes = BufferGeometryUtils.mergeBufferGeometries(geometries);
+  }, [nodes]);
+
   const graphicProps: ThreeElements['mesh'] = {
     geometry: geom,
-    renderOrder: 1000,
   };
 
   const graphicMaterialProps: ThreeElements['meshStandardMaterial'] = {
     transparent: true,
+    colorWrite: false,
   };
 
   return (
@@ -84,16 +101,16 @@ const Model = ({ model }: CustomiserModelProps) => {
           {...getGraphicProps(graphic, geom)}
         ></mesh>
       ))}
-      {/* <mesh {...graphicProps}>
+      <mesh
+        {...graphicProps}
+        ref={meshRef}
+        onPointerMove={(event: ThreeEvent<globalThis.PointerEvent>) => console.log(event.object)}
+      >
         <meshStandardMaterial {...graphicMaterialProps} />
-        <DecalGraphic />
-      </mesh> */}
-      {/* {graphics?.map((graphic) => (
-        <mesh key={graphic.key} {...graphicProps}>
-          <meshStandardMaterial {...graphicMaterialProps} />
-          <DecalGraphic graphic={graphic} />
-        </mesh>
-      ))} */}
+        {decalPosition && decalRotation && decalFreeze && (
+          <DecalGraphic position={decalPosition} rotation={decalRotation} />
+        )}
+      </mesh>
     </>
   );
 };

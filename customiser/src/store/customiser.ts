@@ -14,6 +14,7 @@ import {
 } from '@graphql/generated/graphql-shopify';
 import { MaterialTextureModel } from '@models';
 import produce from 'immer';
+import { Euler, Vector3 } from 'three';
 import create, { StateCreator } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
@@ -65,6 +66,9 @@ export interface CustomiserState {
     weight?: SizingMeasurement;
     variation?: ShopifyProductVariantFragment;
   };
+  decalPosition?: Vector3;
+  decalRotation?: Euler;
+  decalFreeze: boolean;
 }
 
 export interface CustomiserActions {
@@ -90,6 +94,9 @@ export interface CustomiserActions {
   resetNav: () => void;
   texture: (nodeId: string) => MaterialTextureModel;
   reset: () => void;
+  setDecalPosition: (position: Vector3) => void;
+  setDecalRotation: (rotation: Euler) => void;
+  setDecalFreeze: (freeze: boolean) => void;
 }
 
 const initialState: CustomiserState = {
@@ -110,6 +117,7 @@ const initialState: CustomiserState = {
       unit: UNIT.WEIGHT.KG,
     },
   },
+  decalFreeze: false,
 };
 
 const createCustomiser: StateCreator<
@@ -336,6 +344,9 @@ const createCustomiser: StateCreator<
       };
     });
   },
+  setDecalPosition: (data) => set({ decalPosition: data }),
+  setDecalRotation: (data) => set({ decalRotation: data }),
+  setDecalFreeze: (data) => set({ decalFreeze: data }),
 });
 
 export const useCustomiserStore = create<CustomiserState & CustomiserActions>()(

@@ -30,8 +30,8 @@ const config = {
 };
 
 const Lights = () => {
-  const light = useRef();
-  useHelper(light, SpotLightHelper, 'cyan');
+  // const light = useRef();
+  // useHelper(light, SpotLightHelper, 'cyan');
   return (
     <group>
       <hemisphereLight {...config.ambientLight}></hemisphereLight>

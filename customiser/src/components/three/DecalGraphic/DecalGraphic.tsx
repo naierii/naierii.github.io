@@ -1,24 +1,46 @@
-import { GraphicsContextGraphic } from '@context/GraphicsContext';
 import { Decal, useTexture } from '@react-three/drei';
 import { ThreeElements } from '@react-three/fiber';
-import { DoubleSide, Euler, Mesh, Vector2, Vector3 } from 'three';
-
+import { FlagCustomiser } from '@store/customiser';
+import { useMemo } from 'react';
+import { Euler, Vector3, MathUtils } from 'three';
 export interface DecalGraphicProps {
-  graphic?: GraphicsContextGraphic;
+  flag?: FlagCustomiser;
   position: Vector3;
-  rotation: Euler;
+  orientation: Euler;
+  scale?: number;
 }
 
-const size = new Vector3(1, 1, 1);
+const DecalGraphic = ({ flag, position, orientation, scale = 1 }: DecalGraphicProps) => {
+  const texture = flag?.flag?.attributes?.image.data?.attributes?.url
+    ? [flag.flag.attributes.image.data.attributes.url]
+    : [];
 
-const DecalGraphic = ({ graphic, position, rotation }: DecalGraphicProps) => {
-  const [image] = useTexture([
-    'https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/medium_flag_1537280997640_union_jack_26119_960_720_clipped_rev_1_075bac69c6.png',
-  ]);
+  const [image] = useTexture(texture);
+
+  const ratio = useMemo(() => {
+    const width = image.source.data.width ?? 1;
+    const height = image.source.data.height ?? 1;
+    return width / height;
+  }, [image]);
+
+  const rotationModifier = useMemo(() => {
+    const orientationCopy = orientation.clone();
+    const currentAngle = MathUtils.radToDeg(orientationCopy.z);
+    const newAngle = currentAngle + (flag?.decalRotation ?? 0);
+    orientationCopy.z = MathUtils.degToRad(newAngle);
+    return orientationCopy;
+  }, [flag?.decalRotation, orientation]);
+
+  const scaleModifier = useMemo(() => {
+    return new Vector3(1 * ratio * scale, 1 * scale, 1 * scale);
+  }, [scale]);
+
+  if (!position || !rotationModifier || !image) {
+    return null;
+  }
 
   const materialProps: ThreeElements['meshPhongMaterial'] = {
     map: image,
-    shininess: 30,
     transparent: true,
     depthTest: true,
     depthWrite: false,
@@ -28,7 +50,7 @@ const DecalGraphic = ({ graphic, position, rotation }: DecalGraphicProps) => {
   };
 
   return (
-    <Decal position={position} rotation={rotation} scale={size}>
+    <Decal position={position} rotation={rotationModifier} scale={scaleModifier}>
       <meshPhongMaterial {...materialProps} />
     </Decal>
   );

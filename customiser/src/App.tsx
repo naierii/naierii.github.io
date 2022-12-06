@@ -1,5 +1,4 @@
 import Main from '@components/layout/Main';
-import GraphicsContextProvider from '@context/GraphicsContext';
 import { queryClient } from '@graphql/graphql-client';
 import { useCustomiserStore } from '@store/customiser';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -17,7 +16,7 @@ function App({ product }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <GraphicsContextProvider>{product && <Main product={product} />}</GraphicsContextProvider>
+      {product && <Main product={product} />}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

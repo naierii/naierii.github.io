@@ -1,11 +1,10 @@
 import Lights from '@components/three/Lights';
 import Scene from '@components/three/Scene';
-import { OrbitControls, useContextBridge } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import { Canvas, ThreeEvent } from '@react-three/fiber';
 import cn from 'classnames';
 import { MutableRefObject, RefObject, useCallback, useRef } from 'react';
 
-import { GraphicsContext } from '@context/GraphicsContext';
 import { useCustomiserStore } from '@store/customiser';
 import { Camera, Euler, Group, Mesh, Vector3 } from 'three';
 import MouseHelper from '../MouseHelper';
@@ -17,30 +16,24 @@ export interface CustomiserCanvasProps {
   canvasRef: RefObject<HTMLCanvasElement>;
 }
 
-const position = new Vector3();
-const orientation = new Euler();
-
 const CustomiserCanvas = ({
   className,
   cameraRef,
   canvasRef,
 }: CustomiserCanvasProps): JSX.Element => {
+  const positionRef = useRef<Vector3>(new Vector3());
+  const orientationRef = useRef<Euler>(new Euler());
   const groupRef = useRef<Group>(null);
+  const editFlag = useCustomiserStore((state) => state.flags.find((f) => f.edit));
+  const updateFlag = useCustomiserStore((state) => state.updateFlag);
   const setCanvasSize = useCustomiserStore((state) => state.setCanvasSize);
-  const setDecalPosition = useCustomiserStore((state) => state.setDecalPosition);
-  const setDecalRotation = useCustomiserStore((state) => state.setDecalRotation);
-  const setDecalFreeze = useCustomiserStore((state) => state.setDecalFreeze);
   const rootClassName = cn(styles.root, className);
   const mouseHelperRef = useRef<Mesh>(null);
-  const ContextBridge = useContextBridge(GraphicsContext);
 
   const setPosition = useCallback(
     (event: ThreeEvent<globalThis.PointerEvent>) => {
       const p = event.point;
       const n = event?.face?.normal.clone();
-
-      // console.log(event?.face?.normal);
-
       if (mouseHelperRef.current && n && groupRef.current) {
         n.transformDirection(groupRef.current.matrixWorld);
         n.multiplyScalar(10);
@@ -53,24 +46,31 @@ const CustomiserCanvas = ({
   );
 
   const onPointerDown = (event: ThreeEvent<globalThis.PointerEvent>) => {
-    setDecalFreeze(false);
-    setPosition(event);
-    if (mouseHelperRef.current) {
-      position.copy(event.point);
-      position.setY(event.point.x + 8.8);
-      orientation.copy(mouseHelperRef.current.rotation);
-      setDecalPosition(position);
-      setDecalRotation(orientation);
+    if (editFlag?.key) {
+      updateFlag(editFlag.key, { decalFreeze: false });
+      setPosition(event);
+      if (mouseHelperRef.current && positionRef.current && orientationRef.current) {
+        positionRef.current.copy(event.point);
+        orientationRef.current.copy(mouseHelperRef.current.rotation);
+        updateFlag(editFlag.key, {
+          decalPosition: positionRef.current.clone(),
+          decalOrientation: orientationRef.current.clone(),
+        });
+      }
     }
   };
 
   const onPointerup = () => {
-    setDecalFreeze(true);
+    if (editFlag?.key) {
+      updateFlag(editFlag.key, { decalFreeze: true });
+    }
   };
 
-  const onPointerMove = (event: ThreeEvent<globalThis.PointerEvent>) => {
-    setPosition(event);
-  };
+  // const onPointerMove = (event: ThreeEvent<globalThis.PointerEvent>) => {
+  //   if (editFlag?.key) {
+  //     setPosition(event);
+  //   }
+  // };
 
   return (
     <div className={rootClassName}>
@@ -79,7 +79,7 @@ const CustomiserCanvas = ({
         flat
         camera={{
           position: [0, 2.1970893240496195e-15, 25.31024512625285],
-          fov: 20,
+          fov: 45,
         }}
         gl={{ preserveDrawingBuffer: true }}
         ref={canvasRef}
@@ -89,16 +89,18 @@ const CustomiserCanvas = ({
         }}
       >
         <Lights />
-        <ContextBridge>
-          <Scene
-            onPointerMove={onPointerMove}
-            onPointerDown={onPointerDown}
-            onPointerup={onPointerup}
-            ref={groupRef}
-          />
-        </ContextBridge>
+        <Scene
+          // onPointerMove={onPointerMove}
+          onPointerDown={onPointerDown}
+          onPointerup={onPointerup}
+          ref={groupRef}
+        />
         <MouseHelper ref={mouseHelperRef} />
-        <OrbitControls enableZoom={false} />
+        <OrbitControls
+          enableZoom={true}
+          minPolarAngle={Math.PI / 3}
+          maxPolarAngle={Math.PI / 1.9}
+        />
       </Canvas>
     </div>
   );

@@ -97,8 +97,6 @@ const Header = ({ className, cameraRef, canvasRef }: HeaderProps) => {
         });
       }
 
-      console.log(items);
-
       shopifyAddToCart.mutate({ items: items });
     },
   });
@@ -122,7 +120,6 @@ const Header = ({ className, cameraRef, canvasRef }: HeaderProps) => {
         }, 'image/png');
       }, 50);
     } else if (addingToCart) {
-      console.log('saveDesign');
       const upload = async () => {
         await mutateAsync({ files: images.current });
       };

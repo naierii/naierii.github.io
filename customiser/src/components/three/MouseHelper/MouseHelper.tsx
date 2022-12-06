@@ -8,11 +8,12 @@ export interface MouseHelperProps {
 
 const MouseHelper = forwardRef<Mesh, MouseHelperProps>((props, ref) => {
   const MeshProps: ThreeElements['mesh'] = {
-    visible: true,
+    visible: false,
+    scale: 0.1,
   };
 
   const BoxProps: ThreeElements['boxGeometry'] = {
-    args: [1, 1, 5],
+    args: [1, 1, 10],
   };
 
   return (

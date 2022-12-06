@@ -2,20 +2,22 @@ import { useState } from 'react';
 import { NavFlagsSelect } from './NavFlagsSelect';
 
 import Button from '@components/ui/Button';
-import { useGraphics } from '@context/GraphicsContext';
+import { useCustomiserStore } from '@store/customiser';
 import NavButtons from '../NavButtons';
 import NavEditButtons from '../NavEditButtons';
 import styles from './NavFlags.module.scss';
 import { NavFlagsFlag } from './NavFlagsFlag';
+import { NavFlagsMove } from './NavFlagsMove';
 
 // export interface NavFlagsProps {
 
 // }
 
 const NavFlags = () => {
-  const { graphics } = useGraphics();
-  const editGraphic = graphics?.find((g) => g.edit);
+  const flags = useCustomiserStore((state) => state.flags);
+  const editGraphic = flags?.find((g) => g.edit);
   const [showSelector, setShowSelector] = useState(false);
+  const [showMover, setShowMover] = useState(false);
 
   const addFlag = () => {
     setShowSelector(true);
@@ -23,16 +25,24 @@ const NavFlags = () => {
 
   return (
     <>
-      {showSelector ? (
+      {showSelector && !showMover ? (
         <>
-          <NavFlagsSelect editFlag={editGraphic} setShowSelector={setShowSelector} />
-          <NavEditButtons editFlag={editGraphic} setShowSelector={setShowSelector} />
+          <NavFlagsSelect editFlag={editGraphic} setShowMover={setShowMover} />
+        </>
+      ) : showMover ? (
+        <>
+          <NavFlagsMove />
+          <NavEditButtons
+            editFlag={editGraphic}
+            setShowSelector={setShowSelector}
+            setShowMover={setShowMover}
+          />
         </>
       ) : (
         <>
           <div className={styles.customiserFlags}>
             <h3>Your Flags</h3>
-            {graphics?.map((flag) => (
+            {flags?.map((flag) => (
               <NavFlagsFlag key={flag.key} flag={flag} setShowSelector={setShowSelector} />
             ))}
             <Button colour='red' onClick={addFlag}>

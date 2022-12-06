@@ -9,14 +9,11 @@ import styles from './NavFlags.module.scss';
 
 export interface NavFlagsSelectProps {
   editFlag?: GraphicsContextGraphic;
-  setShowSelector: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowMover: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const NavFlagsSelect = ({
-  editFlag,
-  setShowSelector: setSelectModel,
-}: NavFlagsSelectProps) => {
-  const { addGraphic, updateGraphic } = useGraphics();
+export const NavFlagsSelect = ({ editFlag, setShowMover }: NavFlagsSelectProps) => {
+  const { addFlag, updateFlag } = useCustomiserStore((state) => state);
 
   const { data: flags } = useGetFlagsQuery(
     graphQLClient,
@@ -30,16 +27,16 @@ export const NavFlagsSelect = ({
 
   const flagSelected = (flag: FlagFragment) => {
     if (editFlag?.key) {
-      updateGraphic(editFlag.key, {
+      updateFlag(editFlag.key, {
         flag: flag,
-        editMode: EDIT_MODE.EDIT_2D,
-        freeze: false,
+        edit: true,
       });
     } else {
-      addGraphic({
+      addFlag({
         flag: flag,
       });
     }
+    setShowMover(true);
   };
 
   return (

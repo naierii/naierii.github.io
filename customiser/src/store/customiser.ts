@@ -17,6 +17,7 @@ import produce from 'immer';
 import { Euler, Vector3 } from 'three';
 import create, { StateCreator } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+import { v4 as uuidv4 } from 'uuid';
 
 import { UNIT } from './constants';
 interface SelectedModel {
@@ -30,10 +31,16 @@ interface Part {
 }
 
 export interface FlagCustomiser {
-  key: string;
+  key?: string;
   flag?: FlagFragment;
   canvasJSON?: any;
   materialJSON?: any;
+  decalPosition?: Vector3;
+  decalOrientation?: Euler;
+  decalRotation?: number;
+  decalScale?: number;
+  decalFreeze?: boolean;
+  edit?: boolean;
 }
 export interface NavItem {
   id?: Scalars['ID'];
@@ -68,6 +75,7 @@ export interface CustomiserState {
   };
   decalPosition?: Vector3;
   decalRotation?: Euler;
+  decalScale?: number;
   decalFreeze: boolean;
 }
 
@@ -89,7 +97,7 @@ export interface CustomiserActions {
   ) => void;
   cancelPartChange: () => void;
   addFlag: (flag: FlagCustomiser) => void;
-  updateFlag: (flag: FlagCustomiser) => void;
+  updateFlag: (key: string, flag: FlagCustomiser) => void;
   deleteFlag: (key: string) => void;
   resetNav: () => void;
   texture: (nodeId: string) => MaterialTextureModel;
@@ -308,19 +316,17 @@ const createCustomiser: StateCreator<
   addFlag: (flag) => {
     set(
       produce((state: CustomiserState) => {
-        const hasFlag = state.flags.find((f) => f.key === flag.key);
-        if (!hasFlag) {
-          state.flags = [...state.flags, { ...flag }];
-        }
+        const newKey = flag.key ?? uuidv4();
+        state.flags = [...state.flags, { ...flag, key: newKey, edit: true, decalFreeze: false }];
       }),
     );
   },
-  updateFlag: (flag) => {
+  updateFlag: (key, flag) => {
     set(
       produce((state: CustomiserState) => {
         state.flags = [
           ...state.flags.map((f) => {
-            if (f.key === flag.key) {
+            if (f.key === key) {
               return { ...f, ...flag };
             }
             return f;

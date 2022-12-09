@@ -1,6 +1,4 @@
-import { useHelper } from '@react-three/drei';
-import { useRef } from 'react';
-import { SpotLightHelper, Vector3 } from 'three';
+import { Vector3 } from 'three';
 
 const config = {
   ambientLight: {
@@ -30,8 +28,8 @@ const config = {
 };
 
 const Lights = () => {
-  const light = useRef();
-  useHelper(light, SpotLightHelper, 'cyan');
+  // const light = useRef();
+  // useHelper(light, SpotLightHelper, 'cyan');
   return (
     <group>
       <hemisphereLight {...config.ambientLight}></hemisphereLight>

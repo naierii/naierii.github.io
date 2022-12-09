@@ -1,12 +1,13 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
 let mix = require('laravel-mix');
+require('mix-env-file');
 const path = require('path');
 
 const ASSET_DIR = '../shopify-theme/assets';
 
 mix.setPublicPath(ASSET_DIR);
-
+mix.env(process.env.ENV_FILE);
 mix.webpackConfig({
   resolve: {
     alias: {
@@ -39,4 +40,4 @@ mix.addWebpackLoaders([
   },
 ]);
 
-mix.ts('src/index.tsx', 'customiser.js');
+mix.ts('src/index.tsx', 'customiser.js').react();

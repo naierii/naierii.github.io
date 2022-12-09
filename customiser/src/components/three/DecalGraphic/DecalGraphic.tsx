@@ -2,7 +2,7 @@ import { Decal, useTexture } from '@react-three/drei';
 import { ThreeElements } from '@react-three/fiber';
 import { FlagCustomiser } from '@store/customiser';
 import { useMemo } from 'react';
-import { Euler, Vector3, MathUtils } from 'three';
+import { Euler, MathUtils, Vector3 } from 'three';
 export interface DecalGraphicProps {
   flag?: FlagCustomiser;
   position: Vector3;

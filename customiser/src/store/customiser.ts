@@ -340,8 +340,11 @@ const createCustomiser: StateCreator<
 
 export const useCustomiserStore = create<CustomiserState & CustomiserActions>()(
   devtools(
-    persist((...a) => ({
-      ...createCustomiser(...a),
-    })),
+    persist(
+      (...a) => ({
+        ...createCustomiser(...a),
+      }),
+      { name: 'test' },
+    ),
   ),
 );

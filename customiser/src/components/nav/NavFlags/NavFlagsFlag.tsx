@@ -1,12 +1,11 @@
 import Image from '@components/ui/Image';
 
-import { GraphicsContextGraphic, useGraphics } from '@context/GraphicsContext';
-import { useCustomiserStore } from '@store/customiser';
+import { FlagCustomiser, useCustomiserStore } from '@store/customiser';
 import { Dispatch, SetStateAction } from 'react';
 import styles from './NavFlags.module.scss';
 
 export interface NavFlagsFlagProps {
-  flag: GraphicsContextGraphic;
+  flag: FlagCustomiser;
   setShowSelector: Dispatch<SetStateAction<boolean>>;
 }
 

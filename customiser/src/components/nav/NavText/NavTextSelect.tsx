@@ -1,40 +1,32 @@
 import Button from '@components/ui/Button';
+import FormInput from '@components/ui/FormInput';
+import { TextCustomiser } from '@store/customiser';
 import cn from 'classnames';
-import { useState } from 'react';
-import NavButtons from '../NavButtons';
+import { ChangeEvent, useState } from 'react';
 
 import styles from './NavText.module.scss';
 
 export interface NavTextSelectProps {
   className?: string;
+  editText?: TextCustomiser;
 }
 
-const NavTextSelect = ({ className }: NavTextSelectProps) => {
+const NavTextSelect = ({ className, editText }: NavTextSelectProps) => {
+  const [text, setText] = useState<string>();
   const rootClassName = cn(styles.root, className);
-  const [showSelector, setShowSelector] = useState(false);
+
+  const setTextOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setText(event.target.value);
+  };
 
   const addText = () => {
-    setShowSelector(true);
+    console.log(text);
   };
 
   return (
     <>
-      {showSelector ? (
-        <></>
-      ) : (
-        <>
-          <div className={styles.customiserFlags}>
-            <h3>Your Text</h3>
-            {/* {graphics?.map((flag) => (
-              <NavFlagsFlag key={flag.key} flag={flag} setShowSelector={setShowSelector} />
-            ))} */}
-            <Button colour='red' onClick={addText}>
-              Add Text
-            </Button>
-          </div>
-          <NavButtons />
-        </>
-      )}
+      <FormInput placeholder='Enter text' value={text} onChange={setTextOnChange} />
+      <Button onClick={addText}>Add text</Button>
     </>
   );
 };

@@ -1,6 +1,5 @@
 import CustomiserNav from '@components/nav/CustomiserNav';
 import CustomiserCanvas from '@components/three/CustomiserCanvas';
-import GraphicsCanvas from '@components/three/GraphicsCanvas';
 import Button from '@components/ui/Button';
 import { useGetCustomProductByShopifyIdQuery } from '@graphql/generated/graphql';
 import { useShopifyGetProductByIdQuery } from '@graphql/generated/graphql-shopify';
@@ -69,9 +68,6 @@ const Main = ({ className, product }: MainProps) => {
           <CustomiserNav className={styles.nav} />
           <Header className={styles.header} cameraRef={cameraRef} canvasRef={canvasRef} />
           <CustomiserCanvas className={styles.model} cameraRef={cameraRef} canvasRef={canvasRef} />
-          {graphics?.map((graphic) => (
-            <GraphicsCanvas key={graphic.key} graphic={graphic} className={styles.model} />
-          ))}
           <Button className={styles.close} onClick={() => setShow(false)}>
             Close
           </Button>

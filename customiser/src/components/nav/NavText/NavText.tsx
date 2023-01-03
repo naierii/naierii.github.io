@@ -4,6 +4,7 @@ import { useState } from 'react';
 import NavButtons from '../NavButtons';
 
 import styles from './NavText.module.scss';
+import NavTextSelect from './NavTextSelect';
 
 export interface NavTextProps {
   className?: string;
@@ -20,7 +21,7 @@ const NavText = ({ className }: NavTextProps) => {
   return (
     <>
       {showSelector ? (
-        <></>
+        <NavTextSelect />
       ) : (
         <>
           <div className={styles.customiserFlags}>

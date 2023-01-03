@@ -42,6 +42,17 @@ export interface FlagCustomiser {
   decalFreeze?: boolean;
   edit?: boolean;
 }
+
+export interface TextCustomiser {
+  key?: string;
+  text: string;
+  decalPosition?: Vector3;
+  decalOrientation?: Euler;
+  decalRotation?: number;
+  decalScale?: number;
+  decalFreeze?: boolean;
+  edit?: boolean;
+}
 export interface NavItem {
   id?: Scalars['ID'];
   name: Maybe<Scalars['String']>;
@@ -67,6 +78,7 @@ export interface CustomiserState {
   parts: Part[];
   savedParts: Part[];
   flags: FlagCustomiser[];
+  texts: TextCustomiser[];
   variations: Array<ShopifyProductVariantFragment>;
   sizing?: {
     height?: SizingMeasurement;
@@ -99,12 +111,12 @@ export interface CustomiserActions {
   addFlag: (flag: FlagCustomiser) => void;
   updateFlag: (key: string, flag: FlagCustomiser) => void;
   deleteFlag: (key: string) => void;
+  addText: (text: TextCustomiser) => void;
+  updateText: (key: string, text: TextCustomiser) => void;
+  deleteText: (key: string) => void;
   resetNav: () => void;
   texture: (nodeId: string) => MaterialTextureModel;
   reset: () => void;
-  setDecalPosition: (position: Vector3) => void;
-  setDecalRotation: (rotation: Euler) => void;
-  setDecalFreeze: (freeze: boolean) => void;
 }
 
 const initialState: CustomiserState = {
@@ -116,6 +128,7 @@ const initialState: CustomiserState = {
   parts: [],
   savedParts: [],
   flags: [],
+  texts: [],
   variations: [],
   sizing: {
     height: {
@@ -342,6 +355,35 @@ const createCustomiser: StateCreator<
       }),
     );
   },
+  addText: (text) => {
+    set(
+      produce((state: CustomiserState) => {
+        const newKey = text.key ?? uuidv4();
+        state.texts = [...state.texts, { ...text, key: newKey, edit: true, decalFreeze: false }];
+      }),
+    );
+  },
+  updateText: (key, text) => {
+    set(
+      produce((state: CustomiserState) => {
+        state.texts = [
+          ...state.texts.map((f) => {
+            if (f.key === key) {
+              return { ...f, ...text };
+            }
+            return f;
+          }),
+        ];
+      }),
+    );
+  },
+  deleteText: (key) => {
+    set(
+      produce((state: CustomiserState) => {
+        state.texts = [...state.texts.filter((f) => f.key !== key)];
+      }),
+    );
+  },
   reset: () => {
     set(() => {
       useCustomiserStore.persist.clearStorage();
@@ -350,9 +392,6 @@ const createCustomiser: StateCreator<
       };
     });
   },
-  setDecalPosition: (data) => set({ decalPosition: data }),
-  setDecalRotation: (data) => set({ decalRotation: data }),
-  setDecalFreeze: (data) => set({ decalFreeze: data }),
 });
 
 export const useCustomiserStore = create<CustomiserState & CustomiserActions>()(
@@ -362,7 +401,7 @@ export const useCustomiserStore = create<CustomiserState & CustomiserActions>()(
         ...createCustomiser(...a),
       }),
       {
-        name: 'test',
+        name: '',
       },
     ),
   ),

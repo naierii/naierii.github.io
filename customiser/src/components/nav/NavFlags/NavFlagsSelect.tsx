@@ -1,14 +1,12 @@
 import Image from '@components/ui/Image';
-import { GraphicsContextGraphic, useGraphics } from '@context/GraphicsContext';
 import { FlagFragment, useGetFlagsQuery } from '@graphql/generated/graphql';
 import { graphQLClient } from '@graphql/graphql-client';
-import { EDIT_MODE } from '@store/constants';
 import { FlagCustomiser, useCustomiserStore } from '@store/customiser';
 
 import styles from './NavFlags.module.scss';
 
 export interface NavFlagsSelectProps {
-  editFlag?: GraphicsContextGraphic;
+  editFlag?: FlagCustomiser;
   setShowMover: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

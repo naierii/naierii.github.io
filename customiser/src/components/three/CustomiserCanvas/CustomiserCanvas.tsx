@@ -98,8 +98,8 @@ const CustomiserCanvas = ({
         <MouseHelper ref={mouseHelperRef} />
         <OrbitControls
           enableZoom={true}
-          minPolarAngle={Math.PI / 3}
-          maxPolarAngle={Math.PI / 1.9}
+          // minPolarAngle={Math.PI / 3}
+          // maxPolarAngle={Math.PI / 1.9}
         />
       </Canvas>
     </div>

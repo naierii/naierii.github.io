@@ -20,10 +20,10 @@ type GLTFResult = GLTF & {
 const Model = ({ model }: CustomiserModelProps) => {
   const meshRef = useRef<Mesh>(null);
   const flags = useCustomiserStore((state) => state.flags);
-  const { nodes } = useGLTF('/Boxing-shorts-copy.glb') as unknown as GLTFResult;
-  // const { nodes } = useGLTF(
-  //   model?.attributes?.model?.data?.attributes?.url as string,
-  // ) as unknown as GLTFResult;
+  // const { nodes } = useGLTF('/test.glb') as unknown as GLTFResult;
+  const { nodes } = useGLTF(
+    model?.attributes?.model?.data?.attributes?.url as string,
+  ) as unknown as GLTFResult;
 
   const geom = useMemo(() => {
     const geometries = [];
@@ -48,7 +48,7 @@ const Model = ({ model }: CustomiserModelProps) => {
 
   return (
     <>
-      {/* {model?.attributes?.parts?.data.map((part) => {
+      {model?.attributes?.parts?.data.map((part) => {
         return (
           <Fragment key={part.id}>
             {part?.attributes?.nodeId && (
@@ -60,7 +60,7 @@ const Model = ({ model }: CustomiserModelProps) => {
             )}
           </Fragment>
         );
-      })} */}
+      })}
       <mesh {...graphicProps} ref={meshRef}>
         <meshStandardMaterial {...graphicMaterialProps} />
         {flags.map((flag) => {

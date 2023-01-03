@@ -343,7 +343,7 @@ const createCustomiser: StateCreator<
     );
   },
   reset: () => {
-    set((state) => {
+    set(() => {
       useCustomiserStore.persist.clearStorage();
       return {
         ...initialState,
@@ -357,8 +357,13 @@ const createCustomiser: StateCreator<
 
 export const useCustomiserStore = create<CustomiserState & CustomiserActions>()(
   devtools(
-    persist((...a) => ({
-      ...createCustomiser(...a),
-    })),
+    persist(
+      (...a) => ({
+        ...createCustomiser(...a),
+      }),
+      {
+        name: 'test',
+      },
+    ),
   ),
 );

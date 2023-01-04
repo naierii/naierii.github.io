@@ -1,1 +1,13 @@
-.root {}
+@use '~sass-rem' as *;
+@import '@styles/variables';
+
+.textItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: rem(20px);
+}
+
+.textItemText {
+  margin-right: auto;
+  padding: rem(10px) 0;
+}

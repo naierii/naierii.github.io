@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { ChangeEvent, startTransition, useState } from 'react';
 import { NavFlagsSelect } from './NavFlagsSelect';
 
 import Button from '@components/ui/Button';
 import { useCustomiserStore } from '@store/customiser';
 import NavButtons from '../NavButtons';
+import NavDecalAdjust from '../NavDecalAdjust';
 import NavEditButtons from '../NavEditButtons';
 import styles from './NavFlags.module.scss';
 import { NavFlagsFlag } from './NavFlagsFlag';
-import { NavFlagsMove } from './NavFlagsMove';
 
 // export interface NavFlagsProps {
 
@@ -15,7 +15,9 @@ import { NavFlagsMove } from './NavFlagsMove';
 
 const NavFlags = () => {
   const flags = useCustomiserStore((state) => state.flags);
-  const editGraphic = flags?.find((g) => g.edit);
+  const updateFlag = useCustomiserStore((state) => state.updateFlag);
+  const editFlag = flags?.find((g) => g.edit);
+
   const [showSelector, setShowSelector] = useState(false);
   const [showMover, setShowMover] = useState(false);
 
@@ -23,20 +25,43 @@ const NavFlags = () => {
     setShowSelector(true);
   };
 
+  const setScale = (event: ChangeEvent<HTMLInputElement>) => {
+    if (editFlag?.key) updateFlag(editFlag.key, { decalScale: Number(event.target.value) });
+  };
+
+  const setRotation = (event: ChangeEvent<HTMLInputElement>) => {
+    startTransition(() => {
+      if (editFlag?.key) updateFlag(editFlag.key, { decalRotation: Number(event.target.value) });
+    });
+  };
+
+  const applyFlag = () => {
+    if (editFlag?.key) {
+      updateFlag(editFlag.key, {
+        decalFreeze: false,
+        edit: false,
+      });
+    }
+
+    setShowSelector(false);
+    setShowMover(false);
+  };
+
   return (
     <>
       {showSelector && !showMover ? (
         <>
-          <NavFlagsSelect editFlag={editGraphic} setShowMover={setShowMover} />
+          <NavFlagsSelect editFlag={editFlag} setShowMover={setShowMover} />
         </>
       ) : showMover ? (
         <>
-          <NavFlagsMove />
-          <NavEditButtons
-            editFlag={editGraphic}
-            setShowSelector={setShowSelector}
-            setShowMover={setShowMover}
+          <NavDecalAdjust
+            scale={editFlag?.decalScale}
+            rotation={editFlag?.decalRotation}
+            onScale={setScale}
+            onRotate={setRotation}
           />
+          <NavEditButtons disabled={!editFlag} onApply={applyFlag} />
         </>
       ) : (
         <>

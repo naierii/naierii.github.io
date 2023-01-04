@@ -45,7 +45,7 @@ export interface FlagCustomiser {
 
 export interface TextCustomiser {
   key?: string;
-  text: string;
+  text?: string;
   decalPosition?: Vector3;
   decalOrientation?: Euler;
   decalRotation?: number;

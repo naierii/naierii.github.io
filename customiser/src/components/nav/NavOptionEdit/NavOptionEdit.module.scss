@@ -1,0 +1,14 @@
+@use '~sass-rem' as *;
+@import '@styles/variables';
+
+.root {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: rem(13px);
+
+  button {
+    svg {
+      width: rem(23px);
+    }
+  }
+}

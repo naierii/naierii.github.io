@@ -1,9 +1,12 @@
+import FormInput from '@components/ui/FormInput';
 import { useCustomiserStore } from '@store/customiser';
 import { ChangeEvent, startTransition } from 'react';
-import { MathUtils } from 'three';
 import styles from './NavFlags.module.scss';
 
-// export interface NavFlagsMoveProps {}
+export interface NavFlagsMoveProps {
+  onScale?: () => void;
+  onRotate?: () => void;
+}
 
 export const NavFlagsMove = () => {
   const editFlag = useCustomiserStore((state) => state.flags.find((f) => f.edit));
@@ -21,17 +24,13 @@ export const NavFlagsMove = () => {
 
   return (
     <div className={styles.flagItem}>
-      <div>
-        <input type='number' placeholder='Scale' onChange={setScale} />
-      </div>
-      <div>
-        <input
-          type='number'
-          placeholder='Rotate'
-          value={editFlag?.decalRotation}
-          onChange={setRotation}
-        />
-      </div>
+      <FormInput type='number' placeholder='Scale' onChange={setScale} />
+      <FormInput
+        type='number'
+        placeholder='Rotate'
+        value={editFlag?.decalRotation}
+        onChange={setRotation}
+      />
     </div>
   );
 };

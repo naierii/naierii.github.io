@@ -1,15 +1,15 @@
-import FormInput from '@components/ui/FormInput';
 import cn from 'classnames';
-import { ChangeEvent } from 'react';
+import RangeSlider from 'react-range-slider-input';
 
+import 'react-range-slider-input/dist/style.css';
 import styles from './NavDecalAdjust.module.scss';
 
 export interface NavDecalAdjustProps {
   className?: string;
   scale?: number;
   rotation?: number;
-  onScale?: (event: ChangeEvent<HTMLInputElement>) => void;
-  onRotate?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onScale?: (event: [number, number]) => void;
+  onRotate?: (event: [number, number]) => void;
 }
 
 const NavDecalAdjust = ({
@@ -22,8 +22,26 @@ const NavDecalAdjust = ({
   const rootClassName = cn(styles.root, className);
   return (
     <div className={rootClassName}>
-      <FormInput type='number' placeholder='Scale' value={scale} onChange={onScale} />
-      <FormInput type='number' placeholder='Rotate' value={rotation} onChange={onRotate} />
+      <h4>Scale</h4>
+      <RangeSlider
+        className={styles.scale}
+        value={[0, scale]}
+        step={0.1}
+        min={0}
+        max={2}
+        thumbsDisabled={[true, false]}
+        onInput={onScale}
+      />
+      <h4>Rotate</h4>
+      <RangeSlider
+        className={styles.rotate}
+        value={[0, rotation]}
+        step={5}
+        min={0}
+        max={360}
+        thumbsDisabled={[true, false]}
+        onInput={onRotate}
+      />
     </div>
   );
 };

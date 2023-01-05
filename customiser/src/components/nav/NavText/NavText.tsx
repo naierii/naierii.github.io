@@ -24,13 +24,15 @@ const NavText = () => {
     setShowSelector(true);
   };
 
-  const setScale = (event: ChangeEvent<HTMLInputElement>) => {
-    if (editText?.key) updateText(editText.key, { decalScale: Number(event.target.value) });
+  const setScale = (event: [number, number]) => {
+    startTransition(() => {
+      if (editText?.key) updateText(editText.key, { decalScale: Number(event[1]) });
+    });
   };
 
-  const setRotation = (event: ChangeEvent<HTMLInputElement>) => {
+  const setRotation = (event: [number, number]) => {
     startTransition(() => {
-      if (editText?.key) updateText(editText.key, { decalRotation: Number(event.target.value) });
+      if (editText?.key) updateText(editText.key, { decalRotation: Number(event[1]) });
     });
   };
 
@@ -49,7 +51,7 @@ const NavText = () => {
   return (
     <>
       {showSelector ? (
-        <NavTextSelect setShowMover={setShowMover} />
+        <NavTextSelect setShowMover={setShowMover} setShowSelector={setShowSelector} />
       ) : showMover ? (
         <>
           <NavDecalAdjust

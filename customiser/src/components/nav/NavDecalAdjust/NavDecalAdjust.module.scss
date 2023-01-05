@@ -1,1 +1,15 @@
-.root {}
+.root {
+}
+
+.scale,
+.rotate {
+  margin-bottom: 2rem;
+
+  :global .range-slider__thumb[data-lower] {
+    width: 0;
+  }
+
+  :global .range-slider__range {
+    border-radius: 6px;
+  }
+}

@@ -25,13 +25,15 @@ const NavFlags = () => {
     setShowSelector(true);
   };
 
-  const setScale = (event: ChangeEvent<HTMLInputElement>) => {
-    if (editFlag?.key) updateFlag(editFlag.key, { decalScale: Number(event.target.value) });
+  const setScale = (event: number[]) => {
+    console.log(event);
+
+    if (editFlag?.key) updateFlag(editFlag.key, { decalScale: Number(event[1]) });
   };
 
-  const setRotation = (event: ChangeEvent<HTMLInputElement>) => {
+  const setRotation = (event: [number, number]) => {
     startTransition(() => {
-      if (editFlag?.key) updateFlag(editFlag.key, { decalRotation: Number(event.target.value) });
+      if (editFlag?.key) updateFlag(editFlag.key, { decalRotation: Number(event[1]) });
     });
   };
 

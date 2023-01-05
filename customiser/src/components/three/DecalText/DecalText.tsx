@@ -1,7 +1,7 @@
 import { Decal, PerspectiveCamera, RenderTexture, Text } from '@react-three/drei';
 import { TextCustomiser } from '@store/customiser';
 import { useMemo } from 'react';
-import { Vector3, Euler, MathUtils } from 'three';
+import { Euler, MathUtils, Vector3 } from 'three';
 
 export interface DecalTextProps {
   text?: TextCustomiser;
@@ -20,15 +20,15 @@ const DecalText = ({ text, position, orientation, scale = 1 }: DecalTextProps) =
   }, [text?.decalRotation, orientation]);
 
   const scaleModifier = useMemo(() => {
-    return new Vector3(2 * scale, 1 * scale, 5 * scale);
+    return new Vector3(2 * scale, 1 * scale, 4);
   }, [scale]);
 
   return (
     <Decal position={position} rotation={rotationModifier} scale={scaleModifier}>
-      <meshStandardMaterial roughness={0.6} transparent depthTest depthWrite={false}>
+      <meshStandardMaterial transparent depthTest depthWrite={false}>
         <RenderTexture attach='map'>
           <PerspectiveCamera makeDefault manual aspect={4 / 2} position={[0, 0, 5]} />
-          <Text fontSize={0.8} anchorX='center' anchorY='middle' depthOffset={-4} color='black'>
+          <Text fontSize={2} anchorX='center' anchorY='middle' color='red'>
             {text?.text}
           </Text>
         </RenderTexture>

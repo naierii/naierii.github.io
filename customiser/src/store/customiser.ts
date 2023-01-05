@@ -52,6 +52,9 @@ export interface TextCustomiser {
   decalScale?: number;
   decalFreeze?: boolean;
   edit?: boolean;
+  font?: string;
+  material?: MaterialFragment;
+  outline?: MaterialFragment;
 }
 export interface NavItem {
   id?: Scalars['ID'];

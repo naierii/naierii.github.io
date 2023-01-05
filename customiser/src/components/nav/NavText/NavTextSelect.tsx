@@ -10,9 +10,15 @@ export interface NavTextSelectProps {
   className?: string;
   editText?: TextCustomiser;
   setShowMover: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowSelector: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const NavTextSelect = ({ className, editText, setShowMover }: NavTextSelectProps) => {
+const NavTextSelect = ({
+  className,
+  editText,
+  setShowMover,
+  setShowSelector,
+}: NavTextSelectProps) => {
   const [text, setText] = useState<string>();
   const { addText, updateText } = useCustomiserStore((state) => state);
   const rootClassName = cn(styles.root, className);
@@ -32,7 +38,7 @@ const NavTextSelect = ({ className, editText, setShowMover }: NavTextSelectProps
         addText({ text: text });
       }
     }
-
+    setShowSelector(false);
     setShowMover(true);
   };
 

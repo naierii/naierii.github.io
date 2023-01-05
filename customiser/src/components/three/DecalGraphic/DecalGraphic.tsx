@@ -32,7 +32,7 @@ const DecalGraphic = ({ flag, position, orientation, scale = 1 }: DecalGraphicPr
   }, [flag?.decalRotation, orientation]);
 
   const scaleModifier = useMemo(() => {
-    return new Vector3(1 * ratio * scale, 1 * scale, 1 * scale);
+    return new Vector3(1 * ratio * scale, 1 * scale, 5 * scale);
   }, [scale]);
 
   if (!position || !rotationModifier || !image) {
@@ -45,8 +45,7 @@ const DecalGraphic = ({ flag, position, orientation, scale = 1 }: DecalGraphicPr
     depthTest: true,
     depthWrite: false,
     polygonOffset: true,
-    polygonOffsetFactor: -4,
-    wireframe: false,
+    polygonOffsetFactor: -10,
   };
 
   return (

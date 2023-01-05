@@ -8,13 +8,12 @@ import Model from '../Model';
 const models = (state: CustomiserState) => state.selectedModels;
 
 export interface SceneProps {
-  onPointerMove?: (event: ThreeEvent<PointerEvent>) => void;
   onPointerDown?: (event: ThreeEvent<PointerEvent>) => void;
   onPointerup?: (event: ThreeEvent<PointerEvent>) => void;
 }
 
 const Scene = forwardRef<Group, SceneProps>(
-  ({ onPointerMove, onPointerDown, onPointerup }: SceneProps, groupRef) => {
+  ({ onPointerDown, onPointerup }: SceneProps, groupRef) => {
     const selectedModels = useCustomiserStore(models);
     const modelRotation = useDesignStore((state) => state.modelRotation);
     const addingToCart = useDesignStore((state) => state.addingToCart);
@@ -29,7 +28,6 @@ const Scene = forwardRef<Group, SceneProps>(
       <group
         name='meshGroup'
         ref={groupRef}
-        // onPointerMove={onPointerMove}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerup}
       >

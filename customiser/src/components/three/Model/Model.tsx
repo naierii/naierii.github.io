@@ -1,5 +1,5 @@
 import { Maybe, ModelFragment } from '@graphql/generated/graphql';
-import { Center, useGLTF } from '@react-three/drei';
+import { useGLTF } from '@react-three/drei';
 import { ThreeElements } from '@react-three/fiber';
 import { useCustomiserStore } from '@store/customiser';
 import { Dispatch, Fragment, SetStateAction, useEffect, useMemo, useRef } from 'react';
@@ -8,6 +8,7 @@ import { GLTF } from 'three-stdlib';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
 import CustomiserMesh from '../CustomiserMesh';
 import DecalGraphic from '../DecalGraphic';
+import DecalText from '../DecalText';
 export interface CustomiserModelProps {
   model?: Maybe<ModelFragment>;
 }
@@ -20,6 +21,7 @@ type GLTFResult = GLTF & {
 const Model = ({ model }: CustomiserModelProps) => {
   const meshRef = useRef<Mesh>(null);
   const flags = useCustomiserStore((state) => state.flags);
+  const texts = useCustomiserStore((state) => state.texts);
   const { nodes } = useGLTF('/test.glb') as unknown as GLTFResult;
   // const { nodes } = useGLTF(
   //   model?.attributes?.model?.data?.attributes?.url as string,
@@ -34,7 +36,7 @@ const Model = ({ model }: CustomiserModelProps) => {
       }
     }
 
-    return BufferGeometryUtils.mergeBufferGeometries(geometries, true);
+    return BufferGeometryUtils.mergeBufferGeometries(geometries);
   }, [nodes]);
 
   const graphicProps: ThreeElements['mesh'] = {
@@ -72,6 +74,18 @@ const Model = ({ model }: CustomiserModelProps) => {
                 position={flag.decalPosition}
                 orientation={flag.decalOrientation}
                 scale={flag.decalScale}
+              />
+            );
+        })}
+        {texts.map((text) => {
+          if (text.decalPosition && text.decalOrientation)
+            return (
+              <DecalText
+                key={text.key}
+                text={text}
+                position={text.decalPosition}
+                orientation={text.decalOrientation}
+                scale={text.decalScale}
               />
             );
         })}

@@ -13,7 +13,7 @@ const MouseHelper = forwardRef<Mesh, MouseHelperProps>((props, ref) => {
   };
 
   const BoxProps: ThreeElements['boxGeometry'] = {
-    args: [1, 1, 10],
+    args: [10, 10, 10],
   };
 
   return (

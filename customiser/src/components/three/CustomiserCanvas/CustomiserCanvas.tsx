@@ -25,7 +25,9 @@ const CustomiserCanvas = ({
   const orientationRef = useRef<Euler>(new Euler());
   const groupRef = useRef<Group>(null);
   const editFlag = useCustomiserStore((state) => state.flags.find((f) => f.edit));
+  const editText = useCustomiserStore((state) => state.texts.find((f) => f.edit));
   const updateFlag = useCustomiserStore((state) => state.updateFlag);
+  const updateText = useCustomiserStore((state) => state.updateText);
   const setCanvasSize = useCustomiserStore((state) => state.setCanvasSize);
   const rootClassName = cn(styles.root, className);
   const mouseHelperRef = useRef<Mesh>(null);
@@ -58,19 +60,30 @@ const CustomiserCanvas = ({
         });
       }
     }
+
+    if (editText?.key) {
+      updateText(editText.key, { decalFreeze: false });
+      setPosition(event);
+      if (mouseHelperRef.current && positionRef.current && orientationRef.current) {
+        positionRef.current.copy(event.point);
+        orientationRef.current.copy(mouseHelperRef.current.rotation);
+        updateText(editText.key, {
+          decalPosition: positionRef.current.clone(),
+          decalOrientation: orientationRef.current.clone(),
+        });
+      }
+    }
   };
 
   const onPointerup = () => {
     if (editFlag?.key) {
       updateFlag(editFlag.key, { decalFreeze: true });
     }
-  };
 
-  // const onPointerMove = (event: ThreeEvent<globalThis.PointerEvent>) => {
-  //   if (editFlag?.key) {
-  //     setPosition(event);
-  //   }
-  // };
+    if (editText?.key) {
+      updateText(editText.key, { decalFreeze: true });
+    }
+  };
 
   return (
     <div className={rootClassName}>
@@ -89,17 +102,12 @@ const CustomiserCanvas = ({
         }}
       >
         <Lights />
-        <Scene
-          // onPointerMove={onPointerMove}
-          onPointerDown={onPointerDown}
-          onPointerup={onPointerup}
-          ref={groupRef}
-        />
+        <Scene onPointerDown={onPointerDown} onPointerup={onPointerup} ref={groupRef} />
         <MouseHelper ref={mouseHelperRef} />
         <OrbitControls
-          enableZoom={true}
-          // minPolarAngle={Math.PI / 3}
-          // maxPolarAngle={Math.PI / 1.9}
+          enableZoom={false}
+          minPolarAngle={Math.PI / 3}
+          maxPolarAngle={Math.PI / 1.9}
         />
       </Canvas>
     </div>

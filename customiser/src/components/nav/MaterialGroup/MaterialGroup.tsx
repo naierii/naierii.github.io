@@ -2,6 +2,7 @@ import {
   CustomProductPartFragment,
   InputMaybe,
   MaterialEntity,
+  MaterialFragment,
   MaterialGroupEntity,
   Maybe,
   useGetMaterialsQuery,
@@ -20,9 +21,15 @@ export interface MaterialGroupProps {
   className?: string;
   part: CustomProductPartFragment;
   materialGroup?: Maybe<MaterialGroupEntity>;
+  onMaterialSelected: (material: MaterialFragment) => void;
 }
 
-const MaterialGroup = ({ className, materialGroup, part }: MaterialGroupProps) => {
+const MaterialGroup = ({
+  className,
+  materialGroup,
+  part,
+  onMaterialSelected,
+}: MaterialGroupProps) => {
   const parts = useCustomiserStore((state) => state.parts);
   const selectedPart = useMemo(() => parts.find((p) => p.part.id === part?.id), [part]);
   const colourGroups = useMaterialGroupStore((state) => state.colourGroups);
@@ -75,7 +82,7 @@ const MaterialGroup = ({ className, materialGroup, part }: MaterialGroupProps) =
           </button>
         ))}
       </div>
-      <MaterialType />
+      <MaterialType onMaterialSelected={onMaterialSelected} />
     </div>
   );
 };

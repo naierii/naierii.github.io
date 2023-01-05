@@ -1,15 +1,15 @@
+import { MaterialFragment } from '@graphql/generated/graphql';
 import cn from 'classnames';
-import { motion } from 'framer-motion';
-import { useRef } from 'react';
 import { Material } from './Material';
 import styles from './MaterialGroup.module.scss';
 import { useMaterialGroupStore } from './MaterialGroupState';
 
 export interface MaterialTypeProps {
   className?: string;
+  onMaterialSelected: (material: MaterialFragment) => void;
 }
 
-export const MaterialType = ({ className }: MaterialTypeProps) => {
+export const MaterialType = ({ className, onMaterialSelected }: MaterialTypeProps) => {
   const rootClassName = cn(styles.materialType, className);
   const filteredMaterials = useMaterialGroupStore((state) => state.filteredMaterials());
   const materialTypes = useMaterialGroupStore((state) => state.materialTypes);
@@ -34,7 +34,7 @@ export const MaterialType = ({ className }: MaterialTypeProps) => {
 
       <div className={styles.materials}>
         {filteredMaterials.map((m) => (
-          <Material key={m.id} material={m} />
+          <Material key={m.id} material={m} onMaterialSelected={onMaterialSelected} />
         ))}
       </div>
     </div>

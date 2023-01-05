@@ -1,4 +1,5 @@
-import { CustomProductPartFragment } from '@graphql/generated/graphql';
+import { CustomProductPartFragment, MaterialFragment } from '@graphql/generated/graphql';
+import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
 import { motion } from 'framer-motion';
 import { Suspense } from 'react';
@@ -14,10 +15,18 @@ export interface NavPartProps {
 
 const NavPart = ({ className, part }: NavPartProps) => {
   const rootClassName = cn(styles.root, className);
+  const selectedPart = useCustomiserStore((state) => state.selectedPart);
+  const setPart = useCustomiserStore((state) => state.setPart);
 
   if (!part?.materialGroup?.data) {
     return null;
   }
+
+  const onMaterialSelected = (material: MaterialFragment) => {
+    if (selectedPart && material) {
+      setPart(selectedPart, material);
+    }
+  };
 
   return (
     <>
@@ -29,7 +38,11 @@ const NavPart = ({ className, part }: NavPartProps) => {
         exit={{ opacity: 0 }}
       >
         <Suspense fallback={<div>Loading...</div>}>
-          <MaterialGroup materialGroup={part.materialGroup.data} part={part} />
+          <MaterialGroup
+            materialGroup={part.materialGroup.data}
+            part={part}
+            onMaterialSelected={onMaterialSelected}
+          />
         </Suspense>
       </motion.div>
       <NavButtons />

@@ -1,6 +1,9 @@
 import Button from '@components/ui/Button';
+import { MaterialFragment, useGetNamesQuery } from '@graphql/generated/graphql';
+import { graphQLClient } from '@graphql/graphql-client';
 import { useCustomiserStore } from '@store/customiser';
 import { ChangeEvent, startTransition, useState } from 'react';
+import MaterialGroup from '../MaterialGroup';
 import NavButtons from '../NavButtons';
 import NavDecalAdjust from '../NavDecalAdjust';
 import NavEditButtons from '../NavEditButtons';
@@ -20,6 +23,14 @@ const NavText = () => {
   const [showSelector, setShowSelector] = useState(false);
   const [showMover, setShowMover] = useState(false);
 
+  const { data } = useGetNamesQuery(
+    graphQLClient,
+    {},
+    {
+      select: (data) => data.names?.data[0],
+    },
+  );
+
   const addText = () => {
     setShowSelector(true);
   };
@@ -34,6 +45,22 @@ const NavText = () => {
     startTransition(() => {
       if (editText?.key) updateText(editText.key, { decalRotation: Number(event[1]) });
     });
+  };
+
+  const setMaterial = (material: MaterialFragment) => {
+    if (editText?.key) {
+      updateText(editText.key, {
+        material,
+      });
+    }
+  };
+
+  const setOutline = (outline: MaterialFragment) => {
+    if (editText?.key) {
+      updateText(editText.key, {
+        outline,
+      });
+    }
   };
 
   const applyText = () => {
@@ -59,6 +86,16 @@ const NavText = () => {
             rotation={editText?.decalRotation}
             onScale={setScale}
             onRotate={setRotation}
+          />
+          <h4>Colour</h4>
+          <MaterialGroup
+            materialGroup={data?.attributes?.materialGroup?.data}
+            onMaterialSelected={setMaterial}
+          />
+          <h4>Outline</h4>
+          <MaterialGroup
+            materialGroup={data?.attributes?.outlineGroup?.data}
+            onMaterialSelected={setOutline}
           />
           <NavEditButtons disabled={!editText} onApply={applyText} />
         </>

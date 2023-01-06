@@ -1,4 +1,4 @@
-import { Decal, PerspectiveCamera, RenderTexture, Text } from '@react-three/drei';
+import { Decal, PerspectiveCamera, RenderTexture, Text, useTexture } from '@react-three/drei';
 import { TextCustomiser } from '@store/customiser';
 import { useMemo } from 'react';
 import { Euler, MathUtils, Vector3 } from 'three';
@@ -19,16 +19,34 @@ const DecalText = ({ text, position, orientation, scale = 1 }: DecalTextProps) =
     return orientationCopy;
   }, [text?.decalRotation, orientation]);
 
+  const texture =
+    text?.material?.attributes?.images?.length &&
+    text.material.attributes.images[0]?.image.data?.attributes?.url
+      ? [text.material.attributes.images[0].image.data.attributes.url]
+      : [];
+
+  const [image] = useTexture(texture);
+
   const scaleModifier = useMemo(() => {
     return new Vector3(2 * scale, 1 * scale, 4);
   }, [scale]);
+
+  const outline = text?.outline?.attributes?.hex ? 0.06 : 0;
+  const outlineColour = text?.outline?.attributes?.hex ?? '#FFFFFF';
 
   return (
     <Decal position={position} rotation={rotationModifier} scale={scaleModifier}>
       <meshStandardMaterial transparent depthTest depthWrite={false}>
         <RenderTexture attach='map'>
           <PerspectiveCamera makeDefault manual aspect={4 / 2} position={[0, 0, 5]} />
-          <Text fontSize={2} anchorX='center' anchorY='middle' color='red'>
+          <Text
+            fontSize={2}
+            anchorX='center'
+            anchorY='middle'
+            outlineColor={outlineColour}
+            outlineWidth={outline}
+          >
+            {image && <meshBasicMaterial attach='material' map={image} />}
             {text?.text}
           </Text>
         </RenderTexture>

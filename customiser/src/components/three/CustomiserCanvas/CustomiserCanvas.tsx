@@ -105,7 +105,7 @@ const CustomiserCanvas = ({
         <Scene onPointerDown={onPointerDown} onPointerup={onPointerup} ref={groupRef} />
         <MouseHelper ref={mouseHelperRef} />
         <OrbitControls
-          enableZoom={false}
+          enableZoom={true}
           minPolarAngle={Math.PI / 3}
           maxPolarAngle={Math.PI / 1.9}
         />

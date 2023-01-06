@@ -14,7 +14,7 @@ import cn from 'classnames';
 import { useEffect } from 'react';
 
 import styles from './MaterialGroup.module.scss';
-import { useMaterialGroupStore } from './MaterialGroupState';
+import { createStore, Provider, useMaterialGroupStore } from './MaterialGroupState';
 import { MaterialType } from './MaterialType';
 
 export interface MaterialGroupProps {
@@ -25,7 +25,7 @@ export interface MaterialGroupProps {
   onMaterialSelected: (material: MaterialFragment) => void;
 }
 
-const MaterialGroup = ({
+const MaterialGroupLoader = ({
   className,
   materialGroup,
   materialType,
@@ -82,6 +82,14 @@ const MaterialGroup = ({
       </div>
       <MaterialType onMaterialSelected={onMaterialSelected} />
     </div>
+  );
+};
+
+const MaterialGroup = (props: MaterialGroupProps) => {
+  return (
+    <Provider createStore={createStore}>
+      <MaterialGroupLoader {...props} />
+    </Provider>
   );
 };
 

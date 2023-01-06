@@ -26,8 +26,6 @@ const NavFlags = () => {
   };
 
   const setScale = (event: number[]) => {
-    console.log(event);
-
     if (editFlag?.key) updateFlag(editFlag.key, { decalScale: Number(event[1]) });
   };
 

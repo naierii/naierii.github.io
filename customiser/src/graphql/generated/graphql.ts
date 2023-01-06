@@ -7,13 +7,18 @@ export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K]
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 
-function fetcher<TData, TVariables>(
+function fetcher<TData, TVariables extends { [key: string]: any }>(
   client: GraphQLClient,
   query: string,
   variables?: TVariables,
-  headers?: RequestInit['headers'],
+  requestHeaders?: RequestInit['headers'],
 ) {
-  return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
+  return async (): Promise<TData> =>
+    client.request({
+      document: query,
+      variables,
+      requestHeaders,
+    });
 }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -656,6 +661,7 @@ export type GenericMorph =
   | MaterialType
   | Model
   | ModelPart
+  | Name
   | UploadFile
   | UploadFolder
   | UsersPermissionsPermission
@@ -798,6 +804,7 @@ export type Material = {
   __typename?: 'Material';
   colourGroups?: Maybe<MaterialColourGroupRelationResponseCollection>;
   createdAt?: Maybe<Scalars['DateTime']>;
+  hex?: Maybe<Scalars['String']>;
   images?: Maybe<Array<Maybe<ComponentMaterialMaterialMap>>>;
   name?: Maybe<Scalars['String']>;
   price?: Maybe<MaterialPriceEntityResponse>;
@@ -937,6 +944,7 @@ export type MaterialFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<MaterialFiltersInput>>>;
   colourGroups?: InputMaybe<MaterialColourGroupFiltersInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
+  hex?: InputMaybe<StringFilterInput>;
   id?: InputMaybe<IdFilterInput>;
   images?: InputMaybe<ComponentMaterialMaterialMapFiltersInput>;
   name?: InputMaybe<StringFilterInput>;
@@ -996,6 +1004,7 @@ export type MaterialGroupInput = {
 
 export type MaterialInput = {
   colourGroups?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  hex?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<Array<InputMaybe<ComponentMaterialMaterialMapInput>>>;
   name?: InputMaybe<Scalars['String']>;
   price?: InputMaybe<Scalars['ID']>;
@@ -1267,6 +1276,7 @@ export type Mutation = {
   createMaterialType?: Maybe<MaterialTypeEntityResponse>;
   createModel?: Maybe<ModelEntityResponse>;
   createModelPart?: Maybe<ModelPartEntityResponse>;
+  createName?: Maybe<NameEntityResponse>;
   createUploadFile?: Maybe<UploadFileEntityResponse>;
   createUploadFolder?: Maybe<UploadFolderEntityResponse>;
   /** Create a new role */
@@ -1289,6 +1299,7 @@ export type Mutation = {
   deleteMaterialType?: Maybe<MaterialTypeEntityResponse>;
   deleteModel?: Maybe<ModelEntityResponse>;
   deleteModelPart?: Maybe<ModelPartEntityResponse>;
+  deleteName?: Maybe<NameEntityResponse>;
   deleteUploadFile?: Maybe<UploadFileEntityResponse>;
   deleteUploadFolder?: Maybe<UploadFolderEntityResponse>;
   /** Delete an existing role */
@@ -1323,6 +1334,7 @@ export type Mutation = {
   updateMaterialType?: Maybe<MaterialTypeEntityResponse>;
   updateModel?: Maybe<ModelEntityResponse>;
   updateModelPart?: Maybe<ModelPartEntityResponse>;
+  updateName?: Maybe<NameEntityResponse>;
   updateUploadFile?: Maybe<UploadFileEntityResponse>;
   updateUploadFolder?: Maybe<UploadFolderEntityResponse>;
   /** Update an existing role */
@@ -1402,6 +1414,10 @@ export type MutationCreateModelPartArgs = {
   data: ModelPartInput;
 };
 
+export type MutationCreateNameArgs = {
+  data: NameInput;
+};
+
 export type MutationCreateUploadFileArgs = {
   data: UploadFileInput;
 };
@@ -1479,6 +1495,10 @@ export type MutationDeleteModelArgs = {
 };
 
 export type MutationDeleteModelPartArgs = {
+  id: Scalars['ID'];
+};
+
+export type MutationDeleteNameArgs = {
   id: Scalars['ID'];
 };
 
@@ -1616,6 +1636,11 @@ export type MutationUpdateModelPartArgs = {
   id: Scalars['ID'];
 };
 
+export type MutationUpdateNameArgs = {
+  data: NameInput;
+  id: Scalars['ID'];
+};
+
 export type MutationUpdateUploadFileArgs = {
   data: UploadFileInput;
   id: Scalars['ID'];
@@ -1642,6 +1667,53 @@ export type MutationUploadArgs = {
   info?: InputMaybe<FileInfoInput>;
   ref?: InputMaybe<Scalars['String']>;
   refId?: InputMaybe<Scalars['ID']>;
+};
+
+export type Name = {
+  __typename?: 'Name';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  materialGroup?: Maybe<MaterialGroupEntityResponse>;
+  name?: Maybe<Scalars['String']>;
+  outlineGroup?: Maybe<MaterialGroupEntityResponse>;
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type NameEntity = {
+  __typename?: 'NameEntity';
+  attributes?: Maybe<Name>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type NameEntityResponse = {
+  __typename?: 'NameEntityResponse';
+  data?: Maybe<NameEntity>;
+};
+
+export type NameEntityResponseCollection = {
+  __typename?: 'NameEntityResponseCollection';
+  data: Array<NameEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type NameFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<NameFiltersInput>>>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  materialGroup?: InputMaybe<MaterialGroupFiltersInput>;
+  name?: InputMaybe<StringFilterInput>;
+  not?: InputMaybe<NameFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<NameFiltersInput>>>;
+  outlineGroup?: InputMaybe<MaterialGroupFiltersInput>;
+  publishedAt?: InputMaybe<DateTimeFilterInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type NameInput = {
+  materialGroup?: InputMaybe<Scalars['ID']>;
+  name?: InputMaybe<Scalars['String']>;
+  outlineGroup?: InputMaybe<Scalars['ID']>;
+  publishedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type Pagination = {
@@ -1702,6 +1774,8 @@ export type Query = {
   modelPart?: Maybe<ModelPartEntityResponse>;
   modelParts?: Maybe<ModelPartEntityResponseCollection>;
   models?: Maybe<ModelEntityResponseCollection>;
+  name?: Maybe<NameEntityResponse>;
+  names?: Maybe<NameEntityResponseCollection>;
   uploadFile?: Maybe<UploadFileEntityResponse>;
   uploadFiles?: Maybe<UploadFileEntityResponseCollection>;
   uploadFolder?: Maybe<UploadFolderEntityResponse>;
@@ -1885,6 +1959,17 @@ export type QueryModelPartsArgs = {
 export type QueryModelsArgs = {
   filters?: InputMaybe<ModelFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type QueryNameArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type QueryNamesArgs = {
+  filters?: InputMaybe<NameFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
@@ -2597,6 +2682,7 @@ export type MaterialFragment = {
   attributes?: {
     __typename?: 'Material';
     name?: string | null;
+    hex?: string | null;
     type?: {
       __typename?: 'MaterialTypeEntityResponse';
       data?: {
@@ -2716,6 +2802,53 @@ export type ModelPartFragment = {
   __typename?: 'ModelPartEntity';
   id?: string | null;
   attributes?: { __typename?: 'ModelPart'; nodeId: string } | null;
+};
+
+export type NameFragment = {
+  __typename?: 'NameEntity';
+  id?: string | null;
+  attributes?: {
+    __typename?: 'Name';
+    name?: string | null;
+    materialGroup?: {
+      __typename?: 'MaterialGroupEntityResponse';
+      data?: {
+        __typename?: 'MaterialGroupEntity';
+        id?: string | null;
+        attributes?: {
+          __typename?: 'MaterialGroup';
+          name?: string | null;
+          materialTypes?: {
+            __typename?: 'MaterialTypeRelationResponseCollection';
+            data: Array<{
+              __typename?: 'MaterialTypeEntity';
+              id?: string | null;
+              attributes?: { __typename?: 'MaterialType'; name?: string | null } | null;
+            }>;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+    outlineGroup?: {
+      __typename?: 'MaterialGroupEntityResponse';
+      data?: {
+        __typename?: 'MaterialGroupEntity';
+        id?: string | null;
+        attributes?: {
+          __typename?: 'MaterialGroup';
+          name?: string | null;
+          materialTypes?: {
+            __typename?: 'MaterialTypeRelationResponseCollection';
+            data: Array<{
+              __typename?: 'MaterialTypeEntity';
+              id?: string | null;
+              attributes?: { __typename?: 'MaterialType'; name?: string | null } | null;
+            }>;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+  } | null;
 };
 
 export type CreateCustomDesignMutationVariables = Exact<{
@@ -2949,6 +3082,7 @@ export type GetMaterialsQuery = {
       attributes?: {
         __typename?: 'Material';
         name?: string | null;
+        hex?: string | null;
         type?: {
           __typename?: 'MaterialTypeEntityResponse';
           data?: {
@@ -3004,6 +3138,64 @@ export type GetMaterialsQuery = {
             } | null;
           };
         } | null> | null;
+      } | null;
+    }>;
+  } | null;
+};
+
+export type GetNamesQueryVariables = Exact<{
+  pagination?: InputMaybe<PaginationArg>;
+  filters?: InputMaybe<NameFiltersInput>;
+}>;
+
+export type GetNamesQuery = {
+  __typename?: 'Query';
+  names?: {
+    __typename?: 'NameEntityResponseCollection';
+    data: Array<{
+      __typename?: 'NameEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'Name';
+        name?: string | null;
+        materialGroup?: {
+          __typename?: 'MaterialGroupEntityResponse';
+          data?: {
+            __typename?: 'MaterialGroupEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'MaterialGroup';
+              name?: string | null;
+              materialTypes?: {
+                __typename?: 'MaterialTypeRelationResponseCollection';
+                data: Array<{
+                  __typename?: 'MaterialTypeEntity';
+                  id?: string | null;
+                  attributes?: { __typename?: 'MaterialType'; name?: string | null } | null;
+                }>;
+              } | null;
+            } | null;
+          } | null;
+        } | null;
+        outlineGroup?: {
+          __typename?: 'MaterialGroupEntityResponse';
+          data?: {
+            __typename?: 'MaterialGroupEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'MaterialGroup';
+              name?: string | null;
+              materialTypes?: {
+                __typename?: 'MaterialTypeRelationResponseCollection';
+                data: Array<{
+                  __typename?: 'MaterialTypeEntity';
+                  id?: string | null;
+                  attributes?: { __typename?: 'MaterialType'; name?: string | null } | null;
+                }>;
+              } | null;
+            } | null;
+          } | null;
+        } | null;
       } | null;
     }>;
   } | null;
@@ -3183,6 +3375,7 @@ export const MaterialFragmentDoc = /*#__PURE__*/ `
   id
   attributes {
     name
+    hex
     type {
       data {
         ...MaterialType
@@ -3204,6 +3397,24 @@ export const MaterialFragmentDoc = /*#__PURE__*/ `
         data {
           ...Image
         }
+      }
+    }
+  }
+}
+    `;
+export const NameFragmentDoc = /*#__PURE__*/ `
+    fragment Name on NameEntity {
+  id
+  attributes {
+    name
+    materialGroup {
+      data {
+        ...MaterialGroup
+      }
+    }
+    outlineGroup {
+      data {
+        ...MaterialGroup
       }
     }
   }
@@ -3411,3 +3622,28 @@ export const useGetMaterialsQuery = <TData = GetMaterialsQuery, TError = unknown
 
 useGetMaterialsQuery.getKey = (variables?: GetMaterialsQueryVariables) =>
   variables === undefined ? ['GetMaterials'] : ['GetMaterials', variables];
+export const GetNamesDocument = /*#__PURE__*/ `
+    query GetNames($pagination: PaginationArg, $filters: NameFiltersInput) {
+  names(pagination: $pagination, filters: $filters) {
+    data {
+      ...Name
+    }
+  }
+}
+    ${NameFragmentDoc}
+${MaterialGroupFragmentDoc}
+${MaterialTypeFragmentDoc}`;
+export const useGetNamesQuery = <TData = GetNamesQuery, TError = unknown>(
+  client: GraphQLClient,
+  variables?: GetNamesQueryVariables,
+  options?: UseQueryOptions<GetNamesQuery, TError, TData>,
+  headers?: RequestInit['headers'],
+) =>
+  useQuery<GetNamesQuery, TError, TData>(
+    variables === undefined ? ['GetNames'] : ['GetNames', variables],
+    fetcher<GetNamesQuery, GetNamesQueryVariables>(client, GetNamesDocument, variables, headers),
+    options,
+  );
+
+useGetNamesQuery.getKey = (variables?: GetNamesQueryVariables) =>
+  variables === undefined ? ['GetNames'] : ['GetNames', variables];

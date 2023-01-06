@@ -2,6 +2,7 @@ fragment Material on MaterialEntity {
   id
   attributes {
     name
+    hex
     type {
       data {
         ...MaterialType

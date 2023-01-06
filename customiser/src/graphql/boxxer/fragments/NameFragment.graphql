@@ -1,0 +1,16 @@
+fragment Name on NameEntity {
+  id
+  attributes {
+    name
+    materialGroup {
+      data {
+        ...MaterialGroup
+      }
+    }
+    outlineGroup {
+      data {
+        ...MaterialGroup
+      }
+    }
+  }
+}

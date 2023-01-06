@@ -1,4 +1,5 @@
-import create, { StateCreator } from 'zustand';
+import create, { StateCreator, StoreApi } from 'zustand';
+import createContext from 'zustand/context';
 import produce from 'immer';
 import { devtools } from 'zustand/middleware';
 import {
@@ -111,4 +112,7 @@ const createMaterialGroup: StateCreator<MaterialGroupState, [['zustand/devtools'
   },
 });
 
-export const useMaterialGroupStore = create<MaterialGroupState>()(devtools(createMaterialGroup));
+export const { Provider, useStore: useMaterialGroupStore } =
+  createContext<StoreApi<MaterialGroupState>>();
+
+export const createStore = () => create<MaterialGroupState>()(devtools(createMaterialGroup));

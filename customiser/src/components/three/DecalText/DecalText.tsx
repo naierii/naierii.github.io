@@ -1,18 +1,18 @@
 import { Decal, PerspectiveCamera, RenderTexture, Text, useTexture } from '@react-three/drei';
-import { TextCustomiser } from '@store/customiser';
+import { EulerArray, TextCustomiser, Vector3Array } from '@store/customiser';
 import { useMemo } from 'react';
 import { Euler, MathUtils, Vector3 } from 'three';
 
 export interface DecalTextProps {
   text?: TextCustomiser;
-  position: Vector3;
-  orientation: Euler;
+  position: Vector3Array;
+  orientation: EulerArray;
   scale?: number;
 }
 
 const DecalText = ({ text, position, orientation, scale = 1 }: DecalTextProps) => {
   const rotationModifier = useMemo(() => {
-    const orientationCopy = orientation.clone();
+    const orientationCopy = new Euler().fromArray(orientation);
     const currentAngle = MathUtils.radToDeg(orientationCopy.z);
     const newAngle = currentAngle + (text?.decalRotation ?? 0);
     orientationCopy.z = MathUtils.degToRad(newAngle);
@@ -45,6 +45,8 @@ const DecalText = ({ text, position, orientation, scale = 1 }: DecalTextProps) =
             anchorY='middle'
             outlineColor={outlineColour}
             outlineWidth={outline}
+            color={!image ? '#000000' : undefined}
+            font={text?.font}
           >
             {image && <meshBasicMaterial attach='material' map={image} />}
             {text?.text}

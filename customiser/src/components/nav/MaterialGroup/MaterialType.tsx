@@ -1,3 +1,4 @@
+import PillButton from '@components/ui/PillButton';
 import { MaterialFragment } from '@graphql/generated/graphql';
 import cn from 'classnames';
 import { Material } from './Material';
@@ -17,18 +18,16 @@ export const MaterialType = ({ className, onMaterialSelected }: MaterialTypeProp
   const setMaterialType = useMaterialGroupStore((state) => state.setMaterialType);
   return (
     <div className={rootClassName}>
-      <h3>Texture</h3>
+      <h5>Texture</h5>
       <div className={styles.materialTypes}>
         {materialTypes.map((mt) => (
-          <button
-            className={cn(styles.pillButton, {
-              [styles.pillButtonSelected]: mt.id === selectedMaterialType?.id,
-            })}
+          <PillButton
             key={mt.id}
             onClick={() => setMaterialType(mt)}
+            selected={mt.id === selectedMaterialType?.id}
           >
             {mt.attributes?.name}
-          </button>
+          </PillButton>
         ))}
       </div>
 

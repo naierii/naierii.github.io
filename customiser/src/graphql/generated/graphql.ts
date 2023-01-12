@@ -218,6 +218,39 @@ export type ComponentMaterialMaterialMapInput = {
   mapType?: InputMaybe<Scalars['String']>;
 };
 
+export type ComponentShopifyAddonProduct = {
+  __typename?: 'ComponentShopifyAddonProduct';
+  id: Scalars['ID'];
+  price: Scalars['Float'];
+  priceValue?: Maybe<Scalars['Int']>;
+  shopifyProductId?: Maybe<Scalars['String']>;
+  shopifyVariantId?: Maybe<Scalars['String']>;
+};
+
+export type ComponentShopifyAddonProductFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<ComponentShopifyAddonProductFiltersInput>>>;
+  not?: InputMaybe<ComponentShopifyAddonProductFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<ComponentShopifyAddonProductFiltersInput>>>;
+  priceValue?: InputMaybe<IntFilterInput>;
+  shopifyProductId?: InputMaybe<StringFilterInput>;
+  shopifyVariantId?: InputMaybe<StringFilterInput>;
+};
+
+export type ComponentShopifyAddonProductInput = {
+  id?: InputMaybe<Scalars['ID']>;
+  price: Scalars['Float'];
+  priceValue?: InputMaybe<Scalars['Int']>;
+  shopifyProductId?: InputMaybe<Scalars['String']>;
+  shopifyVariantId?: InputMaybe<Scalars['String']>;
+};
+
+export type ComponentShopifyCollection = {
+  __typename?: 'ComponentShopifyCollection';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  shopifyCollectionId?: Maybe<Scalars['String']>;
+};
+
 export type CustomDesign = {
   __typename?: 'CustomDesign';
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -644,6 +677,8 @@ export type GenericMorph =
   | ComponentCustomiserCustomOptionModel
   | ComponentCustomiserCustomParts
   | ComponentMaterialMaterialMap
+  | ComponentShopifyAddonProduct
+  | ComponentShopifyCollection
   | CustomDesign
   | CustomProduct
   | CustomProductStyle
@@ -651,6 +686,7 @@ export type GenericMorph =
   | Flag
   | Gallery
   | GalleryCategory
+  | GraphicPrice
   | I18NLocale
   | Material
   | MaterialAreaSize
@@ -667,6 +703,50 @@ export type GenericMorph =
   | UsersPermissionsPermission
   | UsersPermissionsRole
   | UsersPermissionsUser;
+
+export type GraphicPrice = {
+  __typename?: 'GraphicPrice';
+  basePrice?: Maybe<ComponentShopifyAddonProduct>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
+  size?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type GraphicPriceEntity = {
+  __typename?: 'GraphicPriceEntity';
+  attributes?: Maybe<GraphicPrice>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type GraphicPriceEntityResponse = {
+  __typename?: 'GraphicPriceEntityResponse';
+  data?: Maybe<GraphicPriceEntity>;
+};
+
+export type GraphicPriceEntityResponseCollection = {
+  __typename?: 'GraphicPriceEntityResponseCollection';
+  data: Array<GraphicPriceEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type GraphicPriceFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<GraphicPriceFiltersInput>>>;
+  basePrice?: InputMaybe<ComponentShopifyAddonProductFiltersInput>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  description?: InputMaybe<StringFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  not?: InputMaybe<GraphicPriceFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<GraphicPriceFiltersInput>>>;
+  size?: InputMaybe<StringFilterInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type GraphicPriceInput = {
+  basePrice?: InputMaybe<ComponentShopifyAddonProductInput>;
+  description?: InputMaybe<Scalars['String']>;
+  size?: InputMaybe<Scalars['String']>;
+};
 
 export type I18NLocale = {
   __typename?: 'I18NLocale';
@@ -808,6 +888,7 @@ export type Material = {
   images?: Maybe<Array<Maybe<ComponentMaterialMaterialMap>>>;
   name?: Maybe<Scalars['String']>;
   price?: Maybe<MaterialPriceEntityResponse>;
+  thaiName?: Maybe<Scalars['String']>;
   type?: Maybe<MaterialTypeEntityResponse>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -951,6 +1032,7 @@ export type MaterialFiltersInput = {
   not?: InputMaybe<MaterialFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<MaterialFiltersInput>>>;
   price?: InputMaybe<MaterialPriceFiltersInput>;
+  thaiName?: InputMaybe<StringFilterInput>;
   type?: InputMaybe<MaterialTypeFiltersInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
@@ -1008,6 +1090,7 @@ export type MaterialInput = {
   images?: InputMaybe<Array<InputMaybe<ComponentMaterialMaterialMapInput>>>;
   name?: InputMaybe<Scalars['String']>;
   price?: InputMaybe<Scalars['ID']>;
+  thaiName?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<Scalars['ID']>;
 };
 
@@ -1267,6 +1350,7 @@ export type Mutation = {
   createFlag?: Maybe<FlagEntityResponse>;
   createGallery?: Maybe<GalleryEntityResponse>;
   createGalleryCategory?: Maybe<GalleryCategoryEntityResponse>;
+  createGraphicPrice?: Maybe<GraphicPriceEntityResponse>;
   createMaterial?: Maybe<MaterialEntityResponse>;
   createMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   createMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1290,6 +1374,7 @@ export type Mutation = {
   deleteFlag?: Maybe<FlagEntityResponse>;
   deleteGallery?: Maybe<GalleryEntityResponse>;
   deleteGalleryCategory?: Maybe<GalleryCategoryEntityResponse>;
+  deleteGraphicPrice?: Maybe<GraphicPriceEntityResponse>;
   deleteMaterial?: Maybe<MaterialEntityResponse>;
   deleteMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   deleteMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1325,6 +1410,7 @@ export type Mutation = {
   updateFlag?: Maybe<FlagEntityResponse>;
   updateGallery?: Maybe<GalleryEntityResponse>;
   updateGalleryCategory?: Maybe<GalleryCategoryEntityResponse>;
+  updateGraphicPrice?: Maybe<GraphicPriceEntityResponse>;
   updateMaterial?: Maybe<MaterialEntityResponse>;
   updateMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   updateMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1376,6 +1462,10 @@ export type MutationCreateGalleryArgs = {
 
 export type MutationCreateGalleryCategoryArgs = {
   data: GalleryCategoryInput;
+};
+
+export type MutationCreateGraphicPriceArgs = {
+  data: GraphicPriceInput;
 };
 
 export type MutationCreateMaterialArgs = {
@@ -1459,6 +1549,10 @@ export type MutationDeleteGalleryArgs = {
 };
 
 export type MutationDeleteGalleryCategoryArgs = {
+  id: Scalars['ID'];
+};
+
+export type MutationDeleteGraphicPriceArgs = {
   id: Scalars['ID'];
 };
 
@@ -1591,6 +1685,11 @@ export type MutationUpdateGalleryCategoryArgs = {
   id: Scalars['ID'];
 };
 
+export type MutationUpdateGraphicPriceArgs = {
+  data: GraphicPriceInput;
+  id: Scalars['ID'];
+};
+
 export type MutationUpdateMaterialArgs = {
   data: MaterialInput;
   id: Scalars['ID'];
@@ -1671,11 +1770,15 @@ export type MutationUploadArgs = {
 
 export type Name = {
   __typename?: 'Name';
+  basePrice?: Maybe<ComponentShopifyAddonProduct>;
   createdAt?: Maybe<Scalars['DateTime']>;
+  crystalPrice?: Maybe<ComponentShopifyAddonProduct>;
+  letterPrice?: Maybe<ComponentShopifyAddonProduct>;
   materialGroup?: Maybe<MaterialGroupEntityResponse>;
   name?: Maybe<Scalars['String']>;
   outlineGroup?: Maybe<MaterialGroupEntityResponse>;
-  publishedAt?: Maybe<Scalars['DateTime']>;
+  outlinePrice?: Maybe<ComponentShopifyAddonProduct>;
+  puffPrice?: Maybe<ComponentShopifyAddonProduct>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
@@ -1698,22 +1801,30 @@ export type NameEntityResponseCollection = {
 
 export type NameFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<NameFiltersInput>>>;
+  basePrice?: InputMaybe<ComponentShopifyAddonProductFiltersInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
+  crystalPrice?: InputMaybe<ComponentShopifyAddonProductFiltersInput>;
   id?: InputMaybe<IdFilterInput>;
+  letterPrice?: InputMaybe<ComponentShopifyAddonProductFiltersInput>;
   materialGroup?: InputMaybe<MaterialGroupFiltersInput>;
   name?: InputMaybe<StringFilterInput>;
   not?: InputMaybe<NameFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<NameFiltersInput>>>;
   outlineGroup?: InputMaybe<MaterialGroupFiltersInput>;
-  publishedAt?: InputMaybe<DateTimeFilterInput>;
+  outlinePrice?: InputMaybe<ComponentShopifyAddonProductFiltersInput>;
+  puffPrice?: InputMaybe<ComponentShopifyAddonProductFiltersInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
 
 export type NameInput = {
+  basePrice?: InputMaybe<ComponentShopifyAddonProductInput>;
+  crystalPrice?: InputMaybe<ComponentShopifyAddonProductInput>;
+  letterPrice?: InputMaybe<ComponentShopifyAddonProductInput>;
   materialGroup?: InputMaybe<Scalars['ID']>;
   name?: InputMaybe<Scalars['String']>;
   outlineGroup?: InputMaybe<Scalars['ID']>;
-  publishedAt?: InputMaybe<Scalars['DateTime']>;
+  outlinePrice?: InputMaybe<ComponentShopifyAddonProductInput>;
+  puffPrice?: InputMaybe<ComponentShopifyAddonProductInput>;
 };
 
 export type Pagination = {
@@ -1753,6 +1864,8 @@ export type Query = {
   gallery?: Maybe<GalleryEntityResponse>;
   galleryCategories?: Maybe<GalleryCategoryEntityResponseCollection>;
   galleryCategory?: Maybe<GalleryCategoryEntityResponse>;
+  graphicPrice?: Maybe<GraphicPriceEntityResponse>;
+  graphicPrices?: Maybe<GraphicPriceEntityResponseCollection>;
   i18NLocale?: Maybe<I18NLocaleEntityResponse>;
   i18NLocales?: Maybe<I18NLocaleEntityResponseCollection>;
   material?: Maybe<MaterialEntityResponse>;
@@ -1862,6 +1975,16 @@ export type QueryGalleryCategoryArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
+export type QueryGraphicPriceArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type QueryGraphicPricesArgs = {
+  filters?: InputMaybe<GraphicPriceFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
 export type QueryI18NLocaleArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
@@ -1969,7 +2092,6 @@ export type QueryNameArgs = {
 export type QueryNamesArgs = {
   filters?: InputMaybe<NameFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
@@ -2848,7 +2970,44 @@ export type NameFragment = {
         } | null;
       } | null;
     } | null;
+    basePrice?: {
+      __typename?: 'ComponentShopifyAddonProduct';
+      id: string;
+      price: number;
+      shopifyVariantId?: string | null;
+    } | null;
+    letterPrice?: {
+      __typename?: 'ComponentShopifyAddonProduct';
+      id: string;
+      price: number;
+      shopifyVariantId?: string | null;
+    } | null;
+    outlinePrice?: {
+      __typename?: 'ComponentShopifyAddonProduct';
+      id: string;
+      price: number;
+      shopifyVariantId?: string | null;
+    } | null;
+    puffPrice?: {
+      __typename?: 'ComponentShopifyAddonProduct';
+      id: string;
+      price: number;
+      shopifyVariantId?: string | null;
+    } | null;
+    crystalPrice?: {
+      __typename?: 'ComponentShopifyAddonProduct';
+      id: string;
+      price: number;
+      shopifyVariantId?: string | null;
+    } | null;
   } | null;
+};
+
+export type ShopifyAddonProductFragment = {
+  __typename?: 'ComponentShopifyAddonProduct';
+  id: string;
+  price: number;
+  shopifyVariantId?: string | null;
 };
 
 export type CreateCustomDesignMutationVariables = Exact<{
@@ -3196,6 +3355,36 @@ export type GetNamesQuery = {
             } | null;
           } | null;
         } | null;
+        basePrice?: {
+          __typename?: 'ComponentShopifyAddonProduct';
+          id: string;
+          price: number;
+          shopifyVariantId?: string | null;
+        } | null;
+        letterPrice?: {
+          __typename?: 'ComponentShopifyAddonProduct';
+          id: string;
+          price: number;
+          shopifyVariantId?: string | null;
+        } | null;
+        outlinePrice?: {
+          __typename?: 'ComponentShopifyAddonProduct';
+          id: string;
+          price: number;
+          shopifyVariantId?: string | null;
+        } | null;
+        puffPrice?: {
+          __typename?: 'ComponentShopifyAddonProduct';
+          id: string;
+          price: number;
+          shopifyVariantId?: string | null;
+        } | null;
+        crystalPrice?: {
+          __typename?: 'ComponentShopifyAddonProduct';
+          id: string;
+          price: number;
+          shopifyVariantId?: string | null;
+        } | null;
       } | null;
     }>;
   } | null;
@@ -3402,6 +3591,13 @@ export const MaterialFragmentDoc = /*#__PURE__*/ `
   }
 }
     `;
+export const ShopifyAddonProductFragmentDoc = /*#__PURE__*/ `
+    fragment ShopifyAddonProduct on ComponentShopifyAddonProduct {
+  id
+  price
+  shopifyVariantId
+}
+    `;
 export const NameFragmentDoc = /*#__PURE__*/ `
     fragment Name on NameEntity {
   id
@@ -3416,6 +3612,21 @@ export const NameFragmentDoc = /*#__PURE__*/ `
       data {
         ...MaterialGroup
       }
+    }
+    basePrice {
+      ...ShopifyAddonProduct
+    }
+    letterPrice {
+      ...ShopifyAddonProduct
+    }
+    outlinePrice {
+      ...ShopifyAddonProduct
+    }
+    puffPrice {
+      ...ShopifyAddonProduct
+    }
+    crystalPrice {
+      ...ShopifyAddonProduct
     }
   }
 }
@@ -3632,7 +3843,8 @@ export const GetNamesDocument = /*#__PURE__*/ `
 }
     ${NameFragmentDoc}
 ${MaterialGroupFragmentDoc}
-${MaterialTypeFragmentDoc}`;
+${MaterialTypeFragmentDoc}
+${ShopifyAddonProductFragmentDoc}`;
 export const useGetNamesQuery = <TData = GetNamesQuery, TError = unknown>(
   client: GraphQLClient,
   variables?: GetNamesQueryVariables,

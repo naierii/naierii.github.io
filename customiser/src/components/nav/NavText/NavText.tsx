@@ -1,14 +1,12 @@
 import Button from '@components/ui/Button';
-import { MaterialFragment, useGetNamesQuery } from '@graphql/generated/graphql';
-import { graphQLClient } from '@graphql/graphql-client';
 import { useCustomiserStore } from '@store/customiser';
-import { ChangeEvent, startTransition, useState } from 'react';
-import MaterialGroup from '../MaterialGroup';
+import { startTransition, useState } from 'react';
 import NavButtons from '../NavButtons';
 import NavDecalAdjust from '../NavDecalAdjust';
 import NavEditButtons from '../NavEditButtons';
 
 import styles from './NavText.module.scss';
+import NavTextNameTypes from './NavTextNameTypes';
 import NavTextSelect from './NavTextSelect';
 import NavTextText from './NavTextText';
 
@@ -21,15 +19,8 @@ const NavText = () => {
   const updateText = useCustomiserStore((state) => state.updateText);
   const editText = texts?.find((g) => g.edit);
   const [showSelector, setShowSelector] = useState(false);
-  const [showMover, setShowMover] = useState(false);
 
-  const { data } = useGetNamesQuery(
-    graphQLClient,
-    {},
-    {
-      select: (data) => data.names?.data[0],
-    },
-  );
+  console.log({ editText });
 
   const addText = () => {
     setShowSelector(true);
@@ -47,22 +38,6 @@ const NavText = () => {
     });
   };
 
-  const setMaterial = (material: MaterialFragment) => {
-    if (editText?.key) {
-      updateText(editText.key, {
-        material,
-      });
-    }
-  };
-
-  const setOutline = (outline: MaterialFragment) => {
-    if (editText?.key) {
-      updateText(editText.key, {
-        outline,
-      });
-    }
-  };
-
   const applyText = () => {
     if (editText?.key) {
       updateText(editText.key, {
@@ -72,31 +47,20 @@ const NavText = () => {
     }
 
     setShowSelector(false);
-    setShowMover(false);
   };
 
   return (
     <>
       {showSelector ? (
-        <NavTextSelect setShowMover={setShowMover} setShowSelector={setShowSelector} />
-      ) : showMover ? (
         <>
+          <NavTextSelect editText={editText} />
           <NavDecalAdjust
             scale={editText?.decalScale}
             rotation={editText?.decalRotation}
             onScale={setScale}
             onRotate={setRotation}
           />
-          <h4>Colour</h4>
-          <MaterialGroup
-            materialGroup={data?.attributes?.materialGroup?.data}
-            onMaterialSelected={setMaterial}
-          />
-          <h4>Outline</h4>
-          <MaterialGroup
-            materialGroup={data?.attributes?.outlineGroup?.data}
-            onMaterialSelected={setOutline}
-          />
+          <NavTextNameTypes editText={editText} />
           <NavEditButtons disabled={!editText} onApply={applyText} />
         </>
       ) : (
@@ -104,7 +68,7 @@ const NavText = () => {
           <div className={styles.customiserFlags}>
             <h3>Your Text</h3>
             {texts.map((t) => (
-              <NavTextText key={t.key} text={t} setShowMover={setShowMover} />
+              <NavTextText key={t.key} text={t} setShowSelector={setShowSelector} />
             ))}
             <Button colour='red' onClick={addText}>
               Add Text

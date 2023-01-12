@@ -62,7 +62,7 @@ const MaterialGroupLoader = ({
 
   return (
     <div className={rootClassName}>
-      <h3>Colour</h3>
+      <h5>Colour</h5>
       <div className={styles.colourGroups}>
         {colourGroups.map((group) => (
           <button key={group.id} onClick={() => setColourGroup(group)}>

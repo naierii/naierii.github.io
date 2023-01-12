@@ -15,9 +15,9 @@ import {
 import { MaterialTextureModel } from '@models';
 import produce from 'immer';
 import { Euler, Vector3 } from 'three';
+import { v4 as uuidv4 } from 'uuid';
 import create, { StateCreator } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { v4 as uuidv4 } from 'uuid';
 
 import { UNIT } from './constants';
 interface SelectedModel {
@@ -30,24 +30,33 @@ interface Part {
   material: MaterialFragment;
 }
 
+export type Vector3Array = [number, number, number];
+export type EulerArray = number[];
+
 export interface FlagCustomiser {
   key?: string;
   flag?: FlagFragment;
   canvasJSON?: any;
   materialJSON?: any;
-  decalPosition?: Vector3;
-  decalOrientation?: Euler;
+  decalPosition?: Vector3Array;
+  decalOrientation?: EulerArray;
   decalRotation?: number;
   decalScale?: number;
   decalFreeze?: boolean;
   edit?: boolean;
 }
 
+interface AddonPrice {
+  price?: number;
+  quantity: number;
+  shopifyVariantId?: Maybe<Scalars['String']>;
+}
+
 export interface TextCustomiser {
   key?: string;
   text?: string;
-  decalPosition?: Vector3;
-  decalOrientation?: Euler;
+  decalPosition?: Vector3Array;
+  decalOrientation?: EulerArray;
   decalRotation?: number;
   decalScale?: number;
   decalFreeze?: boolean;
@@ -55,6 +64,16 @@ export interface TextCustomiser {
   font?: string;
   material?: MaterialFragment;
   outline?: MaterialFragment;
+  nameType?: {
+    id?: Maybe<Scalars['ID']>;
+    name?: Maybe<Scalars['String']>;
+  };
+  basePrice?: AddonPrice;
+  letterPrice?: AddonPrice;
+  outlinePrice?: AddonPrice;
+  puffPrice?: AddonPrice;
+  crystalPrice?: AddonPrice;
+  totalPrice?: number;
 }
 export interface NavItem {
   id?: Scalars['ID'];
@@ -162,6 +181,12 @@ const createCustomiser: StateCreator<
       const price = part.material.attributes?.price?.data?.attributes?.price ?? 0;
       const sum = priceAdjust * price;
       total = total + sum;
+    });
+
+    get().texts.forEach((text) => {
+      if (text.totalPrice) {
+        total = total + text.totalPrice;
+      }
     });
 
     return total.toFixed(2);
@@ -372,7 +397,33 @@ const createCustomiser: StateCreator<
         state.texts = [
           ...state.texts.map((f) => {
             if (f.key === key) {
-              return { ...f, ...text };
+              let letterPrice;
+              if (f.letterPrice && f.text) {
+                letterPrice = f.letterPrice;
+                letterPrice.quantity = f.text.length;
+              }
+              const basePriceTotal = f.basePrice?.price
+                ? f.basePrice.price * f.basePrice?.quantity
+                : 0;
+              const letterPriceTotal = f.letterPrice?.price
+                ? f.letterPrice.price * f.letterPrice?.quantity
+                : 0;
+              const outlinePriceTotal = f.outlinePrice?.price
+                ? f.outlinePrice.price * f.outlinePrice?.quantity
+                : 0;
+              const puffPriceTotal = f.puffPrice?.price
+                ? f.puffPrice.price * f.puffPrice?.quantity
+                : 0;
+              const crystalPriceTotal = f.crystalPrice?.price
+                ? f.crystalPrice.price * f.crystalPrice?.quantity
+                : 0;
+              const totalPrice =
+                basePriceTotal +
+                letterPriceTotal +
+                outlinePriceTotal +
+                puffPriceTotal +
+                crystalPriceTotal;
+              return { ...f, ...text, letterPrice, totalPrice };
             }
             return f;
           }),

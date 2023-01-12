@@ -59,16 +59,3 @@
     }
   }
 }
-
-.pillButton {
-  padding: rem(12px) rem(24px);
-  border-radius: 50vw;
-  border: 2px solid $black;
-  white-space: nowrap;
-}
-
-.pillButtonSelected {
-  border-color: $red;
-  background-color: $red;
-  color: $white;
-}

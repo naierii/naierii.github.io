@@ -8,17 +8,17 @@ import styles from './NavText.module.scss';
 export interface NavTextTextProps {
   text: TextCustomiser;
   className?: string;
-  setShowMover: Dispatch<SetStateAction<boolean>>;
+  setShowSelector: Dispatch<SetStateAction<boolean>>;
 }
 
-const NavTextText = ({ className, text, setShowMover }: NavTextTextProps) => {
+const NavTextText = ({ className, text, setShowSelector }: NavTextTextProps) => {
   const { updateText, deleteText } = useCustomiserStore((state) => state);
   const rootClassName = cn(styles.root, className);
 
   const editItem = () => {
     if (text.key) {
       updateText(text.key, { edit: true });
-      setShowMover(true);
+      setShowSelector(true);
     }
   };
 

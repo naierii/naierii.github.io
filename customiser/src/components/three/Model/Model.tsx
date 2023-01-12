@@ -2,7 +2,7 @@ import { Maybe, ModelFragment } from '@graphql/generated/graphql';
 import { useGLTF } from '@react-three/drei';
 import { ThreeElements } from '@react-three/fiber';
 import { useCustomiserStore } from '@store/customiser';
-import { Dispatch, Fragment, SetStateAction, useEffect, useMemo, useRef } from 'react';
+import { Dispatch, Fragment, SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
 import { Mesh } from 'three';
 import { GLTF } from 'three-stdlib';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
@@ -22,10 +22,10 @@ const Model = ({ model }: CustomiserModelProps) => {
   const meshRef = useRef<Mesh>(null);
   const flags = useCustomiserStore((state) => state.flags);
   const texts = useCustomiserStore((state) => state.texts);
-  const { nodes } = useGLTF('/test.glb') as unknown as GLTFResult;
-  // const { nodes } = useGLTF(
-  //   model?.attributes?.model?.data?.attributes?.url as string,
-  // ) as unknown as GLTFResult;
+  // const { nodes } = useGLTF('/test.glb') as unknown as GLTFResult;
+  const { nodes } = useGLTF(
+    model?.attributes?.model?.data?.attributes?.url as string,
+  ) as unknown as GLTFResult;
 
   const geom = useMemo(() => {
     const geometries = [];
@@ -50,7 +50,7 @@ const Model = ({ model }: CustomiserModelProps) => {
 
   return (
     <>
-      {/* {model?.attributes?.parts?.data.map((part) => {
+      {model?.attributes?.parts?.data.map((part) => {
         return (
           <Fragment key={part.id}>
             {part?.attributes?.nodeId && (
@@ -62,7 +62,7 @@ const Model = ({ model }: CustomiserModelProps) => {
             )}
           </Fragment>
         );
-      })} */}
+      })}
       <mesh {...graphicProps} ref={meshRef}>
         <meshStandardMaterial {...graphicMaterialProps} />
         {flags.map((flag) => {

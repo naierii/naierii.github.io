@@ -55,8 +55,8 @@ const CustomiserCanvas = ({
         positionRef.current.copy(event.point);
         orientationRef.current.copy(mouseHelperRef.current.rotation);
         updateFlag(editFlag.key, {
-          decalPosition: positionRef.current.clone(),
-          decalOrientation: orientationRef.current.clone(),
+          decalPosition: positionRef.current.clone().toArray(),
+          decalOrientation: orientationRef.current.clone().toArray(),
         });
       }
     }
@@ -68,8 +68,8 @@ const CustomiserCanvas = ({
         positionRef.current.copy(event.point);
         orientationRef.current.copy(mouseHelperRef.current.rotation);
         updateText(editText.key, {
-          decalPosition: positionRef.current.clone(),
-          decalOrientation: orientationRef.current.clone(),
+          decalPosition: positionRef.current.clone().toArray(),
+          decalOrientation: orientationRef.current.clone().toArray(),
         });
       }
     }

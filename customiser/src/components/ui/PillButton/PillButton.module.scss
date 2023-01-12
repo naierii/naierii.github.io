@@ -1,0 +1,17 @@
+@use '~sass-rem' as *;
+
+@import '@styles/variables';
+
+.pillButton {
+  padding: rem(7px) rem(17px);
+  border-radius: 50vw;
+  border: 2px solid $black;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.pillButtonSelected {
+  border-color: $red;
+  background-color: $red;
+  color: $white;
+}

@@ -1,12 +1,11 @@
 import { Decal, useTexture } from '@react-three/drei';
-import { ThreeElements } from '@react-three/fiber';
-import { FlagCustomiser } from '@store/customiser';
+import { EulerArray, FlagCustomiser, Vector3Array } from '@store/customiser';
 import { useMemo } from 'react';
 import { Euler, MathUtils, Vector3 } from 'three';
 export interface DecalGraphicProps {
   flag?: FlagCustomiser;
-  position: Vector3;
-  orientation: Euler;
+  position: Vector3Array;
+  orientation: EulerArray;
   scale?: number;
 }
 
@@ -24,7 +23,7 @@ const DecalGraphic = ({ flag, position, orientation, scale = 1 }: DecalGraphicPr
   }, [image]);
 
   const rotationModifier = useMemo(() => {
-    const orientationCopy = orientation.clone();
+    const orientationCopy = new Euler().fromArray(orientation);
     const currentAngle = MathUtils.radToDeg(orientationCopy.z);
     const newAngle = currentAngle + (flag?.decalRotation ?? 0);
     orientationCopy.z = MathUtils.degToRad(newAngle);
@@ -35,22 +34,21 @@ const DecalGraphic = ({ flag, position, orientation, scale = 1 }: DecalGraphicPr
     return new Vector3(1 * ratio * scale, 1 * scale, 4);
   }, [scale]);
 
-  if (!position || !rotationModifier || !image) {
+  if (!image) {
     return null;
   }
 
-  const materialProps: ThreeElements['meshPhongMaterial'] = {
-    map: image,
-    transparent: true,
-    depthTest: true,
-    depthWrite: false,
-    polygonOffset: true,
-    polygonOffsetFactor: -10,
-  };
-
   return (
     <Decal position={position} rotation={rotationModifier} scale={scaleModifier}>
-      <meshPhongMaterial {...materialProps} />
+      <meshPhongMaterial
+        map={image}
+        transparent
+        depthTest
+        depthWrite={false}
+        polygonOffset
+        polygonOffsetFactor={-10}
+        needsUpdate
+      />
     </Decal>
   );
 };

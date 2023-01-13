@@ -46,7 +46,7 @@ const DecalGraphic = ({ flag, position, orientation, scale = 1 }: DecalGraphicPr
         depthTest
         depthWrite={false}
         polygonOffset
-        polygonOffsetFactor={-10}
+        polygonOffsetFactor={-20}
         needsUpdate
       />
     </Decal>

@@ -1,9 +1,8 @@
 import { Maybe, ModelFragment } from '@graphql/generated/graphql';
 import { useGLTF } from '@react-three/drei';
-import { ThreeElements } from '@react-three/fiber';
 import { useCustomiserStore } from '@store/customiser';
-import { Dispatch, Fragment, SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
-import { Mesh } from 'three';
+import { Fragment, useMemo, useRef } from 'react';
+import { Material, Mesh } from 'three';
 import { GLTF } from 'three-stdlib';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
 import CustomiserMesh from '../CustomiserMesh';
@@ -14,8 +13,8 @@ export interface CustomiserModelProps {
 }
 
 type GLTFResult = GLTF & {
-  nodes: { [name: string]: THREE.Mesh };
-  materials: { [name: string]: THREE.Material };
+  nodes: { [name: string]: Mesh };
+  materials: { [name: string]: Material };
 };
 
 const Model = ({ model }: CustomiserModelProps) => {
@@ -39,15 +38,6 @@ const Model = ({ model }: CustomiserModelProps) => {
     return BufferGeometryUtils.mergeBufferGeometries(geometries);
   }, [nodes]);
 
-  const graphicProps: ThreeElements['mesh'] = {
-    geometry: geom,
-  };
-
-  const graphicMaterialProps: ThreeElements['meshStandardMaterial'] = {
-    transparent: true,
-    // colorWrite: false,
-  };
-
   return (
     <>
       {model?.attributes?.parts?.data.map((part) => {
@@ -63,8 +53,8 @@ const Model = ({ model }: CustomiserModelProps) => {
           </Fragment>
         );
       })}
-      <mesh {...graphicProps} ref={meshRef}>
-        <meshStandardMaterial {...graphicMaterialProps} />
+      <mesh geometry={geom} ref={meshRef}>
+        <meshStandardMaterial transparent colorWrite={false} />
         {flags.map((flag) => {
           if (flag.decalPosition && flag.decalOrientation)
             return (

@@ -34,7 +34,6 @@ const Scene = forwardRef<Group, SceneProps>(
         {selectedModels.map((m) => (
           <Model key={m.model?.id} model={m.model} />
         ))}
-        {/* <Tassels /> */}
       </group>
     );
   },

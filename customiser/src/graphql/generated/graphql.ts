@@ -170,6 +170,7 @@ export type ComponentCustomiserCustomParts = {
   modelParts?: Maybe<ModelPartRelationResponseCollection>;
   name?: Maybe<Scalars['String']>;
   optional?: Maybe<Scalars['Boolean']>;
+  tassels?: Maybe<Scalars['Boolean']>;
 };
 
 export type ComponentCustomiserCustomPartsModelPartsArgs = {
@@ -187,6 +188,7 @@ export type ComponentCustomiserCustomPartsFiltersInput = {
   not?: InputMaybe<ComponentCustomiserCustomPartsFiltersInput>;
   optional?: InputMaybe<BooleanFilterInput>;
   or?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomPartsFiltersInput>>>;
+  tassels?: InputMaybe<BooleanFilterInput>;
 };
 
 export type ComponentCustomiserCustomPartsInput = {
@@ -196,6 +198,7 @@ export type ComponentCustomiserCustomPartsInput = {
   modelParts?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   name?: InputMaybe<Scalars['String']>;
   optional?: InputMaybe<Scalars['Boolean']>;
+  tassels?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type ComponentMaterialMaterialMap = {
@@ -2590,6 +2593,7 @@ export type CustomProductFragment = {
       id: string;
       name?: string | null;
       optional?: boolean | null;
+      tassels?: boolean | null;
       areaSize?: {
         __typename?: 'MaterialAreaSizeEntityResponse';
         data?: {
@@ -2683,6 +2687,7 @@ export type CustomProductPartFragment = {
   id: string;
   name?: string | null;
   optional?: boolean | null;
+  tassels?: boolean | null;
   areaSize?: {
     __typename?: 'MaterialAreaSizeEntityResponse';
     data?: {
@@ -3116,6 +3121,7 @@ export type GetCustomProductByShopifyIdQuery = {
           id: string;
           name?: string | null;
           optional?: boolean | null;
+          tassels?: boolean | null;
           areaSize?: {
             __typename?: 'MaterialAreaSizeEntityResponse';
             data?: {
@@ -3478,6 +3484,7 @@ export const CustomProductPartFragmentDoc = /*#__PURE__*/ `
   id
   name
   optional
+  tassels
   areaSize {
     data {
       ...MaterialAreaSize

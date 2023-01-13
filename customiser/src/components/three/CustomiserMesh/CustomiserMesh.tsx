@@ -1,16 +1,31 @@
 import { MaterialTextureMapModel } from '@models';
 import { useTexture } from '@react-three/drei';
-import type { ThreeElements } from '@react-three/fiber';
 import { useCustomiserStore } from '@store/customiser';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Box3, DoubleSide, Mesh, MeshStandardMaterial, RepeatWrapping, Vector3 } from 'three';
+import {
+  Box3,
+  DoubleSide,
+  Mesh,
+  MeshStandardMaterial,
+  RepeatWrapping,
+  Texture,
+  Vector3,
+} from 'three';
 export interface ClonedTextureMeshProps {
   node: Mesh;
   texture: MaterialTextureMapModel;
+  tasselsTexture: MaterialTextureMapModel;
+  tassels: boolean;
+  hex: string;
 }
 
-const ClonedTextureMesh = ({ node, texture }: ClonedTextureMeshProps) => {
-  // const [hovered, setHovered] = useState(false);
+const ClonedTextureMesh = ({
+  node,
+  texture,
+  tasselsTexture,
+  tassels,
+  hex,
+}: ClonedTextureMeshProps) => {
   const [textures, setTextures] = useState<MaterialTextureMapModel>();
   const materialRef = useRef<MeshStandardMaterial>(null);
   const meshRef = useRef<Mesh>(null);
@@ -40,41 +55,29 @@ const ClonedTextureMesh = ({ node, texture }: ClonedTextureMeshProps) => {
     materialRef.current.needsUpdate = true;
   }
 
-  const meshProps: ThreeElements['mesh'] = {
-    geometry: node.geometry,
-  };
-
-  const materialProps: ThreeElements['meshStandardMaterial'] = {
-    side: DoubleSide,
-    ...textures,
-  };
-
-  if (textures?.displacementMap) {
-    materialProps.displacementScale = 0.01;
-  }
-
-  if (!textures?.roughnessMap) {
-    materialProps.roughness = 0.4;
-  }
-
-  if (!textures?.metalnessMap) {
-    materialProps.metalness = 0.05;
-  }
-
-  // const onPointerEnter = (e: ThreeEvent<PointerEvent>) => {
-  //   e.stopPropagation();
-  //   setHovered(true);
-  // };
-
-  // const onPointerLeave = (e: ThreeEvent<PointerEvent>) => {
-  //   e.stopPropagation();
-  //   setHovered(false);
-  // };
-
   return (
     <>
-      <mesh {...meshProps} ref={meshRef}>
-        <meshStandardMaterial {...materialProps} ref={materialRef} />
+      <mesh geometry={node.geometry} ref={meshRef}>
+        {tassels ? (
+          <meshStandardMaterial
+            ref={materialRef}
+            {...tasselsTexture}
+            transparent
+            bumpScale={0.15}
+            color={hex}
+            side={DoubleSide}
+            metalness={-0.5}
+          />
+        ) : (
+          <meshStandardMaterial
+            side={DoubleSide}
+            {...textures}
+            displacementScale={textures?.displacementMap ? 0.01 : undefined}
+            roughness={0.4}
+            metalness={0.05}
+            ref={materialRef}
+          />
+        )}
       </mesh>
     </>
   );
@@ -86,9 +89,42 @@ export interface CustomiserMeshProps {
 
 const CustomiserMesh = ({ node, nodeId }: CustomiserMeshProps) => {
   const texture = useCustomiserStore(useCallback((state) => state.texture(nodeId), [nodeId]));
-  const materialTexture = useTexture({ ...texture });
+  const optional = useCustomiserStore(useCallback((state) => state.optional(nodeId), [nodeId]));
+  const tassels = useCustomiserStore(useCallback((state) => state.tassels(nodeId), [nodeId]));
 
-  return <ClonedTextureMesh node={node} texture={materialTexture} />;
+  const materialTexture = useTexture({ ...texture.materials });
+  const tasselsTexture = useTexture(
+    {
+      alphaMap:
+        'https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/tassels/tassels-opacity.jpg',
+      bumpMap: 'https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/tassels/tassels-bump.jpg',
+    },
+    (textures) => {
+      const [bumpMap, alphaMap] = textures as Texture[];
+      alphaMap.wrapS = alphaMap.wrapT = RepeatWrapping;
+      alphaMap.flipY = false;
+      alphaMap.repeat.set(1, 1);
+      alphaMap.needsUpdate = true;
+      bumpMap.wrapS = bumpMap.wrapT = RepeatWrapping;
+      bumpMap.flipY = false;
+      bumpMap.repeat.set(1, 1);
+      bumpMap.needsUpdate = true;
+    },
+  );
+
+  if (optional) {
+    return null;
+  }
+
+  return (
+    <ClonedTextureMesh
+      node={node}
+      texture={materialTexture}
+      tasselsTexture={tasselsTexture}
+      tassels={tassels}
+      hex={texture.hex}
+    />
+  );
 };
 
 export default CustomiserMesh;

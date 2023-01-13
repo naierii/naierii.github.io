@@ -14,7 +14,6 @@ import {
 } from '@graphql/generated/graphql-shopify';
 import { MaterialTextureModel } from '@models';
 import produce from 'immer';
-import { Euler, Vector3 } from 'three';
 import { v4 as uuidv4 } from 'uuid';
 import create, { StateCreator } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
@@ -107,10 +106,6 @@ export interface CustomiserState {
     weight?: SizingMeasurement;
     variation?: ShopifyProductVariantFragment;
   };
-  decalPosition?: Vector3;
-  decalRotation?: Euler;
-  decalScale?: number;
-  decalFreeze: boolean;
 }
 
 export interface CustomiserActions {
@@ -137,7 +132,9 @@ export interface CustomiserActions {
   updateText: (key: string, text: TextCustomiser) => void;
   deleteText: (key: string) => void;
   resetNav: () => void;
-  texture: (nodeId: string) => MaterialTextureModel;
+  texture: (nodeId: string) => { materials: MaterialTextureModel; hex: string };
+  optional: (nodeId: string) => boolean;
+  tassels: (nodeId: string) => boolean;
   reset: () => void;
 }
 
@@ -160,7 +157,6 @@ const initialState: CustomiserState = {
       unit: UNIT.WEIGHT.KG,
     },
   },
-  decalFreeze: false,
 };
 
 const createCustomiser: StateCreator<
@@ -339,9 +335,11 @@ const createCustomiser: StateCreator<
   texture: (nodeId) => {
     const parts = get().parts;
     let materials: MaterialTextureModel = {};
+    let hex = '';
     for (const p of parts) {
       const test = p.part.modelParts?.data.map((mp) => mp?.attributes?.nodeId).indexOf(nodeId);
       if (test != -1 && p?.material?.attributes?.images) {
+        hex = p.material.attributes.hex ?? '';
         p.material.attributes.images?.forEach((image) => {
           materials = {
             ...materials,
@@ -352,7 +350,51 @@ const createCustomiser: StateCreator<
         break;
       }
     }
-    return materials;
+    return {
+      materials,
+      hex,
+    };
+  },
+  optional: (nodeId) => {
+    let isOptional = false;
+    const parts = get().parts;
+    const customProduct = get().customProduct;
+    if (customProduct?.attributes?.parts?.length) {
+      const optionalParts = customProduct.attributes.parts.filter((p) => p?.optional);
+      for (const part of optionalParts) {
+        const test = part?.modelParts?.data.map((mp) => mp?.attributes?.nodeId).indexOf(nodeId);
+        if (test != -1) {
+          isOptional = true;
+          break;
+        }
+      }
+    }
+
+    for (const p of parts) {
+      const test = p.part.modelParts?.data.map((mp) => mp?.attributes?.nodeId).indexOf(nodeId);
+      if (test != -1) {
+        isOptional = false;
+        break;
+      }
+    }
+
+    return isOptional;
+  },
+  tassels: (nodeId) => {
+    let isTassels = false;
+    const customProduct = get().customProduct;
+    if (customProduct?.attributes?.parts?.length) {
+      const tasselParts = customProduct.attributes.parts.filter((p) => p?.tassels);
+      for (const part of tasselParts) {
+        const test = part?.modelParts?.data.map((mp) => mp?.attributes?.nodeId).indexOf(nodeId);
+        if (test != -1) {
+          isTassels = true;
+          break;
+        }
+      }
+    }
+
+    return isTassels;
   },
   addFlag: (flag) => {
     set(

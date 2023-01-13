@@ -2,6 +2,7 @@ fragment CustomProductPart on ComponentCustomiserCustomParts {
   id
   name
   optional
+  tassels
   areaSize {
     data {
       ...MaterialAreaSize

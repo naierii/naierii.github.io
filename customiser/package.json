@@ -98,6 +98,7 @@
     "raw-loader": "^4.0.2",
     "react-app-rewire-alias": "^1.1.7",
     "react-app-rewired": "^2.2.1",
-    "ts-loader": "^9.4.1"
+    "ts-loader": "^9.4.1",
+    "ts-node": "^10.9.1"
   }
 }

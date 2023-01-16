@@ -1,34 +1,27 @@
-import CustomiserNav from '@components/nav/CustomiserNav';
-import CustomiserCanvas from '@components/three/CustomiserCanvas';
 import Button from '@components/ui/Button';
 import { useGetCustomProductByShopifyIdQuery } from '@graphql/generated/graphql';
 import { useShopifyGetProductByIdQuery } from '@graphql/generated/graphql-shopify';
 import { useCustomiserStore } from '@store/customiser';
-import cn from 'classnames';
-import { useEffect, useRef, useState } from 'react';
-import Header from '../Header';
+import { lazy, Suspense, useEffect, useState } from 'react';
 
 import { useGraphics } from '@context/GraphicsContext';
 import { graphQLClient } from '@graphql/graphql-client';
 import { useHydration } from '@hooks';
-import { Camera } from 'three';
-import styles from './Main.module.scss';
+import { useDesignStore } from '@store/design';
+
+const Customiser = lazy(() => import('@components/layout/Customiser'));
 
 export interface MainProps {
-  className?: string;
   product: string;
 }
 
-const Main = ({ className, product }: MainProps) => {
-  const cameraRef = useRef<Camera | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+const Main = ({ product }: MainProps) => {
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [show, setShow] = useState(false);
+  const { show, setShow } = useDesignStore((state) => state);
   const { graphics, loadGraphic } = useGraphics();
   const setCustomProduct = useCustomiserStore((state) => state.setCustomProduct);
   const flags = useCustomiserStore((state) => state.flags);
   const isHydrated = useHydration();
-  const rootClassName = cn(styles.root, className);
 
   const { data: customProduct } = useGetCustomProductByShopifyIdQuery(
     graphQLClient,
@@ -64,14 +57,9 @@ const Main = ({ className, product }: MainProps) => {
   return (
     <>
       {show ? (
-        <div className={rootClassName}>
-          <CustomiserNav className={styles.nav} />
-          <Header className={styles.header} cameraRef={cameraRef} canvasRef={canvasRef} />
-          <CustomiserCanvas className={styles.model} cameraRef={cameraRef} canvasRef={canvasRef} />
-          <Button className={styles.close} onClick={() => setShow(false)}>
-            Close
-          </Button>
-        </div>
+        <Suspense fallback={null}>
+          <Customiser />
+        </Suspense>
       ) : (
         <Button colour='red' onClick={() => setShow(true)}>
           Customise

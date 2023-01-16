@@ -23,6 +23,9 @@ mix.webpackConfig({
       '@lib': path.resolve(__dirname, 'src/lib/'),
     },
   },
+  output: {
+    chunkFilename: 'customiser.[name].js',
+  },
 });
 
 mix.extend('addWebpackLoaders', (webpackConfig, loaderRules) => {
@@ -39,4 +42,4 @@ mix.addWebpackLoaders([
   },
 ]);
 
-mix.ts('src/index.tsx', 'customiser.js');
+mix.ts('src/index.tsx', 'customiser.js').react();

@@ -52,8 +52,8 @@ const Header = ({ className, cameraRef, canvasRef }: HeaderProps) => {
   const shopifyAddToCart = useMutation({
     mutationFn: addToCart,
     onSuccess: () => {
-      // window.location.href = window.Shopify.routes.root + 'cart';
-      // reset();
+      window.location.href = window.Shopify.routes.root + 'cart';
+      reset();
     },
   });
 

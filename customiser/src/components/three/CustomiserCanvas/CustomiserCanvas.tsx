@@ -1,14 +1,16 @@
 import Lights from '@components/three/Lights';
-import Scene from '@components/three/Scene';
 import { OrbitControls } from '@react-three/drei';
 import { Canvas, ThreeEvent } from '@react-three/fiber';
 import cn from 'classnames';
-import { MutableRefObject, RefObject, useCallback, useRef } from 'react';
+import { lazy, MutableRefObject, RefObject, useCallback, useRef } from 'react';
 
 import { useCustomiserStore } from '@store/customiser';
 import { Camera, Euler, Group, Mesh, Vector3 } from 'three';
+import Loadable from '../Loadable';
 import MouseHelper from '../MouseHelper';
 import styles from './CustomiserCanvas.module.scss';
+
+const Scene = Loadable(lazy(() => import('@components/three/Scene')));
 
 export interface CustomiserCanvasProps {
   className?: string;

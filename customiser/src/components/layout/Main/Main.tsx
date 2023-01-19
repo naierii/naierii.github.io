@@ -57,7 +57,7 @@ const Main = ({ product }: MainProps) => {
   return (
     <>
       {show ? (
-        <Suspense fallback={null}>
+        <Suspense fallback={<div></div>}>
           <Customiser />
         </Suspense>
       ) : (

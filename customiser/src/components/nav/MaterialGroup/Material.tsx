@@ -1,23 +1,21 @@
 import { MaterialFragment } from '@graphql/generated/graphql';
-import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
 import styles from './MaterialGroup.module.scss';
 
 export interface MaterialProps {
   className?: string;
   material: MaterialFragment;
+  onMaterialSelected: (material: MaterialFragment) => void;
 }
 
-export const Material = ({ className, material }: MaterialProps) => {
+export const Material = ({ className, material, onMaterialSelected }: MaterialProps) => {
   const rootClassName = cn(styles.material, className);
-  const selectedPart = useCustomiserStore((state) => state.selectedPart);
-  const setPart = useCustomiserStore((state) => state.setPart);
 
   const mapImage = material?.attributes?.images?.find((i) => i?.mapType === 'map');
 
   const onClick = () => {
-    if (selectedPart && material) {
-      setPart(selectedPart, material);
+    if (material) {
+      onMaterialSelected(material);
     }
   };
 

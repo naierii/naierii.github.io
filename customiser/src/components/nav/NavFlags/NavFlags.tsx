@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { ChangeEvent, startTransition, useState } from 'react';
 import { NavFlagsSelect } from './NavFlagsSelect';
 
 import Button from '@components/ui/Button';
-import { useGraphics } from '@context/GraphicsContext';
+import { useCustomiserStore } from '@store/customiser';
 import NavButtons from '../NavButtons';
+import NavDecalAdjust from '../NavDecalAdjust';
 import NavEditButtons from '../NavEditButtons';
 import styles from './NavFlags.module.scss';
 import { NavFlagsFlag } from './NavFlagsFlag';
@@ -13,26 +14,60 @@ import { NavFlagsFlag } from './NavFlagsFlag';
 // }
 
 const NavFlags = () => {
-  const { graphics } = useGraphics();
-  const editGraphic = graphics?.find((g) => g.edit);
+  const flags = useCustomiserStore((state) => state.flags);
+  const updateFlag = useCustomiserStore((state) => state.updateFlag);
+  const editFlag = flags?.find((g) => g.edit);
+
   const [showSelector, setShowSelector] = useState(false);
+  const [showMover, setShowMover] = useState(false);
 
   const addFlag = () => {
     setShowSelector(true);
   };
 
+  const setScale = (event: number[]) => {
+    if (editFlag?.key) updateFlag(editFlag.key, { decalScale: Number(event[1]) });
+  };
+
+  const setRotation = (event: [number, number]) => {
+    startTransition(() => {
+      if (editFlag?.key) updateFlag(editFlag.key, { decalRotation: Number(event[1]) });
+    });
+  };
+
+  const applyFlag = () => {
+    if (editFlag?.key) {
+      updateFlag(editFlag.key, {
+        decalFreeze: false,
+        edit: false,
+      });
+    }
+
+    setShowSelector(false);
+    setShowMover(false);
+  };
+
   return (
     <>
-      {showSelector ? (
+      {showSelector && !showMover ? (
         <>
-          <NavFlagsSelect editFlag={editGraphic} setShowSelector={setShowSelector} />
-          <NavEditButtons editFlag={editGraphic} setShowSelector={setShowSelector} />
+          <NavFlagsSelect editFlag={editFlag} setShowMover={setShowMover} />
+        </>
+      ) : showMover ? (
+        <>
+          <NavDecalAdjust
+            scale={editFlag?.decalScale}
+            rotation={editFlag?.decalRotation}
+            onScale={setScale}
+            onRotate={setRotation}
+          />
+          <NavEditButtons disabled={!editFlag} onApply={applyFlag} />
         </>
       ) : (
         <>
           <div className={styles.customiserFlags}>
             <h3>Your Flags</h3>
-            {graphics?.map((flag) => (
+            {flags?.map((flag) => (
               <NavFlagsFlag key={flag.key} flag={flag} setShowSelector={setShowSelector} />
             ))}
             <Button colour='red' onClick={addFlag}>

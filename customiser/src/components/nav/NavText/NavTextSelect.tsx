@@ -1,40 +1,73 @@
-import Button from '@components/ui/Button';
+import FormInput from '@components/ui/FormInput';
+import FormSelect from '@components/ui/FormSelect';
+import { TextCustomiser, useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
-import { useState } from 'react';
-import NavButtons from '../NavButtons';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import styles from './NavText.module.scss';
 
 export interface NavTextSelectProps {
   className?: string;
+  editText?: TextCustomiser;
 }
 
-const NavTextSelect = ({ className }: NavTextSelectProps) => {
-  const rootClassName = cn(styles.root, className);
-  const [showSelector, setShowSelector] = useState(false);
+const fonts = [
+  {
+    name: 'Arial',
+    url: 'https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/fonts/arial-bold-webfont.woff',
+  },
+  {
+    name: 'Oswald',
+    url: 'https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/fonts/oswald-semibold.woff',
+  },
+  {
+    name: 'College',
+    url: 'https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/fonts/college_block-webfont.woff',
+  },
+  {
+    name: 'Ballantines',
+    url: 'https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/fonts/ballantines-bold-webfont.woff',
+  },
+];
 
-  const addText = () => {
-    setShowSelector(true);
+const NavTextSelect = ({ className, editText }: NavTextSelectProps) => {
+  const [text, setText] = useState<string | undefined>(editText?.text);
+  const [font, setFont] = useState<string | undefined>(editText?.font);
+  const { addText, updateText } = useCustomiserStore((state) => state);
+  const rootClassName = cn(styles.root, className);
+
+  useEffect(() => {
+    if (editText?.key) {
+      updateText(editText.key, {
+        text,
+        font,
+        edit: true,
+      });
+    } else {
+      if (text) {
+        addText({ text, font });
+      }
+    }
+  }, [text, font]);
+
+  const setTextOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setText(event.target.value);
+  };
+
+  const onFontChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setFont(e.target.value);
   };
 
   return (
     <>
-      {showSelector ? (
-        <></>
-      ) : (
-        <>
-          <div className={styles.customiserFlags}>
-            <h3>Your Text</h3>
-            {/* {graphics?.map((flag) => (
-              <NavFlagsFlag key={flag.key} flag={flag} setShowSelector={setShowSelector} />
-            ))} */}
-            <Button colour='red' onClick={addText}>
-              Add Text
-            </Button>
-          </div>
-          <NavButtons />
-        </>
-      )}
+      <FormInput placeholder='Enter text' value={text} onChange={setTextOnChange} />
+      <FormSelect value={font} onChange={onFontChange}>
+        {fonts.map((f) => (
+          <option key={f.url} value={f.url}>
+            {f.name}
+          </option>
+        ))}
+      </FormSelect>
     </>
   );
 };

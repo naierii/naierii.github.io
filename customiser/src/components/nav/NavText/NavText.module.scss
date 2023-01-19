@@ -1,1 +1,41 @@
-.root {}
+@use '~sass-rem' as *;
+@import '@styles/variables';
+
+.textItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: rem(20px);
+}
+
+.textItemText {
+  margin-right: auto;
+  padding: rem(10px) 0;
+}
+
+.materialGroup,
+.nameTypes,
+.showOutline {
+  margin-bottom: 2rem;
+}
+
+.nameTypes {
+  display: flex;
+
+  .nameType:not(last-child) {
+    margin-right: rem(10px);
+  }
+}
+
+.nameTypePricing {
+  text-align: center;
+  margin-top: rem(10px);
+}
+
+.showOutline {
+  display: flex;
+  align-items: center;
+
+  button {
+    margin-right: rem(10px);
+  }
+}

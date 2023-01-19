@@ -1,42 +1,43 @@
-import { useGraphics } from '@context/GraphicsContext';
-import { Center } from '@react-three/drei';
+import { ThreeEvent } from '@react-three/fiber';
 import { CustomiserState, useCustomiserStore } from '@store/customiser';
 import { useDesignStore } from '@store/design';
-import { useEffect, useRef } from 'react';
+import { forwardRef, useEffect } from 'react';
 import { Group, MathUtils } from 'three';
-import GraphicMaterial from '../GraphicMaterial';
 import Model from '../Model';
-
-// export interface SceneProps {}
 
 const models = (state: CustomiserState) => state.selectedModels;
 
-const Scene = () => {
-  const groupRef = useRef<Group>(null);
-  const selectedModels = useCustomiserStore(models);
-  const { graphics } = useGraphics();
-  const modelRotation = useDesignStore((state) => state.modelRotation);
-  const addingToCart = useDesignStore((state) => state.addingToCart);
+export interface SceneProps {
+  onPointerDown?: (event: ThreeEvent<PointerEvent>) => void;
+  onPointerup?: (event: ThreeEvent<PointerEvent>) => void;
+}
 
-  useEffect(() => {
-    if (addingToCart && groupRef.current) {
-      groupRef.current.rotateY(MathUtils.degToRad(modelRotation));
-    }
-  }, [addingToCart, modelRotation]);
+const Scene = forwardRef<Group, SceneProps>(
+  ({ onPointerDown, onPointerup }: SceneProps, groupRef) => {
+    const selectedModels = useCustomiserStore(models);
+    const modelRotation = useDesignStore((state) => state.modelRotation);
+    const addingToCart = useDesignStore((state) => state.addingToCart);
 
-  return (
-    <Center>
-      <group name='meshGroup' ref={groupRef}>
-        {graphics?.map((graphic) => (
-          <GraphicMaterial key={graphic.key} graphic={graphic} />
-        ))}
+    useEffect(() => {
+      if (addingToCart && typeof groupRef !== 'function' && groupRef?.current) {
+        groupRef.current.rotateY(MathUtils.degToRad(modelRotation));
+      }
+    }, [addingToCart, modelRotation]);
+
+    return (
+      <group
+        name='meshGroup'
+        ref={groupRef}
+        onPointerDown={onPointerDown}
+        onPointerUp={onPointerup}
+      >
         {selectedModels.map((m) => (
           <Model key={m.model?.id} model={m.model} />
         ))}
-        {/* <Tassels /> */}
       </group>
-    </Center>
-  );
-};
+    );
+  },
+);
+Scene.displayName = 'Scene';
 
 export default Scene;

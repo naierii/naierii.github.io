@@ -7,7 +7,13 @@ const path = require('path');
 const ASSET_DIR = '../shopify-theme/assets';
 
 mix.setPublicPath(ASSET_DIR);
-mix.env(process.env.ENV_FILE);
+
+mix.options({
+  terser: {
+    extractComments: false,
+  },
+});
+
 mix.webpackConfig({
   resolve: {
     alias: {
@@ -23,6 +29,9 @@ mix.webpackConfig({
       '@services': path.resolve(__dirname, 'src/services/'),
       '@lib': path.resolve(__dirname, 'src/lib/'),
     },
+  },
+  output: {
+    chunkFilename: 'customboxxer.[name].js',
   },
 });
 
@@ -40,4 +49,4 @@ mix.addWebpackLoaders([
   },
 ]);
 
-mix.ts('src/index.tsx', 'customiser.js').react();
+mix.ts('src/index.tsx', 'customboxxer.js').react();

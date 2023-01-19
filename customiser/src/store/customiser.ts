@@ -14,6 +14,7 @@ import {
 } from '@graphql/generated/graphql-shopify';
 import { MaterialTextureModel } from '@models';
 import produce from 'immer';
+import { v4 as uuidv4 } from 'uuid';
 import create, { StateCreator } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
@@ -28,11 +29,50 @@ interface Part {
   material: MaterialFragment;
 }
 
+export type Vector3Array = [number, number, number];
+export type EulerArray = number[];
+
 export interface FlagCustomiser {
-  key: string;
+  key?: string;
   flag?: FlagFragment;
   canvasJSON?: any;
   materialJSON?: any;
+  decalPosition?: Vector3Array;
+  decalOrientation?: EulerArray;
+  decalRotation?: number;
+  decalScale?: number;
+  decalFreeze?: boolean;
+  edit?: boolean;
+}
+
+interface AddonPrice {
+  price?: number;
+  quantity: number;
+  shopifyVariantId?: Maybe<Scalars['String']>;
+}
+
+export interface TextCustomiser {
+  key?: string;
+  text?: string;
+  decalPosition?: Vector3Array;
+  decalOrientation?: EulerArray;
+  decalRotation?: number;
+  decalScale?: number;
+  decalFreeze?: boolean;
+  edit?: boolean;
+  font?: string;
+  material?: MaterialFragment;
+  outline?: MaterialFragment;
+  nameType?: {
+    id?: Maybe<Scalars['ID']>;
+    name?: Maybe<Scalars['String']>;
+  };
+  basePrice?: AddonPrice;
+  letterPrice?: AddonPrice;
+  outlinePrice?: AddonPrice;
+  puffPrice?: AddonPrice;
+  crystalPrice?: AddonPrice;
+  totalPrice?: number;
 }
 export interface NavItem {
   id?: Scalars['ID'];
@@ -59,6 +99,7 @@ export interface CustomiserState {
   parts: Part[];
   savedParts: Part[];
   flags: FlagCustomiser[];
+  texts: TextCustomiser[];
   variations: Array<ShopifyProductVariantFragment>;
   sizing?: {
     height?: SizingMeasurement;
@@ -85,10 +126,15 @@ export interface CustomiserActions {
   ) => void;
   cancelPartChange: () => void;
   addFlag: (flag: FlagCustomiser) => void;
-  updateFlag: (flag: FlagCustomiser) => void;
+  updateFlag: (key: string, flag: FlagCustomiser) => void;
   deleteFlag: (key: string) => void;
+  addText: (text: TextCustomiser) => void;
+  updateText: (key: string, text: TextCustomiser) => void;
+  deleteText: (key: string) => void;
   resetNav: () => void;
-  texture: (nodeId: string) => MaterialTextureModel;
+  texture: (nodeId: string) => { materials: MaterialTextureModel; hex: string };
+  optional: (nodeId: string) => boolean;
+  tassels: (nodeId: string) => boolean;
   reset: () => void;
 }
 
@@ -101,6 +147,7 @@ const initialState: CustomiserState = {
   parts: [],
   savedParts: [],
   flags: [],
+  texts: [],
   variations: [],
   sizing: {
     height: {
@@ -130,6 +177,12 @@ const createCustomiser: StateCreator<
       const price = part.material.attributes?.price?.data?.attributes?.price ?? 0;
       const sum = priceAdjust * price;
       total = total + sum;
+    });
+
+    get().texts.forEach((text) => {
+      if (text.totalPrice) {
+        total = total + text.totalPrice;
+      }
     });
 
     return total.toFixed(2);
@@ -282,9 +335,11 @@ const createCustomiser: StateCreator<
   texture: (nodeId) => {
     const parts = get().parts;
     let materials: MaterialTextureModel = {};
+    let hex = '';
     for (const p of parts) {
       const test = p.part.modelParts?.data.map((mp) => mp?.attributes?.nodeId).indexOf(nodeId);
       if (test != -1 && p?.material?.attributes?.images) {
+        hex = p.material.attributes.hex ?? '';
         p.material.attributes.images?.forEach((image) => {
           materials = {
             ...materials,
@@ -295,24 +350,66 @@ const createCustomiser: StateCreator<
         break;
       }
     }
-    return materials;
+    return {
+      materials,
+      hex,
+    };
+  },
+  optional: (nodeId) => {
+    let isOptional = false;
+    const parts = get().parts;
+    const customProduct = get().customProduct;
+    if (customProduct?.attributes?.parts?.length) {
+      const optionalParts = customProduct.attributes.parts.filter((p) => p?.optional);
+      for (const part of optionalParts) {
+        const test = part?.modelParts?.data.map((mp) => mp?.attributes?.nodeId).indexOf(nodeId);
+        if (test != -1) {
+          isOptional = true;
+          break;
+        }
+      }
+    }
+
+    for (const p of parts) {
+      const test = p.part.modelParts?.data.map((mp) => mp?.attributes?.nodeId).indexOf(nodeId);
+      if (test != -1) {
+        isOptional = false;
+        break;
+      }
+    }
+
+    return isOptional;
+  },
+  tassels: (nodeId) => {
+    let isTassels = false;
+    const customProduct = get().customProduct;
+    if (customProduct?.attributes?.parts?.length) {
+      const tasselParts = customProduct.attributes.parts.filter((p) => p?.tassels);
+      for (const part of tasselParts) {
+        const test = part?.modelParts?.data.map((mp) => mp?.attributes?.nodeId).indexOf(nodeId);
+        if (test != -1) {
+          isTassels = true;
+          break;
+        }
+      }
+    }
+
+    return isTassels;
   },
   addFlag: (flag) => {
     set(
       produce((state: CustomiserState) => {
-        const hasFlag = state.flags.find((f) => f.key === flag.key);
-        if (!hasFlag) {
-          state.flags = [...state.flags, { ...flag }];
-        }
+        const newKey = flag.key ?? uuidv4();
+        state.flags = [...state.flags, { ...flag, key: newKey, edit: true, decalFreeze: false }];
       }),
     );
   },
-  updateFlag: (flag) => {
+  updateFlag: (key, flag) => {
     set(
       produce((state: CustomiserState) => {
         state.flags = [
           ...state.flags.map((f) => {
-            if (f.key === flag.key) {
+            if (f.key === key) {
               return { ...f, ...flag };
             }
             return f;
@@ -328,8 +425,63 @@ const createCustomiser: StateCreator<
       }),
     );
   },
+  addText: (text) => {
+    set(
+      produce((state: CustomiserState) => {
+        const newKey = text.key ?? uuidv4();
+        state.texts = [...state.texts, { ...text, key: newKey, edit: true, decalFreeze: false }];
+      }),
+    );
+  },
+  updateText: (key, text) => {
+    set(
+      produce((state: CustomiserState) => {
+        state.texts = [
+          ...state.texts.map((f) => {
+            if (f.key === key) {
+              let letterPrice;
+              if (f.letterPrice && f.text) {
+                letterPrice = f.letterPrice;
+                letterPrice.quantity = f.text.length;
+              }
+              const basePriceTotal = f.basePrice?.price
+                ? f.basePrice.price * f.basePrice?.quantity
+                : 0;
+              const letterPriceTotal = f.letterPrice?.price
+                ? f.letterPrice.price * f.letterPrice?.quantity
+                : 0;
+              const outlinePriceTotal = f.outlinePrice?.price
+                ? f.outlinePrice.price * f.outlinePrice?.quantity
+                : 0;
+              const puffPriceTotal = f.puffPrice?.price
+                ? f.puffPrice.price * f.puffPrice?.quantity
+                : 0;
+              const crystalPriceTotal = f.crystalPrice?.price
+                ? f.crystalPrice.price * f.crystalPrice?.quantity
+                : 0;
+              const totalPrice =
+                basePriceTotal +
+                letterPriceTotal +
+                outlinePriceTotal +
+                puffPriceTotal +
+                crystalPriceTotal;
+              return { ...f, ...text, letterPrice, totalPrice };
+            }
+            return f;
+          }),
+        ];
+      }),
+    );
+  },
+  deleteText: (key) => {
+    set(
+      produce((state: CustomiserState) => {
+        state.texts = [...state.texts.filter((f) => f.key !== key)];
+      }),
+    );
+  },
   reset: () => {
-    set((state) => {
+    set(() => {
       useCustomiserStore.persist.clearStorage();
       return {
         ...initialState,
@@ -344,7 +496,9 @@ export const useCustomiserStore = create<CustomiserState & CustomiserActions>()(
       (...a) => ({
         ...createCustomiser(...a),
       }),
-      { name: 'test' },
+      {
+        name: '',
+      },
     ),
   ),
 );

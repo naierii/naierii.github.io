@@ -1,0 +1,5 @@
+fragment ShopifyAddonProduct on ComponentShopifyAddonProduct {
+  id
+  price
+  shopifyVariantId
+}

@@ -1,30 +1,37 @@
 import {
-  CustomProductPartFragment,
   InputMaybe,
+  MaterialColourGroupEntity,
   MaterialEntity,
+  MaterialFragment,
   MaterialGroupEntity,
+  MaterialTypeEntity,
   Maybe,
   useGetMaterialsQuery,
 } from '@graphql/generated/graphql';
 import { graphQLClient } from '@graphql/graphql-client';
-import { useCustomiserStore } from '@store/customiser';
 
 import cn from 'classnames';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 
 import styles from './MaterialGroup.module.scss';
-import { useMaterialGroupStore } from './MaterialGroupState';
+import { createStore, Provider, useMaterialGroupStore } from './MaterialGroupState';
 import { MaterialType } from './MaterialType';
 
 export interface MaterialGroupProps {
   className?: string;
-  part: CustomProductPartFragment;
   materialGroup?: Maybe<MaterialGroupEntity>;
+  materialType?: Maybe<MaterialTypeEntity>;
+  colourGroup?: Maybe<MaterialColourGroupEntity>;
+  onMaterialSelected: (material: MaterialFragment) => void;
 }
 
-const MaterialGroup = ({ className, materialGroup, part }: MaterialGroupProps) => {
-  const parts = useCustomiserStore((state) => state.parts);
-  const selectedPart = useMemo(() => parts.find((p) => p.part.id === part?.id), [part]);
+const MaterialGroupLoader = ({
+  className,
+  materialGroup,
+  materialType,
+  colourGroup,
+  onMaterialSelected,
+}: MaterialGroupProps) => {
   const colourGroups = useMaterialGroupStore((state) => state.colourGroups);
   const selectedColourGroup = useMaterialGroupStore((state) => state.selectedColourGroup);
   const setMaterials = useMaterialGroupStore((state) => state.setMaterials);
@@ -45,11 +52,9 @@ const MaterialGroup = ({ className, materialGroup, part }: MaterialGroupProps) =
 
   useEffect(() => {
     if (materials?.length) {
-      const materialType = selectedPart?.material.attributes?.type?.data;
-      const colourGroup = selectedPart?.material.attributes?.colourGroups?.data[0];
       setMaterials(materials, materialType, colourGroup);
     }
-  }, [materials, selectedPart]);
+  }, [materials]);
 
   if (!materialGroup) {
     return null;
@@ -57,7 +62,7 @@ const MaterialGroup = ({ className, materialGroup, part }: MaterialGroupProps) =
 
   return (
     <div className={rootClassName}>
-      <h3>Colour</h3>
+      <h5>Colour</h5>
       <div className={styles.colourGroups}>
         {colourGroups.map((group) => (
           <button key={group.id} onClick={() => setColourGroup(group)}>
@@ -75,8 +80,16 @@ const MaterialGroup = ({ className, materialGroup, part }: MaterialGroupProps) =
           </button>
         ))}
       </div>
-      <MaterialType />
+      <MaterialType onMaterialSelected={onMaterialSelected} />
     </div>
+  );
+};
+
+const MaterialGroup = (props: MaterialGroupProps) => {
+  return (
+    <Provider createStore={createStore}>
+      <MaterialGroupLoader {...props} />
+    </Provider>
   );
 };
 

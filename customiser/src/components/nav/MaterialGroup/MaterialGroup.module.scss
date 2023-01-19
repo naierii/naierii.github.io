@@ -7,6 +7,7 @@
 
 .colourGroups {
   display: flex;
+  flex-wrap: wrap;
   column-gap: rem(6px);
   row-gap: rem(10px);
   margin-bottom: rem(40px);
@@ -34,6 +35,7 @@
 
 .materials {
   display: flex;
+  flex-wrap: wrap;
   gap: rem(14px);
 
   button {
@@ -58,17 +60,4 @@
       object-fit: cover;
     }
   }
-}
-
-.pillButton {
-  padding: rem(12px) rem(24px);
-  border-radius: 50vw;
-  border: 2px solid $black;
-  white-space: nowrap;
-}
-
-.pillButtonSelected {
-  border-color: $red;
-  background-color: $red;
-  color: $white;
 }

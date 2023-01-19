@@ -1,49 +1,55 @@
-import { GraphicsContextGraphic } from '@context/GraphicsContext';
 import { Decal, useTexture } from '@react-three/drei';
-import { ThreeElements } from '@react-three/fiber';
-import { DoubleSide } from 'three';
-
+import { EulerArray, FlagCustomiser, Vector3Array } from '@store/customiser';
+import { useMemo } from 'react';
+import { Euler, MathUtils, Vector3 } from 'three';
 export interface DecalGraphicProps {
-  graphic?: GraphicsContextGraphic;
+  flag?: FlagCustomiser;
+  position: Vector3Array;
+  orientation: EulerArray;
+  scale?: number;
 }
 
-const DecalGraphic = ({ graphic }: DecalGraphicProps) => {
-  const [image] = useTexture([
-    'https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/flag_1531579805314_iq_f53587bd5e.png',
-  ]);
+const DecalGraphic = ({ flag, position, orientation, scale = 1 }: DecalGraphicProps) => {
+  const texture = flag?.flag?.attributes?.image.data?.attributes?.url
+    ? [flag.flag.attributes.image.data.attributes.url]
+    : [];
 
-  console.log({ image });
+  const [image] = useTexture(texture);
 
-  // const textureProps: ThreeElements['canvasTexture'] = {
-  //   image: graphic.canvas,
-  //   needsUpdate: true,
-  //   attach: 'map',
-  // };
+  const ratio = useMemo(() => {
+    const width = image.source.data.width ?? 1;
+    const height = image.source.data.height ?? 1;
+    return width / height;
+  }, [image]);
 
-  // const materialProps: ThreeElements['meshPhongMaterial'] = {
-  //   transparent: true,
-  //   side: DoubleSide,
-  // };
+  const rotationModifier = useMemo(() => {
+    const orientationCopy = new Euler().fromArray(orientation);
+    const currentAngle = MathUtils.radToDeg(orientationCopy.z);
+    const newAngle = currentAngle + (flag?.decalRotation ?? 0);
+    orientationCopy.z = MathUtils.degToRad(newAngle);
+    return orientationCopy;
+  }, [flag?.decalRotation, orientation]);
 
-  // console.log(graphic);
+  const scaleModifier = useMemo(() => {
+    return new Vector3(1 * ratio * scale, 1 * scale, 4);
+  }, [scale]);
+
+  if (!image) {
+    return null;
+  }
 
   return (
-    <Decal position={[-1.1071517066036387, -5.8812294024124867, -1.250402941840271]} map={image} />
-    // <Decal
-    //   position={[0, 0, 0]}
-    //   rotation={0}
-    //   scale={1}
-    //   map={image}
-    //   // map-anisotropy={16}
-    //   // wireframe={true}
-    //   // depthTest={true}
-    //   // depthWrite={false}
-    //   // side={DoubleSide}
-    // >
-    //   <meshPhongMaterial {...materialProps}>
-    //     <canvasTexture {...textureProps} />
-    //   </meshPhongMaterial>
-    // </Decal>
+    <Decal position={position} rotation={rotationModifier} scale={scaleModifier}>
+      <meshPhongMaterial
+        map={image}
+        transparent
+        depthTest
+        depthWrite={false}
+        polygonOffset
+        polygonOffsetFactor={-20}
+        needsUpdate
+      />
+    </Decal>
   );
 };
 

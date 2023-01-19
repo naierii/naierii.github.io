@@ -1,65 +1,42 @@
-import { GraphicsContextGraphic, useGraphics } from '@context/GraphicsContext';
 import { Maybe, ModelFragment } from '@graphql/generated/graphql';
 import { useGLTF } from '@react-three/drei';
-import { ThreeElements } from '@react-three/fiber';
-import { EDIT_MODE } from '@store/constants';
-import { Fragment, useMemo } from 'react';
-import { BufferGeometry } from 'three';
+import { useCustomiserStore } from '@store/customiser';
+import { Fragment, useMemo, useRef } from 'react';
+import { Material, Mesh } from 'three';
 import { GLTF } from 'three-stdlib';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
 import CustomiserMesh from '../CustomiserMesh';
 import DecalGraphic from '../DecalGraphic';
+import DecalText from '../DecalText';
 export interface CustomiserModelProps {
   model?: Maybe<ModelFragment>;
 }
 
 type GLTFResult = GLTF & {
-  nodes: { [name: string]: THREE.Mesh };
-  materials: { [name: string]: THREE.Material };
-};
-
-const getGraphicProps = (graphic: GraphicsContextGraphic, geom: BufferGeometry) => {
-  if (graphic?.material && graphic.editMode === EDIT_MODE.EDIT_2D && !graphic.freeze) {
-    graphic.material.opacity = 0;
-  } else if (graphic?.material) {
-    graphic.material.opacity = 1;
-  }
-
-  const graphicProps: ThreeElements['mesh'] = {
-    geometry: geom,
-    material: graphic?.material ?? undefined,
-  };
-
-  return graphicProps;
+  nodes: { [name: string]: Mesh };
+  materials: { [name: string]: Material };
 };
 
 const Model = ({ model }: CustomiserModelProps) => {
-  const { graphics } = useGraphics();
+  const meshRef = useRef<Mesh>(null);
+  const flags = useCustomiserStore((state) => state.flags);
+  const texts = useCustomiserStore((state) => state.texts);
+  // const { nodes } = useGLTF('/test.glb') as unknown as GLTFResult;
   const { nodes } = useGLTF(
     model?.attributes?.model?.data?.attributes?.url as string,
   ) as unknown as GLTFResult;
 
   const geom = useMemo(() => {
     const geometries = [];
+
     for (const [, node] of Object.entries(nodes)) {
       if (node.isMesh) {
-        geometries.push(node.geometry);
+        geometries.push(node.geometry.clone());
       }
     }
 
-    const merged = BufferGeometryUtils.mergeBufferGeometries(geometries);
-
-    return merged;
+    return BufferGeometryUtils.mergeBufferGeometries(geometries);
   }, [nodes]);
-
-  const graphicProps: ThreeElements['mesh'] = {
-    geometry: geom,
-    renderOrder: 1000,
-  };
-
-  const graphicMaterialProps: ThreeElements['meshStandardMaterial'] = {
-    transparent: true,
-  };
 
   return (
     <>
@@ -76,24 +53,33 @@ const Model = ({ model }: CustomiserModelProps) => {
           </Fragment>
         );
       })}
-      {graphics?.map((graphic) => (
-        <mesh
-          key={graphic.key}
-          name={'texture'}
-          scale={[1, 1, 1]}
-          {...getGraphicProps(graphic, geom)}
-        ></mesh>
-      ))}
-      {/* <mesh {...graphicProps}>
-        <meshStandardMaterial {...graphicMaterialProps} />
-        <DecalGraphic />
-      </mesh> */}
-      {/* {graphics?.map((graphic) => (
-        <mesh key={graphic.key} {...graphicProps}>
-          <meshStandardMaterial {...graphicMaterialProps} />
-          <DecalGraphic graphic={graphic} />
-        </mesh>
-      ))} */}
+      <mesh geometry={geom} ref={meshRef}>
+        <meshStandardMaterial transparent colorWrite={false} />
+        {flags.map((flag) => {
+          if (flag.decalPosition && flag.decalOrientation)
+            return (
+              <DecalGraphic
+                key={flag.key}
+                flag={flag}
+                position={flag.decalPosition}
+                orientation={flag.decalOrientation}
+                scale={flag.decalScale}
+              />
+            );
+        })}
+        {texts.map((text) => {
+          if (text.decalPosition && text.decalOrientation)
+            return (
+              <DecalText
+                key={text.key}
+                text={text}
+                position={text.decalPosition}
+                orientation={text.decalOrientation}
+                scale={text.decalScale}
+              />
+            );
+        })}
+      </mesh>
     </>
   );
 };

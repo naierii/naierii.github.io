@@ -7,13 +7,18 @@ export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K]
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 
-function fetcher<TData, TVariables>(
+function fetcher<TData, TVariables extends { [key: string]: any }>(
   client: GraphQLClient,
   query: string,
   variables?: TVariables,
-  headers?: RequestInit['headers'],
+  requestHeaders?: RequestInit['headers'],
 ) {
-  return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
+  return async (): Promise<TData> =>
+    client.request({
+      document: query,
+      variables,
+      requestHeaders,
+    });
 }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -165,6 +170,7 @@ export type ComponentCustomiserCustomParts = {
   modelParts?: Maybe<ModelPartRelationResponseCollection>;
   name?: Maybe<Scalars['String']>;
   optional?: Maybe<Scalars['Boolean']>;
+  tassels?: Maybe<Scalars['Boolean']>;
 };
 
 export type ComponentCustomiserCustomPartsModelPartsArgs = {
@@ -182,6 +188,7 @@ export type ComponentCustomiserCustomPartsFiltersInput = {
   not?: InputMaybe<ComponentCustomiserCustomPartsFiltersInput>;
   optional?: InputMaybe<BooleanFilterInput>;
   or?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomPartsFiltersInput>>>;
+  tassels?: InputMaybe<BooleanFilterInput>;
 };
 
 export type ComponentCustomiserCustomPartsInput = {
@@ -191,6 +198,7 @@ export type ComponentCustomiserCustomPartsInput = {
   modelParts?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   name?: InputMaybe<Scalars['String']>;
   optional?: InputMaybe<Scalars['Boolean']>;
+  tassels?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type ComponentMaterialMaterialMap = {
@@ -211,6 +219,39 @@ export type ComponentMaterialMaterialMapInput = {
   id?: InputMaybe<Scalars['ID']>;
   image?: InputMaybe<Scalars['ID']>;
   mapType?: InputMaybe<Scalars['String']>;
+};
+
+export type ComponentShopifyAddonProduct = {
+  __typename?: 'ComponentShopifyAddonProduct';
+  id: Scalars['ID'];
+  price: Scalars['Float'];
+  priceValue?: Maybe<Scalars['Int']>;
+  shopifyProductId?: Maybe<Scalars['String']>;
+  shopifyVariantId?: Maybe<Scalars['String']>;
+};
+
+export type ComponentShopifyAddonProductFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<ComponentShopifyAddonProductFiltersInput>>>;
+  not?: InputMaybe<ComponentShopifyAddonProductFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<ComponentShopifyAddonProductFiltersInput>>>;
+  priceValue?: InputMaybe<IntFilterInput>;
+  shopifyProductId?: InputMaybe<StringFilterInput>;
+  shopifyVariantId?: InputMaybe<StringFilterInput>;
+};
+
+export type ComponentShopifyAddonProductInput = {
+  id?: InputMaybe<Scalars['ID']>;
+  price: Scalars['Float'];
+  priceValue?: InputMaybe<Scalars['Int']>;
+  shopifyProductId?: InputMaybe<Scalars['String']>;
+  shopifyVariantId?: InputMaybe<Scalars['String']>;
+};
+
+export type ComponentShopifyCollection = {
+  __typename?: 'ComponentShopifyCollection';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  shopifyCollectionId?: Maybe<Scalars['String']>;
 };
 
 export type CustomDesign = {
@@ -639,6 +680,8 @@ export type GenericMorph =
   | ComponentCustomiserCustomOptionModel
   | ComponentCustomiserCustomParts
   | ComponentMaterialMaterialMap
+  | ComponentShopifyAddonProduct
+  | ComponentShopifyCollection
   | CustomDesign
   | CustomProduct
   | CustomProductStyle
@@ -646,6 +689,7 @@ export type GenericMorph =
   | Flag
   | Gallery
   | GalleryCategory
+  | GraphicPrice
   | I18NLocale
   | Material
   | MaterialAreaSize
@@ -656,11 +700,56 @@ export type GenericMorph =
   | MaterialType
   | Model
   | ModelPart
+  | Name
   | UploadFile
   | UploadFolder
   | UsersPermissionsPermission
   | UsersPermissionsRole
   | UsersPermissionsUser;
+
+export type GraphicPrice = {
+  __typename?: 'GraphicPrice';
+  basePrice?: Maybe<ComponentShopifyAddonProduct>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
+  size?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type GraphicPriceEntity = {
+  __typename?: 'GraphicPriceEntity';
+  attributes?: Maybe<GraphicPrice>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type GraphicPriceEntityResponse = {
+  __typename?: 'GraphicPriceEntityResponse';
+  data?: Maybe<GraphicPriceEntity>;
+};
+
+export type GraphicPriceEntityResponseCollection = {
+  __typename?: 'GraphicPriceEntityResponseCollection';
+  data: Array<GraphicPriceEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type GraphicPriceFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<GraphicPriceFiltersInput>>>;
+  basePrice?: InputMaybe<ComponentShopifyAddonProductFiltersInput>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  description?: InputMaybe<StringFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  not?: InputMaybe<GraphicPriceFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<GraphicPriceFiltersInput>>>;
+  size?: InputMaybe<StringFilterInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type GraphicPriceInput = {
+  basePrice?: InputMaybe<ComponentShopifyAddonProductInput>;
+  description?: InputMaybe<Scalars['String']>;
+  size?: InputMaybe<Scalars['String']>;
+};
 
 export type I18NLocale = {
   __typename?: 'I18NLocale';
@@ -798,9 +887,11 @@ export type Material = {
   __typename?: 'Material';
   colourGroups?: Maybe<MaterialColourGroupRelationResponseCollection>;
   createdAt?: Maybe<Scalars['DateTime']>;
+  hex?: Maybe<Scalars['String']>;
   images?: Maybe<Array<Maybe<ComponentMaterialMaterialMap>>>;
   name?: Maybe<Scalars['String']>;
   price?: Maybe<MaterialPriceEntityResponse>;
+  thaiName?: Maybe<Scalars['String']>;
   type?: Maybe<MaterialTypeEntityResponse>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -937,12 +1028,14 @@ export type MaterialFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<MaterialFiltersInput>>>;
   colourGroups?: InputMaybe<MaterialColourGroupFiltersInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
+  hex?: InputMaybe<StringFilterInput>;
   id?: InputMaybe<IdFilterInput>;
   images?: InputMaybe<ComponentMaterialMaterialMapFiltersInput>;
   name?: InputMaybe<StringFilterInput>;
   not?: InputMaybe<MaterialFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<MaterialFiltersInput>>>;
   price?: InputMaybe<MaterialPriceFiltersInput>;
+  thaiName?: InputMaybe<StringFilterInput>;
   type?: InputMaybe<MaterialTypeFiltersInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
@@ -996,9 +1089,11 @@ export type MaterialGroupInput = {
 
 export type MaterialInput = {
   colourGroups?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  hex?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<Array<InputMaybe<ComponentMaterialMaterialMapInput>>>;
   name?: InputMaybe<Scalars['String']>;
   price?: InputMaybe<Scalars['ID']>;
+  thaiName?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<Scalars['ID']>;
 };
 
@@ -1258,6 +1353,7 @@ export type Mutation = {
   createFlag?: Maybe<FlagEntityResponse>;
   createGallery?: Maybe<GalleryEntityResponse>;
   createGalleryCategory?: Maybe<GalleryCategoryEntityResponse>;
+  createGraphicPrice?: Maybe<GraphicPriceEntityResponse>;
   createMaterial?: Maybe<MaterialEntityResponse>;
   createMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   createMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1267,6 +1363,7 @@ export type Mutation = {
   createMaterialType?: Maybe<MaterialTypeEntityResponse>;
   createModel?: Maybe<ModelEntityResponse>;
   createModelPart?: Maybe<ModelPartEntityResponse>;
+  createName?: Maybe<NameEntityResponse>;
   createUploadFile?: Maybe<UploadFileEntityResponse>;
   createUploadFolder?: Maybe<UploadFolderEntityResponse>;
   /** Create a new role */
@@ -1280,6 +1377,7 @@ export type Mutation = {
   deleteFlag?: Maybe<FlagEntityResponse>;
   deleteGallery?: Maybe<GalleryEntityResponse>;
   deleteGalleryCategory?: Maybe<GalleryCategoryEntityResponse>;
+  deleteGraphicPrice?: Maybe<GraphicPriceEntityResponse>;
   deleteMaterial?: Maybe<MaterialEntityResponse>;
   deleteMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   deleteMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1289,6 +1387,7 @@ export type Mutation = {
   deleteMaterialType?: Maybe<MaterialTypeEntityResponse>;
   deleteModel?: Maybe<ModelEntityResponse>;
   deleteModelPart?: Maybe<ModelPartEntityResponse>;
+  deleteName?: Maybe<NameEntityResponse>;
   deleteUploadFile?: Maybe<UploadFileEntityResponse>;
   deleteUploadFolder?: Maybe<UploadFolderEntityResponse>;
   /** Delete an existing role */
@@ -1314,6 +1413,7 @@ export type Mutation = {
   updateFlag?: Maybe<FlagEntityResponse>;
   updateGallery?: Maybe<GalleryEntityResponse>;
   updateGalleryCategory?: Maybe<GalleryCategoryEntityResponse>;
+  updateGraphicPrice?: Maybe<GraphicPriceEntityResponse>;
   updateMaterial?: Maybe<MaterialEntityResponse>;
   updateMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   updateMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1323,6 +1423,7 @@ export type Mutation = {
   updateMaterialType?: Maybe<MaterialTypeEntityResponse>;
   updateModel?: Maybe<ModelEntityResponse>;
   updateModelPart?: Maybe<ModelPartEntityResponse>;
+  updateName?: Maybe<NameEntityResponse>;
   updateUploadFile?: Maybe<UploadFileEntityResponse>;
   updateUploadFolder?: Maybe<UploadFolderEntityResponse>;
   /** Update an existing role */
@@ -1366,6 +1467,10 @@ export type MutationCreateGalleryCategoryArgs = {
   data: GalleryCategoryInput;
 };
 
+export type MutationCreateGraphicPriceArgs = {
+  data: GraphicPriceInput;
+};
+
 export type MutationCreateMaterialArgs = {
   data: MaterialInput;
 };
@@ -1400,6 +1505,10 @@ export type MutationCreateModelArgs = {
 
 export type MutationCreateModelPartArgs = {
   data: ModelPartInput;
+};
+
+export type MutationCreateNameArgs = {
+  data: NameInput;
 };
 
 export type MutationCreateUploadFileArgs = {
@@ -1446,6 +1555,10 @@ export type MutationDeleteGalleryCategoryArgs = {
   id: Scalars['ID'];
 };
 
+export type MutationDeleteGraphicPriceArgs = {
+  id: Scalars['ID'];
+};
+
 export type MutationDeleteMaterialArgs = {
   id: Scalars['ID'];
 };
@@ -1479,6 +1592,10 @@ export type MutationDeleteModelArgs = {
 };
 
 export type MutationDeleteModelPartArgs = {
+  id: Scalars['ID'];
+};
+
+export type MutationDeleteNameArgs = {
   id: Scalars['ID'];
 };
 
@@ -1571,6 +1688,11 @@ export type MutationUpdateGalleryCategoryArgs = {
   id: Scalars['ID'];
 };
 
+export type MutationUpdateGraphicPriceArgs = {
+  data: GraphicPriceInput;
+  id: Scalars['ID'];
+};
+
 export type MutationUpdateMaterialArgs = {
   data: MaterialInput;
   id: Scalars['ID'];
@@ -1616,6 +1738,11 @@ export type MutationUpdateModelPartArgs = {
   id: Scalars['ID'];
 };
 
+export type MutationUpdateNameArgs = {
+  data: NameInput;
+  id: Scalars['ID'];
+};
+
 export type MutationUpdateUploadFileArgs = {
   data: UploadFileInput;
   id: Scalars['ID'];
@@ -1642,6 +1769,65 @@ export type MutationUploadArgs = {
   info?: InputMaybe<FileInfoInput>;
   ref?: InputMaybe<Scalars['String']>;
   refId?: InputMaybe<Scalars['ID']>;
+};
+
+export type Name = {
+  __typename?: 'Name';
+  basePrice?: Maybe<ComponentShopifyAddonProduct>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  crystalPrice?: Maybe<ComponentShopifyAddonProduct>;
+  letterPrice?: Maybe<ComponentShopifyAddonProduct>;
+  materialGroup?: Maybe<MaterialGroupEntityResponse>;
+  name?: Maybe<Scalars['String']>;
+  outlineGroup?: Maybe<MaterialGroupEntityResponse>;
+  outlinePrice?: Maybe<ComponentShopifyAddonProduct>;
+  puffPrice?: Maybe<ComponentShopifyAddonProduct>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type NameEntity = {
+  __typename?: 'NameEntity';
+  attributes?: Maybe<Name>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type NameEntityResponse = {
+  __typename?: 'NameEntityResponse';
+  data?: Maybe<NameEntity>;
+};
+
+export type NameEntityResponseCollection = {
+  __typename?: 'NameEntityResponseCollection';
+  data: Array<NameEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type NameFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<NameFiltersInput>>>;
+  basePrice?: InputMaybe<ComponentShopifyAddonProductFiltersInput>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  crystalPrice?: InputMaybe<ComponentShopifyAddonProductFiltersInput>;
+  id?: InputMaybe<IdFilterInput>;
+  letterPrice?: InputMaybe<ComponentShopifyAddonProductFiltersInput>;
+  materialGroup?: InputMaybe<MaterialGroupFiltersInput>;
+  name?: InputMaybe<StringFilterInput>;
+  not?: InputMaybe<NameFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<NameFiltersInput>>>;
+  outlineGroup?: InputMaybe<MaterialGroupFiltersInput>;
+  outlinePrice?: InputMaybe<ComponentShopifyAddonProductFiltersInput>;
+  puffPrice?: InputMaybe<ComponentShopifyAddonProductFiltersInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type NameInput = {
+  basePrice?: InputMaybe<ComponentShopifyAddonProductInput>;
+  crystalPrice?: InputMaybe<ComponentShopifyAddonProductInput>;
+  letterPrice?: InputMaybe<ComponentShopifyAddonProductInput>;
+  materialGroup?: InputMaybe<Scalars['ID']>;
+  name?: InputMaybe<Scalars['String']>;
+  outlineGroup?: InputMaybe<Scalars['ID']>;
+  outlinePrice?: InputMaybe<ComponentShopifyAddonProductInput>;
+  puffPrice?: InputMaybe<ComponentShopifyAddonProductInput>;
 };
 
 export type Pagination = {
@@ -1681,6 +1867,8 @@ export type Query = {
   gallery?: Maybe<GalleryEntityResponse>;
   galleryCategories?: Maybe<GalleryCategoryEntityResponseCollection>;
   galleryCategory?: Maybe<GalleryCategoryEntityResponse>;
+  graphicPrice?: Maybe<GraphicPriceEntityResponse>;
+  graphicPrices?: Maybe<GraphicPriceEntityResponseCollection>;
   i18NLocale?: Maybe<I18NLocaleEntityResponse>;
   i18NLocales?: Maybe<I18NLocaleEntityResponseCollection>;
   material?: Maybe<MaterialEntityResponse>;
@@ -1702,6 +1890,8 @@ export type Query = {
   modelPart?: Maybe<ModelPartEntityResponse>;
   modelParts?: Maybe<ModelPartEntityResponseCollection>;
   models?: Maybe<ModelEntityResponseCollection>;
+  name?: Maybe<NameEntityResponse>;
+  names?: Maybe<NameEntityResponseCollection>;
   uploadFile?: Maybe<UploadFileEntityResponse>;
   uploadFiles?: Maybe<UploadFileEntityResponseCollection>;
   uploadFolder?: Maybe<UploadFolderEntityResponse>;
@@ -1786,6 +1976,16 @@ export type QueryGalleryCategoriesArgs = {
 
 export type QueryGalleryCategoryArgs = {
   id?: InputMaybe<Scalars['ID']>;
+};
+
+export type QueryGraphicPriceArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type QueryGraphicPricesArgs = {
+  filters?: InputMaybe<GraphicPriceFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type QueryI18NLocaleArgs = {
@@ -1884,6 +2084,16 @@ export type QueryModelPartsArgs = {
 
 export type QueryModelsArgs = {
   filters?: InputMaybe<ModelFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type QueryNameArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type QueryNamesArgs = {
+  filters?: InputMaybe<NameFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
@@ -2383,6 +2593,7 @@ export type CustomProductFragment = {
       id: string;
       name?: string | null;
       optional?: boolean | null;
+      tassels?: boolean | null;
       areaSize?: {
         __typename?: 'MaterialAreaSizeEntityResponse';
         data?: {
@@ -2476,6 +2687,7 @@ export type CustomProductPartFragment = {
   id: string;
   name?: string | null;
   optional?: boolean | null;
+  tassels?: boolean | null;
   areaSize?: {
     __typename?: 'MaterialAreaSizeEntityResponse';
     data?: {
@@ -2597,6 +2809,7 @@ export type MaterialFragment = {
   attributes?: {
     __typename?: 'Material';
     name?: string | null;
+    hex?: string | null;
     type?: {
       __typename?: 'MaterialTypeEntityResponse';
       data?: {
@@ -2718,6 +2931,90 @@ export type ModelPartFragment = {
   attributes?: { __typename?: 'ModelPart'; nodeId: string } | null;
 };
 
+export type NameFragment = {
+  __typename?: 'NameEntity';
+  id?: string | null;
+  attributes?: {
+    __typename?: 'Name';
+    name?: string | null;
+    materialGroup?: {
+      __typename?: 'MaterialGroupEntityResponse';
+      data?: {
+        __typename?: 'MaterialGroupEntity';
+        id?: string | null;
+        attributes?: {
+          __typename?: 'MaterialGroup';
+          name?: string | null;
+          materialTypes?: {
+            __typename?: 'MaterialTypeRelationResponseCollection';
+            data: Array<{
+              __typename?: 'MaterialTypeEntity';
+              id?: string | null;
+              attributes?: { __typename?: 'MaterialType'; name?: string | null } | null;
+            }>;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+    outlineGroup?: {
+      __typename?: 'MaterialGroupEntityResponse';
+      data?: {
+        __typename?: 'MaterialGroupEntity';
+        id?: string | null;
+        attributes?: {
+          __typename?: 'MaterialGroup';
+          name?: string | null;
+          materialTypes?: {
+            __typename?: 'MaterialTypeRelationResponseCollection';
+            data: Array<{
+              __typename?: 'MaterialTypeEntity';
+              id?: string | null;
+              attributes?: { __typename?: 'MaterialType'; name?: string | null } | null;
+            }>;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+    basePrice?: {
+      __typename?: 'ComponentShopifyAddonProduct';
+      id: string;
+      price: number;
+      shopifyVariantId?: string | null;
+    } | null;
+    letterPrice?: {
+      __typename?: 'ComponentShopifyAddonProduct';
+      id: string;
+      price: number;
+      shopifyVariantId?: string | null;
+    } | null;
+    outlinePrice?: {
+      __typename?: 'ComponentShopifyAddonProduct';
+      id: string;
+      price: number;
+      shopifyVariantId?: string | null;
+    } | null;
+    puffPrice?: {
+      __typename?: 'ComponentShopifyAddonProduct';
+      id: string;
+      price: number;
+      shopifyVariantId?: string | null;
+    } | null;
+    crystalPrice?: {
+      __typename?: 'ComponentShopifyAddonProduct';
+      id: string;
+      price: number;
+      shopifyVariantId?: string | null;
+    } | null;
+  } | null;
+};
+
+export type ShopifyAddonProductFragment = {
+  __typename?: 'ComponentShopifyAddonProduct';
+  id: string;
+  price: number;
+  shopifyVariantId?: string | null;
+};
+
 export type CreateCustomDesignMutationVariables = Exact<{
   data: CustomDesignInput;
 }>;
@@ -2824,6 +3121,7 @@ export type GetCustomProductByShopifyIdQuery = {
           id: string;
           name?: string | null;
           optional?: boolean | null;
+          tassels?: boolean | null;
           areaSize?: {
             __typename?: 'MaterialAreaSizeEntityResponse';
             data?: {
@@ -2949,6 +3247,7 @@ export type GetMaterialsQuery = {
       attributes?: {
         __typename?: 'Material';
         name?: string | null;
+        hex?: string | null;
         type?: {
           __typename?: 'MaterialTypeEntityResponse';
           data?: {
@@ -3004,6 +3303,94 @@ export type GetMaterialsQuery = {
             } | null;
           };
         } | null> | null;
+      } | null;
+    }>;
+  } | null;
+};
+
+export type GetNamesQueryVariables = Exact<{
+  pagination?: InputMaybe<PaginationArg>;
+  filters?: InputMaybe<NameFiltersInput>;
+}>;
+
+export type GetNamesQuery = {
+  __typename?: 'Query';
+  names?: {
+    __typename?: 'NameEntityResponseCollection';
+    data: Array<{
+      __typename?: 'NameEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'Name';
+        name?: string | null;
+        materialGroup?: {
+          __typename?: 'MaterialGroupEntityResponse';
+          data?: {
+            __typename?: 'MaterialGroupEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'MaterialGroup';
+              name?: string | null;
+              materialTypes?: {
+                __typename?: 'MaterialTypeRelationResponseCollection';
+                data: Array<{
+                  __typename?: 'MaterialTypeEntity';
+                  id?: string | null;
+                  attributes?: { __typename?: 'MaterialType'; name?: string | null } | null;
+                }>;
+              } | null;
+            } | null;
+          } | null;
+        } | null;
+        outlineGroup?: {
+          __typename?: 'MaterialGroupEntityResponse';
+          data?: {
+            __typename?: 'MaterialGroupEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'MaterialGroup';
+              name?: string | null;
+              materialTypes?: {
+                __typename?: 'MaterialTypeRelationResponseCollection';
+                data: Array<{
+                  __typename?: 'MaterialTypeEntity';
+                  id?: string | null;
+                  attributes?: { __typename?: 'MaterialType'; name?: string | null } | null;
+                }>;
+              } | null;
+            } | null;
+          } | null;
+        } | null;
+        basePrice?: {
+          __typename?: 'ComponentShopifyAddonProduct';
+          id: string;
+          price: number;
+          shopifyVariantId?: string | null;
+        } | null;
+        letterPrice?: {
+          __typename?: 'ComponentShopifyAddonProduct';
+          id: string;
+          price: number;
+          shopifyVariantId?: string | null;
+        } | null;
+        outlinePrice?: {
+          __typename?: 'ComponentShopifyAddonProduct';
+          id: string;
+          price: number;
+          shopifyVariantId?: string | null;
+        } | null;
+        puffPrice?: {
+          __typename?: 'ComponentShopifyAddonProduct';
+          id: string;
+          price: number;
+          shopifyVariantId?: string | null;
+        } | null;
+        crystalPrice?: {
+          __typename?: 'ComponentShopifyAddonProduct';
+          id: string;
+          price: number;
+          shopifyVariantId?: string | null;
+        } | null;
       } | null;
     }>;
   } | null;
@@ -3097,6 +3484,7 @@ export const CustomProductPartFragmentDoc = /*#__PURE__*/ `
   id
   name
   optional
+  tassels
   areaSize {
     data {
       ...MaterialAreaSize
@@ -3183,6 +3571,7 @@ export const MaterialFragmentDoc = /*#__PURE__*/ `
   id
   attributes {
     name
+    hex
     type {
       data {
         ...MaterialType
@@ -3205,6 +3594,46 @@ export const MaterialFragmentDoc = /*#__PURE__*/ `
           ...Image
         }
       }
+    }
+  }
+}
+    `;
+export const ShopifyAddonProductFragmentDoc = /*#__PURE__*/ `
+    fragment ShopifyAddonProduct on ComponentShopifyAddonProduct {
+  id
+  price
+  shopifyVariantId
+}
+    `;
+export const NameFragmentDoc = /*#__PURE__*/ `
+    fragment Name on NameEntity {
+  id
+  attributes {
+    name
+    materialGroup {
+      data {
+        ...MaterialGroup
+      }
+    }
+    outlineGroup {
+      data {
+        ...MaterialGroup
+      }
+    }
+    basePrice {
+      ...ShopifyAddonProduct
+    }
+    letterPrice {
+      ...ShopifyAddonProduct
+    }
+    outlinePrice {
+      ...ShopifyAddonProduct
+    }
+    puffPrice {
+      ...ShopifyAddonProduct
+    }
+    crystalPrice {
+      ...ShopifyAddonProduct
     }
   }
 }
@@ -3411,3 +3840,29 @@ export const useGetMaterialsQuery = <TData = GetMaterialsQuery, TError = unknown
 
 useGetMaterialsQuery.getKey = (variables?: GetMaterialsQueryVariables) =>
   variables === undefined ? ['GetMaterials'] : ['GetMaterials', variables];
+export const GetNamesDocument = /*#__PURE__*/ `
+    query GetNames($pagination: PaginationArg, $filters: NameFiltersInput) {
+  names(pagination: $pagination, filters: $filters) {
+    data {
+      ...Name
+    }
+  }
+}
+    ${NameFragmentDoc}
+${MaterialGroupFragmentDoc}
+${MaterialTypeFragmentDoc}
+${ShopifyAddonProductFragmentDoc}`;
+export const useGetNamesQuery = <TData = GetNamesQuery, TError = unknown>(
+  client: GraphQLClient,
+  variables?: GetNamesQueryVariables,
+  options?: UseQueryOptions<GetNamesQuery, TError, TData>,
+  headers?: RequestInit['headers'],
+) =>
+  useQuery<GetNamesQuery, TError, TData>(
+    variables === undefined ? ['GetNames'] : ['GetNames', variables],
+    fetcher<GetNamesQuery, GetNamesQueryVariables>(client, GetNamesDocument, variables, headers),
+    options,
+  );
+
+useGetNamesQuery.getKey = (variables?: GetNamesQueryVariables) =>
+  variables === undefined ? ['GetNames'] : ['GetNames', variables];

@@ -27,15 +27,3 @@
   width: rem(50px);
   margin-right: auto;
 }
-
-.flagItemButtons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: rem(13px);
-
-  button {
-    svg {
-      width: rem(23px);
-    }
-  }
-}

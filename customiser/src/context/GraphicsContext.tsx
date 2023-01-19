@@ -83,12 +83,12 @@ const GraphicsContextProvider = ({ children }: GraphicsContextProviderProps) => 
     if (flagKey) {
       const getGraphic = graphics.find((g) => g.key === flagKey);
       if (getGraphic) {
-        updateFlag({
-          key: flagKey,
-          flag: getGraphic.flag,
-          canvasJSON: getGraphic.canvasJSON,
-          materialJSON: getGraphic.materialJSON,
-        });
+        // updateFlag({
+        //   key: flagKey,
+        //   flag: getGraphic.flag,
+        //   canvasJSON: getGraphic.canvasJSON,
+        //   materialJSON: getGraphic.materialJSON,
+        // });
       }
       setFlagKey(undefined);
     }

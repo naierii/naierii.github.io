@@ -1,4 +1,7 @@
-<script src="{{ 'customiser.js' | asset_url }}" defer="defer"></script>
+<script type="application/javascript">
+  window.assetsPath = "{{ 'customboxxer.js' | asset_url }}".split('customboxxer.js')[0];
+</script>
+<script src="{{ 'customboxxer.js' | asset_url }}" defer="defer"></script>
 <div class="customiser">
-<div id="BoxxerCustomiser" data-product="gid://shopify/Product/{{ product.id }}"></div>
+  <div id="BoxxerCustomiser" data-product="gid://shopify/Product/{{ product.id }}"></div>
 </div>

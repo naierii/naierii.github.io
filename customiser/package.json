@@ -35,7 +35,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "build-mix": "ENV_FILE=./.env.production.local npx mix --production",
+    "build-mix": "npx mix --production",
     "build-watch": "ENV_FILE=./.env.local npx mix watch",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",

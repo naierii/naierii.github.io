@@ -27,6 +27,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: any;
   DateTime: any;
   JSON: any;
   Long: any;
@@ -55,6 +56,27 @@ export type BooleanFilterInput = {
   null?: InputMaybe<Scalars['Boolean']>;
   or?: InputMaybe<Array<InputMaybe<Scalars['Boolean']>>>;
   startsWith?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type ComponentCustomiserCustomDesignFlag = {
+  __typename?: 'ComponentCustomiserCustomDesignFlag';
+  decalPosition?: Maybe<Scalars['JSON']>;
+  flag?: Maybe<FlagEntityResponse>;
+  id: Scalars['ID'];
+};
+
+export type ComponentCustomiserCustomDesignFlagFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignFlagFiltersInput>>>;
+  decalPosition?: InputMaybe<JsonFilterInput>;
+  flag?: InputMaybe<FlagFiltersInput>;
+  not?: InputMaybe<ComponentCustomiserCustomDesignFlagFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignFlagFiltersInput>>>;
+};
+
+export type ComponentCustomiserCustomDesignFlagInput = {
+  decalPosition?: InputMaybe<Scalars['JSON']>;
+  flag?: InputMaybe<Scalars['ID']>;
+  id?: InputMaybe<Scalars['ID']>;
 };
 
 export type ComponentCustomiserCustomDesignPart = {
@@ -258,10 +280,17 @@ export type CustomDesign = {
   __typename?: 'CustomDesign';
   createdAt?: Maybe<Scalars['DateTime']>;
   customProduct?: Maybe<CustomProductEntityResponse>;
+  flags?: Maybe<Array<Maybe<ComponentCustomiserCustomDesignFlag>>>;
   images?: Maybe<UploadFileRelationResponseCollection>;
   parts?: Maybe<Array<Maybe<ComponentCustomiserCustomDesignPart>>>;
   sizing?: Maybe<ComponentCustomiserCustomDesignSizing>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type CustomDesignFlagsArgs = {
+  filters?: InputMaybe<ComponentCustomiserCustomDesignFlagFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type CustomDesignImagesArgs = {
@@ -297,6 +326,7 @@ export type CustomDesignFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<CustomDesignFiltersInput>>>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
   customProduct?: InputMaybe<CustomProductFiltersInput>;
+  flags?: InputMaybe<ComponentCustomiserCustomDesignFlagFiltersInput>;
   id?: InputMaybe<IdFilterInput>;
   not?: InputMaybe<CustomDesignFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<CustomDesignFiltersInput>>>;
@@ -307,6 +337,7 @@ export type CustomDesignFiltersInput = {
 
 export type CustomDesignInput = {
   customProduct?: InputMaybe<Scalars['ID']>;
+  flags?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignFlagInput>>>;
   images?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   parts?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignPartInput>>>;
   sizing?: InputMaybe<ComponentCustomiserCustomDesignSizingInput>;
@@ -453,6 +484,30 @@ export type CustomProductTypeInput = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+export type DateFilterInput = {
+  and?: InputMaybe<Array<InputMaybe<Scalars['Date']>>>;
+  between?: InputMaybe<Array<InputMaybe<Scalars['Date']>>>;
+  contains?: InputMaybe<Scalars['Date']>;
+  containsi?: InputMaybe<Scalars['Date']>;
+  endsWith?: InputMaybe<Scalars['Date']>;
+  eq?: InputMaybe<Scalars['Date']>;
+  eqi?: InputMaybe<Scalars['Date']>;
+  gt?: InputMaybe<Scalars['Date']>;
+  gte?: InputMaybe<Scalars['Date']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['Date']>>>;
+  lt?: InputMaybe<Scalars['Date']>;
+  lte?: InputMaybe<Scalars['Date']>;
+  ne?: InputMaybe<Scalars['Date']>;
+  not?: InputMaybe<DateFilterInput>;
+  notContains?: InputMaybe<Scalars['Date']>;
+  notContainsi?: InputMaybe<Scalars['Date']>;
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['Date']>>>;
+  notNull?: InputMaybe<Scalars['Boolean']>;
+  null?: InputMaybe<Scalars['Boolean']>;
+  or?: InputMaybe<Array<InputMaybe<Scalars['Date']>>>;
+  startsWith?: InputMaybe<Scalars['Date']>;
+};
+
 export type DateTimeFilterInput = {
   and?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   between?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
@@ -476,6 +531,13 @@ export type DateTimeFilterInput = {
   or?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   startsWith?: InputMaybe<Scalars['DateTime']>;
 };
+
+export enum Enum_Jobcard_Orderstatus {
+  Complete = 'Complete',
+  Pending = 'Pending',
+  ReadyToCut = 'Ready_to_cut',
+  ReadyToShip = 'Ready_to_ship',
+}
 
 export type FileInfoInput = {
   alternativeText?: InputMaybe<Scalars['String']>;
@@ -674,6 +736,7 @@ export type GalleryRelationResponseCollection = {
 };
 
 export type GenericMorph =
+  | ComponentCustomiserCustomDesignFlag
   | ComponentCustomiserCustomDesignPart
   | ComponentCustomiserCustomDesignSizing
   | ComponentCustomiserCustomOption
@@ -691,6 +754,7 @@ export type GenericMorph =
   | GalleryCategory
   | GraphicPrice
   | I18NLocale
+  | JobCard
   | Material
   | MaterialAreaSize
   | MaterialColourGroup
@@ -857,6 +921,62 @@ export type JsonFilterInput = {
   null?: InputMaybe<Scalars['Boolean']>;
   or?: InputMaybe<Array<InputMaybe<Scalars['JSON']>>>;
   startsWith?: InputMaybe<Scalars['JSON']>;
+};
+
+export type JobCard = {
+  __typename?: 'JobCard';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  customDesign?: Maybe<CustomDesignEntityResponse>;
+  dueDate?: Maybe<Scalars['Date']>;
+  jobCardName?: Maybe<Scalars['String']>;
+  orderStatus?: Maybe<Enum_Jobcard_Orderstatus>;
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  sendDate?: Maybe<Scalars['Date']>;
+  trackingNumber?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type JobCardEntity = {
+  __typename?: 'JobCardEntity';
+  attributes?: Maybe<JobCard>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type JobCardEntityResponse = {
+  __typename?: 'JobCardEntityResponse';
+  data?: Maybe<JobCardEntity>;
+};
+
+export type JobCardEntityResponseCollection = {
+  __typename?: 'JobCardEntityResponseCollection';
+  data: Array<JobCardEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type JobCardFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<JobCardFiltersInput>>>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  customDesign?: InputMaybe<CustomDesignFiltersInput>;
+  dueDate?: InputMaybe<DateFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  jobCardName?: InputMaybe<StringFilterInput>;
+  not?: InputMaybe<JobCardFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<JobCardFiltersInput>>>;
+  orderStatus?: InputMaybe<StringFilterInput>;
+  publishedAt?: InputMaybe<DateTimeFilterInput>;
+  sendDate?: InputMaybe<DateFilterInput>;
+  trackingNumber?: InputMaybe<StringFilterInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type JobCardInput = {
+  customDesign?: InputMaybe<Scalars['ID']>;
+  dueDate?: InputMaybe<Scalars['Date']>;
+  jobCardName?: InputMaybe<Scalars['String']>;
+  orderStatus?: InputMaybe<Enum_Jobcard_Orderstatus>;
+  publishedAt?: InputMaybe<Scalars['DateTime']>;
+  sendDate?: InputMaybe<Scalars['Date']>;
+  trackingNumber?: InputMaybe<Scalars['String']>;
 };
 
 export type LongFilterInput = {
@@ -1354,6 +1474,7 @@ export type Mutation = {
   createGallery?: Maybe<GalleryEntityResponse>;
   createGalleryCategory?: Maybe<GalleryCategoryEntityResponse>;
   createGraphicPrice?: Maybe<GraphicPriceEntityResponse>;
+  createJobCard?: Maybe<JobCardEntityResponse>;
   createMaterial?: Maybe<MaterialEntityResponse>;
   createMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   createMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1378,6 +1499,7 @@ export type Mutation = {
   deleteGallery?: Maybe<GalleryEntityResponse>;
   deleteGalleryCategory?: Maybe<GalleryCategoryEntityResponse>;
   deleteGraphicPrice?: Maybe<GraphicPriceEntityResponse>;
+  deleteJobCard?: Maybe<JobCardEntityResponse>;
   deleteMaterial?: Maybe<MaterialEntityResponse>;
   deleteMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   deleteMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1414,6 +1536,7 @@ export type Mutation = {
   updateGallery?: Maybe<GalleryEntityResponse>;
   updateGalleryCategory?: Maybe<GalleryCategoryEntityResponse>;
   updateGraphicPrice?: Maybe<GraphicPriceEntityResponse>;
+  updateJobCard?: Maybe<JobCardEntityResponse>;
   updateMaterial?: Maybe<MaterialEntityResponse>;
   updateMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   updateMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1469,6 +1592,10 @@ export type MutationCreateGalleryCategoryArgs = {
 
 export type MutationCreateGraphicPriceArgs = {
   data: GraphicPriceInput;
+};
+
+export type MutationCreateJobCardArgs = {
+  data: JobCardInput;
 };
 
 export type MutationCreateMaterialArgs = {
@@ -1556,6 +1683,10 @@ export type MutationDeleteGalleryCategoryArgs = {
 };
 
 export type MutationDeleteGraphicPriceArgs = {
+  id: Scalars['ID'];
+};
+
+export type MutationDeleteJobCardArgs = {
   id: Scalars['ID'];
 };
 
@@ -1690,6 +1821,11 @@ export type MutationUpdateGalleryCategoryArgs = {
 
 export type MutationUpdateGraphicPriceArgs = {
   data: GraphicPriceInput;
+  id: Scalars['ID'];
+};
+
+export type MutationUpdateJobCardArgs = {
+  data: JobCardInput;
   id: Scalars['ID'];
 };
 
@@ -1871,6 +2007,8 @@ export type Query = {
   graphicPrices?: Maybe<GraphicPriceEntityResponseCollection>;
   i18NLocale?: Maybe<I18NLocaleEntityResponse>;
   i18NLocales?: Maybe<I18NLocaleEntityResponseCollection>;
+  jobCard?: Maybe<JobCardEntityResponse>;
+  jobCards?: Maybe<JobCardEntityResponseCollection>;
   material?: Maybe<MaterialEntityResponse>;
   materialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   materialAreaSizes?: Maybe<MaterialAreaSizeEntityResponseCollection>;
@@ -1995,6 +2133,17 @@ export type QueryI18NLocaleArgs = {
 export type QueryI18NLocalesArgs = {
   filters?: InputMaybe<I18NLocaleFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type QueryJobCardArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type QueryJobCardsArgs = {
+  filters?: InputMaybe<JobCardFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 

@@ -1,13 +1,1 @@
-.newsletter-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
-  position: relative;
-  margin-top: 1rem;
-}
-.newsletter-form .field {
-  gap: 1.875rem;
-  align-items: center;
-}
+.newsletter-form{align-items:flex-start;display:flex;flex-direction:column;justify-content:center;margin-top:1rem;position:relative;width:100%}.newsletter-form .field{align-items:center;gap:1.875rem}

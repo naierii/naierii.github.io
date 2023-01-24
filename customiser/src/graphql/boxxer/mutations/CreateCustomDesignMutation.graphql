@@ -4,9 +4,19 @@ mutation CreateCustomDesign($data: CustomDesignInput!) {
       id
       attributes {
         sizing {
+          id
           shopifyVariantId
         }
         parts {
+          id
+          shopifyVariantId
+        }
+        flags {
+          id
+          shopifyVariantId
+        }
+        graphics {
+          id
           shopifyVariantId
         }
       }

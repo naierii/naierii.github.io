@@ -31,7 +31,7 @@ mix.webpackConfig({
     },
   },
   output: {
-    chunkFilename: 'customboxxer.[name].js',
+    chunkFilename: 'customboxxer.[name].js?id=[chunkhash]',
   },
 });
 

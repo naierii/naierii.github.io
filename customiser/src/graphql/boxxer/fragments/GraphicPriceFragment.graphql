@@ -1,0 +1,9 @@
+fragment GraphicPrice on GraphicPriceEntity {
+  id
+  attributes {
+    size
+    basePrice {
+      ...ShopifyAddonProduct
+    }
+  }
+}

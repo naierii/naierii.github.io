@@ -4,4 +4,9 @@ query GetFlags($pagination: PaginationArg, $filters: FlagFiltersInput) {
       ...Flag
     }
   }
+  graphicPrices {
+    data {
+      ...GraphicPrice
+    }
+  }
 }

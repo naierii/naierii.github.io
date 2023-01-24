@@ -1,6 +1,8 @@
 import Button from '@components/ui/Button';
 import {
+  CustomDesignEntity,
   CustomDesignInput,
+  Maybe,
   useCreateCustomDesignMutation,
   useUploadMultipleFilesMutation,
 } from '@graphql/generated/graphql';
@@ -10,10 +12,10 @@ import { MutableRefObject, RefObject, useCallback, useEffect, useRef } from 'rea
 import { Camera } from 'three';
 
 import { graphQLClient } from '@graphql/graphql-client';
-import styles from './Header.module.scss';
-import { useMutation } from '@tanstack/react-query';
 import { addToCart } from '@lib/shopify';
 import { useDesignStore } from '@store/design';
+import { useMutation } from '@tanstack/react-query';
+import styles from './Header.module.scss';
 
 export interface HeaderProps {
   className?: string;
@@ -38,6 +40,70 @@ const getCustomDesignData = (state: CustomiserState, files: string[]): CustomDes
   },
 });
 
+const getCartVariations = (customDesignEntity?: CustomDesignEntity) => {
+  const customDesignId = customDesignEntity?.id;
+  const customDesign = customDesignEntity?.attributes;
+
+  if (!customDesign || !customDesignId) {
+    return [];
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const items: Array<{ id?: string; quantity: number; properties: any }> = [];
+  const id = (id?: Maybe<string>) => id?.replace('gid://shopify/ProductVariant/', '');
+  const getItem = (id?: string) => items.find((i) => i.id === id);
+  const addOrUpdate = (variantId: string) => {
+    const checkItem = getItem(variantId);
+    if (checkItem) {
+      const newQuantity = checkItem.quantity + 1;
+      checkItem.quantity = newQuantity;
+      checkItem.properties._customDesignQuantity = newQuantity;
+    } else {
+      items.push({
+        id: variantId,
+        quantity: 1,
+        properties: {
+          _customDesignAddon: customDesignId,
+          _customDesignQuantity: 1,
+        },
+      });
+    }
+  };
+
+  if (customDesign.parts?.length) {
+    customDesign.parts.forEach((p) => {
+      const variantId = id(p?.shopifyVariantId);
+      if (variantId) addOrUpdate(variantId);
+    });
+  }
+
+  if (customDesign.flags?.length) {
+    customDesign.flags.forEach((p) => {
+      const variantId = id(p?.shopifyVariantId);
+      if (variantId) addOrUpdate(variantId);
+    });
+  }
+
+  if (customDesign.graphics?.length) {
+    customDesign.graphics.forEach((p) => {
+      const variantId = id(p?.shopifyVariantId);
+      if (variantId) addOrUpdate(variantId);
+    });
+  }
+
+  if (customDesign.sizing?.shopifyVariantId) {
+    items.push({
+      id: id(customDesign.sizing.shopifyVariantId),
+      quantity: 1,
+      properties: {
+        _customDesign: customDesignId,
+      },
+    });
+  }
+
+  return items;
+};
+
 const Header = ({ className, cameraRef, canvasRef }: HeaderProps) => {
   const images = useRef<File[]>([]);
   const rootClassName = cn(styles.root, className);
@@ -59,45 +125,10 @@ const Header = ({ className, cameraRef, canvasRef }: HeaderProps) => {
 
   const { mutate } = useCreateCustomDesignMutation(graphQLClient, {
     onSuccess(data) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const items: Array<{ id?: string; quantity: number; properties: any }> = [];
-
-      if (data.createCustomDesign?.data?.attributes?.parts?.length) {
-        data.createCustomDesign?.data?.attributes?.parts.forEach((p) => {
-          const id = p?.shopifyVariantId?.replace('gid://shopify/ProductVariant/', '');
-          const checkItem = items.find((i) => i.id === id);
-
-          if (checkItem) {
-            const newQuantity = checkItem.quantity + 1;
-            checkItem.quantity = newQuantity;
-            checkItem.properties._customDesignQuantity = newQuantity;
-          } else {
-            items.push({
-              id: p?.shopifyVariantId?.replace('gid://shopify/ProductVariant/', ''),
-              quantity: 1,
-              properties: {
-                _customDesignAddon: data.createCustomDesign?.data?.id,
-                _customDesignQuantity: 1,
-              },
-            });
-          }
-        });
+      if (data.createCustomDesign?.data) {
+        const items = getCartVariations(data.createCustomDesign.data);
+        shopifyAddToCart.mutate({ items: items });
       }
-
-      if (data.createCustomDesign?.data?.attributes?.sizing?.shopifyVariantId) {
-        items.push({
-          id: data.createCustomDesign?.data?.attributes?.sizing?.shopifyVariantId.replace(
-            'gid://shopify/ProductVariant/',
-            '',
-          ),
-          quantity: 1,
-          properties: {
-            _customDesign: data.createCustomDesign?.data?.id,
-          },
-        });
-      }
-
-      shopifyAddToCart.mutate({ items: items });
     },
   });
 

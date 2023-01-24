@@ -20,21 +20,19 @@ const NavText = () => {
   const editText = texts?.find((g) => g.edit);
   const [showSelector, setShowSelector] = useState(false);
 
-  console.log({ editText });
-
   const addText = () => {
     setShowSelector(true);
   };
 
-  const setScale = (event: [number, number]) => {
+  const setScale = (event: number) => {
     startTransition(() => {
-      if (editText?.key) updateText(editText.key, { decalScale: Number(event[1]) });
+      if (editText?.key) updateText(editText.key, { decalScale: Number(event) });
     });
   };
 
-  const setRotation = (event: [number, number]) => {
+  const setRotation = (event: number) => {
     startTransition(() => {
-      if (editText?.key) updateText(editText.key, { decalRotation: Number(event[1]) });
+      if (editText?.key) updateText(editText.key, { decalRotation: Number(event) });
     });
   };
 

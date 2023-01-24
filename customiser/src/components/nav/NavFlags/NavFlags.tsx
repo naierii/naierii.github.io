@@ -1,4 +1,4 @@
-import { ChangeEvent, startTransition, useState } from 'react';
+import { startTransition, useState } from 'react';
 import { NavFlagsSelect } from './NavFlagsSelect';
 
 import Button from '@components/ui/Button';
@@ -8,10 +8,6 @@ import NavDecalAdjust from '../NavDecalAdjust';
 import NavEditButtons from '../NavEditButtons';
 import styles from './NavFlags.module.scss';
 import { NavFlagsFlag } from './NavFlagsFlag';
-
-// export interface NavFlagsProps {
-
-// }
 
 const NavFlags = () => {
   const flags = useCustomiserStore((state) => state.flags);
@@ -25,13 +21,13 @@ const NavFlags = () => {
     setShowSelector(true);
   };
 
-  const setScale = (event: number[]) => {
-    if (editFlag?.key) updateFlag(editFlag.key, { decalScale: Number(event[1]) });
+  const setScale = (event: number) => {
+    if (editFlag?.key) updateFlag(editFlag.key, { decalScale: Number(event) });
   };
 
-  const setRotation = (event: [number, number]) => {
+  const setRotation = (event: number) => {
     startTransition(() => {
-      if (editFlag?.key) updateFlag(editFlag.key, { decalRotation: Number(event[1]) });
+      if (editFlag?.key) updateFlag(editFlag.key, { decalRotation: Number(event) });
     });
   };
 

@@ -60,23 +60,35 @@ export type BooleanFilterInput = {
 
 export type ComponentCustomiserCustomDesignFlag = {
   __typename?: 'ComponentCustomiserCustomDesignFlag';
+  decalOrientation?: Maybe<Scalars['JSON']>;
   decalPosition?: Maybe<Scalars['JSON']>;
+  decalRotation?: Maybe<Scalars['Int']>;
+  decalScale?: Maybe<Scalars['Int']>;
   flag?: Maybe<FlagEntityResponse>;
   id: Scalars['ID'];
+  shopifyVariantId?: Maybe<Scalars['String']>;
 };
 
 export type ComponentCustomiserCustomDesignFlagFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignFlagFiltersInput>>>;
+  decalOrientation?: InputMaybe<JsonFilterInput>;
   decalPosition?: InputMaybe<JsonFilterInput>;
+  decalRotation?: InputMaybe<IntFilterInput>;
+  decalScale?: InputMaybe<IntFilterInput>;
   flag?: InputMaybe<FlagFiltersInput>;
   not?: InputMaybe<ComponentCustomiserCustomDesignFlagFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignFlagFiltersInput>>>;
+  shopifyVariantId?: InputMaybe<StringFilterInput>;
 };
 
 export type ComponentCustomiserCustomDesignFlagInput = {
+  decalOrientation?: InputMaybe<Scalars['JSON']>;
   decalPosition?: InputMaybe<Scalars['JSON']>;
+  decalRotation?: InputMaybe<Scalars['Int']>;
+  decalScale?: InputMaybe<Scalars['Int']>;
   flag?: InputMaybe<Scalars['ID']>;
   id?: InputMaybe<Scalars['ID']>;
+  shopifyVariantId?: InputMaybe<Scalars['String']>;
 };
 
 export type ComponentCustomiserCustomDesignPart = {
@@ -223,6 +235,78 @@ export type ComponentCustomiserCustomPartsInput = {
   tassels?: InputMaybe<Scalars['Boolean']>;
 };
 
+export type ComponentCustomiserGraphic = {
+  __typename?: 'ComponentCustomiserGraphic';
+  decalOrientation?: Maybe<Scalars['JSON']>;
+  decalPosition?: Maybe<Scalars['JSON']>;
+  decalRotation?: Maybe<Scalars['Int']>;
+  decalScale?: Maybe<Scalars['Int']>;
+  graphic?: Maybe<GraphicEntityResponse>;
+  id: Scalars['ID'];
+  shopifyVariantId?: Maybe<Scalars['String']>;
+};
+
+export type ComponentCustomiserGraphicFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<ComponentCustomiserGraphicFiltersInput>>>;
+  decalOrientation?: InputMaybe<JsonFilterInput>;
+  decalPosition?: InputMaybe<JsonFilterInput>;
+  decalRotation?: InputMaybe<IntFilterInput>;
+  decalScale?: InputMaybe<IntFilterInput>;
+  graphic?: InputMaybe<GraphicFiltersInput>;
+  not?: InputMaybe<ComponentCustomiserGraphicFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<ComponentCustomiserGraphicFiltersInput>>>;
+  shopifyVariantId?: InputMaybe<StringFilterInput>;
+};
+
+export type ComponentCustomiserGraphicInput = {
+  decalOrientation?: InputMaybe<Scalars['JSON']>;
+  decalPosition?: InputMaybe<Scalars['JSON']>;
+  decalRotation?: InputMaybe<Scalars['Int']>;
+  decalScale?: InputMaybe<Scalars['Int']>;
+  graphic?: InputMaybe<Scalars['ID']>;
+  id?: InputMaybe<Scalars['ID']>;
+  shopifyVariantId?: InputMaybe<Scalars['String']>;
+};
+
+export type ComponentCustomiserText = {
+  __typename?: 'ComponentCustomiserText';
+  decalOrientation?: Maybe<Scalars['JSON']>;
+  decalPosition?: Maybe<Scalars['JSON']>;
+  decalRotation?: Maybe<Scalars['Int']>;
+  decalScale?: Maybe<Scalars['Int']>;
+  fontName?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  material?: Maybe<MaterialEntityResponse>;
+  outline?: Maybe<MaterialEntityResponse>;
+  text?: Maybe<Scalars['String']>;
+};
+
+export type ComponentCustomiserTextFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<ComponentCustomiserTextFiltersInput>>>;
+  decalOrientation?: InputMaybe<JsonFilterInput>;
+  decalPosition?: InputMaybe<JsonFilterInput>;
+  decalRotation?: InputMaybe<IntFilterInput>;
+  decalScale?: InputMaybe<IntFilterInput>;
+  fontName?: InputMaybe<StringFilterInput>;
+  material?: InputMaybe<MaterialFiltersInput>;
+  not?: InputMaybe<ComponentCustomiserTextFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<ComponentCustomiserTextFiltersInput>>>;
+  outline?: InputMaybe<MaterialFiltersInput>;
+  text?: InputMaybe<StringFilterInput>;
+};
+
+export type ComponentCustomiserTextInput = {
+  decalOrientation?: InputMaybe<Scalars['JSON']>;
+  decalPosition?: InputMaybe<Scalars['JSON']>;
+  decalRotation?: InputMaybe<Scalars['Int']>;
+  decalScale?: InputMaybe<Scalars['Int']>;
+  fontName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  material?: InputMaybe<Scalars['ID']>;
+  outline?: InputMaybe<Scalars['ID']>;
+  text?: InputMaybe<Scalars['String']>;
+};
+
 export type ComponentMaterialMaterialMap = {
   __typename?: 'ComponentMaterialMaterialMap';
   id: Scalars['ID'];
@@ -281,14 +365,22 @@ export type CustomDesign = {
   createdAt?: Maybe<Scalars['DateTime']>;
   customProduct?: Maybe<CustomProductEntityResponse>;
   flags?: Maybe<Array<Maybe<ComponentCustomiserCustomDesignFlag>>>;
+  graphics?: Maybe<Array<Maybe<ComponentCustomiserGraphic>>>;
   images?: Maybe<UploadFileRelationResponseCollection>;
   parts?: Maybe<Array<Maybe<ComponentCustomiserCustomDesignPart>>>;
   sizing?: Maybe<ComponentCustomiserCustomDesignSizing>;
+  texts?: Maybe<Array<Maybe<ComponentCustomiserText>>>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type CustomDesignFlagsArgs = {
   filters?: InputMaybe<ComponentCustomiserCustomDesignFlagFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type CustomDesignGraphicsArgs = {
+  filters?: InputMaybe<ComponentCustomiserGraphicFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
@@ -301,6 +393,12 @@ export type CustomDesignImagesArgs = {
 
 export type CustomDesignPartsArgs = {
   filters?: InputMaybe<ComponentCustomiserCustomDesignPartFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type CustomDesignTextsArgs = {
+  filters?: InputMaybe<ComponentCustomiserTextFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
@@ -327,20 +425,24 @@ export type CustomDesignFiltersInput = {
   createdAt?: InputMaybe<DateTimeFilterInput>;
   customProduct?: InputMaybe<CustomProductFiltersInput>;
   flags?: InputMaybe<ComponentCustomiserCustomDesignFlagFiltersInput>;
+  graphics?: InputMaybe<ComponentCustomiserGraphicFiltersInput>;
   id?: InputMaybe<IdFilterInput>;
   not?: InputMaybe<CustomDesignFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<CustomDesignFiltersInput>>>;
   parts?: InputMaybe<ComponentCustomiserCustomDesignPartFiltersInput>;
   sizing?: InputMaybe<ComponentCustomiserCustomDesignSizingFiltersInput>;
+  texts?: InputMaybe<ComponentCustomiserTextFiltersInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
 
 export type CustomDesignInput = {
   customProduct?: InputMaybe<Scalars['ID']>;
   flags?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignFlagInput>>>;
+  graphics?: InputMaybe<Array<InputMaybe<ComponentCustomiserGraphicInput>>>;
   images?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   parts?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignPartInput>>>;
   sizing?: InputMaybe<ComponentCustomiserCustomDesignSizingInput>;
+  texts?: InputMaybe<Array<InputMaybe<ComponentCustomiserTextInput>>>;
 };
 
 export type CustomProduct = {
@@ -532,9 +634,8 @@ export type DateTimeFilterInput = {
   startsWith?: InputMaybe<Scalars['DateTime']>;
 };
 
-export enum Enum_Jobcard_Orderstatus {
+export enum Enum_Jobcardorderstatus_Orderstatus {
   Complete = 'Complete',
-  Pending = 'Pending',
   ReadyToCut = 'Ready_to_cut',
   ReadyToShip = 'Ready_to_ship',
 }
@@ -742,6 +843,8 @@ export type GenericMorph =
   | ComponentCustomiserCustomOption
   | ComponentCustomiserCustomOptionModel
   | ComponentCustomiserCustomParts
+  | ComponentCustomiserGraphic
+  | ComponentCustomiserText
   | ComponentMaterialMaterialMap
   | ComponentShopifyAddonProduct
   | ComponentShopifyCollection
@@ -752,9 +855,11 @@ export type GenericMorph =
   | Flag
   | Gallery
   | GalleryCategory
+  | Graphic
   | GraphicPrice
   | I18NLocale
   | JobCard
+  | JobCardOrderStatus
   | Material
   | MaterialAreaSize
   | MaterialColourGroup
@@ -770,6 +875,49 @@ export type GenericMorph =
   | UsersPermissionsPermission
   | UsersPermissionsRole
   | UsersPermissionsUser;
+
+export type Graphic = {
+  __typename?: 'Graphic';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  image?: Maybe<UploadFileEntityResponse>;
+  name?: Maybe<Scalars['String']>;
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type GraphicEntity = {
+  __typename?: 'GraphicEntity';
+  attributes?: Maybe<Graphic>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type GraphicEntityResponse = {
+  __typename?: 'GraphicEntityResponse';
+  data?: Maybe<GraphicEntity>;
+};
+
+export type GraphicEntityResponseCollection = {
+  __typename?: 'GraphicEntityResponseCollection';
+  data: Array<GraphicEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type GraphicFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<GraphicFiltersInput>>>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  name?: InputMaybe<StringFilterInput>;
+  not?: InputMaybe<GraphicFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<GraphicFiltersInput>>>;
+  publishedAt?: InputMaybe<DateTimeFilterInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type GraphicInput = {
+  image?: InputMaybe<Scalars['ID']>;
+  name?: InputMaybe<Scalars['String']>;
+  publishedAt?: InputMaybe<Scalars['DateTime']>;
+};
 
 export type GraphicPrice = {
   __typename?: 'GraphicPrice';
@@ -929,9 +1077,11 @@ export type JobCard = {
   customDesign?: Maybe<CustomDesignEntityResponse>;
   dueDate?: Maybe<Scalars['Date']>;
   jobCardName?: Maybe<Scalars['String']>;
-  orderStatus?: Maybe<Enum_Jobcard_Orderstatus>;
+  jobCardOrderStatus?: Maybe<JobCardOrderStatusEntityResponse>;
   publishedAt?: Maybe<Scalars['DateTime']>;
+  quantity?: Maybe<Scalars['Int']>;
   sendDate?: Maybe<Scalars['Date']>;
+  shopifyOrderId?: Maybe<Scalars['String']>;
   trackingNumber?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -960,11 +1110,13 @@ export type JobCardFiltersInput = {
   dueDate?: InputMaybe<DateFilterInput>;
   id?: InputMaybe<IdFilterInput>;
   jobCardName?: InputMaybe<StringFilterInput>;
+  jobCardOrderStatus?: InputMaybe<JobCardOrderStatusFiltersInput>;
   not?: InputMaybe<JobCardFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<JobCardFiltersInput>>>;
-  orderStatus?: InputMaybe<StringFilterInput>;
   publishedAt?: InputMaybe<DateTimeFilterInput>;
+  quantity?: InputMaybe<IntFilterInput>;
   sendDate?: InputMaybe<DateFilterInput>;
+  shopifyOrderId?: InputMaybe<StringFilterInput>;
   trackingNumber?: InputMaybe<StringFilterInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
@@ -973,10 +1125,53 @@ export type JobCardInput = {
   customDesign?: InputMaybe<Scalars['ID']>;
   dueDate?: InputMaybe<Scalars['Date']>;
   jobCardName?: InputMaybe<Scalars['String']>;
-  orderStatus?: InputMaybe<Enum_Jobcard_Orderstatus>;
+  jobCardOrderStatus?: InputMaybe<Scalars['ID']>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
+  quantity?: InputMaybe<Scalars['Int']>;
   sendDate?: InputMaybe<Scalars['Date']>;
+  shopifyOrderId?: InputMaybe<Scalars['String']>;
   trackingNumber?: InputMaybe<Scalars['String']>;
+};
+
+export type JobCardOrderStatus = {
+  __typename?: 'JobCardOrderStatus';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  orderStatus?: Maybe<Enum_Jobcardorderstatus_Orderstatus>;
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type JobCardOrderStatusEntity = {
+  __typename?: 'JobCardOrderStatusEntity';
+  attributes?: Maybe<JobCardOrderStatus>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type JobCardOrderStatusEntityResponse = {
+  __typename?: 'JobCardOrderStatusEntityResponse';
+  data?: Maybe<JobCardOrderStatusEntity>;
+};
+
+export type JobCardOrderStatusEntityResponseCollection = {
+  __typename?: 'JobCardOrderStatusEntityResponseCollection';
+  data: Array<JobCardOrderStatusEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type JobCardOrderStatusFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<JobCardOrderStatusFiltersInput>>>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  not?: InputMaybe<JobCardOrderStatusFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<JobCardOrderStatusFiltersInput>>>;
+  orderStatus?: InputMaybe<StringFilterInput>;
+  publishedAt?: InputMaybe<DateTimeFilterInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type JobCardOrderStatusInput = {
+  orderStatus?: InputMaybe<Enum_Jobcardorderstatus_Orderstatus>;
+  publishedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type LongFilterInput = {
@@ -1473,8 +1668,10 @@ export type Mutation = {
   createFlag?: Maybe<FlagEntityResponse>;
   createGallery?: Maybe<GalleryEntityResponse>;
   createGalleryCategory?: Maybe<GalleryCategoryEntityResponse>;
+  createGraphic?: Maybe<GraphicEntityResponse>;
   createGraphicPrice?: Maybe<GraphicPriceEntityResponse>;
   createJobCard?: Maybe<JobCardEntityResponse>;
+  createJobCardOrderStatus?: Maybe<JobCardOrderStatusEntityResponse>;
   createMaterial?: Maybe<MaterialEntityResponse>;
   createMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   createMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1498,8 +1695,10 @@ export type Mutation = {
   deleteFlag?: Maybe<FlagEntityResponse>;
   deleteGallery?: Maybe<GalleryEntityResponse>;
   deleteGalleryCategory?: Maybe<GalleryCategoryEntityResponse>;
+  deleteGraphic?: Maybe<GraphicEntityResponse>;
   deleteGraphicPrice?: Maybe<GraphicPriceEntityResponse>;
   deleteJobCard?: Maybe<JobCardEntityResponse>;
+  deleteJobCardOrderStatus?: Maybe<JobCardOrderStatusEntityResponse>;
   deleteMaterial?: Maybe<MaterialEntityResponse>;
   deleteMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   deleteMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1535,8 +1734,10 @@ export type Mutation = {
   updateFlag?: Maybe<FlagEntityResponse>;
   updateGallery?: Maybe<GalleryEntityResponse>;
   updateGalleryCategory?: Maybe<GalleryCategoryEntityResponse>;
+  updateGraphic?: Maybe<GraphicEntityResponse>;
   updateGraphicPrice?: Maybe<GraphicPriceEntityResponse>;
   updateJobCard?: Maybe<JobCardEntityResponse>;
+  updateJobCardOrderStatus?: Maybe<JobCardOrderStatusEntityResponse>;
   updateMaterial?: Maybe<MaterialEntityResponse>;
   updateMaterialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
   updateMaterialColourGroup?: Maybe<MaterialColourGroupEntityResponse>;
@@ -1590,12 +1791,20 @@ export type MutationCreateGalleryCategoryArgs = {
   data: GalleryCategoryInput;
 };
 
+export type MutationCreateGraphicArgs = {
+  data: GraphicInput;
+};
+
 export type MutationCreateGraphicPriceArgs = {
   data: GraphicPriceInput;
 };
 
 export type MutationCreateJobCardArgs = {
   data: JobCardInput;
+};
+
+export type MutationCreateJobCardOrderStatusArgs = {
+  data: JobCardOrderStatusInput;
 };
 
 export type MutationCreateMaterialArgs = {
@@ -1682,11 +1891,19 @@ export type MutationDeleteGalleryCategoryArgs = {
   id: Scalars['ID'];
 };
 
+export type MutationDeleteGraphicArgs = {
+  id: Scalars['ID'];
+};
+
 export type MutationDeleteGraphicPriceArgs = {
   id: Scalars['ID'];
 };
 
 export type MutationDeleteJobCardArgs = {
+  id: Scalars['ID'];
+};
+
+export type MutationDeleteJobCardOrderStatusArgs = {
   id: Scalars['ID'];
 };
 
@@ -1819,6 +2036,11 @@ export type MutationUpdateGalleryCategoryArgs = {
   id: Scalars['ID'];
 };
 
+export type MutationUpdateGraphicArgs = {
+  data: GraphicInput;
+  id: Scalars['ID'];
+};
+
 export type MutationUpdateGraphicPriceArgs = {
   data: GraphicPriceInput;
   id: Scalars['ID'];
@@ -1826,6 +2048,11 @@ export type MutationUpdateGraphicPriceArgs = {
 
 export type MutationUpdateJobCardArgs = {
   data: JobCardInput;
+  id: Scalars['ID'];
+};
+
+export type MutationUpdateJobCardOrderStatusArgs = {
+  data: JobCardOrderStatusInput;
   id: Scalars['ID'];
 };
 
@@ -2003,11 +2230,15 @@ export type Query = {
   gallery?: Maybe<GalleryEntityResponse>;
   galleryCategories?: Maybe<GalleryCategoryEntityResponseCollection>;
   galleryCategory?: Maybe<GalleryCategoryEntityResponse>;
+  graphic?: Maybe<GraphicEntityResponse>;
   graphicPrice?: Maybe<GraphicPriceEntityResponse>;
   graphicPrices?: Maybe<GraphicPriceEntityResponseCollection>;
+  graphics?: Maybe<GraphicEntityResponseCollection>;
   i18NLocale?: Maybe<I18NLocaleEntityResponse>;
   i18NLocales?: Maybe<I18NLocaleEntityResponseCollection>;
   jobCard?: Maybe<JobCardEntityResponse>;
+  jobCardOrderStatus?: Maybe<JobCardOrderStatusEntityResponse>;
+  jobCardOrderStatuses?: Maybe<JobCardOrderStatusEntityResponseCollection>;
   jobCards?: Maybe<JobCardEntityResponseCollection>;
   material?: Maybe<MaterialEntityResponse>;
   materialAreaSize?: Maybe<MaterialAreaSizeEntityResponse>;
@@ -2116,6 +2347,10 @@ export type QueryGalleryCategoryArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
+export type QueryGraphicArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
 export type QueryGraphicPriceArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
@@ -2123,6 +2358,13 @@ export type QueryGraphicPriceArgs = {
 export type QueryGraphicPricesArgs = {
   filters?: InputMaybe<GraphicPriceFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type QueryGraphicsArgs = {
+  filters?: InputMaybe<GraphicFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
@@ -2138,6 +2380,17 @@ export type QueryI18NLocalesArgs = {
 
 export type QueryJobCardArgs = {
   id?: InputMaybe<Scalars['ID']>;
+};
+
+export type QueryJobCardOrderStatusArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type QueryJobCardOrderStatusesArgs = {
+  filters?: InputMaybe<JobCardOrderStatusFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type QueryJobCardsArgs = {
@@ -2919,6 +3172,21 @@ export type FlagFragment = {
   } | null;
 };
 
+export type GraphicPriceFragment = {
+  __typename?: 'GraphicPriceEntity';
+  id?: string | null;
+  attributes?: {
+    __typename?: 'GraphicPrice';
+    size?: string | null;
+    basePrice?: {
+      __typename?: 'ComponentShopifyAddonProduct';
+      id: string;
+      price: number;
+      shopifyVariantId?: string | null;
+    } | null;
+  } | null;
+};
+
 export type ImageFragment = {
   __typename?: 'UploadFileEntity';
   id?: string | null;
@@ -3179,10 +3447,22 @@ export type CreateCustomDesignMutation = {
         __typename?: 'CustomDesign';
         sizing?: {
           __typename?: 'ComponentCustomiserCustomDesignSizing';
+          id: string;
           shopifyVariantId?: string | null;
         } | null;
         parts?: Array<{
           __typename?: 'ComponentCustomiserCustomDesignPart';
+          id: string;
+          shopifyVariantId?: string | null;
+        } | null> | null;
+        flags?: Array<{
+          __typename?: 'ComponentCustomiserCustomDesignFlag';
+          id: string;
+          shopifyVariantId?: string | null;
+        } | null> | null;
+        graphics?: Array<{
+          __typename?: 'ComponentCustomiserGraphic';
+          id: string;
           shopifyVariantId?: string | null;
         } | null> | null;
       } | null;
@@ -3350,6 +3630,23 @@ export type GetFlagsQuery = {
             } | null;
           } | null;
         };
+      } | null;
+    }>;
+  } | null;
+  graphicPrices?: {
+    __typename?: 'GraphicPriceEntityResponseCollection';
+    data: Array<{
+      __typename?: 'GraphicPriceEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'GraphicPrice';
+        size?: string | null;
+        basePrice?: {
+          __typename?: 'ComponentShopifyAddonProduct';
+          id: string;
+          price: number;
+          shopifyVariantId?: string | null;
+        } | null;
       } | null;
     }>;
   } | null;
@@ -3696,6 +3993,24 @@ export const FlagFragmentDoc = /*#__PURE__*/ `
   }
 }
     `;
+export const ShopifyAddonProductFragmentDoc = /*#__PURE__*/ `
+    fragment ShopifyAddonProduct on ComponentShopifyAddonProduct {
+  id
+  price
+  shopifyVariantId
+}
+    `;
+export const GraphicPriceFragmentDoc = /*#__PURE__*/ `
+    fragment GraphicPrice on GraphicPriceEntity {
+  id
+  attributes {
+    size
+    basePrice {
+      ...ShopifyAddonProduct
+    }
+  }
+}
+    `;
 export const MaterialColourGroupFragmentDoc = /*#__PURE__*/ `
     fragment MaterialColourGroup on MaterialColourGroupEntity {
   id
@@ -3747,13 +4062,6 @@ export const MaterialFragmentDoc = /*#__PURE__*/ `
   }
 }
     `;
-export const ShopifyAddonProductFragmentDoc = /*#__PURE__*/ `
-    fragment ShopifyAddonProduct on ComponentShopifyAddonProduct {
-  id
-  price
-  shopifyVariantId
-}
-    `;
 export const NameFragmentDoc = /*#__PURE__*/ `
     fragment Name on NameEntity {
   id
@@ -3794,9 +4102,19 @@ export const CreateCustomDesignDocument = /*#__PURE__*/ `
       id
       attributes {
         sizing {
+          id
           shopifyVariantId
         }
         parts {
+          id
+          shopifyVariantId
+        }
+        flags {
+          id
+          shopifyVariantId
+        }
+        graphics {
+          id
           shopifyVariantId
         }
       }
@@ -3902,9 +4220,16 @@ export const GetFlagsDocument = /*#__PURE__*/ `
       ...Flag
     }
   }
+  graphicPrices {
+    data {
+      ...GraphicPrice
+    }
+  }
 }
     ${FlagFragmentDoc}
-${ImageFragmentDoc}`;
+${ImageFragmentDoc}
+${GraphicPriceFragmentDoc}
+${ShopifyAddonProductFragmentDoc}`;
 export const useGetFlagsQuery = <TData = GetFlagsQuery, TError = unknown>(
   client: GraphQLClient,
   variables?: GetFlagsQueryVariables,

@@ -1,27 +1,16 @@
 import Image from '@components/ui/Image';
-import { FlagFragment, useGetFlagsQuery } from '@graphql/generated/graphql';
-import { graphQLClient } from '@graphql/graphql-client';
+import { FlagFragment } from '@graphql/generated/graphql';
 import { FlagCustomiser, useCustomiserStore } from '@store/customiser';
 
 import styles from './NavFlags.module.scss';
 
 export interface NavFlagsSelectProps {
   editFlag?: FlagCustomiser;
-  setShowMover: React.Dispatch<React.SetStateAction<boolean>>;
+  flags: FlagFragment[];
 }
 
-export const NavFlagsSelect = ({ editFlag, setShowMover }: NavFlagsSelectProps) => {
+export const NavFlagsSelect = ({ editFlag, flags }: NavFlagsSelectProps) => {
   const { addFlag, updateFlag } = useCustomiserStore((state) => state);
-
-  const { data: flags } = useGetFlagsQuery(
-    graphQLClient,
-    {
-      pagination: { limit: 500 },
-    },
-    {
-      select: (data) => data?.flags?.data,
-    },
-  );
 
   const flagSelected = (flag: FlagFragment) => {
     if (editFlag?.key) {
@@ -34,7 +23,6 @@ export const NavFlagsSelect = ({ editFlag, setShowMover }: NavFlagsSelectProps) 
         flag: flag,
       });
     }
-    setShowMover(true);
   };
 
   return (

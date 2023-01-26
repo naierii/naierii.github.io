@@ -20,7 +20,7 @@ export const Material = ({ className, material, onMaterialSelected }: MaterialPr
   };
 
   return (
-    <button className={rootClassName} onClick={onClick}>
+    <button className={rootClassName} onClick={onClick} data-name={material.attributes?.name}>
       {mapImage && <img src={mapImage?.image?.data?.attributes?.formats['thumbnail'].url} />}
     </button>
   );

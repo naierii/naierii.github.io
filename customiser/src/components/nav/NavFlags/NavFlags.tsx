@@ -8,6 +8,8 @@ import NavDecalAdjust from '../NavDecalAdjust';
 import NavEditButtons from '../NavEditButtons';
 import styles from './NavFlags.module.scss';
 import { NavFlagsFlag } from './NavFlagsFlag';
+import { useGetFlagsQuery } from '@graphql/generated/graphql';
+import { graphQLClient } from '@graphql/graphql-client';
 
 const NavFlags = () => {
   const flags = useCustomiserStore((state) => state.flags);
@@ -15,7 +17,16 @@ const NavFlags = () => {
   const editFlag = flags?.find((g) => g.edit);
 
   const [showSelector, setShowSelector] = useState(false);
-  const [showMover, setShowMover] = useState(false);
+
+  const { data: flagQuery } = useGetFlagsQuery(
+    graphQLClient,
+    {
+      pagination: { limit: 500 },
+    },
+    {
+      select: (data) => ({ flags: data.flags?.data, prices: data.graphicPrices?.data }),
+    },
+  );
 
   const addFlag = () => {
     setShowSelector(true);
@@ -40,23 +51,20 @@ const NavFlags = () => {
     }
 
     setShowSelector(false);
-    setShowMover(false);
   };
 
   return (
     <>
-      {showSelector && !showMover ? (
-        <>
-          <NavFlagsSelect editFlag={editFlag} setShowMover={setShowMover} />
-        </>
-      ) : showMover ? (
+      {showSelector ? (
         <>
           <NavDecalAdjust
             scale={editFlag?.decalScale}
             rotation={editFlag?.decalRotation}
             onScale={setScale}
             onRotate={setRotation}
+            prices={flagQuery?.prices}
           />
+          {flagQuery?.flags && <NavFlagsSelect editFlag={editFlag} flags={flagQuery.flags} />}
           <NavEditButtons disabled={!editFlag} onApply={applyFlag} />
         </>
       ) : (

@@ -93,7 +93,7 @@ const CustomiserCanvas = ({
         linear
         flat
         camera={{
-          position: [0, 2.1970893240496195e-15, 25.31024512625285],
+          position: [0, 2.1970893240496195e-15, 15.31024512625285],
           fov: 45,
         }}
         gl={{ preserveDrawingBuffer: true }}

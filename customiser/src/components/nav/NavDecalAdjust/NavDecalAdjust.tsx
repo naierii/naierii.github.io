@@ -1,10 +1,12 @@
+/* eslint-disable react/prop-types */
+import Price from '@components/ui/Price';
+import { GraphicPriceFragment } from '@graphql/generated/graphql';
 import cn from 'classnames';
 import ReactSlider from 'react-slider';
 import styles from './NavDecalAdjust.module.scss';
-import { ShopifyAddonProductFragment } from '@graphql/generated/graphql';
 export interface NavDecalAdjustProps {
   className?: string;
-  prices?: ShopifyAddonProductFragment[];
+  prices?: GraphicPriceFragment[];
   scale?: number;
   rotation?: number;
   onScale?: (event: number) => void;
@@ -29,6 +31,11 @@ const NavDecalAdjust = ({
   const step = (max - min) / (numberOfSteps - 1);
   const marks = range(min, max, step);
 
+  const formattedPrices = prices?.map((p, i) => ({
+    ...p,
+    markKey: marks[i],
+  }));
+
   return (
     <div className={rootClassName}>
       <h4>Scale</h4>
@@ -45,13 +52,12 @@ const NavDecalAdjust = ({
         value={scale}
         onChange={onScale}
         renderMark={(props) => {
-          // eslint-disable-next-line react/prop-types
           if (props.key && props.key < scale) {
             props.className = 'mark mark-before';
-            // eslint-disable-next-line react/prop-types
           } else if (props.key && props.key === scale) {
             props.className = 'mark mark-active';
           }
+          const price = formattedPrices?.find((p) => p.markKey === props?.key);
           return <span {...props} />;
         }}
       />
@@ -61,7 +67,6 @@ const NavDecalAdjust = ({
         thumbClassName={styles.thumb}
         trackClassName={styles.track}
         markClassName={styles.mark}
-        step={5}
         min={0}
         max={360}
         defaultValue={0}

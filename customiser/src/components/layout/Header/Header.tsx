@@ -30,9 +30,40 @@ const getCustomDesignData = (state: CustomiserState, files: string[]): CustomDes
     areaSize: p.part.areaSize?.data?.id,
     material: p.material.id,
   })),
+  texts: state.texts.map((t) => ({
+    text: t.text,
+    decalPosition: t.decalPosition,
+    decalOrientation: t.decalOrientation,
+    decalRotation: t.decalRotation,
+    decalScale: t.decalScale,
+    basePriceVariantId: t.basePrice?.shopifyVariantId,
+    letterPriceVariantId: t.letterPrice?.shopifyVariantId,
+    outlinePriceVariantId: t.outlinePrice?.shopifyVariantId,
+    puffPriceVariantId: t.puffPrice?.shopifyVariantId,
+    crystalPriceVariantId: t.crystalPrice?.shopifyVariantId,
+  })),
+  flags: state.flags.map((f) => ({
+    flag: f.flag?.id,
+    decalPosition: f.decalPosition,
+    decalOrientation: f.decalOrientation,
+    decalRotation: f.decalRotation,
+    decalScale: f.decalScale,
+    size: f.size,
+    shopifyVariantId: f.basePrice?.shopifyVariantId,
+  })),
+  graphics: state.graphics.map((g) => ({
+    graphic: g.graphic?.id,
+    decalPosition: g.decalPosition,
+    decalOrientation: g.decalOrientation,
+    decalRotation: g.decalRotation,
+    decalScale: g.decalScale,
+    size: g.size,
+    shopifyVariantId: g.basePrice?.shopifyVariantId,
+  })),
   images: files,
   sizing: {
     shopifyVariantId: state.sizing?.variation?.id,
+    size: state.sizing?.size,
     height: state.sizing?.height?.value?.toString(),
     heightUnit: state.sizing?.height?.unit,
     weight: state.sizing?.weight?.value,
@@ -52,19 +83,19 @@ const getCartVariations = (customDesignEntity?: CustomDesignEntity) => {
   const items: Array<{ id?: string; quantity: number; properties: any }> = [];
   const id = (id?: Maybe<string>) => id?.replace('gid://shopify/ProductVariant/', '');
   const getItem = (id?: string) => items.find((i) => i.id === id);
-  const addOrUpdate = (variantId: string) => {
+  const addOrUpdate = (variantId: string, addQty = 1) => {
     const checkItem = getItem(variantId);
     if (checkItem) {
-      const newQuantity = checkItem.quantity + 1;
+      const newQuantity = checkItem.quantity + addQty;
       checkItem.quantity = newQuantity;
       checkItem.properties._customDesignQuantity = newQuantity;
     } else {
       items.push({
         id: variantId,
-        quantity: 1,
+        quantity: addQty,
         properties: {
           _customDesignAddon: customDesignId,
-          _customDesignQuantity: 1,
+          _customDesignQuantity: addQty,
         },
       });
     }
@@ -88,6 +119,21 @@ const getCartVariations = (customDesignEntity?: CustomDesignEntity) => {
     customDesign.graphics.forEach((p) => {
       const variantId = id(p?.shopifyVariantId);
       if (variantId) addOrUpdate(variantId);
+    });
+  }
+
+  if (customDesign.texts?.length) {
+    customDesign.texts.forEach((t) => {
+      const basePrice = id(t?.basePriceVariantId);
+      if (basePrice) addOrUpdate(basePrice);
+      const letterPrice = id(t?.letterPriceVariantId);
+      if (letterPrice) addOrUpdate(letterPrice, t?.text?.length);
+      const outlinePrice = id(t?.outlinePriceVariantId);
+      if (outlinePrice) addOrUpdate(outlinePrice);
+      const puffPrice = id(t?.puffPriceVariantId);
+      if (puffPrice) addOrUpdate(puffPrice);
+      const crystalPrice = id(t?.crystalPriceVariantId);
+      if (crystalPrice) addOrUpdate(crystalPrice);
     });
   }
 

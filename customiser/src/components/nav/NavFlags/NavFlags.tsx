@@ -8,7 +8,7 @@ import NavDecalAdjust from '../NavDecalAdjust';
 import NavEditButtons from '../NavEditButtons';
 import styles from './NavFlags.module.scss';
 import { NavFlagsFlag } from './NavFlagsFlag';
-import { useGetFlagsQuery } from '@graphql/generated/graphql';
+import { GraphicPriceEntity, useGetFlagsQuery } from '@graphql/generated/graphql';
 import { graphQLClient } from '@graphql/graphql-client';
 
 const NavFlags = () => {
@@ -32,8 +32,21 @@ const NavFlags = () => {
     setShowSelector(true);
   };
 
-  const setScale = (event: number) => {
-    if (editFlag?.key) updateFlag(editFlag.key, { decalScale: Number(event) });
+  const setScale = (event: number, price?: GraphicPriceEntity) => {
+    const priceValues =
+      price?.attributes?.size && price?.attributes?.basePrice
+        ? {
+            size: price.attributes.size,
+            basePrice: {
+              ...price.attributes.basePrice,
+              quantity: 1,
+            },
+          }
+        : {};
+
+    if (editFlag?.key) {
+      updateFlag(editFlag.key, { decalScale: Number(event), ...priceValues });
+    }
   };
 
   const setRotation = (event: number) => {

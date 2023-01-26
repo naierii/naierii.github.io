@@ -67,6 +67,7 @@ export type ComponentCustomiserCustomDesignFlag = {
   flag?: Maybe<FlagEntityResponse>;
   id: Scalars['ID'];
   shopifyVariantId?: Maybe<Scalars['String']>;
+  size?: Maybe<Scalars['String']>;
 };
 
 export type ComponentCustomiserCustomDesignFlagFiltersInput = {
@@ -79,6 +80,7 @@ export type ComponentCustomiserCustomDesignFlagFiltersInput = {
   not?: InputMaybe<ComponentCustomiserCustomDesignFlagFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignFlagFiltersInput>>>;
   shopifyVariantId?: InputMaybe<StringFilterInput>;
+  size?: InputMaybe<StringFilterInput>;
 };
 
 export type ComponentCustomiserCustomDesignFlagInput = {
@@ -89,6 +91,7 @@ export type ComponentCustomiserCustomDesignFlagInput = {
   flag?: InputMaybe<Scalars['ID']>;
   id?: InputMaybe<Scalars['ID']>;
   shopifyVariantId?: InputMaybe<Scalars['String']>;
+  size?: InputMaybe<Scalars['String']>;
 };
 
 export type ComponentCustomiserCustomDesignPart = {
@@ -127,6 +130,7 @@ export type ComponentCustomiserCustomDesignSizing = {
   heightUnit?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   shopifyVariantId?: Maybe<Scalars['String']>;
+  size?: Maybe<Scalars['String']>;
   weight?: Maybe<Scalars['Float']>;
   weightUnit?: Maybe<Scalars['String']>;
 };
@@ -138,6 +142,7 @@ export type ComponentCustomiserCustomDesignSizingFiltersInput = {
   not?: InputMaybe<ComponentCustomiserCustomDesignSizingFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignSizingFiltersInput>>>;
   shopifyVariantId?: InputMaybe<StringFilterInput>;
+  size?: InputMaybe<StringFilterInput>;
   weight?: InputMaybe<FloatFilterInput>;
   weightUnit?: InputMaybe<StringFilterInput>;
 };
@@ -147,6 +152,7 @@ export type ComponentCustomiserCustomDesignSizingInput = {
   heightUnit?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
   shopifyVariantId?: InputMaybe<Scalars['String']>;
+  size?: InputMaybe<Scalars['String']>;
   weight?: InputMaybe<Scalars['Float']>;
   weightUnit?: InputMaybe<Scalars['String']>;
 };
@@ -244,6 +250,7 @@ export type ComponentCustomiserGraphic = {
   graphic?: Maybe<GraphicEntityResponse>;
   id: Scalars['ID'];
   shopifyVariantId?: Maybe<Scalars['String']>;
+  size?: Maybe<Scalars['String']>;
 };
 
 export type ComponentCustomiserGraphicFiltersInput = {
@@ -256,6 +263,7 @@ export type ComponentCustomiserGraphicFiltersInput = {
   not?: InputMaybe<ComponentCustomiserGraphicFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<ComponentCustomiserGraphicFiltersInput>>>;
   shopifyVariantId?: InputMaybe<StringFilterInput>;
+  size?: InputMaybe<StringFilterInput>;
 };
 
 export type ComponentCustomiserGraphicInput = {
@@ -266,44 +274,60 @@ export type ComponentCustomiserGraphicInput = {
   graphic?: InputMaybe<Scalars['ID']>;
   id?: InputMaybe<Scalars['ID']>;
   shopifyVariantId?: InputMaybe<Scalars['String']>;
+  size?: InputMaybe<Scalars['String']>;
 };
 
 export type ComponentCustomiserText = {
   __typename?: 'ComponentCustomiserText';
+  basePriceVariantId?: Maybe<Scalars['String']>;
+  crystalPriceVariantId?: Maybe<Scalars['String']>;
   decalOrientation?: Maybe<Scalars['JSON']>;
   decalPosition?: Maybe<Scalars['JSON']>;
   decalRotation?: Maybe<Scalars['Int']>;
   decalScale?: Maybe<Scalars['Int']>;
   fontName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  letterPriceVariantId?: Maybe<Scalars['String']>;
   material?: Maybe<MaterialEntityResponse>;
   outline?: Maybe<MaterialEntityResponse>;
+  outlinePriceVariantId?: Maybe<Scalars['String']>;
+  puffPriceVariantId?: Maybe<Scalars['String']>;
   text?: Maybe<Scalars['String']>;
 };
 
 export type ComponentCustomiserTextFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<ComponentCustomiserTextFiltersInput>>>;
+  basePriceVariantId?: InputMaybe<StringFilterInput>;
+  crystalPriceVariantId?: InputMaybe<StringFilterInput>;
   decalOrientation?: InputMaybe<JsonFilterInput>;
   decalPosition?: InputMaybe<JsonFilterInput>;
   decalRotation?: InputMaybe<IntFilterInput>;
   decalScale?: InputMaybe<IntFilterInput>;
   fontName?: InputMaybe<StringFilterInput>;
+  letterPriceVariantId?: InputMaybe<StringFilterInput>;
   material?: InputMaybe<MaterialFiltersInput>;
   not?: InputMaybe<ComponentCustomiserTextFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<ComponentCustomiserTextFiltersInput>>>;
   outline?: InputMaybe<MaterialFiltersInput>;
+  outlinePriceVariantId?: InputMaybe<StringFilterInput>;
+  puffPriceVariantId?: InputMaybe<StringFilterInput>;
   text?: InputMaybe<StringFilterInput>;
 };
 
 export type ComponentCustomiserTextInput = {
+  basePriceVariantId?: InputMaybe<Scalars['String']>;
+  crystalPriceVariantId?: InputMaybe<Scalars['String']>;
   decalOrientation?: InputMaybe<Scalars['JSON']>;
   decalPosition?: InputMaybe<Scalars['JSON']>;
   decalRotation?: InputMaybe<Scalars['Int']>;
   decalScale?: InputMaybe<Scalars['Int']>;
   fontName?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
+  letterPriceVariantId?: InputMaybe<Scalars['String']>;
   material?: InputMaybe<Scalars['ID']>;
   outline?: InputMaybe<Scalars['ID']>;
+  outlinePriceVariantId?: InputMaybe<Scalars['String']>;
+  puffPriceVariantId?: InputMaybe<Scalars['String']>;
   text?: InputMaybe<Scalars['String']>;
 };
 
@@ -3172,6 +3196,33 @@ export type FlagFragment = {
   } | null;
 };
 
+export type GraphicFragment = {
+  __typename?: 'GraphicEntity';
+  id?: string | null;
+  attributes?: {
+    __typename?: 'Graphic';
+    name?: string | null;
+    image?: {
+      __typename?: 'UploadFileEntityResponse';
+      data?: {
+        __typename?: 'UploadFileEntity';
+        id?: string | null;
+        attributes?: {
+          __typename?: 'UploadFile';
+          url: string;
+          size: number;
+          width?: number | null;
+          height?: number | null;
+          ext?: string | null;
+          mime: string;
+          name: string;
+          formats?: any | null;
+        } | null;
+      } | null;
+    } | null;
+  } | null;
+};
+
 export type GraphicPriceFragment = {
   __typename?: 'GraphicPriceEntity';
   id?: string | null;
@@ -3464,6 +3515,15 @@ export type CreateCustomDesignMutation = {
           __typename?: 'ComponentCustomiserGraphic';
           id: string;
           shopifyVariantId?: string | null;
+        } | null> | null;
+        texts?: Array<{
+          __typename?: 'ComponentCustomiserText';
+          id: string;
+          basePriceVariantId?: string | null;
+          letterPriceVariantId?: string | null;
+          outlinePriceVariantId?: string | null;
+          puffPriceVariantId?: string | null;
+          crystalPriceVariantId?: string | null;
         } | null> | null;
       } | null;
     } | null;
@@ -3993,6 +4053,19 @@ export const FlagFragmentDoc = /*#__PURE__*/ `
   }
 }
     `;
+export const GraphicFragmentDoc = /*#__PURE__*/ `
+    fragment Graphic on GraphicEntity {
+  id
+  attributes {
+    name
+    image {
+      data {
+        ...Image
+      }
+    }
+  }
+}
+    `;
 export const ShopifyAddonProductFragmentDoc = /*#__PURE__*/ `
     fragment ShopifyAddonProduct on ComponentShopifyAddonProduct {
   id
@@ -4116,6 +4189,14 @@ export const CreateCustomDesignDocument = /*#__PURE__*/ `
         graphics {
           id
           shopifyVariantId
+        }
+        texts {
+          id
+          basePriceVariantId
+          letterPriceVariantId
+          outlinePriceVariantId
+          puffPriceVariantId
+          crystalPriceVariantId
         }
       }
     }

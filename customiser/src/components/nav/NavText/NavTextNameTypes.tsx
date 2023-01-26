@@ -17,6 +17,8 @@ const NavTextNameTypes = ({ editText }: NavTextNameTypesProps) => {
   const [showOutline, setShowOutline] = useState<boolean>(editText?.outline ? true : false);
   const updateText = useCustomiserStore((state) => state.updateText);
 
+  console.log({ selectedName });
+
   const { data: names } = useGetNamesQuery(
     graphQLClient,
     {},
@@ -24,6 +26,8 @@ const NavTextNameTypes = ({ editText }: NavTextNameTypesProps) => {
       select: (data) => data.names?.data,
     },
   );
+
+  console.log(names);
 
   useEffect(() => {
     if (!selectedName && names?.length) {

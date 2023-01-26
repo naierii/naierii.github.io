@@ -11,6 +11,8 @@ const NavOptions = ({ toggle }: NavOptionsProps) => {
   const navItems = useCustomiserStore((state) => state.navItems);
   const sizingVariation = useCustomiserStore((state) => state.sizing?.variation);
   const parts = useCustomiserStore((state) => state.savedParts);
+  const flags = useCustomiserStore((state) => state.flags);
+  const texts = useCustomiserStore((state) => state.texts);
   const setSelectedNav = useCustomiserStore((state) => state.setSelectedNav);
 
   const handleClick = (index: number) => {
@@ -22,6 +24,8 @@ const NavOptions = ({ toggle }: NavOptionsProps) => {
     if (item.type === 'fitting') return true;
     if (item.type === 'size' && sizingVariation) return true;
     if (item.type === 'part' && parts.find((p) => p.part.id === item.id)) return true;
+    if (item.type === 'flags' && flags.length) return true;
+    if (item.type === 'names' && texts.length) return true;
   };
 
   return (

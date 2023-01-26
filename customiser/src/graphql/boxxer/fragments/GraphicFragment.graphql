@@ -1,0 +1,11 @@
+fragment Graphic on GraphicEntity {
+  id
+  attributes {
+    name
+    image {
+      data {
+        ...Image
+      }
+    }
+  }
+}

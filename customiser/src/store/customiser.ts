@@ -3,6 +3,7 @@ import type {
   CustomProductFragment,
   CustomProductPartFragment,
   FlagFragment,
+  GraphicFragment,
   MaterialFragment,
   Maybe,
   ModelFragment,
@@ -43,6 +44,21 @@ export interface FlagCustomiser {
   decalScale?: number;
   decalFreeze?: boolean;
   edit?: boolean;
+  basePrice?: AddonPrice;
+  size?: string;
+}
+
+export interface GraphicCustomiser {
+  key?: string;
+  graphic?: GraphicFragment;
+  decalPosition?: Vector3Array;
+  decalOrientation?: EulerArray;
+  decalRotation?: number;
+  decalScale?: number;
+  decalFreeze?: boolean;
+  edit?: boolean;
+  basePrice?: AddonPrice;
+  size?: string;
 }
 
 interface AddonPrice {
@@ -99,11 +115,13 @@ export interface CustomiserState {
   parts: Part[];
   savedParts: Part[];
   flags: FlagCustomiser[];
+  graphics: GraphicCustomiser[];
   texts: TextCustomiser[];
   variations: Array<ShopifyProductVariantFragment>;
   sizing?: {
     height?: SizingMeasurement;
     weight?: SizingMeasurement;
+    size?: string;
     variation?: ShopifyProductVariantFragment;
   };
 }
@@ -147,6 +165,7 @@ const initialState: CustomiserState = {
   parts: [],
   savedParts: [],
   flags: [],
+  graphics: [],
   texts: [],
   variations: [],
   sizing: {
@@ -182,6 +201,12 @@ const createCustomiser: StateCreator<
     get().texts.forEach((text) => {
       if (text.totalPrice) {
         total = total + text.totalPrice;
+      }
+    });
+
+    get().flags.forEach((flag) => {
+      if (flag.basePrice?.price) {
+        total = total + flag.basePrice.price;
       }
     });
 
@@ -271,7 +296,7 @@ const createCustomiser: StateCreator<
           state.sizing = { ...state.sizing, weight };
         }
         if (variation) {
-          state.sizing = { ...state.sizing, variation };
+          state.sizing = { ...state.sizing, variation, size: variation.title };
         }
       }),
     );

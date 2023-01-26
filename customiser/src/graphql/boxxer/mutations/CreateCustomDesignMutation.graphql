@@ -19,6 +19,14 @@ mutation CreateCustomDesign($data: CustomDesignInput!) {
           id
           shopifyVariantId
         }
+        texts {
+          id
+          basePriceVariantId
+          letterPriceVariantId
+          outlinePriceVariantId
+          puffPriceVariantId
+          crystalPriceVariantId
+        }
       }
     }
   }

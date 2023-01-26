@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
-import Price from '@components/ui/Price';
-import { GraphicPriceFragment } from '@graphql/generated/graphql';
+import { GraphicPriceEntity, GraphicPriceFragment } from '@graphql/generated/graphql';
 import cn from 'classnames';
 import ReactSlider from 'react-slider';
 import styles from './NavDecalAdjust.module.scss';
@@ -9,7 +8,7 @@ export interface NavDecalAdjustProps {
   prices?: GraphicPriceFragment[];
   scale?: number;
   rotation?: number;
-  onScale?: (event: number) => void;
+  onScale?: (event: number, price?: GraphicPriceEntity) => void;
   onRotate?: (event: number) => void;
 }
 
@@ -33,12 +32,17 @@ const NavDecalAdjust = ({
 
   const formattedPrices = prices?.map((p, i) => ({
     ...p,
-    markKey: marks[i],
+    markKey: Number(marks[i].toFixed(5)),
   }));
+
+  const onChange = (value: number) => {
+    const price = formattedPrices?.find((p) => p.markKey === value);
+    if (onScale) onScale(value, price);
+  };
 
   return (
     <div className={rootClassName}>
-      <h4>Scale</h4>
+      <h4>Size</h4>
       <ReactSlider
         className={styles.scale}
         thumbClassName={styles.thumb}
@@ -50,14 +54,13 @@ const NavDecalAdjust = ({
         max={max}
         defaultValue={min}
         value={scale}
-        onChange={onScale}
+        onChange={onChange}
         renderMark={(props) => {
           if (props.key && props.key < scale) {
             props.className = 'mark mark-before';
           } else if (props.key && props.key === scale) {
             props.className = 'mark mark-active';
           }
-          const price = formattedPrices?.find((p) => p.markKey === props?.key);
           return <span {...props} />;
         }}
       />

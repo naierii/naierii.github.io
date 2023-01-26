@@ -2,11 +2,9 @@ import Button from '@components/ui/Button';
 import { useGetCustomProductByShopifyIdQuery } from '@graphql/generated/graphql';
 import { useShopifyGetProductByIdQuery } from '@graphql/generated/graphql-shopify';
 import { useCustomiserStore } from '@store/customiser';
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 
-import { useGraphics } from '@context/GraphicsContext';
 import { graphQLClient } from '@graphql/graphql-client';
-import { useHydration } from '@hooks';
 import { useDesignStore } from '@store/design';
 
 const Customiser = lazy(() => import('@components/layout/Customiser'));
@@ -16,12 +14,8 @@ export interface MainProps {
 }
 
 const Main = ({ product }: MainProps) => {
-  const [dataLoaded, setDataLoaded] = useState(false);
   const { show, setShow } = useDesignStore((state) => state);
-  const { graphics, loadGraphic } = useGraphics();
   const setCustomProduct = useCustomiserStore((state) => state.setCustomProduct);
-  const flags = useCustomiserStore((state) => state.flags);
-  const isHydrated = useHydration();
 
   const { data: customProduct } = useGetCustomProductByShopifyIdQuery(
     graphQLClient,
@@ -32,17 +26,6 @@ const Main = ({ product }: MainProps) => {
   const { data: shopifyProduct } = useShopifyGetProductByIdQuery({
     id: product,
   });
-
-  useEffect(() => {
-    if (isHydrated && flags.length !== graphics?.length && !dataLoaded) {
-      for (const flag of flags) {
-        if (flag.materialJSON) {
-          loadGraphic(flag);
-        }
-      }
-      setDataLoaded(true);
-    }
-  }, [isHydrated, flags, graphics]);
 
   useEffect(() => {
     async function rehydrate() {

@@ -41,12 +41,4 @@ mix.extend('addWebpackLoaders', (webpackConfig, loaderRules) => {
   });
 });
 
-mix.addWebpackLoaders([
-  {
-    test: /\.(glsl|vs|fs|vert|frag)$/,
-    exclude: /node_modules/,
-    use: ['raw-loader', 'glslify-loader'],
-  },
-]);
-
 mix.ts('src/index.tsx', 'customboxxer.js').react();

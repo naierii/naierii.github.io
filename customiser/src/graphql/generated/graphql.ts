@@ -3738,6 +3738,81 @@ export type GetGalleriesQuery = {
   } | null;
 };
 
+export type GetMaterialQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['ID']>;
+}>;
+
+export type GetMaterialQuery = {
+  __typename?: 'Query';
+  material?: {
+    __typename?: 'MaterialEntityResponse';
+    data?: {
+      __typename?: 'MaterialEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'Material';
+        name?: string | null;
+        hex?: string | null;
+        type?: {
+          __typename?: 'MaterialTypeEntityResponse';
+          data?: {
+            __typename?: 'MaterialTypeEntity';
+            id?: string | null;
+            attributes?: { __typename?: 'MaterialType'; name?: string | null } | null;
+          } | null;
+        } | null;
+        colourGroups?: {
+          __typename?: 'MaterialColourGroupRelationResponseCollection';
+          data: Array<{
+            __typename?: 'MaterialColourGroupEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'MaterialColourGroup';
+              name: string;
+              colour: string;
+            } | null;
+          }>;
+        } | null;
+        price?: {
+          __typename?: 'MaterialPriceEntityResponse';
+          data?: {
+            __typename?: 'MaterialPriceEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'MaterialPrice';
+              name: string;
+              price: number;
+              sku: string;
+            } | null;
+          } | null;
+        } | null;
+        images?: Array<{
+          __typename?: 'ComponentMaterialMaterialMap';
+          mapType?: string | null;
+          image: {
+            __typename?: 'UploadFileEntityResponse';
+            data?: {
+              __typename?: 'UploadFileEntity';
+              id?: string | null;
+              attributes?: {
+                __typename?: 'UploadFile';
+                url: string;
+                size: number;
+                width?: number | null;
+                height?: number | null;
+                ext?: string | null;
+                mime: string;
+                name: string;
+                formats?: any | null;
+              } | null;
+            } | null;
+          };
+        } | null> | null;
+      } | null;
+    } | null;
+  } | null;
+};
+
 export type GetMaterialsQueryVariables = Exact<{
   filters?: InputMaybe<MaterialFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
@@ -4363,6 +4438,38 @@ export const useGetGalleriesQuery = <TData = GetGalleriesQuery, TError = unknown
 
 useGetGalleriesQuery.getKey = (variables?: GetGalleriesQueryVariables) =>
   variables === undefined ? ['GetGalleries'] : ['GetGalleries', variables];
+export const GetMaterialDocument = /*#__PURE__*/ `
+    query GetMaterial($id: ID) {
+  material(id: $id) {
+    data {
+      ...Material
+    }
+  }
+}
+    ${MaterialFragmentDoc}
+${MaterialTypeFragmentDoc}
+${MaterialColourGroupFragmentDoc}
+${MaterialPriceFragmentDoc}
+${ImageFragmentDoc}`;
+export const useGetMaterialQuery = <TData = GetMaterialQuery, TError = unknown>(
+  client: GraphQLClient,
+  variables?: GetMaterialQueryVariables,
+  options?: UseQueryOptions<GetMaterialQuery, TError, TData>,
+  headers?: RequestInit['headers'],
+) =>
+  useQuery<GetMaterialQuery, TError, TData>(
+    variables === undefined ? ['GetMaterial'] : ['GetMaterial', variables],
+    fetcher<GetMaterialQuery, GetMaterialQueryVariables>(
+      client,
+      GetMaterialDocument,
+      variables,
+      headers,
+    ),
+    options,
+  );
+
+useGetMaterialQuery.getKey = (variables?: GetMaterialQueryVariables) =>
+  variables === undefined ? ['GetMaterial'] : ['GetMaterial', variables];
 export const GetMaterialsDocument = /*#__PURE__*/ `
     query GetMaterials($filters: MaterialFiltersInput, $pagination: PaginationArg) {
   materials(filters: $filters, pagination: $pagination) {

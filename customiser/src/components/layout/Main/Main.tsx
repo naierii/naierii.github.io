@@ -40,7 +40,7 @@ const Main = ({ product }: MainProps) => {
   return (
     <>
       {show ? (
-        <Suspense fallback={<div></div>}>
+        <Suspense fallback={<Button colour='red'>Loading...</Button>}>
           <Customiser />
         </Suspense>
       ) : (

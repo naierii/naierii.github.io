@@ -1,0 +1,7 @@
+query GetMaterial($id: ID) {
+  material(id: $id) {
+    data {
+      ...Material
+    }
+  }
+}

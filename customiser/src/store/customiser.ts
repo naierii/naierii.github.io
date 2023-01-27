@@ -150,7 +150,11 @@ export interface CustomiserActions {
   updateText: (key: string, text: TextCustomiser) => void;
   deleteText: (key: string) => void;
   resetNav: () => void;
-  texture: (nodeId: string) => { materials: MaterialTextureModel; hex: string };
+  texture: (nodeId: string) => {
+    id?: Maybe<Scalars['ID']>;
+    materials: MaterialTextureModel;
+    hex: string;
+  };
   optional: (nodeId: string) => boolean;
   tassels: (nodeId: string) => boolean;
   reset: () => void;
@@ -361,10 +365,12 @@ const createCustomiser: StateCreator<
     const parts = get().parts;
     let materials: MaterialTextureModel = {};
     let hex = '';
+    let id;
     for (const p of parts) {
       const test = p.part.modelParts?.data.map((mp) => mp?.attributes?.nodeId).indexOf(nodeId);
       if (test != -1 && p?.material?.attributes?.images) {
         hex = p.material.attributes.hex ?? '';
+        id = p.material.id;
         p.material.attributes.images?.forEach((image) => {
           materials = {
             ...materials,
@@ -376,6 +382,7 @@ const createCustomiser: StateCreator<
       }
     }
     return {
+      id,
       materials,
       hex,
     };

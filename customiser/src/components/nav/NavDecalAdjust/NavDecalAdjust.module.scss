@@ -3,6 +3,9 @@
 @import '@styles/variables';
 
 .root {
+  div:empty {
+    display: block;
+  }
 }
 
 .scale,

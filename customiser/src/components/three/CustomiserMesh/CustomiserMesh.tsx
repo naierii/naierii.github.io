@@ -43,7 +43,7 @@ const ClonedTextureMesh = ({
         const boxSize = new Vector3();
         const dimensions = boundingBox.getSize(boxSize);
         const area = dimensions.x * dimensions.y;
-        clone.repeat.set(0.0015 * area, 0.0015 * area);
+        clone.repeat.set(0.0008 * area, 0.0008 * area);
         updatedTextures = { ...updatedTextures, [key]: clone };
       }
 

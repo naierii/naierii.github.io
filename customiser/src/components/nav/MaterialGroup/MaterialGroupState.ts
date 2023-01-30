@@ -1,4 +1,4 @@
-import create, { StateCreator, StoreApi } from 'zustand';
+import { create, StateCreator, StoreApi } from 'zustand';
 import createContext from 'zustand/context';
 import produce from 'immer';
 import { devtools } from 'zustand/middleware';

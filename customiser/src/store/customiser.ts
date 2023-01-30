@@ -16,7 +16,7 @@ import {
 import { MaterialTextureModel } from '@models';
 import produce from 'immer';
 import { v4 as uuidv4 } from 'uuid';
-import create, { StateCreator } from 'zustand';
+import { create, StateCreator } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
 import { UNIT } from './constants';
@@ -351,6 +351,24 @@ const createCustomiser: StateCreator<
           state.savedParts = state.parts;
           state.savedModels = state.selectedModels;
         }
+
+        state.flags = state.flags.map((f) => {
+          f.decalFreeze = false;
+          f.edit = false;
+          return f;
+        });
+
+        state.texts = state.texts.map((f) => {
+          f.decalFreeze = false;
+          f.edit = false;
+          return f;
+        });
+
+        state.graphics = state.graphics.map((f) => {
+          f.decalFreeze = false;
+          f.edit = false;
+          return f;
+        });
       }),
     ),
   resetNav: () => set({ selectedPart: null }),

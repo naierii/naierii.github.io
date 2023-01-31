@@ -12,6 +12,7 @@ export interface HeaderProps {
 const Header = ({ className }: HeaderProps) => {
   const rootClassName = cn(styles.root, className);
   const total = useCustomiserStore((state) => state.total());
+  const designComplete = useCustomiserStore((state) => state.designComplete());
   const setResetCamera = useDesignStore((state) => state.setResetCamera);
 
   const saveDesign = () => {
@@ -23,7 +24,9 @@ const Header = ({ className }: HeaderProps) => {
       <div className={styles.total}>
         Current <span className={styles.price}>${total}</span>
       </div>
-      <Button onClick={saveDesign}>Add to basket</Button>
+      <Button onClick={saveDesign} disabled={!designComplete}>
+        Add to basket
+      </Button>
     </div>
   );
 };

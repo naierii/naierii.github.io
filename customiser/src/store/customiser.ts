@@ -158,6 +158,7 @@ export interface CustomiserActions {
   optional: (nodeId: string) => boolean;
   tassels: (nodeId: string) => boolean;
   reset: () => void;
+  designComplete: () => boolean;
 }
 
 const initialState: CustomiserState = {
@@ -188,6 +189,23 @@ const createCustomiser: StateCreator<
   []
 > = (set, get) => ({
   ...initialState,
+  designComplete: () => {
+    const navItems = get().navItems;
+    let isComplete = true;
+
+    const sizing = navItems.find((i) => i.type === 'size');
+    if (sizing && !get().sizing?.variation) return false;
+
+    const requiredParts = navItems.filter((i) => i.type === 'part' && i.required);
+    for (const part of requiredParts) {
+      if (!get().savedParts.find((p) => p.part.id === part.id)) {
+        isComplete = false;
+        break;
+      }
+    }
+
+    return isComplete;
+  },
   total: () => {
     let total = 0;
     const variation = get().sizing?.variation;
@@ -347,10 +365,8 @@ const createCustomiser: StateCreator<
           }
         }
 
-        if (save) {
-          state.savedParts = state.parts;
-          state.savedModels = state.selectedModels;
-        }
+        state.savedParts = state.parts;
+        state.savedModels = state.selectedModels;
 
         state.flags = state.flags.map((f) => {
           f.decalFreeze = false;

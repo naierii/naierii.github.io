@@ -2,7 +2,6 @@ import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
 import { AnimatePresence, motion, useCycle } from 'framer-motion';
 import { Suspense } from 'react';
-import NavButtons from '../NavButtons';
 import NavFitting from '../NavFitting';
 import NavFlags from '../NavFlags';
 import NavHeader from '../NavHeader';
@@ -46,7 +45,6 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
         </AnimatePresence>
       </Suspense>
       <div id='CustomiserNavActions' className={styles.actions}></div>
-      {/* {!isOpen && <NavButtons className={styles.actions} />} */}
     </motion.nav>
   );
 };

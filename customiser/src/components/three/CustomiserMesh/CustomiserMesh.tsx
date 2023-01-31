@@ -43,7 +43,7 @@ const ClonedTextureMesh = ({
         const boxSize = new Vector3();
         const dimensions = boundingBox.getSize(boxSize);
         const area = dimensions.x * dimensions.y;
-        clone.repeat.set(0.0008 * area, 0.0008 * area);
+        clone.repeat.set(0.0015 * area, 0.0015 * area);
         updatedTextures = { ...updatedTextures, [key]: clone };
       }
 
@@ -73,8 +73,8 @@ const ClonedTextureMesh = ({
             side={DoubleSide}
             {...textures}
             displacementScale={textures?.displacementMap ? 0 : undefined}
-            roughness={textures?.map ? undefined : 0.4}
-            metalness={textures?.map ? undefined : 0.05}
+            // roughness={textures?.map ? undefined : 0.4}
+            // metalness={textures?.map ? undefined : 0.05}
             ref={materialRef}
           />
         )}

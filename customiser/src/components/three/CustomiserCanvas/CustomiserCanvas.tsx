@@ -154,6 +154,10 @@ const getCartVariations = (customDesignEntity?: CustomDesignEntity) => {
   return items;
 };
 
+const cameraDefault: [x: number, y: number, z: number] = [
+  0, 2.1970893240496195e-15, 15.31024512625285,
+];
+
 const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => {
   const cameraRef = useRef<Camera | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -278,7 +282,7 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
       return;
     }
     if (resetCamera) {
-      camera.position.set(0, 2.1970893240496195e-15, 25.31024512625285);
+      camera.position.set(cameraDefault[0], cameraDefault[1], cameraDefault[2]);
       setAddingToCart();
     }
   }, [resetCamera]);
@@ -289,7 +293,7 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
         linear
         flat
         camera={{
-          position: [0, 2.1970893240496195e-15, 15.31024512625285],
+          position: cameraDefault,
           fov: 45,
         }}
         gl={{ preserveDrawingBuffer: true }}

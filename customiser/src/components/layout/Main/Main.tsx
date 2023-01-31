@@ -3,11 +3,26 @@ import { useGetCustomProductByShopifyIdQuery } from '@graphql/generated/graphql'
 import { useShopifyGetProductByIdQuery } from '@graphql/generated/graphql-shopify';
 import { useCustomiserStore } from '@store/customiser';
 import { lazy, Suspense, useEffect } from 'react';
-
+import { ErrorBoundary } from 'react-error-boundary';
 import { graphQLClient } from '@graphql/graphql-client';
 import { useDesignStore } from '@store/design';
 
 const Customiser = lazy(() => import('@components/layout/Customiser'));
+
+interface ErrorFallbackProps {
+  error: Error;
+  resetErrorBoundary: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
+  return (
+    <div role='alert'>
+      <h2>Something went wrong:</h2>
+      <pre>{error.message}</pre>
+      <Button onClick={resetErrorBoundary}>Try again</Button>
+    </div>
+  );
+}
 
 export interface MainProps {
   product: string;
@@ -16,6 +31,7 @@ export interface MainProps {
 const Main = ({ product }: MainProps) => {
   const { show, setShow } = useDesignStore((state) => state);
   const setCustomProduct = useCustomiserStore((state) => state.setCustomProduct);
+  const reset = useCustomiserStore((state) => state.reset);
 
   const { data: customProduct } = useGetCustomProductByShopifyIdQuery(
     graphQLClient,
@@ -41,7 +57,14 @@ const Main = ({ product }: MainProps) => {
     <>
       {show ? (
         <Suspense fallback={<Button colour='red'>Loading...</Button>}>
-          <Customiser />
+          <ErrorBoundary
+            FallbackComponent={ErrorFallback}
+            onReset={() => {
+              reset();
+            }}
+          >
+            <Customiser />
+          </ErrorBoundary>
         </Suspense>
       ) : (
         <Button colour='red' onClick={() => setShow(true)}>

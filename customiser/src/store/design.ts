@@ -13,7 +13,7 @@ export interface DesignState {
   setShow: (show: boolean) => void;
 }
 
-const createDesign: StateCreator<DesignState, [['zustand/devtools', never]], []> = (set, get) => ({
+const createDesign: StateCreator<DesignState, [['zustand/devtools', never]], []> = (set) => ({
   resetCamera: false,
   addingToCart: false,
   modelRotation: 0,

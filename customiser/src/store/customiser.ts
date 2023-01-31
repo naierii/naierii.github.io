@@ -547,10 +547,16 @@ const createCustomiser: StateCreator<
     );
   },
   reset: () => {
-    set(() => {
+    set((state) => {
       useCustomiserStore.persist.clearStorage();
       return {
-        ...initialState,
+        ...state,
+        parts: [],
+        savedParts: [],
+        texts: [],
+        flags: [],
+        graphics: [],
+        sizing: undefined,
       };
     });
   },

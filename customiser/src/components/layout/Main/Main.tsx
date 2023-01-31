@@ -7,6 +7,8 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { graphQLClient } from '@graphql/graphql-client';
 import { useDesignStore } from '@store/design';
 
+import styles from './Main.module.scss';
+
 const Customiser = lazy(() => import('@components/layout/Customiser'));
 
 interface ErrorFallbackProps {
@@ -16,7 +18,7 @@ interface ErrorFallbackProps {
 
 function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
   return (
-    <div role='alert'>
+    <div className={styles.error} role='alert'>
       <h2>Something went wrong:</h2>
       <pre>{error.message}</pre>
       <Button onClick={resetErrorBoundary}>Try again</Button>

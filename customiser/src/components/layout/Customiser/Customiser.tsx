@@ -21,7 +21,7 @@ const Customiser = ({ className }: CustomiserProps) => {
     <div className={rootClassName}>
       <CustomiserNav className={styles.nav} />
       <Header className={styles.header} />
-      <Suspense>
+      <Suspense fallback={<div className={styles.loading}>Loading ...</div>}>
         <CustomiserCanvas className={styles.model} />
       </Suspense>
       <Button className={styles.close} onClick={() => setShow(false)}>

@@ -14,6 +14,7 @@ const Header = ({ className }: HeaderProps) => {
   const total = useCustomiserStore((state) => state.total());
   const designComplete = useCustomiserStore((state) => state.designComplete());
   const setResetCamera = useDesignStore((state) => state.setResetCamera);
+  const addingToCart = useDesignStore((state) => state.addingToCart);
 
   const saveDesign = () => {
     setResetCamera();
@@ -24,8 +25,8 @@ const Header = ({ className }: HeaderProps) => {
       <div className={styles.total}>
         Current <span className={styles.price}>${total}</span>
       </div>
-      <Button onClick={saveDesign} disabled={!designComplete}>
-        Add to basket
+      <Button onClick={saveDesign} disabled={!designComplete || addingToCart}>
+        {addingToCart ? 'Saving' : 'Add to basket'}
       </Button>
     </div>
   );

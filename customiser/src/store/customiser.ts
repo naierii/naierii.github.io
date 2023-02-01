@@ -135,6 +135,7 @@ export interface CustomiserActions {
   ) => void;
   setSelectedPart: (data: CustomProductPartFragment) => void;
   setPart: (part: CustomProductPartFragment, material: MaterialFragment) => void;
+  removePart: (part: CustomProductPartFragment) => void;
   setSelectedNav: (index: number, save?: boolean) => void;
   setCanvasSize: (width: number, height: number) => void;
   setSizing: (
@@ -343,6 +344,14 @@ const createCustomiser: StateCreator<
         } else {
           state.parts.push({ part, material });
         }
+      }),
+    );
+  },
+  removePart: (part) => {
+    set(
+      produce((state: CustomiserState) => {
+        state.parts = state.parts.filter((p) => p.part.id !== part.id);
+        state.savedParts = state.savedParts.filter((p) => p.part.id !== part.id);
       }),
     );
   },

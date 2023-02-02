@@ -514,25 +514,26 @@ const createCustomiser: StateCreator<
         state.texts = [
           ...state.texts.map((f) => {
             if (f.key === key) {
+              const updateText = { ...f, ...text };
               let letterPrice;
-              if (f.letterPrice && f.text) {
-                letterPrice = f.letterPrice;
-                letterPrice.quantity = f.text.length;
+              if (updateText.letterPrice && updateText.text) {
+                letterPrice = updateText.letterPrice;
+                letterPrice.quantity = updateText.text.length;
               }
-              const basePriceTotal = f.basePrice?.price
-                ? f.basePrice.price * f.basePrice?.quantity
+              const basePriceTotal = updateText.basePrice?.price
+                ? updateText.basePrice.price * updateText.basePrice?.quantity
                 : 0;
-              const letterPriceTotal = f.letterPrice?.price
-                ? f.letterPrice.price * f.letterPrice?.quantity
+              const letterPriceTotal = updateText.letterPrice?.price
+                ? updateText.letterPrice.price * updateText.letterPrice?.quantity
                 : 0;
-              const outlinePriceTotal = f.outlinePrice?.price
-                ? f.outlinePrice.price * f.outlinePrice?.quantity
+              const outlinePriceTotal = updateText.outlinePrice?.price
+                ? updateText.outlinePrice.price * updateText.outlinePrice?.quantity
                 : 0;
-              const puffPriceTotal = f.puffPrice?.price
-                ? f.puffPrice.price * f.puffPrice?.quantity
+              const puffPriceTotal = updateText.puffPrice?.price
+                ? updateText.puffPrice.price * updateText.puffPrice?.quantity
                 : 0;
-              const crystalPriceTotal = f.crystalPrice?.price
-                ? f.crystalPrice.price * f.crystalPrice?.quantity
+              const crystalPriceTotal = updateText.crystalPrice?.price
+                ? updateText.crystalPrice.price * updateText.crystalPrice?.quantity
                 : 0;
               const totalPrice =
                 basePriceTotal +
@@ -540,7 +541,7 @@ const createCustomiser: StateCreator<
                 outlinePriceTotal +
                 puffPriceTotal +
                 crystalPriceTotal;
-              return { ...f, ...text, letterPrice, totalPrice };
+              return { ...updateText, letterPrice, totalPrice };
             }
             return f;
           }),

@@ -15,9 +15,9 @@ export interface NavTextNameTypesProps {
 const NavTextNameTypes = ({ editText }: NavTextNameTypesProps) => {
   const [selectedName, setSelectedName] = useState<NameEntity>();
   const [showOutline, setShowOutline] = useState<boolean>(editText?.outline ? true : false);
+  const [crystals, setCrystals] = useState<boolean>(editText?.crystalPrice ? true : false);
+  const [puff, setPuff] = useState<boolean>(editText?.puffPrice ? true : false);
   const updateText = useCustomiserStore((state) => state.updateText);
-
-  console.log({ selectedName });
 
   const { data: names } = useGetNamesQuery(
     graphQLClient,
@@ -26,8 +26,6 @@ const NavTextNameTypes = ({ editText }: NavTextNameTypesProps) => {
       select: (data) => data.names?.data,
     },
   );
-
-  console.log(names);
 
   useEffect(() => {
     if (!selectedName && names?.length) {
@@ -88,6 +86,44 @@ const NavTextNameTypes = ({ editText }: NavTextNameTypesProps) => {
     }
   };
 
+  const addCrystals = (add: boolean) => {
+    if (editText?.key) {
+      setCrystals(add);
+      if (add) {
+        updateText(editText.key, {
+          crystalPrice: {
+            price: selectedName.attributes?.crystalPrice?.price,
+            quantity: 1,
+            shopifyVariantId: selectedName.attributes?.crystalPrice?.shopifyVariantId,
+          },
+        });
+      } else {
+        updateText(editText.key, {
+          crystalPrice: undefined,
+        });
+      }
+    }
+  };
+
+  const addPuff = (add: boolean) => {
+    if (editText?.key) {
+      setPuff(add);
+      if (add) {
+        updateText(editText.key, {
+          puffPrice: {
+            price: selectedName.attributes?.puffPrice?.price,
+            quantity: 1,
+            shopifyVariantId: selectedName.attributes?.puffPrice?.shopifyVariantId,
+          },
+        });
+      } else {
+        updateText(editText.key, {
+          puffPrice: undefined,
+        });
+      }
+    }
+  };
+
   return (
     <>
       <div className={styles.nameTypes}>
@@ -117,7 +153,8 @@ const NavTextNameTypes = ({ editText }: NavTextNameTypesProps) => {
         <PillButton onClick={() => updateOutline(!showOutline)} selected={showOutline}>
           Add Outline
         </PillButton>
-        + <Price price={selectedName.attributes?.outlinePrice?.price} />
+        {' +'}
+        <Price price={selectedName.attributes?.outlinePrice?.price} />
       </div>
       {showOutline && (
         <>
@@ -131,6 +168,20 @@ const NavTextNameTypes = ({ editText }: NavTextNameTypesProps) => {
           />
         </>
       )}
+      <div className={styles.addCrystals}>
+        <PillButton onClick={() => addCrystals(!crystals)} selected={crystals}>
+          Add Crystals
+        </PillButton>
+        {' +'}
+        <Price price={selectedName.attributes?.crystalPrice?.price} />
+      </div>
+      <div className={styles.addPuff}>
+        <PillButton onClick={() => addPuff(!puff)} selected={puff}>
+          Add 3D Puff
+        </PillButton>
+        {' +'}
+        <Price price={selectedName.attributes?.puffPrice?.price} />
+      </div>
     </>
   );
 };

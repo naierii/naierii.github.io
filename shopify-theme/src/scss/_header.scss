@@ -200,6 +200,10 @@
                 li {
                     &:not(:first-child) {
                         border-top: 1px solid $midGrey;
+
+                        @include mq($from: tabletLandscape) {
+                            border-top: 0;
+                        }
                     }
 
                     &:last-child {

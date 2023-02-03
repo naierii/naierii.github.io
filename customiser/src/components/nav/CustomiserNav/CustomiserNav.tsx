@@ -28,7 +28,7 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
       <NavHeader className={styles.header} toggle={() => toggleOpen()} isOpen={isOpen} />
       <Suspense fallback={<div>Loading...</div>}>
         <AnimatePresence initial={false}>
-          <div className={styles.content}>
+          <div id='scrollable' className={styles.content}>
             {isOpen ? (
               <NavOptions toggle={() => toggleOpen()} />
             ) : selectedNav?.type === 'fitting' ? (

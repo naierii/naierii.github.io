@@ -6,6 +6,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { graphQLClient } from '@graphql/graphql-client';
 import { useDesignStore } from '@store/design';
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 import styles from './Main.module.scss';
 
@@ -44,6 +45,19 @@ const Main = ({ product }: MainProps) => {
   const { data: shopifyProduct } = useShopifyGetProductByIdQuery({
     id: product,
   });
+
+  useEffect(() => {
+    const target = document.querySelector('#scrollable') as Element;
+    if (show) {
+      disableBodyScroll(target);
+    } else {
+      enableBodyScroll(target);
+    }
+
+    return () => {
+      clearAllBodyScrollLocks();
+    };
+  }, [show]);
 
   useEffect(() => {
     async function rehydrate() {

@@ -48,9 +48,9 @@ const Main = ({ product }: MainProps) => {
 
   useEffect(() => {
     const target = document.querySelector('#scrollable') as Element;
-    if (show) {
+    if (show && target) {
       disableBodyScroll(target);
-    } else {
+    } else if (target) {
       enableBodyScroll(target);
     }
 

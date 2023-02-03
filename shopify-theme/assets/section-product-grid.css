@@ -1,1 +1,1 @@
-.product-grid{display:flex;flex-direction:column;margin-top:2.5rem}@media (min-width:46.25em){.product-grid{flex-direction:row}.product-grid__sidebar{margin-right:3.4375rem;min-width:15.625rem}}.product-grid__container{width:100%}
+.product-grid{display:flex;flex-direction:column;margin-top:2.5rem}@media (min-width:46.25em){.product-grid{flex-direction:row}}.product-grid__sidebar{margin-bottom:2.5rem}@media (min-width:46.25em){.product-grid__sidebar{margin-bottom:0;margin-right:3.4375rem;min-width:15.625rem}}.product-grid__container{width:100%}

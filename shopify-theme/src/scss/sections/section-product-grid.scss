@@ -13,7 +13,10 @@
     }
 
     &__sidebar {
+        margin-bottom: rem(40px);
+
         @include mq($from: tablet) {
+            margin-bottom: 0;
             min-width: rem(250px);
             margin-right: rem(55px);
         }

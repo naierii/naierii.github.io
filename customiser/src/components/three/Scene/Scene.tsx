@@ -4,6 +4,8 @@ import { useDesignStore } from '@store/design';
 import { forwardRef, useEffect } from 'react';
 import { Group, MathUtils } from 'three';
 import Model from '../Model';
+import ModelDecals from '../ModelDecals';
+import ModelMerge from '../ModelMerge';
 
 const models = (state: CustomiserState) => state.selectedModels;
 
@@ -31,9 +33,16 @@ const Scene = forwardRef<Group, SceneProps>(
         onPointerDown={onPointerDown}
         onPointerUp={onPointerup}
       >
-        {selectedModels.map((m) => (
-          <Model key={m.model?.id} model={m.model} />
-        ))}
+        <ModelMerge>
+          {({ addNodes, geom }) => (
+            <>
+              {selectedModels.map((m) => (
+                <Model key={m.model?.id} model={m.model} addNodes={addNodes} />
+              ))}
+              {geom && <ModelDecals geom={geom} />}
+            </>
+          )}
+        </ModelMerge>
       </group>
     );
   },

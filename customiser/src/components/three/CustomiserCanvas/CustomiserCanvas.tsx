@@ -309,6 +309,8 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
     }
   }, [resetCamera]);
 
+  const isEditing = editFlag || editGraphic || editText;
+
   return (
     <div className={rootClassName}>
       <Canvas
@@ -324,10 +326,11 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
           setCanvasSize(state.size.width, state.size.height);
           cameraRef.current = state.camera;
         }}
+        frameloop='demand'
       >
         <Lights />
         <Scene onPointerDown={onPointerDown} onPointerup={onPointerup} ref={groupRef} />
-        <MouseHelper ref={mouseHelperRef} />
+        {isEditing && <MouseHelper ref={mouseHelperRef} />}
         <OrbitControls
           enableZoom={true}
           minPolarAngle={Math.PI / 3}

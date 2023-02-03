@@ -31,15 +31,18 @@
 .nav {
   grid-area: nav;
 }
+
 .model {
   grid-area: model;
 }
+
 .loading {
   grid-area: model;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .header {
   grid-area: header;
 }
@@ -47,6 +50,11 @@
 .close {
   grid-area: model;
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 10px;
+  right: 20px;
+
+  @include mq($from: tablet) {
+    bottom: 0px;
+    right: 0px;
+  }
 }

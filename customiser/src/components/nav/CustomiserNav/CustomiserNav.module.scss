@@ -15,6 +15,13 @@
   max-width: 500px;
 }
 
+.open {
+  grid-template-rows: 73px 1fr;
+  grid-template-areas:
+    'header'
+    'content';
+}
+
 .content {
   grid-area: content;
   display: flex;

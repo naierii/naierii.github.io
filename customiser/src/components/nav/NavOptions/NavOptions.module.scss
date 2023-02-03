@@ -6,6 +6,7 @@
   display: flex;
   padding: rem(15px) 0;
   text-align: left;
+  color: $black;
 
   &:not(:last-child) {
     border-bottom: 1px solid $midGrey;

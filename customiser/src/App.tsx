@@ -17,7 +17,7 @@ function App({ product }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       {product && <Main product={product} />}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   );
 }

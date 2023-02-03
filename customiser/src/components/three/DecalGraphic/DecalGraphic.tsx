@@ -1,17 +1,21 @@
 import { Decal, useTexture } from '@react-three/drei';
-import { EulerArray, FlagCustomiser, Vector3Array } from '@store/customiser';
+import { EulerArray, FlagCustomiser, GraphicCustomiser, Vector3Array } from '@store/customiser';
+import { log } from 'console';
 import { useMemo } from 'react';
 import { Euler, MathUtils, Vector3 } from 'three';
 export interface DecalGraphicProps {
   flag?: FlagCustomiser;
+  graphic?: GraphicCustomiser;
   position: Vector3Array;
   orientation: EulerArray;
   scale?: number;
 }
 
-const DecalGraphic = ({ flag, position, orientation, scale = 1 }: DecalGraphicProps) => {
+const DecalGraphic = ({ flag, graphic, position, orientation, scale = 1 }: DecalGraphicProps) => {
   const texture = flag?.flag?.attributes?.image.data?.attributes?.url
     ? [flag.flag.attributes.image.data.attributes.url]
+    : graphic?.graphic?.attributes?.image?.data?.attributes?.url
+    ? [graphic.graphic.attributes.image.data.attributes.url]
     : [];
 
   const [image] = useTexture(texture);
@@ -25,10 +29,11 @@ const DecalGraphic = ({ flag, position, orientation, scale = 1 }: DecalGraphicPr
   const rotationModifier = useMemo(() => {
     const orientationCopy = new Euler().fromArray(orientation);
     const currentAngle = MathUtils.radToDeg(orientationCopy.z);
-    const newAngle = currentAngle + (flag?.decalRotation ?? 0);
+    const decalRotation = flag?.decalRotation || graphic?.decalRotation;
+    const newAngle = currentAngle + (decalRotation ?? 0);
     orientationCopy.z = MathUtils.degToRad(newAngle);
     return orientationCopy;
-  }, [flag?.decalRotation, orientation]);
+  }, [flag?.decalRotation, graphic?.decalRotation, orientation]);
 
   const scaleModifier = useMemo(() => {
     return new Vector3(1 * ratio * scale, 1 * scale, 4);

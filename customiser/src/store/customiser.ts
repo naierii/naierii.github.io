@@ -36,8 +36,6 @@ export type EulerArray = number[];
 export interface FlagCustomiser {
   key?: string;
   flag?: FlagFragment;
-  canvasJSON?: any;
-  materialJSON?: any;
   decalPosition?: Vector3Array;
   decalOrientation?: EulerArray;
   decalRotation?: number;
@@ -93,7 +91,7 @@ export interface TextCustomiser {
 export interface NavItem {
   id?: Scalars['ID'];
   name: Maybe<Scalars['String']>;
-  type: 'option' | 'part' | 'fitting' | 'size' | 'flags' | 'names';
+  type: 'option' | 'part' | 'fitting' | 'size' | 'flags' | 'names' | 'images';
   index?: number;
   required?: boolean;
 }
@@ -147,6 +145,9 @@ export interface CustomiserActions {
   addFlag: (flag: FlagCustomiser) => void;
   updateFlag: (key: string, flag: FlagCustomiser) => void;
   deleteFlag: (key: string) => void;
+  addGraphic: (graphic: GraphicCustomiser) => void;
+  updateGraphic: (key: string, graphic: GraphicCustomiser) => void;
+  deleteGraphic: (key: string) => void;
   addText: (text: TextCustomiser) => void;
   updateText: (key: string, text: TextCustomiser) => void;
   deleteText: (key: string) => void;
@@ -281,15 +282,22 @@ const createCustomiser: StateCreator<
         type: 'flags',
       };
 
+      const navImages: NavItem = {
+        name: 'Images',
+        type: 'images',
+      };
+
       const navNames: NavItem = {
         name: 'Text',
         type: 'names',
       };
 
-      const navItems = [navFitting, ...navParts, navNames, navFlags, navSize].map((i, index) => {
-        i.index = index;
-        return i;
-      });
+      const navItems = [navFitting, ...navParts, navNames, navFlags, navImages, navSize].map(
+        (i, index) => {
+          i.index = index;
+          return i;
+        },
+      );
 
       dataToSet = {
         ...dataToSet,
@@ -497,6 +505,38 @@ const createCustomiser: StateCreator<
     set(
       produce((state: CustomiserState) => {
         state.flags = [...state.flags.filter((f) => f.key !== key)];
+      }),
+    );
+  },
+  addGraphic: (graphic) => {
+    set(
+      produce((state: CustomiserState) => {
+        const newKey = graphic.key ?? uuidv4();
+        state.graphics = [
+          ...state.graphics,
+          { ...graphic, key: newKey, edit: true, decalFreeze: false },
+        ];
+      }),
+    );
+  },
+  updateGraphic: (key, graphic) => {
+    set(
+      produce((state: CustomiserState) => {
+        state.graphics = [
+          ...state.graphics.map((f) => {
+            if (f.key === key) {
+              return { ...f, ...graphic };
+            }
+            return f;
+          }),
+        ];
+      }),
+    );
+  },
+  deleteGraphic: (key) => {
+    set(
+      produce((state: CustomiserState) => {
+        state.graphics = [...state.graphics.filter((f) => f.key !== key)];
       }),
     );
   },

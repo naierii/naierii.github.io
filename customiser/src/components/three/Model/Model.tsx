@@ -21,7 +21,7 @@ const Model = ({ model }: CustomiserModelProps) => {
   const meshRef = useRef<Mesh>(null);
   const flags = useCustomiserStore((state) => state.flags);
   const texts = useCustomiserStore((state) => state.texts);
-  // const { nodes } = useGLTF('/test.glb') as unknown as GLTFResult;
+  const graphics = useCustomiserStore((state) => state.graphics);
   const { nodes } = useGLTF(
     model?.attributes?.model?.data?.attributes?.url as string,
   ) as unknown as GLTFResult;
@@ -64,6 +64,18 @@ const Model = ({ model }: CustomiserModelProps) => {
                 position={flag.decalPosition}
                 orientation={flag.decalOrientation}
                 scale={flag.decalScale}
+              />
+            );
+        })}
+        {graphics.map((graphic) => {
+          if (graphic.decalPosition && graphic.decalOrientation)
+            return (
+              <DecalGraphic
+                key={graphic.key}
+                graphic={graphic}
+                position={graphic.decalPosition}
+                orientation={graphic.decalOrientation}
+                scale={graphic.decalScale}
               />
             );
         })}

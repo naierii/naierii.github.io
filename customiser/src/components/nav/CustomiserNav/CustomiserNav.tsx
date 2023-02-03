@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import NavFitting from '../NavFitting';
 import NavFlags from '../NavFlags';
 import NavHeader from '../NavHeader';
+import NavImages from '../NavImages';
 import NavOptions from '../NavOptions';
 import NavPart from '../NavPart';
 import NavSize from '../NavSize';
@@ -36,6 +37,8 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
               <NavText />
             ) : selectedNav?.type === 'flags' ? (
               <NavFlags />
+            ) : selectedNav?.type === 'images' ? (
+              <NavImages />
             ) : selectedNav?.type === 'size' ? (
               <NavSize />
             ) : selectedPart ? (

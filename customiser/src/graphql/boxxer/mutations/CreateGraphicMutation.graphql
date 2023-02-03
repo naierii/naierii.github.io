@@ -1,0 +1,7 @@
+mutation CreateGraphic($data: GraphicInput!) {
+  createGraphic(data: $data) {
+    data {
+      ...Graphic
+    }
+  }
+}

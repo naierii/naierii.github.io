@@ -167,6 +167,8 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
   const groupRef = useRef<Group>(null);
   const editFlag = useCustomiserStore((state) => state.flags.find((f) => f.edit));
   const editText = useCustomiserStore((state) => state.texts.find((f) => f.edit));
+  const editGraphic = useCustomiserStore((state) => state.graphics.find((f) => f.edit));
+  const updateGraphic = useCustomiserStore((state) => state.updateGraphic);
   const updateFlag = useCustomiserStore((state) => state.updateFlag);
   const updateText = useCustomiserStore((state) => state.updateText);
   const setCanvasSize = useCustomiserStore((state) => state.setCanvasSize);
@@ -195,43 +197,63 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
     [mouseHelperRef],
   );
 
-  const onPointerDown = (event: ThreeEvent<globalThis.PointerEvent>) => {
-    if (editFlag?.key) {
-      updateFlag(editFlag.key, { decalFreeze: false });
-      setPosition(event);
-      if (mouseHelperRef.current && positionRef.current && orientationRef.current) {
-        positionRef.current.copy(event.point);
-        orientationRef.current.copy(mouseHelperRef.current.rotation);
-        updateFlag(editFlag.key, {
-          decalPosition: positionRef.current.clone().toArray(),
-          decalOrientation: orientationRef.current.clone().toArray(),
-        });
+  const onPointerDown = useCallback(
+    (event: ThreeEvent<globalThis.PointerEvent>) => {
+      if (editFlag?.key) {
+        updateFlag(editFlag.key, { decalFreeze: false });
+        setPosition(event);
+        if (mouseHelperRef.current && positionRef.current && orientationRef.current) {
+          positionRef.current.copy(event.point);
+          orientationRef.current.copy(mouseHelperRef.current.rotation);
+          updateFlag(editFlag.key, {
+            decalPosition: positionRef.current.clone().toArray(),
+            decalOrientation: orientationRef.current.clone().toArray(),
+          });
+        }
       }
-    }
 
-    if (editText?.key) {
-      updateText(editText.key, { decalFreeze: false });
-      setPosition(event);
-      if (mouseHelperRef.current && positionRef.current && orientationRef.current) {
-        positionRef.current.copy(event.point);
-        orientationRef.current.copy(mouseHelperRef.current.rotation);
-        updateText(editText.key, {
-          decalPosition: positionRef.current.clone().toArray(),
-          decalOrientation: orientationRef.current.clone().toArray(),
-        });
+      if (editGraphic?.key) {
+        updateGraphic(editGraphic.key, { decalFreeze: false });
+        setPosition(event);
+        if (mouseHelperRef.current && positionRef.current && orientationRef.current) {
+          positionRef.current.copy(event.point);
+          orientationRef.current.copy(mouseHelperRef.current.rotation);
+          updateGraphic(editGraphic.key, {
+            decalPosition: positionRef.current.clone().toArray(),
+            decalOrientation: orientationRef.current.clone().toArray(),
+          });
+        }
       }
-    }
-  };
 
-  const onPointerup = () => {
+      if (editText?.key) {
+        updateText(editText.key, { decalFreeze: false });
+        setPosition(event);
+        if (mouseHelperRef.current && positionRef.current && orientationRef.current) {
+          positionRef.current.copy(event.point);
+          orientationRef.current.copy(mouseHelperRef.current.rotation);
+          updateText(editText.key, {
+            decalPosition: positionRef.current.clone().toArray(),
+            decalOrientation: orientationRef.current.clone().toArray(),
+          });
+        }
+      }
+    },
+    [editFlag, editGraphic, editText],
+  );
+
+  const onPointerup = useCallback(() => {
     if (editFlag?.key) {
       updateFlag(editFlag.key, { decalFreeze: true });
+    }
+
+    if (editGraphic?.key) {
+      updateFlag(editGraphic.key, { decalFreeze: true });
     }
 
     if (editText?.key) {
       updateText(editText.key, { decalFreeze: true });
     }
-  };
+  }, [editFlag, editGraphic, editText]);
 
   const shopifyAddToCart = useMutation({
     mutationFn: addToCart,

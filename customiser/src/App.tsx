@@ -11,7 +11,7 @@ export interface AppProps {
 function App({ product }: AppProps) {
   useCustomiserStore.persist.setOptions({
     name: `customiser-${product}`,
-    version: 1,
+    version: 2,
   });
 
   return (

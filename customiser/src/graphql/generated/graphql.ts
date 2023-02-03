@@ -63,7 +63,7 @@ export type ComponentCustomiserCustomDesignFlag = {
   decalOrientation?: Maybe<Scalars['JSON']>;
   decalPosition?: Maybe<Scalars['JSON']>;
   decalRotation?: Maybe<Scalars['Int']>;
-  decalScale?: Maybe<Scalars['Int']>;
+  decalScale?: Maybe<Scalars['Float']>;
   flag?: Maybe<FlagEntityResponse>;
   id: Scalars['ID'];
   shopifyVariantId?: Maybe<Scalars['String']>;
@@ -75,7 +75,7 @@ export type ComponentCustomiserCustomDesignFlagFiltersInput = {
   decalOrientation?: InputMaybe<JsonFilterInput>;
   decalPosition?: InputMaybe<JsonFilterInput>;
   decalRotation?: InputMaybe<IntFilterInput>;
-  decalScale?: InputMaybe<IntFilterInput>;
+  decalScale?: InputMaybe<FloatFilterInput>;
   flag?: InputMaybe<FlagFiltersInput>;
   not?: InputMaybe<ComponentCustomiserCustomDesignFlagFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<ComponentCustomiserCustomDesignFlagFiltersInput>>>;
@@ -87,7 +87,7 @@ export type ComponentCustomiserCustomDesignFlagInput = {
   decalOrientation?: InputMaybe<Scalars['JSON']>;
   decalPosition?: InputMaybe<Scalars['JSON']>;
   decalRotation?: InputMaybe<Scalars['Int']>;
-  decalScale?: InputMaybe<Scalars['Int']>;
+  decalScale?: InputMaybe<Scalars['Float']>;
   flag?: InputMaybe<Scalars['ID']>;
   id?: InputMaybe<Scalars['ID']>;
   shopifyVariantId?: InputMaybe<Scalars['String']>;
@@ -246,7 +246,7 @@ export type ComponentCustomiserGraphic = {
   decalOrientation?: Maybe<Scalars['JSON']>;
   decalPosition?: Maybe<Scalars['JSON']>;
   decalRotation?: Maybe<Scalars['Int']>;
-  decalScale?: Maybe<Scalars['Int']>;
+  decalScale?: Maybe<Scalars['Float']>;
   graphic?: Maybe<GraphicEntityResponse>;
   id: Scalars['ID'];
   shopifyVariantId?: Maybe<Scalars['String']>;
@@ -258,7 +258,7 @@ export type ComponentCustomiserGraphicFiltersInput = {
   decalOrientation?: InputMaybe<JsonFilterInput>;
   decalPosition?: InputMaybe<JsonFilterInput>;
   decalRotation?: InputMaybe<IntFilterInput>;
-  decalScale?: InputMaybe<IntFilterInput>;
+  decalScale?: InputMaybe<FloatFilterInput>;
   graphic?: InputMaybe<GraphicFiltersInput>;
   not?: InputMaybe<ComponentCustomiserGraphicFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<ComponentCustomiserGraphicFiltersInput>>>;
@@ -270,7 +270,7 @@ export type ComponentCustomiserGraphicInput = {
   decalOrientation?: InputMaybe<Scalars['JSON']>;
   decalPosition?: InputMaybe<Scalars['JSON']>;
   decalRotation?: InputMaybe<Scalars['Int']>;
-  decalScale?: InputMaybe<Scalars['Int']>;
+  decalScale?: InputMaybe<Scalars['Float']>;
   graphic?: InputMaybe<Scalars['ID']>;
   id?: InputMaybe<Scalars['ID']>;
   shopifyVariantId?: InputMaybe<Scalars['String']>;
@@ -284,7 +284,7 @@ export type ComponentCustomiserText = {
   decalOrientation?: Maybe<Scalars['JSON']>;
   decalPosition?: Maybe<Scalars['JSON']>;
   decalRotation?: Maybe<Scalars['Int']>;
-  decalScale?: Maybe<Scalars['Int']>;
+  decalScale?: Maybe<Scalars['Float']>;
   fontName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   letterPriceVariantId?: Maybe<Scalars['String']>;
@@ -302,7 +302,7 @@ export type ComponentCustomiserTextFiltersInput = {
   decalOrientation?: InputMaybe<JsonFilterInput>;
   decalPosition?: InputMaybe<JsonFilterInput>;
   decalRotation?: InputMaybe<IntFilterInput>;
-  decalScale?: InputMaybe<IntFilterInput>;
+  decalScale?: InputMaybe<FloatFilterInput>;
   fontName?: InputMaybe<StringFilterInput>;
   letterPriceVariantId?: InputMaybe<StringFilterInput>;
   material?: InputMaybe<MaterialFiltersInput>;
@@ -320,7 +320,7 @@ export type ComponentCustomiserTextInput = {
   decalOrientation?: InputMaybe<Scalars['JSON']>;
   decalPosition?: InputMaybe<Scalars['JSON']>;
   decalRotation?: InputMaybe<Scalars['Int']>;
-  decalScale?: InputMaybe<Scalars['Int']>;
+  decalScale?: InputMaybe<Scalars['Float']>;
   fontName?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
   letterPriceVariantId?: InputMaybe<Scalars['String']>;
@@ -903,9 +903,9 @@ export type GenericMorph =
 export type Graphic = {
   __typename?: 'Graphic';
   createdAt?: Maybe<Scalars['DateTime']>;
+  customer?: Maybe<Scalars['Boolean']>;
   image?: Maybe<UploadFileEntityResponse>;
   name?: Maybe<Scalars['String']>;
-  publishedAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
@@ -929,18 +929,18 @@ export type GraphicEntityResponseCollection = {
 export type GraphicFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<GraphicFiltersInput>>>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
+  customer?: InputMaybe<BooleanFilterInput>;
   id?: InputMaybe<IdFilterInput>;
   name?: InputMaybe<StringFilterInput>;
   not?: InputMaybe<GraphicFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<GraphicFiltersInput>>>;
-  publishedAt?: InputMaybe<DateTimeFilterInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
 
 export type GraphicInput = {
+  customer?: InputMaybe<Scalars['Boolean']>;
   image?: InputMaybe<Scalars['ID']>;
   name?: InputMaybe<Scalars['String']>;
-  publishedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type GraphicPrice = {
@@ -1102,7 +1102,6 @@ export type JobCard = {
   dueDate?: Maybe<Scalars['Date']>;
   jobCardName?: Maybe<Scalars['String']>;
   jobCardOrderStatus?: Maybe<JobCardOrderStatusEntityResponse>;
-  publishedAt?: Maybe<Scalars['DateTime']>;
   quantity?: Maybe<Scalars['Int']>;
   sendDate?: Maybe<Scalars['Date']>;
   shopifyOrderId?: Maybe<Scalars['String']>;
@@ -1137,7 +1136,6 @@ export type JobCardFiltersInput = {
   jobCardOrderStatus?: InputMaybe<JobCardOrderStatusFiltersInput>;
   not?: InputMaybe<JobCardFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<JobCardFiltersInput>>>;
-  publishedAt?: InputMaybe<DateTimeFilterInput>;
   quantity?: InputMaybe<IntFilterInput>;
   sendDate?: InputMaybe<DateFilterInput>;
   shopifyOrderId?: InputMaybe<StringFilterInput>;
@@ -1150,7 +1148,6 @@ export type JobCardInput = {
   dueDate?: InputMaybe<Scalars['Date']>;
   jobCardName?: InputMaybe<Scalars['String']>;
   jobCardOrderStatus?: InputMaybe<Scalars['ID']>;
-  publishedAt?: InputMaybe<Scalars['DateTime']>;
   quantity?: InputMaybe<Scalars['Int']>;
   sendDate?: InputMaybe<Scalars['Date']>;
   shopifyOrderId?: InputMaybe<Scalars['String']>;
@@ -2388,7 +2385,6 @@ export type QueryGraphicPricesArgs = {
 export type QueryGraphicsArgs = {
   filters?: InputMaybe<GraphicFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
@@ -2420,7 +2416,6 @@ export type QueryJobCardOrderStatusesArgs = {
 export type QueryJobCardsArgs = {
   filters?: InputMaybe<JobCardFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
@@ -3530,6 +3525,43 @@ export type CreateCustomDesignMutation = {
   } | null;
 };
 
+export type CreateGraphicMutationVariables = Exact<{
+  data: GraphicInput;
+}>;
+
+export type CreateGraphicMutation = {
+  __typename?: 'Mutation';
+  createGraphic?: {
+    __typename?: 'GraphicEntityResponse';
+    data?: {
+      __typename?: 'GraphicEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'Graphic';
+        name?: string | null;
+        image?: {
+          __typename?: 'UploadFileEntityResponse';
+          data?: {
+            __typename?: 'UploadFileEntity';
+            id?: string | null;
+            attributes?: {
+              __typename?: 'UploadFile';
+              url: string;
+              size: number;
+              width?: number | null;
+              height?: number | null;
+              ext?: string | null;
+              mime: string;
+              name: string;
+              formats?: any | null;
+            } | null;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+  } | null;
+};
+
 export type UploadMultipleFilesMutationVariables = Exact<{
   refId?: InputMaybe<Scalars['ID']>;
   ref?: InputMaybe<Scalars['String']>;
@@ -3732,6 +3764,29 @@ export type GetGalleriesQuery = {
             id?: string | null;
             attributes?: { __typename?: 'UploadFile'; formats?: any | null } | null;
           }>;
+        } | null;
+      } | null;
+    }>;
+  } | null;
+};
+
+export type GetImagesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetImagesQuery = {
+  __typename?: 'Query';
+  graphicPrices?: {
+    __typename?: 'GraphicPriceEntityResponseCollection';
+    data: Array<{
+      __typename?: 'GraphicPriceEntity';
+      id?: string | null;
+      attributes?: {
+        __typename?: 'GraphicPrice';
+        size?: string | null;
+        basePrice?: {
+          __typename?: 'ComponentShopifyAddonProduct';
+          id: string;
+          price: number;
+          shopifyVariantId?: string | null;
         } | null;
       } | null;
     }>;
@@ -4299,6 +4354,37 @@ export const useCreateCustomDesignMutation = <TError = unknown, TContext = unkno
       )(),
     options,
   );
+export const CreateGraphicDocument = /*#__PURE__*/ `
+    mutation CreateGraphic($data: GraphicInput!) {
+  createGraphic(data: $data) {
+    data {
+      ...Graphic
+    }
+  }
+}
+    ${GraphicFragmentDoc}
+${ImageFragmentDoc}`;
+export const useCreateGraphicMutation = <TError = unknown, TContext = unknown>(
+  client: GraphQLClient,
+  options?: UseMutationOptions<
+    CreateGraphicMutation,
+    TError,
+    CreateGraphicMutationVariables,
+    TContext
+  >,
+  headers?: RequestInit['headers'],
+) =>
+  useMutation<CreateGraphicMutation, TError, CreateGraphicMutationVariables, TContext>(
+    ['CreateGraphic'],
+    (variables?: CreateGraphicMutationVariables) =>
+      fetcher<CreateGraphicMutation, CreateGraphicMutationVariables>(
+        client,
+        CreateGraphicDocument,
+        variables,
+        headers,
+      )(),
+    options,
+  );
 export const UploadMultipleFilesDocument = /*#__PURE__*/ `
     mutation UploadMultipleFiles($refId: ID, $ref: String, $field: String, $files: [Upload]!) {
   multipleUpload(refId: $refId, ref: $ref, field: $field, files: $files) {
@@ -4438,6 +4524,30 @@ export const useGetGalleriesQuery = <TData = GetGalleriesQuery, TError = unknown
 
 useGetGalleriesQuery.getKey = (variables?: GetGalleriesQueryVariables) =>
   variables === undefined ? ['GetGalleries'] : ['GetGalleries', variables];
+export const GetImagesDocument = /*#__PURE__*/ `
+    query GetImages {
+  graphicPrices {
+    data {
+      ...GraphicPrice
+    }
+  }
+}
+    ${GraphicPriceFragmentDoc}
+${ShopifyAddonProductFragmentDoc}`;
+export const useGetImagesQuery = <TData = GetImagesQuery, TError = unknown>(
+  client: GraphQLClient,
+  variables?: GetImagesQueryVariables,
+  options?: UseQueryOptions<GetImagesQuery, TError, TData>,
+  headers?: RequestInit['headers'],
+) =>
+  useQuery<GetImagesQuery, TError, TData>(
+    variables === undefined ? ['GetImages'] : ['GetImages', variables],
+    fetcher<GetImagesQuery, GetImagesQueryVariables>(client, GetImagesDocument, variables, headers),
+    options,
+  );
+
+useGetImagesQuery.getKey = (variables?: GetImagesQueryVariables) =>
+  variables === undefined ? ['GetImages'] : ['GetImages', variables];
 export const GetMaterialDocument = /*#__PURE__*/ `
     query GetMaterial($id: ID) {
   material(id: $id) {

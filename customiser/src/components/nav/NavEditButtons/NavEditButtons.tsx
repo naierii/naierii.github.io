@@ -22,7 +22,7 @@ const NavEditButtons = ({ className, disabled, onApply }: NavEditButtonsProps) =
   return ReactDOM.createPortal(
     <div className={rootClassName}>
       <Button onClick={onApply} disabled={disabled}>
-        Apply to model
+        Save
       </Button>
     </div>,
     portalRef,

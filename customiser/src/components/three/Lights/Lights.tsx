@@ -33,9 +33,9 @@ const Lights = () => {
   return (
     <group>
       <hemisphereLight {...config.ambientLight}></hemisphereLight>
-      {config.directionalLights.map((directionalLight, index) => (
+      {/* {config.directionalLights.map((directionalLight, index) => (
         <directionalLight key={index} {...directionalLight}></directionalLight>
-      ))}
+      ))} */}
     </group>
   );
 };

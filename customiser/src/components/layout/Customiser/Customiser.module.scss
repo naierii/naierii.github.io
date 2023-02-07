@@ -36,6 +36,13 @@
   grid-area: model;
 }
 
+.background {
+  grid-area: model;
+  align-self: center;
+  justify-self: center;
+  width: 80%;
+}
+
 .loading {
   grid-area: model;
   display: flex;

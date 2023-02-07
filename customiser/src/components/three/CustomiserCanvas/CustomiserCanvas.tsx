@@ -1,8 +1,7 @@
-import Lights from '@components/three/Lights';
-import { OrbitControls } from '@react-three/drei';
+import { Environment, OrbitControls } from '@react-three/drei';
 import { Canvas, ThreeEvent } from '@react-three/fiber';
 import cn from 'classnames';
-import { lazy, useCallback, useEffect, useRef } from 'react';
+import { CSSProperties, lazy, useCallback, useEffect, useRef } from 'react';
 
 import {
   CustomDesignEntity,
@@ -25,6 +24,7 @@ const Scene = Loadable(lazy(() => import('@components/three/Scene')));
 
 export interface CustomiserCanvasProps {
   className?: string;
+  style?: CSSProperties;
 }
 
 const getCustomDesignData = (state: CustomiserState, files: string[]): CustomDesignInput => ({
@@ -158,7 +158,7 @@ const cameraDefault: [x: number, y: number, z: number] = [
   0, 2.1970893240496195e-15, 15.31024512625285,
 ];
 
-const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => {
+const CustomiserCanvas = ({ className, style }: CustomiserCanvasProps): JSX.Element => {
   const cameraRef = useRef<Camera | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const images = useRef<File[]>([]);
@@ -312,7 +312,7 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
   const isEditing = editFlag || editGraphic || editText;
 
   return (
-    <div className={rootClassName}>
+    <div className={rootClassName} style={style}>
       <Canvas
         linear
         flat
@@ -320,6 +320,7 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
           position: cameraDefault,
           fov: 45,
         }}
+        dpr={window.devicePixelRatio}
         gl={{ preserveDrawingBuffer: true }}
         ref={canvasRef}
         onCreated={(state) => {
@@ -328,7 +329,7 @@ const CustomiserCanvas = ({ className }: CustomiserCanvasProps): JSX.Element => 
         }}
         frameloop='demand'
       >
-        <Lights />
+        <Environment files='https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/assets/studio.hdr' />
         <Scene onPointerDown={onPointerDown} onPointerup={onPointerup} ref={groupRef} />
         {isEditing && <MouseHelper ref={mouseHelperRef} />}
         <OrbitControls

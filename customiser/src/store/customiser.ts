@@ -31,7 +31,7 @@ interface Part {
 }
 
 export type Vector3Array = [number, number, number];
-export type EulerArray = number[];
+export type EulerArray = (string | number | undefined)[];
 
 export interface FlagCustomiser {
   key?: string;

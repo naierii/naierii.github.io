@@ -103,11 +103,11 @@ const CustomiserMesh = ({ node, nodeId }: CustomiserMeshProps) => {
       const [bumpMap, alphaMap] = textures as Texture[];
       alphaMap.wrapS = alphaMap.wrapT = RepeatWrapping;
       alphaMap.flipY = false;
-      alphaMap.repeat.set(1, 1);
+      alphaMap.repeat.set(1.5, 1);
       alphaMap.needsUpdate = true;
       bumpMap.wrapS = bumpMap.wrapT = RepeatWrapping;
       bumpMap.flipY = false;
-      bumpMap.repeat.set(1, 1);
+      bumpMap.repeat.set(1.5, 1);
       bumpMap.needsUpdate = true;
     },
   );

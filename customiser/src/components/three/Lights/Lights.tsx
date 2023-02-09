@@ -1,10 +1,11 @@
-import { Vector3 } from 'three';
-
+import { SpotLight, useHelper } from '@react-three/drei';
+import { useRef } from 'react';
+import { SpotLightHelper, Vector3, SpotLight as SpotLightRef } from 'three';
 const config = {
   ambientLight: {
-    color: 16777215,
-    groundColor: 4473924,
-    intensity: 1.05,
+    // color: 16777215,
+    // groundColor: 4473924,
+    intensity: 0.1,
   },
   directionalLights: [
     {
@@ -28,14 +29,15 @@ const config = {
 };
 
 const Lights = () => {
-  // const light = useRef();
-  // useHelper(light, SpotLightHelper, 'cyan');
+  const light = useRef<SpotLightRef>(null);
+  // useHelper(light.current, SpotLightHelper, 'cyan');
   return (
     <group>
       <hemisphereLight {...config.ambientLight}></hemisphereLight>
-      {/* {config.directionalLights.map((directionalLight, index) => (
-        <directionalLight key={index} {...directionalLight}></directionalLight>
-      ))} */}
+      <pointLight position={[-800, 0, -1000]} intensity={0.5} decay={12} power={7} castShadow />
+      <pointLight position={[-800, 0, 1000]} intensity={0.5} decay={12} power={7} castShadow />
+      <pointLight position={[800, 0, 1000]} intensity={0.5} decay={120} power={7} castShadow />
+      <pointLight position={[800, 0, -1000]} intensity={0.5} decay={12} power={7} castShadow />
     </group>
   );
 };

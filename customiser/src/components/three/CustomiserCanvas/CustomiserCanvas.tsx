@@ -1,4 +1,4 @@
-import { Environment, OrbitControls } from '@react-three/drei';
+import { Environment, OrbitControls, PresentationControls } from '@react-three/drei';
 import { Canvas, ThreeEvent } from '@react-three/fiber';
 import cn from 'classnames';
 import { CSSProperties, lazy, useCallback, useEffect, useRef } from 'react';
@@ -19,6 +19,7 @@ import { Camera, Euler, Group, Mesh, Vector3 } from 'three';
 import Loadable from '../Loadable';
 import MouseHelper from '../MouseHelper';
 import styles from './CustomiserCanvas.module.scss';
+import Lights from '../Lights';
 
 const Scene = Loadable(lazy(() => import('@components/three/Scene')));
 
@@ -329,8 +330,12 @@ const CustomiserCanvas = ({ className, style }: CustomiserCanvasProps): JSX.Elem
         }}
         frameloop='demand'
       >
-        <Environment files='https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/assets/studio.hdr' />
+        {/* <Environment
+          background
+          files='https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/assets/studio.hdr'
+        /> */}
         <Scene onPointerDown={onPointerDown} onPointerup={onPointerup} ref={groupRef} />
+        <Lights />
         {isEditing && <MouseHelper ref={mouseHelperRef} />}
         <OrbitControls
           enableZoom={true}

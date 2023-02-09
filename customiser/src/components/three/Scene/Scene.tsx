@@ -32,6 +32,7 @@ const Scene = forwardRef<Group, SceneProps>(
         ref={groupRef}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerup}
+        dispose={null}
       >
         <ModelMerge>
           {({ addNodes, geom }) => (

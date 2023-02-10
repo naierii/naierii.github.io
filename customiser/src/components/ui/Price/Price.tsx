@@ -5,25 +5,21 @@ import styles from './Price.module.scss';
 export interface PriceProps {
   className?: string;
   price?: number;
+  priceString?: string;
 }
 
-const Price = ({ className, price }: PriceProps) => {
-  const rootClassName = cn(styles.root, className);
+const Price = ({ className, price, priceString }: PriceProps) => {
+  const rootClassName = cn('price-item', styles.root, className);
   // TODO - Make currency change depending on selected currency.
-  const currency = '$';
+  const currency = '£';
 
-  if (!price) {
+  const formattedPrice = price ? `${currency}${price.toFixed(2)}` : `${currency}${priceString}`;
+
+  if (!formattedPrice) {
     return null;
   }
 
-  const formattedPrice = price.toFixed(2);
-
-  return (
-    <span className={rootClassName}>
-      {currency}
-      {formattedPrice}
-    </span>
-  );
+  return <span className={rootClassName}>{formattedPrice}</span>;
 };
 
 export default Price;

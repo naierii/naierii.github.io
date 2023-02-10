@@ -100,7 +100,7 @@
         top: rem(82px);
         left: 0;
         width: 100%;
-        height: 100%;
+        height: calc(100% - #{rem(82px)});
         background-color: $white;
         padding: 1.5rem;
         display: none;
@@ -153,6 +153,16 @@
             padding: rem(20px) 0;
             @include mq($from: tabletLandscape) {
                 padding: 0 rem(21px);
+            }
+        }
+
+        .mobile-currency {
+            background-color: $black;
+            margin: -1.5rem -1.5rem 1.5rem;
+            padding: 1.5rem 1rem;
+
+            @include mq($from: tabletLandscape) {
+                display: none;
             }
         }
     }
@@ -227,6 +237,7 @@
         align-self: center;
         justify-self: flex-end;
         display: flex;
+        align-items: center;
         gap: rem(18px);
 
         @include mq($from: tabletLandscape) {

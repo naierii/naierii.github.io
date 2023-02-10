@@ -4,6 +4,7 @@ import cn from 'classnames';
 
 import { useDesignStore } from '@store/design';
 import styles from './Header.module.scss';
+import Price from '@components/ui/Price';
 
 export interface HeaderProps {
   className?: string;
@@ -23,7 +24,7 @@ const Header = ({ className }: HeaderProps) => {
   return (
     <div className={rootClassName}>
       <div className={styles.total}>
-        Current <span className={styles.price}>${total}</span>
+        Current <Price className={styles.price} priceString={total} />
       </div>
       <Button onClick={saveDesign} disabled={!designComplete || addingToCart}>
         {addingToCart ? 'Saving' : 'Add to basket'}

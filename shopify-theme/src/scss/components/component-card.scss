@@ -27,6 +27,10 @@
 
     &__heading {
         color: $black;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 
     .card-information {

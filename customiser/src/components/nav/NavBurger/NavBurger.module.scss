@@ -1,9 +1,28 @@
 @use '~sass-rem' as *;
+@import '@styles/variables';
 
-.root {
+.hamburger {
   border: 0;
   background: none;
   padding: 0;
   cursor: pointer;
   width: rem(32px);
+
+  &.is-active {
+    .hamburger-inner {
+      &,
+      &::before,
+      &::after {
+        background-color: $black;
+      }
+    }
+  }
+}
+
+.hamburger-inner {
+  &,
+  &::before,
+  &::after {
+    background-color: $black;
+  }
 }

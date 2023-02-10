@@ -29,7 +29,7 @@ const NavHeader = ({ className, toggle, isOpen }: NavHeaderProps) => {
   return (
     <div className={rootClassName}>
       <div className={styles.menu}>
-        <NavBurger onClick={toggle} />
+        <NavBurger onClick={toggle} isOpen={isOpen} />
       </div>
       {isOpen ? (
         <div className={styles.nav}>

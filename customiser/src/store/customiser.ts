@@ -94,6 +94,7 @@ export interface NavItem {
   type: 'option' | 'part' | 'fitting' | 'size' | 'flags' | 'names' | 'images';
   index?: number;
   required?: boolean;
+  hasActions?: boolean;
 }
 interface SizingMeasurement {
   value?: number;
@@ -261,6 +262,7 @@ const createCustomiser: StateCreator<
         name: 'Fitting',
         type: 'fitting',
         required: true,
+        hasActions: true,
       };
 
       const navParts: NavItem[] =
@@ -269,6 +271,7 @@ const createCustomiser: StateCreator<
           name: o?.name ?? '',
           type: 'part',
           required: !o?.optional,
+          hasActions: true,
         })) ?? [];
 
       const navSize: NavItem = {
@@ -620,6 +623,9 @@ export const useCustomiserStore = create<CustomiserState & CustomiserActions>()(
       }),
       {
         name: '',
+        onRehydrateStorage: () => (state) => {
+          state?.setSelectedNav(0);
+        },
       },
     ),
   ),

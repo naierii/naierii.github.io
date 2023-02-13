@@ -19,9 +19,14 @@ export interface CustomiserNavProps {
 
 const CustomiserNav = ({ className }: CustomiserNavProps) => {
   const [isOpen, toggleOpen] = useCycle(false, true);
-  const rootClassName = cn(styles.root, { [styles.open]: isOpen }, className);
   const selectedPart = useCustomiserStore((state) => state.selectedPart);
   const selectedNav = useCustomiserStore((state) => state.selectedNav);
+
+  const rootClassName = cn(
+    styles.root,
+    { [styles.open]: isOpen, [styles.hasActions]: selectedNav?.hasActions },
+    className,
+  );
 
   return (
     <motion.nav className={rootClassName} initial={'closed'} animate={isOpen ? 'open' : 'closed'}>
@@ -47,7 +52,9 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
           </div>
         </AnimatePresence>
       </Suspense>
-      {!isOpen && <div id='CustomiserNavActions' className={styles.actions}></div>}
+      {!isOpen && selectedNav?.hasActions && (
+        <div id='CustomiserNavActions' className={styles.actions}></div>
+      )}
     </motion.nav>
   );
 };

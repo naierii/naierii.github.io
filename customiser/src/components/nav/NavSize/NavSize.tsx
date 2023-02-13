@@ -51,85 +51,82 @@ const NavSize = ({ className }: NavSizeProps) => {
   };
 
   return (
-    <>
-      <motion.div
-        className={rootClassName}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+    <motion.div
+      className={rootClassName}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <h3>Size Details</h3>
+      <p>
+        To help us make sure the size you’ve selected is correct, enter your height and weight
+        below.
+      </p>
+      <FormInput
+        type='number'
+        placeholder='Enter Height'
+        step='0.1'
+        required
+        value={height?.value ? height.value : ''}
+        onChange={onHeightChange}
       >
-        <h3>Size Details</h3>
-        <p>
-          To help us make sure the size you’ve selected is correct, enter your height and weight
-          below.
-        </p>
-        <FormInput
-          type='number'
-          placeholder='Enter Height'
-          step='0.1'
-          required
-          value={height?.value ? height.value : ''}
-          onChange={onHeightChange}
-        >
-          <div className={styles.unitToggle}>
-            <button
-              className={cn(styles.toggleButton, {
-                [styles.toggleButtonSelected]: height?.unit === UNIT.HEIGHT.CM,
-              })}
-              onClick={() => setHeightUnit(UNIT.HEIGHT.CM)}
-            >
-              {UNIT.HEIGHT.CM}
-            </button>
-            {'/'}
-            <button
-              className={cn(styles.toggleButton, {
-                [styles.toggleButtonSelected]: height?.unit === UNIT.HEIGHT.INCH,
-              })}
-              onClick={() => setHeightUnit(UNIT.HEIGHT.INCH)}
-            >
-              {UNIT.HEIGHT.INCH}
-            </button>
-          </div>
-        </FormInput>
-        <FormInput
-          type='number'
-          placeholder='Enter Weight'
-          step='0.1'
-          required
-          value={weight?.value ? weight.value : ''}
-          onChange={onWeightChange}
-        >
-          <div className={styles.unitToggle}>
-            <button
-              className={cn(styles.toggleButton, {
-                [styles.toggleButtonSelected]: weight?.unit === UNIT.WEIGHT.KG,
-              })}
-              onClick={() => setWeightUnit(UNIT.WEIGHT.KG)}
-            >
-              {UNIT.WEIGHT.KG}
-            </button>
-            {'/'}
-            <button
-              className={cn(styles.toggleButton, {
-                [styles.toggleButtonSelected]: weight?.unit === UNIT.WEIGHT.LB,
-              })}
-              onClick={() => setWeightUnit(UNIT.WEIGHT.LB)}
-            >
-              {UNIT.WEIGHT.LB}
-            </button>
-          </div>
-        </FormInput>
-        <h3>Suggested Size</h3>
-        <FormSelect value={variation?.id} onChange={onVariationChange}>
-          {variations.map((v) => (
-            <option key={v.id} value={v.id}>
-              {v.title}
-            </option>
-          ))}
-        </FormSelect>
-      </motion.div>
-      <NavButtons />
-    </>
+        <div className={styles.unitToggle}>
+          <button
+            className={cn(styles.toggleButton, {
+              [styles.toggleButtonSelected]: height?.unit === UNIT.HEIGHT.CM,
+            })}
+            onClick={() => setHeightUnit(UNIT.HEIGHT.CM)}
+          >
+            {UNIT.HEIGHT.CM}
+          </button>
+          {'/'}
+          <button
+            className={cn(styles.toggleButton, {
+              [styles.toggleButtonSelected]: height?.unit === UNIT.HEIGHT.INCH,
+            })}
+            onClick={() => setHeightUnit(UNIT.HEIGHT.INCH)}
+          >
+            {UNIT.HEIGHT.INCH}
+          </button>
+        </div>
+      </FormInput>
+      <FormInput
+        type='number'
+        placeholder='Enter Weight'
+        step='0.1'
+        required
+        value={weight?.value ? weight.value : ''}
+        onChange={onWeightChange}
+      >
+        <div className={styles.unitToggle}>
+          <button
+            className={cn(styles.toggleButton, {
+              [styles.toggleButtonSelected]: weight?.unit === UNIT.WEIGHT.KG,
+            })}
+            onClick={() => setWeightUnit(UNIT.WEIGHT.KG)}
+          >
+            {UNIT.WEIGHT.KG}
+          </button>
+          {'/'}
+          <button
+            className={cn(styles.toggleButton, {
+              [styles.toggleButtonSelected]: weight?.unit === UNIT.WEIGHT.LB,
+            })}
+            onClick={() => setWeightUnit(UNIT.WEIGHT.LB)}
+          >
+            {UNIT.WEIGHT.LB}
+          </button>
+        </div>
+      </FormInput>
+      <h3>Suggested Size</h3>
+      <FormSelect value={variation?.id} onChange={onVariationChange}>
+        {variations.map((v) => (
+          <option key={v.id} value={v.id}>
+            {v.title}
+          </option>
+        ))}
+      </FormSelect>
+    </motion.div>
   );
 };
 

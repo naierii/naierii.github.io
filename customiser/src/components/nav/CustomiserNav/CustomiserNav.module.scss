@@ -5,14 +5,21 @@
 .root {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 73px 1fr 73px;
+  grid-template-rows: 73px 1fr;
   gap: 0px 0px;
+  grid-template-areas:
+    'header'
+    'content';
+  background-color: white;
+  max-width: 500px;
+}
+
+.hasActions {
+  grid-template-rows: 73px 1fr 73px;
   grid-template-areas:
     'header'
     'content'
     'actions';
-  background-color: white;
-  max-width: 500px;
 }
 
 .open {

@@ -20,6 +20,15 @@
         flex-grow: 1;
         flex-shrink: 0;
 
+        &.no-viewer {
+            width: calc(50% - var(--grid-horizontal-spacing) / 2);
+
+            &:nth-child(3n + 1) {
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+
         .grid--1-col & {
             max-width: 100%;
             width: 100%;

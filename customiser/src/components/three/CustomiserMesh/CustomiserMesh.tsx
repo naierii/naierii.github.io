@@ -72,7 +72,7 @@ const ClonedTextureMesh = ({
           <meshStandardMaterial
             side={DoubleSide}
             {...textures}
-            displacementScale={textures?.displacementMap ? 0 : undefined}
+            displacementScale={textures?.displacementMap ? 0.09 : undefined}
             // roughness={textures?.map ? undefined : 0.4}
             // metalness={textures?.map ? undefined : 0.05}
             ref={materialRef}

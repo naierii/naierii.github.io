@@ -22,6 +22,7 @@
 
         &.no-viewer {
             width: calc(50% - var(--grid-horizontal-spacing) / 2);
+            max-width: none;
 
             &:nth-child(3n + 1) {
                 max-width: 100%;

@@ -10,6 +10,15 @@ export interface CustomiserModelProps {
   addNodes: (newNodes: ModelMergeNodes, remove?: boolean) => void;
 }
 
+// const parts = [
+//   {
+//     id: 1,
+//     attributes: {
+//       nodeId: 'LeePerrySmith',
+//     },
+//   },
+// ];
+
 type GLTFResult = GLTF & {
   nodes: { [name: string]: Mesh };
   materials: { [name: string]: Material };

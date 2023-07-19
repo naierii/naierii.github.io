@@ -330,10 +330,6 @@ const CustomiserCanvas = ({ className, style }: CustomiserCanvasProps): JSX.Elem
         }}
         frameloop='demand'
       >
-        {/* <Environment
-          background
-          files='https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/assets/studio.hdr'
-        /> */}
         <Scene onPointerDown={onPointerDown} onPointerup={onPointerup} ref={groupRef} />
         <Lights />
         {isEditing && <MouseHelper ref={mouseHelperRef} />}

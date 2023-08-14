@@ -410,7 +410,7 @@ const createCustomiser: StateCreator<
         });
       }),
     ),
-  resetNav: () => set({ selectedPart: null }),
+  resetNav: () => set({ selectedPart: null, selectedNav: null }),
   cancelPartChange: () =>
     set(
       produce((state: CustomiserState) => {

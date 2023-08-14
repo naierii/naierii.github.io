@@ -12,17 +12,9 @@ export interface NavButtonsProps {
 
 const NavButtons = ({ className }: NavButtonsProps) => {
   const rootClassName = cn(styles.root, className);
-  const selectedNav = useCustomiserStore((state) => state.selectedNav);
-  const setSelectedNav = useCustomiserStore((state) => state.setSelectedNav);
   const cancelPartChange = useCustomiserStore((state) => state.cancelPartChange);
+  const resetNav = useCustomiserStore((state) => state.resetNav);
   const portalRef = usePortalRef('CustomiserNavActions');
-
-  if (!selectedNav) {
-    return null;
-  }
-
-  const currentIndex = selectedNav.index;
-  const next = currentIndex || currentIndex === 0 ? currentIndex + 1 : 0;
 
   if (!portalRef) {
     return null;
@@ -31,8 +23,8 @@ const NavButtons = ({ className }: NavButtonsProps) => {
   return ReactDOM.createPortal(
     <div className={rootClassName}>
       <Button onClick={() => cancelPartChange()}>Cancel</Button>
-      <Button colour='red' onClick={() => setSelectedNav(next, true)}>
-        Save & Next
+      <Button colour='red' onClick={() => resetNav()}>
+        Save
       </Button>
     </div>,
     portalRef,

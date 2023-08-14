@@ -278,21 +278,25 @@ const createCustomiser: StateCreator<
         name: 'Size',
         type: 'size',
         required: true,
+        hasActions: true,
       };
 
       const navFlags: NavItem = {
         name: 'Flags',
         type: 'flags',
+        hasActions: true,
       };
 
       const navImages: NavItem = {
         name: 'Images',
         type: 'images',
+        hasActions: true,
       };
 
       const navNames: NavItem = {
         name: 'Text',
         type: 'names',
+        hasActions: true,
       };
 
       const navItems = [navFitting, ...navParts, navNames, navFlags, navImages, navSize].map(
@@ -307,7 +311,6 @@ const createCustomiser: StateCreator<
         selectedModels: models,
         savedModels: models,
         navItems: navItems,
-        selectedNav: navItems[0],
       };
     }
 
@@ -413,6 +416,8 @@ const createCustomiser: StateCreator<
       produce((state: CustomiserState) => {
         state.parts = state.savedParts;
         state.selectedModels = state.savedModels;
+        state.selectedPart = null;
+        state.selectedNav = null;
       }),
     ),
   texture: (nodeId) => {
@@ -624,7 +629,19 @@ export const useCustomiserStore = create<CustomiserState & CustomiserActions>()(
       {
         name: '',
         onRehydrateStorage: () => (state) => {
-          state?.setSelectedNav(0);
+          if (state) {
+            if (state.selectedPart) {
+              const partNavItem = state.navItems.find(
+                (navItem) => navItem.id === state.selectedPart?.id,
+              );
+
+              if (partNavItem && partNavItem.index) {
+                state.setSelectedNav(partNavItem.index);
+              }
+            } else {
+              state.selectedNav = null;
+            }
+          }
         },
       },
     ),

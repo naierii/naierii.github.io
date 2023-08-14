@@ -21,10 +21,10 @@
     grid-template-columns: 33.33% calc(66.66% - 80px) 80px;
     grid-template-rows: 60px 60px 1fr 60px;
     grid-template-areas:
-      '. . .'
+      'nav . .'
       'nav header .'
       'nav model .'
-      '. . .';
+      'nav . .';
   }
 
   &:before {

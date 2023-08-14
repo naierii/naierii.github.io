@@ -25,7 +25,7 @@
 .open {
   grid-template-rows: 73px 1fr;
   grid-template-areas:
-    'header'
+    'content'
     'content';
 }
 
@@ -33,7 +33,7 @@
   grid-area: content;
   display: flex;
   flex-direction: column;
-  padding: rem(30px) rem(15px);
+  padding: rem(10px) rem(30px);
   overflow-y: scroll;
   scroll-behavior: smooth;
   -ms-overflow-style: none; /* IE and Edge */

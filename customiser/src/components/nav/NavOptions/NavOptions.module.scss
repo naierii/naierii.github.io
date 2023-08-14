@@ -4,7 +4,7 @@
 
 .option {
   display: flex;
-  padding: rem(15px) 0;
+  padding: rem(20px) 0;
   text-align: left;
   color: $black;
 
@@ -17,7 +17,12 @@
   flex: 1;
 
   h3 {
+    font-size: 260%;
     margin: 0;
+  }
+
+  .required{
+    font-style: italic;
   }
 }
 

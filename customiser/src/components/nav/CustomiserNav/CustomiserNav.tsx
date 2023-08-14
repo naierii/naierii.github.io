@@ -1,7 +1,7 @@
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
-import { AnimatePresence, motion, useCycle } from 'framer-motion';
-import { Suspense } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Suspense, useEffect, useState } from 'react';
 import NavFitting from '../NavFitting';
 import NavFlags from '../NavFlags';
 import NavHeader from '../NavHeader';
@@ -18,15 +18,27 @@ export interface CustomiserNavProps {
 }
 
 const CustomiserNav = ({ className }: CustomiserNavProps) => {
-  const [isOpen, toggleOpen] = useCycle(false, true);
+  const [isOpen, setIsOpen] = useState(false);
   const selectedPart = useCustomiserStore((state) => state.selectedPart);
   const selectedNav = useCustomiserStore((state) => state.selectedNav);
+
+  const { navItems } = useCustomiserStore();
 
   const rootClassName = cn(
     styles.root,
     { [styles.open]: isOpen, [styles.hasActions]: selectedNav?.hasActions },
     className,
   );
+
+  const toggleOpen = () => setIsOpen(!isOpen);
+
+  useEffect(() => {
+    if (selectedNav === null && selectedPart === null) {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  }, [selectedPart, selectedNav]);
 
   return (
     <motion.nav className={rootClassName} initial={'closed'} animate={isOpen ? 'open' : 'closed'}>

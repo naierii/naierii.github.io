@@ -37,10 +37,8 @@ const NavOptions = ({ toggle }: NavOptionsProps) => {
           onClick={() => handleClick(item.index ? item.index : 0)}
         >
           <div className={styles.optionTitle}>
-            <h3>
-              {item?.index?.toString() ? `${item.index + 1}:` : null} {item.name}
-            </h3>
-            {item.required && 'Required'}
+            <h3>{item.name}</h3>
+            {item.required && <span className={styles.required}>Required</span>}
           </div>
           <svg
             className={cn(styles.icon, { [styles.iconSelected]: isSelected(item) })}

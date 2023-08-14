@@ -34,6 +34,20 @@ const ClonedTextureMesh = ({
     [texture],
   );
 
+
+  const { navItems, customProduct, setSelectedNav } = useCustomiserStore();
+  const part = useMemo(
+    () =>
+      customProduct?.attributes?.parts?.find((p) =>
+        p?.modelParts?.data.find((mp) => mp.attributes?.nodeId === node.userData.name),
+      ),
+    [customProduct, node],
+  );
+  const navItem = useMemo(
+    () => navItems.find((navItem) => navItem.id === part?.id),
+    [part, navItems],
+  );
+
   useEffect(() => {
     if (clonedTextures && meshRef.current) {
       let updatedTextures: MaterialTextureMapModel = {};
@@ -57,7 +71,17 @@ const ClonedTextureMesh = ({
 
   return (
     <>
-      <mesh geometry={node.geometry} ref={meshRef}>
+      <mesh
+        geometry={node.geometry}
+        ref={meshRef}
+        onPointerDown={(e) => {
+          e.stopPropagation();
+
+          if (navItem && navItem.index) {
+            setSelectedNav(navItem.index);
+          }
+        }}
+      >
         {tassels ? (
           <meshStandardMaterial
             ref={materialRef}

@@ -16,6 +16,7 @@ import { useEffect } from 'react';
 import styles from './MaterialGroup.module.scss';
 import { createStore, Provider, useMaterialGroupStore } from './MaterialGroupState';
 import { MaterialType } from './MaterialType';
+import SelectedMaterialInfo from './SelectedMaterialInfo';
 
 export interface MaterialGroupProps {
   className?: string;
@@ -81,6 +82,7 @@ const MaterialGroupLoader = ({
         ))}
       </div>
       <MaterialType onMaterialSelected={onMaterialSelected} />
+      <SelectedMaterialInfo />
     </div>
   );
 };

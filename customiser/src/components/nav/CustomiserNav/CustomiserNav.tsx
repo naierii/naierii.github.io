@@ -65,7 +65,10 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
         </AnimatePresence>
       </Suspense>
       {!isOpen && selectedNav?.hasActions && (
-        <div id='CustomiserNavActions' className={styles.actions}></div>
+        <div className={styles.actions}>
+          <div id='CustomiserNavMaterial'></div>
+          <div id='CustomiserNavActions'></div>
+        </div>
       )}
     </motion.nav>
   );

@@ -46,11 +46,8 @@ const createMaterialGroup: StateCreator<MaterialGroupState, [['zustand/devtools'
   filteredMaterials: () => {
     const materials = get().materials;
     const colourGroup = get().selectedColourGroup;
-    const materialType = get().selectedMaterialType;
-    const filteredMaterials = materials.filter(
-      (m) =>
-        m.attributes?.type?.data?.id === materialType?.id &&
-        m.attributes?.colourGroups?.data.find((g) => g.id === colourGroup?.id),
+    const filteredMaterials = materials.filter((m) =>
+      m.attributes?.colourGroups?.data.find((g) => g.id === colourGroup?.id),
     );
     return filteredMaterials;
   },
@@ -99,7 +96,6 @@ const createMaterialGroup: StateCreator<MaterialGroupState, [['zustand/devtools'
           )
           .map((m) => m.attributes?.type?.data) as MaterialTypeEntity[];
         state.materialTypes = uniqueMaterialTypes(materialTypes);
-        state.selectedMaterialType = state.materialTypes[0];
       }),
     );
   },

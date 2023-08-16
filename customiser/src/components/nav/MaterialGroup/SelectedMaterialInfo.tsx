@@ -10,17 +10,10 @@ const SelectedMaterialInfo: FC = () => {
   const portalRef = usePortalRef('CustomiserNavMaterial');
   const { selectedPart, parts } = useCustomiserStore();
 
-  console.log(
-    selectedPart,
-    parts.find((part) => part.part.id === selectedPart?.id),
-  );
-
   const selectedMaterial = useMemo(
     () => parts.find((part) => part.part.id === selectedPart?.id)?.material,
     [selectedPart, parts],
   );
-
-  console.log('render', portalRef, selectedMaterial);
 
   if (!portalRef) return null;
 

@@ -1,14 +1,14 @@
-@use '~sass-rem' as *;
+@use '~sass-rem' as srem;
 @import '@styles/variables';
 
 .root {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: rem(13px);
+  gap: srem.convert(13px);
 
   button {
     svg {
-      width: rem(23px);
+      width: srem.convert(23px);
     }
   }
 }

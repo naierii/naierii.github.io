@@ -1,9 +1,9 @@
-@use '~sass-rem' as *;
+@use '~sass-rem' as srem;
 
 @import '@styles/variables';
 
 .root {
-  padding: rem(15px);
+  padding: srem.convert(15px);
   background-color: $yellow;
   text-transform: capitalize;
 

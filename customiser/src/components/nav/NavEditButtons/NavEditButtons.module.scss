@@ -1,4 +1,4 @@
-@use '~sass-rem' as *;
+@use '~sass-rem' as srem;
 
 @import '@styles/variables';
 
@@ -6,6 +6,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: rem(15px);
+  padding: srem.convert(15px);
   border-top: 1px solid $midGrey;
 }

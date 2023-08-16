@@ -1,4 +1,4 @@
-@use '~sass-rem' as *;
+@use '~sass-rem' as srem;
 
 @import '@styles/variables';
 
@@ -33,7 +33,7 @@
   grid-area: content;
   display: flex;
   flex-direction: column;
-  padding: rem(10px) rem(30px);
+  padding: srem.convert(10px) srem.convert(30px);
   overflow-y: scroll;
   scroll-behavior: smooth;
   -ms-overflow-style: none; /* IE and Edge */

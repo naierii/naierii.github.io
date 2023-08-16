@@ -1,15 +1,15 @@
-@use '~sass-rem' as *;
+@use '~sass-rem' as srem;
 @import '@styles/variables';
 
 .textItem {
   display: flex;
   align-items: center;
-  margin-bottom: rem(20px);
+  margin-bottom: srem.convert(20px);
 }
 
 .textItemText {
   margin-right: auto;
-  padding: rem(10px) 0;
+  padding: srem.convert(10px) 0;
 }
 
 .materialGroup,
@@ -23,13 +23,13 @@
   display: flex;
 
   .nameType:not(last-child) {
-    margin-right: rem(10px);
+    margin-right: srem.convert(10px);
   }
 }
 
 .nameTypePricing {
   text-align: center;
-  margin-top: rem(10px);
+  margin-top: srem.convert(10px);
 }
 
 .showOutline {
@@ -37,6 +37,6 @@
   align-items: center;
 
   button {
-    margin-right: rem(10px);
+    margin-right: srem.convert(10px);
   }
 }

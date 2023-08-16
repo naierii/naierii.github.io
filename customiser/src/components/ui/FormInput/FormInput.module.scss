@@ -1,22 +1,22 @@
-@use '~sass-rem' as *;
+@use '~sass-rem' as srem;
 
 @import '@styles/variables';
 
 .root {
   border: 1px solid $midGrey;
-  margin-bottom: rem(20px);
+  margin-bottom: srem.convert(20px);
   position: relative;
-  padding: 0 rem(16px);
+  padding: 0 srem.convert(16px);
   display: flex;
-  column-gap: rem(16px);
+  column-gap: srem.convert(16px);
 }
 
 .input {
   appearance: none;
   background-color: $white;
   color: $black;
-  font-size: rem(20px);
-  padding: rem(20px) 0 rem(12px);
+  font-size: srem.convert(20px);
+  padding: srem.convert(20px) 0 srem.convert(12px);
   width: 100%;
   border-radius: 0;
   position: relative;
@@ -27,20 +27,20 @@
   &:active,
   &:not(:placeholder-shown) {
     + .label {
-      font-size: rem(12px);
-      top: rem(10px);
+      font-size: srem.convert(12px);
+      top: srem.convert(10px);
     }
   }
 }
 
 .label {
   position: absolute;
-  left: rem(16px);
+  left: srem.convert(16px);
   top: 50%;
   transform: translateY(calc(-50% + 2px));
   font-family: $displayFont;
   font-weight: 900;
-  font-size: rem(20px);
+  font-size: srem.convert(20px);
   transition: all 0.2s ease-in-out;
   pointer-events: none;
   color: $grey;

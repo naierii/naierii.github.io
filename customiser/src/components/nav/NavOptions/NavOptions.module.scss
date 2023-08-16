@@ -1,10 +1,10 @@
-@use '~sass-rem' as *;
+@use '~sass-rem' as srem;
 
 @import '@styles/variables';
 
 .option {
   display: flex;
-  padding: rem(20px) 0;
+  padding: srem.convert(20px) 0;
   text-align: left;
   color: $black;
 
@@ -21,13 +21,13 @@
     margin: 0;
   }
 
-  .required{
+  .required {
     font-style: italic;
   }
 }
 
 .icon {
-  width: rem(26px);
+  width: srem.convert(26px);
   align-self: flex-start;
   fill: $midGrey;
 }

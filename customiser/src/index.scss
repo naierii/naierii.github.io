@@ -1,6 +1,6 @@
 @use './styles/mq-settings';
 @use '~sass-mq/mq';
-@use '~sass-rem' as *;
+@use '~sass-rem' as srem;
 
 @import './styles/variables';
 @import './styles/helpers';
@@ -28,8 +28,8 @@ body,
   .h#{$index} {
     font-family: $displayFont;
     font-weight: 900;
-    padding-top: rem(5px);
-    margin-top: rem(-5px);
+    padding-top: srem.convert(5px);
+    margin-top: srem.convert(-5px);
     line-height: 1;
     margin-bottom: 1rem;
     word-break: break-word;
@@ -42,7 +42,7 @@ body,
 
     &.text-color-light {
       color: $white;
-      text-shadow: 0 rem(3px) rem(20px) $black;
+      text-shadow: 0 srem.convert(3px) srem.convert(20px) $black;
 
       .outlined {
         -webkit-text-stroke-color: $white;
@@ -65,34 +65,34 @@ body,
 
 h1,
 .h1 {
-  @include fluidType(rem(48px), rem(72px));
+  @include fluidType(srem.convert(48px), srem.convert(72px));
 }
 
 h2,
 .h2 {
-  @include fluidType(rem(36px), rem(45px));
+  @include fluidType(srem.convert(36px), srem.convert(45px));
 }
 
 h3,
 .h3 {
-  font-size: rem(28px);
+  font-size: srem.convert(28px);
 }
 
 h4,
 .h4 {
-  font-size: rem(28px);
+  font-size: srem.convert(28px);
 }
 
 h5,
 .h5 {
-  font-size: rem(22px);
+  font-size: srem.convert(22px);
 }
 
 p {
   margin-top: 0;
 
   .text--large & {
-    @include fluidType(rem(18px), rem(22px));
+    @include fluidType(srem.convert(18px), srem.convert(22px));
   }
 }
 

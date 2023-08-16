@@ -1,4 +1,4 @@
-@use '~sass-rem' as *;
+@use '~sass-rem' as srem;
 
 @import '@styles/variables';
 
@@ -7,13 +7,13 @@
 
 .dropZone {
   border: 1px dashed #707070;
-  padding: rem(70px) rem(18px) rem(40px);
+  padding: srem.convert(70px) srem.convert(18px) srem.convert(40px);
   text-align: center;
   cursor: pointer;
 
   svg {
-    width: rem(23px);
-    margin-bottom: rem(25px);
+    width: srem.convert(23px);
+    margin-bottom: srem.convert(25px);
   }
 
   h5 {
@@ -29,10 +29,10 @@
 .graphicItem {
   display: flex;
   align-items: center;
-  margin-bottom: rem(20px);
+  margin-bottom: srem.convert(20px);
 }
 
 .graphicItemImage {
-  width: rem(50px);
+  width: srem.convert(50px);
   margin-right: auto;
 }

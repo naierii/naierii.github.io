@@ -1,4 +1,4 @@
-@use '~sass-rem' as *;
+@use '~sass-rem' as srem;
 @import '@styles/variables';
 
 .hamburger {
@@ -6,7 +6,7 @@
   background: none;
   padding: 0;
   cursor: pointer;
-  width: rem(32px);
+  width: srem.convert(32px);
 
   &.is-active {
     .hamburger-inner {

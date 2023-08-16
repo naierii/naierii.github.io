@@ -1,11 +1,11 @@
-@use '~sass-rem' as *;
+@use '~sass-rem' as srem;
 
 @import '@styles/variables';
 
 .variations {
   display: flex;
   flex-wrap: wrap;
-  gap: rem(15px);
+  gap: srem.convert(15px);
 }
 
 .unitToggle {
@@ -13,15 +13,15 @@
   align-items: center;
   font-family: $displayFont;
   font-weight: 900;
-  font-size: rem(20px);
-  column-gap: rem(5px);
+  font-size: srem.convert(20px);
+  column-gap: srem.convert(5px);
   color: $grey;
 }
 
 .toggleButton {
   font-family: $displayFont;
   font-weight: 900;
-  font-size: rem(20px);
+  font-size: srem.convert(20px);
   color: $grey;
 }
 

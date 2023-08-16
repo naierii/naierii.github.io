@@ -1,9 +1,9 @@
-@use '~sass-rem' as *;
+@use '~sass-rem' as srem;
 
 @import '@styles/variables';
 
 .pillButton {
-  padding: rem(7px) rem(17px);
+  padding: srem.convert(7px) srem.convert(17px);
   border-radius: 50vw;
   border: 2px solid $black;
   white-space: nowrap;

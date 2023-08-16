@@ -1,15 +1,41 @@
 @use '~sass-rem' as srem;
+@use '~sass-mq/mq' as *;
 
 @import '@styles/variables';
 
+.root {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  margin: 0 srem.convert(-30px);
+
+  @include mq($from: tablet) {
+    flex-direction: column;
+    align-items: stretch;
+    margin: 0;
+  }
+}
+
 .option {
   display: flex;
-  padding: srem.convert(20px) 0;
+  padding: 0 srem.convert(20px);
   text-align: left;
   color: $black;
+  min-width: srem.convert(250px);
 
   &:not(:last-child) {
-    border-bottom: 1px solid $midGrey;
+    border-right: 3px solid $midGrey;
+  }
+
+  @include mq($from: tablet) {
+    padding: srem.convert(20px) 0;
+    min-width: 0;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $midGrey;
+      border-right: none;
+    }
   }
 }
 

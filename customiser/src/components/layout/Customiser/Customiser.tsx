@@ -7,6 +7,7 @@ import Header from '../Header';
 
 const CustomiserCanvas = lazy(() => import('@components/three/CustomiserCanvas'));
 
+import { useCustomiserStore } from '@store/customiser';
 import styles from './Customiser.module.scss';
 
 export interface CustomiserProps {
@@ -15,8 +16,12 @@ export interface CustomiserProps {
 
 const Customiser = ({ className }: CustomiserProps) => {
   const setShow = useDesignStore((state) => state.setShow);
+  const { selectedNav } = useCustomiserStore();
 
-  const rootClassName = cn(styles.root, className);
+  const rootClassName = cn(styles.root, className, {
+    [styles.navOpen]: selectedNav !== null,
+  });
+
   return (
     <div className={rootClassName}>
       <CustomiserNav className={styles.nav} />

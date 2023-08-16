@@ -29,7 +29,7 @@ const NavOptions = ({ toggle }: NavOptionsProps) => {
   };
 
   return (
-    <>
+    <div className={styles.root}>
       {navItems.map((item) => (
         <button
           className={styles.option}
@@ -49,7 +49,7 @@ const NavOptions = ({ toggle }: NavOptionsProps) => {
           </svg>
         </button>
       ))}
-    </>
+    </div>
   );
 };
 

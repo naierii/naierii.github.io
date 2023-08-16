@@ -22,8 +22,6 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
   const selectedPart = useCustomiserStore((state) => state.selectedPart);
   const selectedNav = useCustomiserStore((state) => state.selectedNav);
 
-  const { navItems } = useCustomiserStore();
-
   const rootClassName = cn(
     styles.root,
     { [styles.open]: isOpen, [styles.hasActions]: selectedNav?.hasActions },
@@ -41,11 +39,29 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
   }, [selectedPart, selectedNav]);
 
   return (
-    <motion.nav className={rootClassName} initial={'closed'} animate={isOpen ? 'open' : 'closed'}>
+    <motion.nav
+      layout='preserve-aspect'
+      transition={{
+        type: 'spring',
+        stiffness: 700,
+        damping: 40,
+      }}
+      className={rootClassName}
+    >
       <NavHeader className={styles.header} toggle={() => toggleOpen()} isOpen={isOpen} />
       <Suspense fallback={<div>Loading...</div>}>
         <AnimatePresence initial={false}>
-          <div id='scrollable' className={styles.content}>
+          <motion.div
+            id='scrollable'
+            className={styles.content}
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+              open: { opacity: 1 },
+              collapsed: { opacity: 0 },
+            }}
+          >
             {isOpen ? (
               <NavOptions toggle={() => toggleOpen()} />
             ) : selectedNav?.type === 'fitting' ? (
@@ -61,7 +77,7 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
             ) : selectedPart ? (
               <NavPart part={selectedPart} />
             ) : null}
-          </div>
+          </motion.div>
         </AnimatePresence>
       </Suspense>
       {!isOpen && selectedNav?.hasActions && (

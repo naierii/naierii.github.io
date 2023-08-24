@@ -8,6 +8,7 @@ import NavHeader from '../NavHeader';
 import NavImages from '../NavImages';
 import NavOptions from '../NavOptions';
 import NavPart from '../NavPart';
+import NavMinimize from '../NavMinimize';
 import NavSize from '../NavSize';
 import NavText from '../NavText';
 
@@ -19,12 +20,18 @@ export interface CustomiserNavProps {
 
 const CustomiserNav = ({ className }: CustomiserNavProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
+
   const selectedPart = useCustomiserStore((state) => state.selectedPart);
   const selectedNav = useCustomiserStore((state) => state.selectedNav);
 
   const rootClassName = cn(
     styles.root,
-    { [styles.open]: isOpen, [styles.hasActions]: selectedNav?.hasActions },
+    {
+      [styles.open]: isOpen,
+      [styles.minimized]: isMinimized,
+      [styles.hasActions]: selectedNav?.hasActions,
+    },
     className,
   );
 
@@ -35,6 +42,7 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
       setIsOpen(true);
     } else {
       setIsOpen(false);
+      setIsMinimized(false);
     }
   }, [selectedPart, selectedNav]);
 
@@ -48,7 +56,22 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
       }}
       className={rootClassName}
     >
-      <NavHeader className={styles.header} toggle={() => toggleOpen()} isOpen={isOpen} />
+      {/* {!isOpen && (
+        <NavMinimize
+          isMinimized={isMinimized}
+          onMinimize={() => setIsMinimized(true)}
+          onMaximize={() => setIsMinimized(false)}
+        />
+      )} */}
+      <NavHeader
+        className={styles.header}
+        toggle={() => toggleOpen()}
+        isOpen={isOpen}
+        onClick={() => {
+          setIsMinimized(!isMinimized);
+        }}
+        isMinimized={isMinimized}
+      />
       <Suspense fallback={<div>Loading...</div>}>
         <AnimatePresence initial={false}>
           <motion.div

@@ -1,3 +1,4 @@
+@use '~sass-mq/mq' as *;
 @use '~sass-rem' as srem;
 
 @import '@styles/variables';
@@ -12,6 +13,38 @@
     'content';
   background-color: white;
   max-width: 500px;
+  height: 100%;
+  z-index: 100;
+  bottom: 0;
+  overflow: hidden;
+
+  &.open {
+    grid-template-areas:
+      'content'
+      'content';
+  }
+
+  @include mq($until: tablet) {
+    height: 66%;
+    position: absolute;
+    width: 100%;
+    max-width: none;
+
+    &.open {
+      height: 100px;
+    }
+
+    &.minimized {
+      grid-template-areas: 'header';
+      grid-template-rows: 1fr;
+      height: 100px;
+
+      .actions,
+      .content {
+        display: none;
+      }
+    }
+  }
 }
 
 .hasActions {
@@ -20,13 +53,6 @@
     'header'
     'content'
     'actions';
-}
-
-.open {
-  grid-template-rows: 73px 1fr;
-  grid-template-areas:
-    'content'
-    'content';
 }
 
 .content {

@@ -1,0 +1,23 @@
+@use '~sass-mq/mq' as *;
+
+.root {
+  display: block;
+  position: absolute;
+  bottom: 100%;
+  background-color: white;
+  padding: 0.5rem 1rem;
+
+  @include mq($from: tablet) {
+    display: none;
+  }
+}
+
+.icon {
+  width: 25px;
+  height: 25px;
+  transform: scaleY(-1);
+}
+
+.minimized .icon {
+  transform: scaleY(1);
+}

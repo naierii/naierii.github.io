@@ -1,3 +1,4 @@
+@use '~sass-mq/mq' as *;
 @use '~sass-rem' as srem;
 
 @import '@styles/variables';
@@ -25,15 +26,30 @@
 .nav {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .title {
-  flex: 1;
   text-align: center;
   font-family: $displayFont;
   font-size: srem.convert(32px);
   margin-top: srem.convert(4px);
   font-weight: 900;
+}
+
+.minimizeIcon {
+  padding-left: 0.8rem;
+  width: 40px;
+  flex-shrink: 0;
+  transform: scaleY(-1);
+
+  &.minimized {
+    transform: scaleY(1);
+  }
+
+  @include mq($from: tablet) {
+    display: none;
+  }
 }
 
 .navIcon {

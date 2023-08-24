@@ -29,11 +29,14 @@ const ClonedTextureMesh = ({
   const [textures, setTextures] = useState<MaterialTextureMapModel>();
   const materialRef = useRef<MeshStandardMaterial>(null);
   const meshRef = useRef<Mesh>(null);
+
+  const [isPointerDown, setIsPointerDown] = useState(false);
+  const [isPointerMoved, setIsPointerMoved] = useState(false);
+
   const clonedTextures = useMemo(
     () => Object.fromEntries(Object.entries(texture).map(([k, v]) => [k, v.clone()])),
     [texture],
   );
-
 
   const { navItems, customProduct, setSelectedNav } = useCustomiserStore();
   const part = useMemo(
@@ -77,9 +80,26 @@ const ClonedTextureMesh = ({
         onPointerDown={(e) => {
           e.stopPropagation();
 
-          if (navItem && navItem.index) {
-            setSelectedNav(navItem.index);
+          setIsPointerDown(true);
+        }}
+        onPointerMove={(e) => {
+          e.stopPropagation();
+
+          if (isPointerDown) {
+            setIsPointerMoved(true);
           }
+        }}
+        onClick={(e) => {
+          e.stopPropagation();
+
+          if (navItem && navItem.index) {
+            if (isPointerDown && !isPointerMoved) {
+              setSelectedNav(navItem.index);
+            }
+          }
+
+          setIsPointerDown(false);
+          setIsPointerMoved(false);
         }}
       >
         {tassels ? (

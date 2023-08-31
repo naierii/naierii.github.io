@@ -1,6 +1,6 @@
 import Button from '@components/ui/Button';
 import { useCustomiserStore } from '@store/customiser';
-import { startTransition, useState } from 'react';
+import { startTransition, useEffect, useMemo, useState } from 'react';
 import NavButtons from '../NavButtons';
 import NavDecalAdjust from '../NavDecalAdjust';
 import NavEditButtons from '../NavEditButtons';
@@ -17,8 +17,16 @@ import NavTextText from './NavTextText';
 const NavText = () => {
   const texts = useCustomiserStore((state) => state.texts);
   const updateText = useCustomiserStore((state) => state.updateText);
-  const editText = texts?.find((g) => g.edit);
-  const [showSelector, setShowSelector] = useState(false);
+  const editText = useMemo(() => texts?.find((g) => g.edit), [texts]);
+  const [showSelector, setShowSelector] = useState(editText?.key !== undefined);
+
+  useEffect(() => {
+    if (editText?.key) {
+      setShowSelector(true);
+    } else {
+      setShowSelector(false);
+    }
+  }, [editText]);
 
   const addText = () => {
     setShowSelector(true);

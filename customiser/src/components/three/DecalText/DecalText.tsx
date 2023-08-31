@@ -49,6 +49,9 @@ const DecalText = ({ text, position, orientation, scale = 1 }: DecalTextProps) =
             outlineWidth={outline}
             color={!image ? '#000000' : undefined}
             font={text?.font}
+            userData={{
+              text,
+            }}
           >
             {image && <meshBasicMaterial attach='material' map={image} />}
             {text?.text}

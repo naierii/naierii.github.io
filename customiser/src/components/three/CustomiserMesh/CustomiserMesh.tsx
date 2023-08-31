@@ -1,6 +1,6 @@
 import { MaterialTextureMapModel } from '@models';
 import { useTexture } from '@react-three/drei';
-import { useCustomiserStore } from '@store/customiser';
+import { TextCustomiser, useCustomiserStore } from '@store/customiser';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Box3,
@@ -38,7 +38,7 @@ const ClonedTextureMesh = ({
     [texture],
   );
 
-  const { navItems, customProduct, setSelectedNav, texts } = useCustomiserStore();
+  const { navItems, customProduct, setSelectedNav, texts, updateText } = useCustomiserStore();
 
   const editText = useMemo(() => texts.find((t) => t.edit), [texts]);
 
@@ -52,6 +52,11 @@ const ClonedTextureMesh = ({
   const navItem = useMemo(
     () => navItems.find((navItem) => navItem.id === part?.id),
     [part, navItems],
+  );
+
+  const navItemText = useMemo(
+    () => navItems.find((navItem) => navItem.type === 'names'),
+    [navItems],
   );
 
   useEffect(() => {
@@ -89,18 +94,39 @@ const ClonedTextureMesh = ({
           }
         }}
         onClick={(e) => {
-          if (navItem && navItem.index) {
-            if (isPointerDown && !isPointerMoved) {
-              if (!editText?.key) {
-                e.stopPropagation();
-
-                setSelectedNav(navItem.index);
-              }
-            }
-          }
-
           setIsPointerDown(false);
           setIsPointerMoved(false);
+
+          if (!isPointerDown || isPointerMoved) {
+            return;
+          }
+
+          if (editText?.key) {
+            return;
+          }
+
+          const intersectedText = e.intersections.find(
+            (intersection) => intersection.object.userData.text,
+          )?.object.userData.text as TextCustomiser | undefined;
+
+          /**
+           * If text is clicked, go to NavItem to text
+           */
+          if (navItemText && navItemText.index && intersectedText && intersectedText.key) {
+            setSelectedNav(navItemText.index);
+            updateText(intersectedText.key, { edit: true });
+
+            return;
+          }
+
+          /**
+           * If mesh part is clicked, go to NavItem of part
+           */
+          if (navItem && navItem.index) {
+            e.stopPropagation();
+
+            setSelectedNav(navItem.index);
+          }
         }}
       >
         {tassels ? (

@@ -630,17 +630,16 @@ export const useCustomiserStore = create<CustomiserState & CustomiserActions>()(
         name: '',
         onRehydrateStorage: () => (state) => {
           if (state) {
-            if (state.selectedPart) {
-              const partNavItem = state.navItems.find(
-                (navItem) => navItem.id === state.selectedPart?.id,
-              );
-
-              if (partNavItem && partNavItem.index) {
-                state.setSelectedNav(partNavItem.index);
-              }
-            } else {
-              state.selectedNav = null;
-            }
+            // if (state.selectedPart) {
+            //   const partNavItem = state.navItems.find(
+            //     (navItem) => navItem.id === state.selectedPart?.id,
+            //   );
+            //   if (partNavItem && partNavItem.index) {
+            //     state.setSelectedNav(partNavItem.index);
+            //   }
+            // } else {
+            //   state.selectedNav = null;
+            // }
           }
         },
       },

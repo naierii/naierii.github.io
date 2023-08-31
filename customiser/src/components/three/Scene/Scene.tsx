@@ -1,4 +1,4 @@
-import { ThreeEvent } from '@react-three/fiber';
+import { EventHandlers } from '@react-three/fiber/dist/declarations/src/core/events';
 import { CustomiserState, useCustomiserStore } from '@store/customiser';
 import { useDesignStore } from '@store/design';
 import { forwardRef, useEffect } from 'react';
@@ -10,12 +10,14 @@ import ModelMerge from '../ModelMerge';
 const models = (state: CustomiserState) => state.selectedModels;
 
 export interface SceneProps {
-  onPointerDown?: (event: ThreeEvent<PointerEvent>) => void;
-  onPointerup?: (event: ThreeEvent<PointerEvent>) => void;
+  onPointerDown?: EventHandlers['onPointerDown'];
+  onPointerUp?: EventHandlers['onPointerUp'];
+  onPointerMove?: EventHandlers['onPointerMove'];
+  onClick?: EventHandlers['onClick'];
 }
 
 const Scene = forwardRef<Group, SceneProps>(
-  ({ onPointerDown, onPointerup }: SceneProps, groupRef) => {
+  ({ onPointerDown, onPointerUp, onPointerMove, onClick }: SceneProps, groupRef) => {
     const selectedModels = useCustomiserStore(models);
     const modelRotation = useDesignStore((state) => state.modelRotation);
     const addingToCart = useDesignStore((state) => state.addingToCart);
@@ -31,7 +33,9 @@ const Scene = forwardRef<Group, SceneProps>(
         name='meshGroup'
         ref={groupRef}
         onPointerDown={onPointerDown}
-        onPointerUp={onPointerup}
+        onPointerUp={onPointerUp}
+        onPointerMove={onPointerMove}
+        onClick={onClick}
         dispose={null}
       >
         <ModelMerge>

@@ -38,7 +38,10 @@ const ClonedTextureMesh = ({
     [texture],
   );
 
-  const { navItems, customProduct, setSelectedNav } = useCustomiserStore();
+  const { navItems, customProduct, setSelectedNav, texts } = useCustomiserStore();
+
+  const editText = useMemo(() => texts.find((t) => t.edit), [texts]);
+
   const part = useMemo(
     () =>
       customProduct?.attributes?.parts?.find((p) =>
@@ -78,23 +81,21 @@ const ClonedTextureMesh = ({
         geometry={node.geometry}
         ref={meshRef}
         onPointerDown={(e) => {
-          e.stopPropagation();
-
           setIsPointerDown(true);
         }}
         onPointerMove={(e) => {
-          e.stopPropagation();
-
           if (isPointerDown) {
             setIsPointerMoved(true);
           }
         }}
         onClick={(e) => {
-          e.stopPropagation();
-
           if (navItem && navItem.index) {
             if (isPointerDown && !isPointerMoved) {
-              setSelectedNav(navItem.index);
+              if (!editText?.key) {
+                e.stopPropagation();
+
+                setSelectedNav(navItem.index);
+              }
             }
           }
 

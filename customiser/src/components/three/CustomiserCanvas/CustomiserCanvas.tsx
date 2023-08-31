@@ -1,7 +1,7 @@
-import { Environment, OrbitControls, PresentationControls } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import { Canvas, ThreeEvent } from '@react-three/fiber';
 import cn from 'classnames';
-import { CSSProperties, lazy, useCallback, useEffect, useRef } from 'react';
+import { CSSProperties, lazy, useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   CustomDesignEntity,
@@ -16,12 +16,16 @@ import { CustomiserState, useCustomiserStore } from '@store/customiser';
 import { useDesignStore } from '@store/design';
 import { useMutation } from '@tanstack/react-query';
 import { Camera, Euler, Group, Mesh, Vector3 } from 'three';
+
+import Lights from '../Lights';
 import Loadable from '../Loadable';
 import MouseHelper from '../MouseHelper';
+import { SceneProps } from '../Scene/Scene';
 import styles from './CustomiserCanvas.module.scss';
-import Lights from '../Lights';
 
-const Scene = Loadable(lazy(() => import('@components/three/Scene')));
+import ThreeScene from '@components/three/Scene';
+
+const Scene = Loadable(lazy(() => import('@components/three/Scene'))) as typeof ThreeScene;
 
 export interface CustomiserCanvasProps {
   className?: string;
@@ -183,8 +187,11 @@ const CustomiserCanvas = ({ className, style }: CustomiserCanvasProps): JSX.Elem
   const mouseHelperRef = useRef<Mesh>(null);
   const state = useCustomiserStore((state) => state);
 
+  const [isPointerDown, setIsPointerDown] = useState(false);
+  const [isPointerMoved, setIsPointerMoved] = useState(false);
+
   const setPosition = useCallback(
-    (event: ThreeEvent<globalThis.PointerEvent>) => {
+    (event: ThreeEvent<MouseEvent>) => {
       const p = event.point;
       const n = event?.face?.normal.clone();
       if (mouseHelperRef.current && n && groupRef.current) {
@@ -198,10 +205,19 @@ const CustomiserCanvas = ({ className, style }: CustomiserCanvasProps): JSX.Elem
     [mouseHelperRef],
   );
 
-  const onPointerDown = useCallback(
-    (event: ThreeEvent<globalThis.PointerEvent>) => {
+  const onClick = useCallback<Required<SceneProps>['onClick']>(
+    (event) => {
+      setIsPointerDown(false);
+      setIsPointerMoved(false);
+
+      if (!isPointerDown || isPointerMoved) {
+        return;
+      }
+
       if (editFlag?.key) {
-        updateFlag(editFlag.key, { decalFreeze: false });
+        event.stopPropagation();
+
+        updateFlag(editFlag.key, { decalFreeze: true });
         setPosition(event);
         if (mouseHelperRef.current && positionRef.current && orientationRef.current) {
           positionRef.current.copy(event.point);
@@ -214,7 +230,9 @@ const CustomiserCanvas = ({ className, style }: CustomiserCanvasProps): JSX.Elem
       }
 
       if (editGraphic?.key) {
-        updateGraphic(editGraphic.key, { decalFreeze: false });
+        event.stopPropagation();
+
+        updateGraphic(editGraphic.key, { decalFreeze: true });
         setPosition(event);
         if (mouseHelperRef.current && positionRef.current && orientationRef.current) {
           positionRef.current.copy(event.point);
@@ -227,7 +245,9 @@ const CustomiserCanvas = ({ className, style }: CustomiserCanvasProps): JSX.Elem
       }
 
       if (editText?.key) {
-        updateText(editText.key, { decalFreeze: false });
+        event.stopPropagation();
+
+        updateText(editText.key, { decalFreeze: true });
         setPosition(event);
         if (mouseHelperRef.current && positionRef.current && orientationRef.current) {
           positionRef.current.copy(event.point);
@@ -239,22 +259,21 @@ const CustomiserCanvas = ({ className, style }: CustomiserCanvasProps): JSX.Elem
         }
       }
     },
-    [editFlag, editGraphic, editText],
+    [editFlag, editGraphic, editText, isPointerDown, isPointerMoved],
   );
 
-  const onPointerup = useCallback(() => {
-    if (editFlag?.key) {
-      updateFlag(editFlag.key, { decalFreeze: true });
-    }
+  const onPointerDown = useCallback<Required<SceneProps>['onPointerDown']>(() => {
+    setIsPointerDown(true);
+  }, []);
 
-    if (editGraphic?.key) {
-      updateFlag(editGraphic.key, { decalFreeze: true });
-    }
-
-    if (editText?.key) {
-      updateText(editText.key, { decalFreeze: true });
-    }
-  }, [editFlag, editGraphic, editText]);
+  const onPointerMove = useCallback<Required<SceneProps>['onPointerMove']>(
+    (e) => {
+      if (isPointerDown) {
+        setIsPointerMoved(true);
+      }
+    },
+    [isPointerDown],
+  );
 
   const shopifyAddToCart = useMutation({
     mutationFn: addToCart,
@@ -330,7 +349,12 @@ const CustomiserCanvas = ({ className, style }: CustomiserCanvasProps): JSX.Elem
         }}
         frameloop='demand'
       >
-        <Scene onPointerDown={onPointerDown} onPointerup={onPointerup} ref={groupRef} />
+        <Scene
+          onClick={onClick}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          ref={groupRef}
+        />
         <Lights />
         {isEditing && <MouseHelper ref={mouseHelperRef} />}
         <OrbitControls

@@ -49,9 +49,16 @@ const DecalText = ({ text, position, orientation, scale = 1 }: DecalTextProps) =
             outlineWidth={outline}
             color={!image ? '#000000' : undefined}
             font={text?.font}
+            name={['decalText', text?.key].join('-')}
             userData={{
               text,
             }}
+            /**
+             * onClick event in Text is required to be able to detect
+             * click event on text for parent event
+             */
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            onClick={() => {}}
           >
             {image && <meshBasicMaterial attach='material' map={image} />}
             {text?.text}

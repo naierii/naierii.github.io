@@ -50,9 +50,11 @@ const Customiser = ({ className }: CustomiserProps) => {
       <Suspense fallback={<div className={styles.loading}>Loading ...</div>}>
         <CustomiserCanvas className={styles.model} />
       </Suspense>
-      <Button className={styles.close} onClick={() => setShow(false)}>
-        Close
-      </Button>
+      {selectedNav === null && (
+        <Button className={styles.close} onClick={() => setShow(false)}>
+          Close
+        </Button>
+      )}
     </div>
   );
 };

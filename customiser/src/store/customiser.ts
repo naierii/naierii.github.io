@@ -7,6 +7,7 @@ import type {
   MaterialFragment,
   Maybe,
   ModelFragment,
+  NameEntity,
   Scalars,
 } from '@graphql/generated/graphql';
 import {
@@ -81,12 +82,14 @@ export interface TextCustomiser {
     id?: Maybe<Scalars['ID']>;
     name?: Maybe<Scalars['String']>;
   };
+  selectedName?: NameEntity;
   basePrice?: AddonPrice;
   letterPrice?: AddonPrice;
   outlinePrice?: AddonPrice;
   puffPrice?: AddonPrice;
   crystalPrice?: AddonPrice;
   totalPrice?: number;
+  preview?: any;
 }
 export interface NavItem {
   id?: Scalars['ID'];

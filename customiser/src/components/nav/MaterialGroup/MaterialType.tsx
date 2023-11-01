@@ -8,18 +8,27 @@ import { useMaterialGroupStore } from './MaterialGroupState';
 export interface MaterialTypeProps {
   className?: string;
   onMaterialSelected: (material: MaterialFragment) => void;
+  hideColorGroups?: boolean;
 }
 
-export const MaterialType = ({ className, onMaterialSelected }: MaterialTypeProps) => {
+export const MaterialType = ({
+  className,
+  onMaterialSelected,
+  hideColorGroups,
+}: MaterialTypeProps) => {
   const rootClassName = cn(styles.materialType, className);
 
-  const { materialTypes, filteredMaterials: getFilteredMaterials } = useMaterialGroupStore();
+  const {
+    materialTypes,
+    filteredMaterials: getFilteredMaterials,
+    materials,
+  } = useMaterialGroupStore();
 
-  const filteredMaterials = getFilteredMaterials();
+  const filteredMaterials = hideColorGroups ? materials : getFilteredMaterials();
 
   return (
     <div className={rootClassName}>
-      <h5>Texture</h5>
+      {!hideColorGroups && <h5>Texture</h5>}
       {materialTypes.map((mt) => (
         <div key={mt.id} className={styles.materialType}>
           <h6 className={styles.materialType__title}>{mt.attributes?.name}</h6>

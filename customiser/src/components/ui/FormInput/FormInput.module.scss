@@ -16,7 +16,7 @@
   background-color: $white;
   color: $black;
   font-size: srem.convert(20px);
-  padding: srem.convert(20px) 0 srem.convert(12px);
+  padding: srem.convert(25px) 0 srem.convert(9px);
   width: 100%;
   border-radius: 0;
   position: relative;
@@ -28,7 +28,7 @@
   &:not(:placeholder-shown) {
     + .label {
       font-size: srem.convert(12px);
-      top: srem.convert(10px);
+      top: srem.convert(15px);
     }
   }
 }

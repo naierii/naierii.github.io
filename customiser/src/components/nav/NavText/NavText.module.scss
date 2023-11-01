@@ -1,6 +1,43 @@
 @use '~sass-rem' as srem;
 @import '@styles/variables';
 
+@font-face {
+  font-family: 'Arial';
+  src: url('https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/fonts/arial-bold-webfont.woff');
+}
+
+@font-face {
+  font-family: 'Oswald';
+  src: url('https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/fonts/oswald-semibold.woff');
+}
+
+@font-face {
+  font-family: 'College';
+  src: url('https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/fonts/college_block-webfont.woff');
+}
+
+@font-face {
+  font-family: 'Ballantines';
+  src: url('https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/fonts/ballantines-bold-webfont.woff');
+}
+
+.arial {
+  font-family: 'Arial';
+}
+.oswald {
+  font-family: 'Oswald';
+}
+.college {
+  font-family: 'College';
+}
+.ballantines {
+  font-family: 'Ballantines';
+}
+
+.navTextEdit {
+  padding-top: srem.convert(20px);
+}
+
 .textItem {
   display: flex;
   align-items: center;
@@ -12,31 +49,72 @@
   padding: srem.convert(10px) 0;
 }
 
-.materialGroup,
-.nameTypes,
-.showOutline,
-.addCrystals {
+.finishSelections {
   margin-bottom: 2rem;
-}
-
-.nameTypes {
-  display: flex;
-
-  .nameType:not(last-child) {
-    margin-right: srem.convert(10px);
-  }
-}
-
-.nameTypePricing {
-  text-align: center;
-  margin-top: srem.convert(10px);
 }
 
 .showOutline {
   display: flex;
   align-items: center;
+  margin-bottom: srem.convert(20px);
 
   button {
     margin-right: srem.convert(10px);
+  }
+}
+
+.fontSelection {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 900;
+}
+
+.fontSelection,
+.finishSelections {
+  display: flex;
+  flex-wrap: wrap;
+
+  .font,
+  .finishSelection {
+    flex-basis: 50%;
+    cursor: pointer;
+    // padding: 0.25rem;
+    text-align: center;
+    background-color: $lightGrey;
+    border: 1px solid white;
+
+    &:hover {
+      background-color: $midGrey;
+    }
+
+    &.selected {
+      background-color: $yellow;
+    }
+  }
+
+  .font {
+    font-size: 150%;
+    line-height: 200%;
+  }
+
+  .finishSelection {
+    padding: 1rem 0.5rem;
+    text-transform: uppercase;
+    font-weight: 800;
+
+    .pricing {
+      text-align: center;
+      text-transform: lowercase;
+      // margin-top: srem.convert(10px);
+      font-weight: normal;
+      font-size: smaller;
+    }
+  }
+}
+
+.navTextEdit {
+  .materialGroup {
+    margin: 0;
+    padding: 0;
   }
 }

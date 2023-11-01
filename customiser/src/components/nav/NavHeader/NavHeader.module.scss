@@ -10,7 +10,8 @@
   grid-template-rows: 1fr;
   gap: 0px 0px;
   grid-area: header;
-  border-bottom: 1px solid $midGrey;
+  // border-bottom: 1px solid $midGrey;
+  background-color: $lightGrey;
 }
 
 .menu {

@@ -19,7 +19,7 @@ const Customiser = ({ className }: CustomiserProps) => {
   const { selectedNav } = useCustomiserStore();
 
   const rootClassName = cn(styles.root, className, {
-    [styles.navOpen]: selectedNav !== null,
+    // [styles.navOpen]: selectedNav !== null,
   });
 
   return (
@@ -47,6 +47,7 @@ const Customiser = ({ className }: CustomiserProps) => {
           />
         </g>
       </svg>
+      <div id='CustomiserCanvasControls' className={styles.controls}></div>
       <Suspense fallback={<div className={styles.loading}>Loading ...</div>}>
         <CustomiserCanvas className={styles.model} />
       </Suspense>

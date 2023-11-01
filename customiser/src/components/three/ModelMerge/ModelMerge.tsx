@@ -1,3 +1,4 @@
+import { useCustomiserStore } from '@store/customiser';
 import { ReactElement, useMemo, useState } from 'react';
 import { BufferGeometry, Material, Mesh } from 'three';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
@@ -15,12 +16,19 @@ export interface ModelMergeProps {
 
 const ModelMerge = ({ children }: ModelMergeProps) => {
   const [nodes, setNodes] = useState<ModelMergeNodes>();
+  const { customProduct } = useCustomiserStore();
 
   const geom = useMemo(() => {
     const geometries = [];
     if (nodes) {
-      for (const [, node] of Object.entries(nodes)) {
-        if (node.isMesh) {
+      for (const [nodeId, node] of Object.entries(nodes)) {
+        const optionalPart = (customProduct?.attributes?.parts ?? [])
+          .filter((p) => p?.optional)
+          .map((p) => p?.modelParts?.data)
+          .flat()
+          .find((p) => p?.attributes?.nodeId === nodeId);
+
+        if (node.isMesh && !optionalPart) {
           geometries.push(node.geometry.clone());
         }
       }

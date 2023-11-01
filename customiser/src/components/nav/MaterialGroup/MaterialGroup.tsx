@@ -24,6 +24,7 @@ export interface MaterialGroupProps {
   materialType?: Maybe<MaterialTypeEntity>;
   colourGroup?: Maybe<MaterialColourGroupEntity>;
   onMaterialSelected: (material: MaterialFragment) => void;
+  hideColorGroups?: boolean;
 }
 
 const MaterialGroupLoader = ({
@@ -32,6 +33,7 @@ const MaterialGroupLoader = ({
   materialType,
   colourGroup,
   onMaterialSelected,
+  hideColorGroups,
 }: MaterialGroupProps) => {
   const colourGroups = useMaterialGroupStore((state) => state.colourGroups);
   const selectedColourGroup = useMaterialGroupStore((state) => state.selectedColourGroup);
@@ -63,25 +65,31 @@ const MaterialGroupLoader = ({
 
   return (
     <div className={rootClassName}>
-      <h5>Colour</h5>
-      <div className={styles.colourGroups}>
-        {colourGroups.map((group) => (
-          <button key={group.id} onClick={() => setColourGroup(group)}>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              viewBox='0 0 42 42'
-              strokeWidth={4}
-              stroke={
-                selectedColourGroup?.id === group.id ? '#000' : group.attributes?.colour ?? '#000'
-              }
-              fill={group.attributes?.colour ?? '#000'}
-            >
-              <rect width='100%' height='100%' />
-            </svg>
-          </button>
-        ))}
-      </div>
-      <MaterialType onMaterialSelected={onMaterialSelected} />
+      {!hideColorGroups && (
+        <>
+          <h5>Colour</h5>
+          <div className={styles.colourGroups}>
+            {colourGroups.map((group) => (
+              <button key={group.id} onClick={() => setColourGroup(group)}>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  viewBox='0 0 42 42'
+                  strokeWidth={4}
+                  stroke={
+                    selectedColourGroup?.id === group.id
+                      ? '#000'
+                      : group.attributes?.colour ?? '#000'
+                  }
+                  fill={group.attributes?.colour ?? '#000'}
+                >
+                  <rect width='100%' height='100%' />
+                </svg>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+      <MaterialType hideColorGroups={hideColorGroups} onMaterialSelected={onMaterialSelected} />
       <SelectedMaterialInfo />
     </div>
   );

@@ -14,38 +14,43 @@ export interface NavTextSelectProps {
 const fonts = [
   {
     name: 'Arial',
+    className: styles.arial,
     url: 'https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/fonts/arial-bold-webfont.woff',
   },
   {
     name: 'Oswald',
+    className: styles.oswald,
     url: 'https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/fonts/oswald-semibold.woff',
   },
   {
     name: 'College',
+    className: styles.college,
     url: 'https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/fonts/college_block-webfont.woff',
   },
   {
     name: 'Ballantines',
+    className: styles.ballantines,
     url: 'https://boxxer-api-dev.nyc3.cdn.digitaloceanspaces.com/fonts/ballantines-bold-webfont.woff',
   },
 ];
 
 const NavTextSelect = ({ className, editText }: NavTextSelectProps) => {
   const [text, setText] = useState<string | undefined>(editText?.text);
-  const [font, setFont] = useState<string | undefined>(editText?.font);
+  const [font, setFont] = useState<(typeof fonts)[number]>(
+    fonts.find((f) => editText?.font === f.url) ?? fonts[0],
+  );
   const { addText, updateText } = useCustomiserStore((state) => state);
-  const rootClassName = cn(styles.root, className);
 
   useEffect(() => {
     if (editText?.key) {
       updateText(editText.key, {
         text,
-        font,
+        font: font.url,
         edit: true,
       });
     } else {
       if (text) {
-        addText({ text, font });
+        addText({ text, font: font.url });
       }
     }
   }, [text, font]);
@@ -54,21 +59,39 @@ const NavTextSelect = ({ className, editText }: NavTextSelectProps) => {
     setText(event.target.value);
   };
 
-  const onFontChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setFont(e.target.value);
+  const onFontChange = (font: (typeof fonts)[number]) => {
+    setFont(font);
   };
 
   return (
-    <>
+    <div className={className}>
       <FormInput placeholder='Enter text' value={text} onChange={setTextOnChange} />
-      <FormSelect value={font} onChange={onFontChange}>
+
+      <div className={styles.fontSelection}>
+        {fonts.map((_font) => (
+          <div
+            key={_font.name}
+            onClick={() => onFontChange(_font)}
+            className={cn(styles.font, _font.className, {
+              [styles.selected]: font.name === _font.name,
+            })}
+          >
+            {_font.name}
+          </div>
+        ))}
+      </div>
+      {/* <FormSelect
+        className={fonts.find((f) => f.url === font)?.className}
+        value={font}
+        onChange={onFontChange}
+      >
         {fonts.map((f) => (
-          <option key={f.url} value={f.url}>
+          <option className={f.className} key={f.url} value={f.url}>
             {f.name}
           </option>
         ))}
-      </FormSelect>
-    </>
+      </FormSelect> */}
+    </div>
   );
 };
 

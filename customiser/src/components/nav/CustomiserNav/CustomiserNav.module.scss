@@ -14,7 +14,7 @@
   background-color: white;
   max-width: 500px;
   height: 100%;
-  z-index: 100;
+  z-index: 200;
   bottom: 0;
   overflow: hidden;
 
@@ -32,6 +32,10 @@
 
     &.open {
       height: 100px;
+    }
+
+    &.isFullscreen {
+      height: 100%;
     }
 
     &.minimized {

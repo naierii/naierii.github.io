@@ -1,18 +1,87 @@
 @use '~sass-rem' as srem;
+@use '~sass-mq/mq' as *;
 
 @import '@styles/variables';
 
 .root {
+  position: absolute;
+  // background-color: white;
+  pointer-events: all;
+  padding: srem.convert(16px);
+  text-align: center;
+
   div:empty {
     display: block;
+  }
+
+  &__rotate {
+    width: 90%;
+    bottom: 0;
+    padding-bottom: srem.convert(8px);
+
+    @include mq($from: tablet) {
+      padding-bottom: srem.convert(24px);
+    }
+  }
+
+  &__scale {
+    writing-mode: vertical-rl;
+    right: 0;
+    height: 90%;
+    padding-right: srem.convert(8px);
+
+    @include mq($from: tablet) {
+      padding-right: srem.convert(24px);
+    }
+  }
+
+  :global {
+    h4 {
+      margin: 0;
+    }
+  }
+}
+
+.rotate {
+  height: 20px;
+
+  :global {
+    .track {
+      top: 9px;
+      height: 2px;
+    }
+
+    .mark {
+      top: 6px;
+      margin-left: 10px;
+      width: 1.5px;
+      height: 8px;
+    }
+  }
+}
+
+.scale {
+  // writing-mode: horizontal-tb;
+  width: 20px;
+
+  :global {
+    .track {
+      right: 9px;
+      width: 2px;
+    }
+
+    .mark {
+      right: 6px;
+      // margin-top: 5px;
+      transform: translateY(-10px);
+      height: 1.5px;
+      width: 8px;
+    }
   }
 }
 
 .scale,
 .rotate {
-  height: 20px;
-  margin-bottom: 2rem;
-
   :global .range-slider__thumb[data-lower] {
     width: 0;
   }
@@ -23,8 +92,6 @@
 
   :global {
     .track {
-      top: 9px;
-      height: 2px;
       background: $black;
 
       &.track-0 {
@@ -44,10 +111,6 @@
 
     .mark {
       cursor: pointer;
-      top: 6px;
-      margin-left: 10px;
-      width: 1.5px;
-      height: 8px;
       background-color: $black;
 
       &.mark-before {

@@ -11,7 +11,7 @@
 .select {
   border: none;
   appearance: none;
-  font-family: $displayFont;
+  font-family: inherit;
   font-weight: 900;
   font-size: srem.convert(20px);
   outline: none;

@@ -55,6 +55,20 @@
   justify-self: stretch;
 }
 
+.controls {
+  position: relative;
+  z-index: 100;
+  pointer-events: none;
+
+  grid-column: 2 /4;
+  grid-row: 2 / 5;
+
+  @include mq($until: tablet) {
+    grid-column: 1 /2;
+    grid-row: 2 / 3;
+  }
+}
+
 .background {
   grid-area: model;
   align-self: center;

@@ -45,7 +45,10 @@ const ClonedTextureMesh = ({
   const part = useMemo(
     () =>
       customProduct?.attributes?.parts?.find((p) =>
-        p?.modelParts?.data.find((mp) => mp.attributes?.nodeId === node.userData.name),
+        p?.modelParts?.data.find(
+          (mp) =>
+            mp.attributes?.nodeId === node.userData.name || mp.attributes?.nodeId === node.name,
+        ),
       ),
     [customProduct, node],
   );
@@ -83,8 +86,12 @@ const ClonedTextureMesh = ({
   return (
     <>
       <mesh
+        name={node.name}
         geometry={node.geometry}
         ref={meshRef}
+        userData={{
+          name: node.userData.name,
+        }}
         onPointerDown={(e) => {
           setIsPointerDown(true);
         }}
@@ -112,7 +119,12 @@ const ClonedTextureMesh = ({
           /**
            * If text is clicked, go to NavItem to text
            */
-          if (navItemText && navItemText.index && intersectedText && intersectedText.key) {
+          if (
+            navItemText &&
+            navItemText.index !== undefined &&
+            intersectedText &&
+            intersectedText.key
+          ) {
             setSelectedNav(navItemText.index);
             updateText(intersectedText.key, { edit: true });
 
@@ -122,7 +134,11 @@ const ClonedTextureMesh = ({
           /**
            * If mesh part is clicked, go to NavItem of part
            */
-          if (navItem && navItem.index) {
+          if (
+            navItem &&
+            navItem.index !== undefined &&
+            e.intersections[0].object.name === node.name
+          ) {
             e.stopPropagation();
 
             setSelectedNav(navItem.index);

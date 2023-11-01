@@ -1,7 +1,7 @@
 import { useCustomiserStore } from '@store/customiser';
 import cn from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import NavFitting from '../NavFitting';
 import NavFlags from '../NavFlags';
 import NavHeader from '../NavHeader';
@@ -22,8 +22,13 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
 
-  const selectedPart = useCustomiserStore((state) => state.selectedPart);
-  const selectedNav = useCustomiserStore((state) => state.selectedNav);
+  const { selectedPart, selectedNav, texts } = useCustomiserStore();
+
+  const editText = useMemo(() => texts?.find((g) => g.edit), [texts]);
+  const isFullscreen = useMemo(
+    () => selectedNav?.name === 'Text' && editText,
+    [selectedNav, editText],
+  );
 
   const rootClassName = cn(
     styles.root,
@@ -31,6 +36,7 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
       [styles.open]: isOpen,
       [styles.minimized]: isMinimized,
       [styles.hasActions]: selectedNav?.hasActions,
+      [styles.isFullscreen]: isFullscreen,
     },
     className,
   );
@@ -105,7 +111,7 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
       </Suspense>
       {!isOpen && selectedNav?.hasActions && (
         <div className={styles.actions}>
-          <div id='CustomiserNavMaterial'></div>
+          {selectedPart && <div id='CustomiserNavMaterial'></div>}
           <div id='CustomiserNavActions'></div>
         </div>
       )}

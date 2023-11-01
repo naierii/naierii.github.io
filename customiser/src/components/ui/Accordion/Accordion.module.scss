@@ -1,0 +1,42 @@
+@use '~sass-rem' as srem;
+@import '@styles/variables';
+
+.titleContainer {
+  display: flex;
+  margin-bottom: srem.convert(20px);
+  align-items: flex-start;
+
+  .titleStep {
+    // background-color: $yellow;
+    // transform: scale(1.2);
+    font-size: 150%;
+    z-index: 10;
+    // padding: 0.8rem;
+  }
+
+  &.active {
+    .titleStep {
+      background-color: $red;
+    }
+
+    .titleButton {
+      background-color: $red;
+    }
+  }
+}
+
+.titleStep,
+.titleStep span {
+  text-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.titleButton {
+  width: 100%;
+  // text-align: left;
+  justify-content: flex-start;
+}
+
+.content {
+  padding-bottom: srem.convert(20px);
+}

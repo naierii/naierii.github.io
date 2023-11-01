@@ -5,14 +5,21 @@
 .pillButton {
   padding: srem.convert(7px) srem.convert(17px);
   border-radius: 50vw;
-  border: 2px solid $black;
+  background-color: $lightGrey;
   white-space: nowrap;
   width: fit-content;
   color: $black;
 }
 
 .pillButtonSelected {
-  border-color: $red;
   background-color: $red;
   color: $white;
+
+  &.darkGrey {
+    background-color: $darkGrey;
+  }
+
+  &.black {
+    background-color: black;
+  }
 }

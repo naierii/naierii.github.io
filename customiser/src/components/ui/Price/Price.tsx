@@ -13,7 +13,8 @@ const Price = ({ className, price, priceString }: PriceProps) => {
   // TODO - Make currency change depending on selected currency.
   const currency = '£';
 
-  const formattedPrice = price ? `${currency}${price.toFixed(2)}` : `${currency}${priceString}`;
+  const formattedPrice =
+    price !== undefined ? `${currency}${price.toFixed(2)}` : `${currency}${priceString}`;
 
   if (!formattedPrice) {
     return null;

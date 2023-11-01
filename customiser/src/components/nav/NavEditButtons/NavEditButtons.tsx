@@ -21,7 +21,8 @@ const NavEditButtons = ({ className, disabled, onApply }: NavEditButtonsProps) =
 
   return ReactDOM.createPortal(
     <div className={rootClassName}>
-      <Button onClick={onApply} disabled={disabled}>
+      <Button onClick={onApply}>Cancel</Button>
+      <Button colour='red' onClick={onApply} disabled={disabled}>
         Save
       </Button>
     </div>,

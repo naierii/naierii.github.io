@@ -91,10 +91,7 @@ const NavText = () => {
     <>
       {showSelector ? (
         <div className={styles.navTextEdit}>
-          <div id='TestView'>
-            <img height={200} style={{ width: '100%' }}></img>
-          </div>
-          <NavTextPreview editText={editText}/>
+          <NavTextPreview editText={editText} />
           <Accordion
             step={0}
             title='Text and Font'

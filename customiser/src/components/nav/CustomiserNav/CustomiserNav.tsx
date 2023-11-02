@@ -78,6 +78,7 @@ const CustomiserNav = ({ className }: CustomiserNavProps) => {
         }}
         isMinimized={isMinimized}
       />
+      <div id='NavHeaderAfter' className={styles.headerAfter}></div>
       <Suspense fallback={<div>Loading...</div>}>
         <AnimatePresence initial={false}>
           <motion.div

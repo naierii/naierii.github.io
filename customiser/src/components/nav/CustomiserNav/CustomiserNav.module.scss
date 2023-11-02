@@ -6,10 +6,11 @@
 .root {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 73px 1fr;
+  grid-template-rows: 73px auto 1fr;
   gap: 0px 0px;
   grid-template-areas:
     'header'
+    'header-after'
     'content';
   background-color: white;
   max-width: 500px;
@@ -51,10 +52,15 @@
   }
 }
 
+.headerAfter {
+  grid-area: header-after;
+}
+
 .hasActions {
-  grid-template-rows: 73px 1fr auto;
+  grid-template-rows: 73px auto 1fr auto;
   grid-template-areas:
     'header'
+    'header-after'
     'content'
     'actions';
 }

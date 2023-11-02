@@ -3,6 +3,10 @@ import { useCustomiserStore } from '@store/customiser';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CanvasTexture } from 'three';
 import type { NavTextSelectProps } from './NavTextSelect';
+import { usePortalRef } from '@hooks';
+import { createPortal } from 'react-dom';
+
+import styles from './NavText.module.scss';
 
 // TODO - Pre load the fonts somewhere
 async function loadFonts(fontUrl: string) {
@@ -18,6 +22,8 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
 
   const { updateText } = useCustomiserStore();
 
+  const portalRef = usePortalRef('NavHeaderAfter');
+
   /**
    * Save image here
    */
@@ -26,8 +32,12 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
   }, [editText?.material]);
 
   useEffect(() => {
-    const canvas = canvasRef.current as HTMLCanvasElement;
-    const outlineCanvas = outlineCanvasRef.current as HTMLCanvasElement;
+    const canvas = canvasRef.current;
+    const outlineCanvas = outlineCanvasRef.current;
+
+    if (!canvas || !outlineCanvas) {
+      return;
+    }
 
     (async () => {
       const canvasText = new CanvasText(canvas, outlineCanvas);
@@ -60,11 +70,22 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
     })();
   }, [editText?.text, editText?.material, editText?.outline, editText?.font]); // TO IMPROVE? - update only on certain value changes
 
-  return (
-    <div>
-      <canvas height={200} style={{ width: '100%', display: 'none' }} ref={canvasRef} />
-      <canvas height={200} style={{ width: '100%' }} ref={outlineCanvasRef} />
-    </div>
+  if (!portalRef) {
+    return null;
+  }
+
+  return createPortal(
+    <div className={styles.textPreview}>
+      {!editText?.text ? (
+        <div className={styles.noText}>Enter text to show preview</div>
+      ) : (
+        <>
+          <canvas height={50} style={{ width: '100%', display: 'none' }} ref={canvasRef} />
+          <canvas height={50} style={{ width: '100%' }} ref={outlineCanvasRef} />
+        </>
+      )}
+    </div>,
+    portalRef,
   );
 };
 

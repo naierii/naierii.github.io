@@ -54,14 +54,14 @@ export class CanvasText {
   public drawPreviewText(text: string) {
     this.ctx.font = '45px testFont';
     this.ctx.textAlign = 'center';
-    this.ctx.fillText(text, this.canvas.width / 2, this.canvas.height / 2);
+    this.ctx.fillText(text, this.canvas.width / 2, this.canvas.height / 2 + 15);
   }
 
   public drawPreviewOutlineText(text: string) {
     this.outlineCtx.font = '45px testFont';
     this.outlineCtx.textAlign = 'center';
     this.outlineCtx.lineWidth = 4;
-    this.outlineCtx.strokeText(text, this.canvas.width / 2, this.canvas.height / 2);
+    this.outlineCtx.strokeText(text, this.canvas.width / 2, this.canvas.height / 2 + 15);
   }
 
   public async previewText({ text, material, outline }: PreviewText) {

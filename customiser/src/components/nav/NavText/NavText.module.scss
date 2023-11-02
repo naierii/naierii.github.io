@@ -35,7 +35,7 @@
 }
 
 .navTextEdit {
-  padding-top: srem.convert(20px);
+  padding-top: srem.convert(10px);
 }
 
 .textItem {
@@ -145,5 +145,16 @@
     .titleText {
       margin: 0;
     }
+  }
+}
+
+.textPreview {
+  border-bottom: 5px solid #f4f4f4;
+
+  .noText {
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    text-align: center;
+    font-style: italic;
   }
 }

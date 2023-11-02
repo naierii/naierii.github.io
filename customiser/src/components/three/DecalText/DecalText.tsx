@@ -1,7 +1,7 @@
 import { Decal } from '@react-three/drei';
 import { EulerArray, TextCustomiser, Vector3Array } from '@store/customiser';
-import { useMemo, useRef } from 'react';
-import { Euler, EulerOrder, MathUtils, Vector3 } from 'three';
+import { useEffect, useMemo, useRef } from 'react';
+import { Euler, EulerOrder, MathUtils, MeshStandardMaterial, Texture, Vector3 } from 'three';
 
 export interface DecalTextProps {
   text?: TextCustomiser;
@@ -31,8 +31,15 @@ const DecalText = ({ text = {}, position, orientation, scale = 1 }: DecalTextPro
     return new Vector3(2 * scale, 1 * scale, 4);
   }, [scale]);
 
-  const matRef = useRef(null);
+  const matRef = useRef<MeshStandardMaterial>(null);
   const decalRef = useRef(null);
+
+  useEffect(() => {
+    if (text.preview && matRef.current && text.preview instanceof Texture) {
+      text.preview.needsUpdate = true;
+      matRef.current.needsUpdate = true;
+    }
+  }, [text.preview]);
 
   return (
     <Decal ref={decalRef} position={position} rotation={rotationModifier} scale={scaleModifier}>
@@ -41,7 +48,7 @@ const DecalText = ({ text = {}, position, orientation, scale = 1 }: DecalTextPro
         transparent
         depthTest
         depthWrite={false}
-        map={text.preview}
+        map={text.preview instanceof Texture ? text.preview : null}
       ></meshStandardMaterial>
     </Decal>
   );

@@ -1,12 +1,10 @@
-import { NameEntity, useGetNamesQuery } from '@graphql/generated/graphql';
-import { graphQLClient } from '@graphql/graphql-client';
 import { TextCustomiser, useCustomiserStore } from '@store/customiser';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 
-import styles from './NavText.module.scss';
-import PillButton from '@components/ui/PillButton';
 import Price from '@components/ui/Price';
+import { NAME_TYPE_LUXURY_ID } from '@store/constants';
 import cn from 'classnames';
+import styles from './NavText.module.scss';
 
 export interface NavTextFinishProps {
   editText?: TextCustomiser;
@@ -18,7 +16,13 @@ const NavTextFinish: FC<NavTextFinishProps> = ({ editText = {} }) => {
   const [crystals, setCrystals] = useState<boolean>(editText?.crystalPrice ? true : false);
   const [puff, setPuff] = useState<boolean>(editText?.puffPrice ? true : false);
 
+  const hasPuffOption = useMemo(() => selectedName?.id === NAME_TYPE_LUXURY_ID, [selectedName]);
+
   const { updateText } = useCustomiserStore();
+
+  useEffect(() => {
+    setPuff(editText.puffPrice ? true : false);
+  }, [editText.puffPrice]);
 
   if (!selectedName) {
     return null;
@@ -102,14 +106,21 @@ const NavTextFinish: FC<NavTextFinishProps> = ({ editText = {} }) => {
           </div>
         </div>
         <div
-          className={cn(styles.finishSelection, { [styles.selected]: puff })}
+          className={cn(styles.finishSelection, {
+            [styles.selected]: puff,
+            [styles.disabled]: !hasPuffOption,
+          })}
           onClick={() => addPuff(true)}
         >
           Add 3D Puff
-          <div className={styles.pricing}>
-            {' +'}
-            <Price price={selectedName.attributes?.puffPrice?.price} />
-          </div>
+          {hasPuffOption ? (
+            <div className={styles.pricing}>
+              {' +'}
+              <Price price={selectedName.attributes?.puffPrice?.price} />
+            </div>
+          ) : (
+            <div className={styles.pricing}>(Only available for luxury colors)</div>
+          )}
         </div>
       </div>
     </>

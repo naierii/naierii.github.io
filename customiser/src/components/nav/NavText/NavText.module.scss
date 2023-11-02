@@ -58,6 +58,12 @@
 
 .finishSelections {
   margin-bottom: 2rem;
+
+  .disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    color: #9a9a9a;
+  }
 }
 
 .showOutline {

@@ -70,6 +70,8 @@ const NavTextNameTypes = ({ editText = {} }: NavTextNameTypesProps) => {
               },
             }
           : {}),
+
+        puffPrice: undefined,
       });
     }
   }, [selectedName]);

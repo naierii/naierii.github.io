@@ -41,7 +41,6 @@ const DecalText = ({ text = {}, position, orientation, scale = 1 }: DecalTextPro
         transparent
         depthTest
         depthWrite={false}
-        color={'yellow'}
         map={text.preview}
       ></meshStandardMaterial>
     </Decal>

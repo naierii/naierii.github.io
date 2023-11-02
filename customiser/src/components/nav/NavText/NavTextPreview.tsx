@@ -58,7 +58,7 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
         preview: new CanvasTexture(outlineCanvas),
       });
     })();
-  }, [editText?.text, editText?.material, editText?.outline]); // TO IMPROVE? - update only on certain value changes
+  }, [editText?.text, editText?.material, editText?.outline, editText?.font]); // TO IMPROVE? - update only on certain value changes
 
   return (
     <div>

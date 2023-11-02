@@ -1,22 +1,15 @@
-import Button from '@components/ui/Button';
 import { useCustomiserStore } from '@store/customiser';
 import { startTransition, useEffect, useMemo, useState } from 'react';
-import NavButtons from '../NavButtons';
 import NavDecalAdjust from '../NavDecalAdjust';
 
-import styles from './NavText.module.scss';
-import NavTextNameTypes from './NavTextNameTypes';
-import NavTextSelect from './NavTextSelect';
-import NavTextText from './NavTextText';
 import Accordion from '@components/ui/Accordion/Accordion';
-import NavTextFinish from './NavTextFinish';
-import NavTextOutline from './NavTextOutline';
 import NavStepButtons from '../NavStepButtons';
-import { useFrame } from '@react-three/fiber';
-
-// export interface NavTextProps {
-
-// }
+import styles from './NavText.module.scss';
+import NavTextFinish from './NavTextFinish';
+import NavTextNameTypes from './NavTextNameTypes';
+import NavTextOutline from './NavTextOutline';
+import NavTextSelect from './NavTextSelect';
+import NavTextsSelection from './NavTextsSelection';
 
 const NavText = () => {
   const [step, setStep] = useState<number | undefined>(0);
@@ -147,16 +140,7 @@ const NavText = () => {
         </div>
       ) : (
         <>
-          <div className={styles.customiserFlags}>
-            <h3>Your Text</h3>
-            {texts.map((t) => (
-              <NavTextText key={t.key} text={t} setShowSelector={setShowSelector} />
-            ))}
-            <Button colour='red' onClick={addText}>
-              Add Text
-            </Button>
-          </div>
-          <NavButtons />
+          <NavTextsSelection onAddTextClicked={addText}></NavTextsSelection>
         </>
       )}
     </>

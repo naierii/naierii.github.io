@@ -13,6 +13,13 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const outlineCanvasRef = useRef<HTMLCanvasElement>(null);
   const [fontFamily, setFontFamily] = useState<string | undefined>(editText?.font);
+
+  /**
+   * Save image here
+   */
+  const materialImg = useMemo<Promise<HTMLImageElement>>(() => {
+    return new Promise((res) => res(new Image()));
+  }, [editText?.material]);
   
   useEffect(() => {
     const canvas = canvasRef.current as HTMLCanvasElement;
@@ -32,8 +39,13 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
         await loadFonts(editText?.font as string);
       }
 
+      const img = await materialImg;
+
       await canvasText.previewText({
         text: editText.text,
+        /**
+         * material: img
+         */
         material: editText.material,
         outline: editText.outline,
       });

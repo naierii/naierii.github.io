@@ -10,6 +10,11 @@ import NavTextNameTypes from './NavTextNameTypes';
 import NavTextOutline from './NavTextOutline';
 import NavTextSelect from './NavTextSelect';
 import NavTextsSelection from './NavTextsSelection';
+import NavTextPreview from './NavTextPreview';
+
+// export interface NavTextProps {
+
+// }
 
 const NavText = () => {
   const [step, setStep] = useState<number | undefined>(0);
@@ -89,6 +94,7 @@ const NavText = () => {
           <div id='TestView'>
             <img height={200} style={{ width: '100%' }}></img>
           </div>
+          <NavTextPreview editText={editText}/>
           <Accordion
             step={0}
             title='Text and Font'

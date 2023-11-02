@@ -21,6 +21,7 @@ import { create, StateCreator } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
 import { UNIT } from './constants';
+import { Texture } from 'three';
 interface SelectedModel {
   optionId: Scalars['ID'];
   model?: Maybe<ModelFragment>;
@@ -89,7 +90,7 @@ export interface TextCustomiser {
   puffPrice?: AddonPrice;
   crystalPrice?: AddonPrice;
   totalPrice?: number;
-  preview?: any;
+  preview?: Texture;
 }
 export interface NavItem {
   id?: Scalars['ID'];

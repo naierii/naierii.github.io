@@ -4,6 +4,7 @@ import type { MaterialFragment } from '@graphql/generated/graphql';
 async function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
+    img.crossOrigin = 'anonymous';
     img.onload = () => resolve(img);
     img.onerror = reject;
     img.src = src;
@@ -11,16 +12,8 @@ async function loadImage(src: string): Promise<HTMLImageElement> {
 }
 
 function getMaterialUrl(material: MaterialFragment | undefined): string {
-  return material
-  ?.attributes
-  ?.images
-  ?.find(imgMap => imgMap?.mapType === 'map')
-  ?.image
-  .data
-  ?.attributes
-  ?.formats
-  .large
-  .url;
+  return material?.attributes?.images?.find((imgMap) => imgMap?.mapType === 'map')?.image.data
+    ?.attributes?.formats.large.url;
 }
 
 interface PreviewText {
@@ -42,7 +35,7 @@ export class CanvasText {
     this.outlineCtx = this.outlineCanvas.getContext('2d') as CanvasRenderingContext2D;
   }
 
-  public clear(){
+  public clear() {
     this.ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.outlineCtx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
@@ -61,19 +54,19 @@ export class CanvasText {
   public drawPreviewText(text: string) {
     this.ctx.font = '45px testFont';
     this.ctx.textAlign = 'center';
-    this.ctx.fillText(text, this.canvas.width/2, this.canvas.height/2);
+    this.ctx.fillText(text, this.canvas.width / 2, this.canvas.height / 2);
   }
 
   public drawPreviewOutlineText(text: string) {
     this.outlineCtx.font = '45px testFont';
     this.outlineCtx.textAlign = 'center';
     this.outlineCtx.lineWidth = 4;
-    this.outlineCtx.strokeText(text, this.canvas.width/2, this.canvas.height/2);
+    this.outlineCtx.strokeText(text, this.canvas.width / 2, this.canvas.height / 2);
   }
 
-  public async previewText({text, material, outline}: PreviewText) {
+  public async previewText({ text, material, outline }: PreviewText) {
     this.clear();
-    
+
     if (outline) {
       this.drawPreviewOutlineText(text);
       await this.maskImage(this.outlineCtx, outline);
@@ -81,7 +74,7 @@ export class CanvasText {
 
     this.drawPreviewText(text);
     await this.maskImage(this.ctx, material);
-    
+
     this.outlineCtx.drawImage(this.canvas, 0, 0);
   }
 
@@ -89,18 +82,17 @@ export class CanvasText {
     this.outlineCtx.drawImage(this.canvas, 0, 0);
   }
 
-  getCanvas(){
+  getCanvas() {
     return this.canvas;
   }
-  getOutlineCanvas(){
+  getOutlineCanvas() {
     return this.outlineCanvas;
   }
 
-  getCtx(){
+  getCtx() {
     return this.ctx;
   }
-  getOutlineCtx(){
+  getOutlineCtx() {
     return this.outlineCtx;
   }
-
 }

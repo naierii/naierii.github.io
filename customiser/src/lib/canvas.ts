@@ -73,7 +73,10 @@ export class CanvasText {
     }
 
     this.drawPreviewText(text);
-    await this.maskImage(this.ctx, material);
+
+    if (material) {
+      await this.maskImage(this.ctx, material);
+    }
 
     this.outlineCtx.drawImage(this.canvas, 0, 0);
   }

@@ -1,4 +1,4 @@
-import { CanvasText } from '@lib/canvas';
+import { CanvasText, getMaterialUrl } from '@lib/canvas';
 import { useCustomiserStore } from '@store/customiser';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CanvasTexture } from 'three';
@@ -15,10 +15,22 @@ async function loadFonts(fontUrl: string) {
   document.fonts.add(font);
 }
 
+// TO IMPROVE? - Make this a reusable function if needed
+async function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    if (!src) resolve(img);
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
 const NavTextPreview = ({ editText }: NavTextSelectProps) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const outlineCanvasRef = useRef<HTMLCanvasElement>(null);
+  const previewImgRef = useRef<HTMLImageElement | null>(null);
   const [fontFamily, setFontFamily] = useState<string | undefined>(editText?.font);
+  const [isVisiblePreview, setIsVisiblePreview] = useState(false);
 
   const { updateText } = useCustomiserStore();
 
@@ -27,23 +39,29 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
   /**
    * Save image here
    */
-  const materialImg = useMemo<Promise<HTMLImageElement>>(() => {
-    return new Promise((res) => res(new Image()));
+  const materialImgMemo = useMemo<Promise<HTMLImageElement>>(() => {
+    return loadImage(getMaterialUrl(editText?.material));
   }, [editText?.material]);
+  const outlineImgMemo = useMemo<Promise<HTMLImageElement>>(() => {
+    return loadImage(getMaterialUrl(editText?.outline));
+  }, [editText?.outline]);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const outlineCanvas = outlineCanvasRef.current;
-
-    if (!canvas || !outlineCanvas) {
-      return;
-    }
+    const previewImgDom = previewImgRef.current as HTMLImageElement;
 
     (async () => {
-      const canvasText = new CanvasText(canvas, outlineCanvas);
+      const canvasText = new CanvasText();
 
-      if (!editText || !editText.text || !editText.key) {
+      if (!editText || !editText.material || !editText.key || !isVisiblePreview) {
         canvasText.clear();
+        return;
+      }
+
+      if (!editText.text) {
+        canvasText.clear();
+        updateText(editText.key, {
+          preview: new CanvasTexture(canvasText.getOutlineCanvas()),
+        });
         return;
       }
 
@@ -53,35 +71,40 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
         await loadFonts(editText?.font as string);
       }
 
-      const img = await materialImg;
+      const img = await materialImgMemo;
+      const outlineImg = editText?.outline && (await outlineImgMemo);
 
       await canvasText.previewText({
         text: editText.text,
-        /**
-         * material: img
-         */
-        material: editText.material,
-        outline: editText.outline,
+        material: img,
+        outline: outlineImg,
+        previewImg: previewImgDom,
       });
 
       updateText(editText.key, {
-        preview: new CanvasTexture(outlineCanvas),
+        preview: new CanvasTexture(canvasText.getOutlineCanvas()),
       });
     })();
-  }, [editText?.text, editText?.material, editText?.outline, editText?.font]); // TO IMPROVE? - update only on certain value changes
+  }, [editText?.text, editText?.material, editText?.outline, editText?.font, isVisiblePreview]);
 
   if (!portalRef) {
     return null;
   }
 
   return createPortal(
-    <div className={styles.textPreview}>
+    <div id='testPreview' className={styles.textPreview}>
       {!editText?.text ? (
         <div className={styles.noText}>Enter text to show preview</div>
       ) : (
         <>
-          <canvas height={50} style={{ width: '100%', display: 'none' }} ref={canvasRef} />
-          <canvas height={50} style={{ width: '100%' }} ref={outlineCanvasRef} />
+          <img
+            height={200}
+            width={200}
+            ref={(el) => {
+              previewImgRef.current = el;
+              setIsVisiblePreview(!!el);
+            }}
+          />
         </>
       )}
     </div>,

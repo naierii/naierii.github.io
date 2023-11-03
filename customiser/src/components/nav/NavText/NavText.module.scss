@@ -150,6 +150,11 @@
 
 .textPreview {
   border-bottom: 5px solid #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 80px;
+  overflow: hidden;
 
   .noText {
     margin-bottom: 0.5rem;

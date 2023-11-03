@@ -1,25 +1,15 @@
 import type { MaterialFragment } from '@graphql/generated/graphql';
 
-// TO IMPROVE? - Make this a reusable function if needed
-async function loadImage(src: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = src;
-  });
-}
-
-function getMaterialUrl(material: MaterialFragment | undefined): string {
+export function getMaterialUrl(material: MaterialFragment | undefined): string {
   return material?.attributes?.images?.find((imgMap) => imgMap?.mapType === 'map')?.image.data
     ?.attributes?.formats.large.url;
 }
 
 interface PreviewText {
   text: string;
-  material: MaterialFragment | undefined;
-  outline: MaterialFragment | undefined;
+  material: HTMLImageElement;
+  outline: HTMLImageElement | undefined;
+  previewImg: HTMLImageElement;
 }
 
 export class CanvasText {
@@ -28,10 +18,25 @@ export class CanvasText {
   outlineCanvas: HTMLCanvasElement;
   outlineCtx: CanvasRenderingContext2D;
 
-  constructor(canvas: HTMLCanvasElement, outlineCanvas: HTMLCanvasElement) {
-    this.canvas = canvas;
+  fontSize: number;
+
+  constructor() {
+    this.fontSize = 180;
+
+    this.canvas = document.createElement('canvas');
+    this.canvas.height = 800;
+    this.canvas.width = 800;
+    this.canvas.style.display = 'none';
     this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
-    this.outlineCanvas = outlineCanvas;
+
+    this.outlineCanvas = document.createElement('canvas');
+    this.outlineCanvas.height = 800;
+    this.outlineCanvas.width = 800;
+    // this.outlineCanvas.style.zIndex = '100'; // TEST ONLY, TO BE REMOVED
+    // this.outlineCanvas.style.position = 'absolute'; // TEST ONLY, TO BE REMOVED
+    // this.outlineCanvas.style.top = '0'; // TEST ONLY, TO BE REMOVED
+    // this.outlineCanvas.style.left = '0'; // TEST ONLY, TO BE REMOVED
+    // this.outlineCanvas.style.background = 'rgba(0, 0, 0, 0.5)'; // TEST ONLY, TO BE REMOVED
     this.outlineCtx = this.outlineCanvas.getContext('2d') as CanvasRenderingContext2D;
   }
 
@@ -39,33 +44,38 @@ export class CanvasText {
     this.ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.outlineCtx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
-  public async drawImg(ctx: CanvasRenderingContext2D, src: string) {
-    const baseImage = await loadImage(src);
-    ctx.drawImage(baseImage, 0, 0, this.canvas.width, this.canvas.height);
+  public async drawImg(ctx: CanvasRenderingContext2D, src: HTMLImageElement) {
+    ctx.drawImage(src, 0, 0, this.canvas.width, this.canvas.height);
   }
 
-  public async maskImage(ctx: CanvasRenderingContext2D, material: MaterialFragment | undefined) {
-    const src = getMaterialUrl(material);
+  public async maskImage(ctx: CanvasRenderingContext2D, img: HTMLImageElement) {
     ctx.globalCompositeOperation = 'source-in';
-    await this.drawImg(ctx, src);
+    await this.drawImg(ctx, img);
     ctx.globalCompositeOperation = 'source-over'; // reset to default
   }
 
   public drawPreviewText(text: string) {
-    this.ctx.font = '45px testFont';
+    this.ctx.font = `${this.fontSize}px testFont`;
     this.ctx.textAlign = 'center';
-    this.ctx.fillText(text, this.canvas.width / 2, this.canvas.height / 2 + 15);
+    this.ctx.fillText(text, this.canvas.width / 2, this.canvas.height / 2 + 15 + this.fontSize / 4);
   }
 
   public drawPreviewOutlineText(text: string) {
-    this.outlineCtx.font = '45px testFont';
+    this.outlineCtx.font = `${this.fontSize}px testFont`;
     this.outlineCtx.textAlign = 'center';
-    this.outlineCtx.lineWidth = 4;
-    this.outlineCtx.strokeText(text, this.canvas.width / 2, this.canvas.height / 2 + 15);
+    this.outlineCtx.lineWidth = 20;
+    this.outlineCtx.strokeText(
+      text,
+      this.canvas.width / 2,
+      this.canvas.height / 2 + 15 + this.fontSize / 4,
+    );
   }
 
-  public async previewText({ text, material, outline }: PreviewText) {
+  public async previewText({ text, material, outline, previewImg }: PreviewText) {
     this.clear();
+    // const testPreviewDom = document.getElementById('testPreview'); // TEST ONLY, TO BE REMOVED
+    // testPreviewDom?.innerHTML || ((testPreviewDom as unknown as HTMLElement).innerHTML = ''); // TEST ONLY, TO BE REMOVED
+    // testPreviewDom?.appendChild(this.outlineCanvas); // TEST ONLY, TO BE REMOVED
 
     if (outline) {
       this.drawPreviewOutlineText(text);
@@ -79,6 +89,7 @@ export class CanvasText {
     }
 
     this.outlineCtx.drawImage(this.canvas, 0, 0);
+    previewImg.src = this.outlineCanvas.toDataURL();
   }
 
   public mergeCanvas() {

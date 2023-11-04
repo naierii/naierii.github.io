@@ -7,7 +7,7 @@ export function getMaterialUrl(material: MaterialFragment | undefined): string {
 
 interface PreviewText {
   text: string;
-  material: HTMLImageElement;
+  material: HTMLImageElement | undefined;
   outline: HTMLImageElement | undefined;
   previewImg: HTMLImageElement;
 }
@@ -21,17 +21,17 @@ export class CanvasText {
   fontSize: number;
 
   constructor() {
-    this.fontSize = 180;
+    this.fontSize = 360;
 
     this.canvas = document.createElement('canvas');
-    this.canvas.height = 800;
-    this.canvas.width = 800;
+    this.canvas.height = 1600;
+    this.canvas.width = 1600;
     this.canvas.style.display = 'none';
     this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
 
     this.outlineCanvas = document.createElement('canvas');
-    this.outlineCanvas.height = 800;
-    this.outlineCanvas.width = 800;
+    this.outlineCanvas.height = 1600;
+    this.outlineCanvas.width = 1600;
     // this.outlineCanvas.style.zIndex = '100'; // TEST ONLY, TO BE REMOVED
     // this.outlineCanvas.style.position = 'absolute'; // TEST ONLY, TO BE REMOVED
     // this.outlineCanvas.style.top = '0'; // TEST ONLY, TO BE REMOVED

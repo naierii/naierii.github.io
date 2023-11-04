@@ -52,7 +52,7 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
     (async () => {
       const canvasText = new CanvasText();
 
-      if (!editText || !editText.material || !editText.key || !isVisiblePreview) {
+      if (!editText || !editText.key || !isVisiblePreview) {
         canvasText.clear();
         return;
       }
@@ -71,7 +71,7 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
         await loadFonts(editText?.font as string);
       }
 
-      const img = await materialImgMemo;
+      const img = editText?.material && (await materialImgMemo);
       const outlineImg = editText?.outline && (await outlineImgMemo);
 
       await canvasText.previewText({

@@ -28,7 +28,7 @@ const DecalText = ({ text = {}, position, orientation, scale = 1 }: DecalTextPro
       : [];
 
   const scaleModifier = useMemo(() => {
-    return new Vector3(2 * scale, 1 * scale, 4);
+    return new Vector3(3.2 * scale, 0.4 * scale, 4);
   }, [scale]);
 
   const matRef = useRef<MeshStandardMaterial>(null);

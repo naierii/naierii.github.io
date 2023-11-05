@@ -97,14 +97,16 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
         <div className={styles.noText}>Enter text to show preview</div>
       ) : (
         <>
-          <img
-            height={200}
-            width={200}
-            ref={(el) => {
-              previewImgRef.current = el;
-              setIsVisiblePreview(!!el);
-            }}
-          />
+          <div className={styles.textPreview__imgContainer}>
+            <img
+              height={80}
+              width={640}
+              ref={(el) => {
+                previewImgRef.current = el;
+                setIsVisiblePreview(!!el);
+              }}
+            />
+          </div>
         </>
       )}
     </div>,

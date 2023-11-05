@@ -18,20 +18,24 @@ export class CanvasText {
   outlineCanvas: HTMLCanvasElement;
   outlineCtx: CanvasRenderingContext2D;
 
+  canvasHeight: number;
+  canvasWidth: number;
   fontSize: number;
 
   constructor() {
     this.fontSize = 360;
+    this.canvasHeight = 400;
+    this.canvasWidth = 3200;
 
     this.canvas = document.createElement('canvas');
-    this.canvas.height = 1600;
-    this.canvas.width = 1600;
+    this.canvas.height = this.canvasHeight;
+    this.canvas.width = this.canvasWidth;
     this.canvas.style.display = 'none';
     this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
 
     this.outlineCanvas = document.createElement('canvas');
-    this.outlineCanvas.height = 1600;
-    this.outlineCanvas.width = 1600;
+    this.outlineCanvas.height = this.canvasHeight;
+    this.outlineCanvas.width = this.canvasWidth;
     // this.outlineCanvas.style.zIndex = '100'; // TEST ONLY, TO BE REMOVED
     // this.outlineCanvas.style.position = 'absolute'; // TEST ONLY, TO BE REMOVED
     // this.outlineCanvas.style.top = '0'; // TEST ONLY, TO BE REMOVED

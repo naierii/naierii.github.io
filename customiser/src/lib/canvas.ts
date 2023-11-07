@@ -67,7 +67,7 @@ export class CanvasText {
   public drawPreviewOutlineText(text: string) {
     this.outlineCtx.font = `${this.fontSize}px testFont`;
     this.outlineCtx.textAlign = 'center';
-    this.outlineCtx.lineWidth = 20;
+    this.outlineCtx.lineWidth = 30;
     this.outlineCtx.strokeText(
       text,
       this.canvas.width / 2,

@@ -103,8 +103,7 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
 
       updateText(editText.key, {
         preview: new CanvasTexture(canvasText.getOutlineCanvas()),
-        normalMap: new CanvasTexture(canvasText.getNormalMapCanvas()),
-        // normalMap: new CanvasTexture(canvasText.getNormalMapCanvas2()),
+        normalMap: new CanvasTexture(canvasText.getNormalMapCanvas2()),
       });
     })();
   }, [editText?.text, editText?.material, editText?.outline, editText?.font, isVisiblePreview]);

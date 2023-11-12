@@ -96,10 +96,10 @@ export class CanvasText {
   public showTestCanvas(canvas: HTMLCanvasElement) {
     const testPreviewDom = document.getElementById('testPreview'); // TEST ONLY, TO BE REMOVED
     (testPreviewDom as unknown as HTMLElement).innerHTML = ''; // TEST ONLY, TO BE REMOVED
-    // testPreviewDom?.appendChild(canvas); // TEST ONLY, TO BE REMOVED
-    // testPreviewDom?.appendChild(this.normalMapCanvas2); // TEST ONLY, TO BE REMOVED
-    // testPreviewDom?.appendChild(this.normalMapOutlineCanvas); // TEST ONLY, TO BE REMOVED
-    // testPreviewDom?.appendChild(this.normalMapOutlineCanvas2); // TEST ONLY, TO BE REMOVED
+    testPreviewDom?.appendChild(canvas); // TEST ONLY, TO BE REMOVED
+    testPreviewDom?.appendChild(this.normalMapCanvas2); // TEST ONLY, TO BE REMOVED
+    testPreviewDom?.appendChild(this.normalMapOutlineCanvas); // TEST ONLY, TO BE REMOVED
+    testPreviewDom?.appendChild(this.normalMapOutlineCanvas2); // TEST ONLY, TO BE REMOVED
   }
 
   public async maskImage(ctx: CanvasRenderingContext2D, img: HTMLImageElement) {
@@ -145,16 +145,9 @@ export class CanvasText {
     if (!pattern) return;
 
     this.normalMapCtx.globalCompositeOperation = 'source-in';
-    this.normalMapCtx.rect(0, 0, this.canvasWidth / 2, this.canvasHeight);
     this.normalMapCtx.fillStyle = pattern;
     this.normalMapCtx.fill();
     this.normalMapCtx.globalCompositeOperation = 'source-over';
-
-    this.normalMapCtx.fillStyle = 'red';
-    this.normalMapCtx.fillRect(150, 150, 300, 300);
-    this.normalMapCtx.fillStyle = 'yellow';
-    this.normalMapCtx.fillRect(200, 200, 300, 300);
-    this.normalMapCtx.clearRect(250, 250, 300, 300);
 
     const normalMap = await imgToNormalMap(this.normalMapCanvas);
     this.normalMapCtx2.drawImage(normalMap, 0, 0);

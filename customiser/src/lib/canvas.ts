@@ -9,12 +9,16 @@ export function getMaterialUrl(material: MaterialFragment | undefined): string {
 }
 
 const normalMapGenerator = NormalMapGenerator.instance();
-async function imgToNormalMap(img: HTMLImageElement | HTMLCanvasElement) {
+async function imgToNormalMap(
+  img: HTMLImageElement | HTMLCanvasElement,
+  hasNoBackground?: boolean,
+) {
   return normalMapGenerator.generateFromImage(img, {
     strength: 0.5,
-    // blur: 0,
-    blur: 7,
+    blur: 0,
+    // blur: 7,
     level: 1,
+    hasNoBackground,
   });
 }
 
@@ -98,8 +102,8 @@ export class CanvasText {
     (testPreviewDom as unknown as HTMLElement).innerHTML = ''; // TEST ONLY, TO BE REMOVED
     testPreviewDom?.appendChild(canvas); // TEST ONLY, TO BE REMOVED
     testPreviewDom?.appendChild(this.normalMapCanvas2); // TEST ONLY, TO BE REMOVED
-    // testPreviewDom?.appendChild(this.normalMapOutlineCanvas); // TEST ONLY, TO BE REMOVED
-    // testPreviewDom?.appendChild(this.normalMapOutlineCanvas2); // TEST ONLY, TO BE REMOVED
+    testPreviewDom?.appendChild(this.normalMapOutlineCanvas); // TEST ONLY, TO BE REMOVED
+    testPreviewDom?.appendChild(this.normalMapOutlineCanvas2); // TEST ONLY, TO BE REMOVED
   }
 
   public async maskImage(ctx: CanvasRenderingContext2D, img: HTMLImageElement) {
@@ -149,7 +153,7 @@ export class CanvasText {
     this.normalMapCtx.fill();
     this.normalMapCtx.globalCompositeOperation = 'source-over';
 
-    const normalMap = await imgToNormalMap(this.normalMapCanvas);
+    const normalMap = await imgToNormalMap(this.normalMapCanvas, true);
     this.normalMapCtx2.drawImage(normalMap, 0, 0);
   }
 
@@ -175,8 +179,7 @@ export class CanvasText {
   }
 
   private printTextMapToStrokeMap() {
-    // this.normalMapCtx2.drawImage(this.normalMapCanvas, 0, 0);
-    // this.normalMapOutlineCtx2.drawImage(this.normalMapOutlineCanvas, 0, 0);
+    this.normalMapOutlineCtx2.drawImage(this.normalMapCanvas2, 0, 0);
   }
 
   public async previewText({

@@ -8,6 +8,10 @@ import { createPortal } from 'react-dom';
 
 import styles from './NavText.module.scss';
 
+// eslint-disable-next-line
+// @ts-ignore
+import { NormalMapGenerator } from 'normalmap-online';
+
 // TODO - Pre load the fonts somewhere
 async function loadFonts(fontUrl: string) {
   const font = new FontFace('testFont', `url(${fontUrl})`);
@@ -24,6 +28,15 @@ async function loadImage(src: string): Promise<HTMLImageElement> {
     img.onload = () => resolve(img);
     img.onerror = reject;
     img.src = src;
+  });
+}
+
+const normalMapGenerator = NormalMapGenerator.instance();
+async function imgToNormalMap(img: HTMLImageElement) {
+  return normalMapGenerator.generateFromImage(img, {
+    strength: 0.5,
+    blur: 7,
+    level: 1,
   });
 }
 
@@ -45,6 +58,9 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
   const outlineImgMemo = useMemo<Promise<HTMLImageElement>>(() => {
     return loadImage(getMaterialUrl(editText?.outline));
   }, [editText?.outline]);
+  const normalMapImgMemo = useMemo<Promise<HTMLImageElement>>(() => {
+    return loadImage('/Fabric_Knitted_006_height_small.png');
+  }, []);
 
   useEffect(() => {
     const previewImgDom = previewImgRef.current as HTMLImageElement;
@@ -73,16 +89,22 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
 
       const img = editText?.material && (await materialImgMemo);
       const outlineImg = editText?.outline && (await outlineImgMemo);
+      const normalMapPatternImg = await normalMapImgMemo;
+
+      // const normalMapImg = (await imgToNormalMap(normalMapImgEntry)) as unknown as HTMLImageElement;
 
       await canvasText.previewText({
         text: editText.text,
         material: img,
         outline: outlineImg,
         previewImg: previewImgDom,
+        normalMapPatternImg,
       });
 
       updateText(editText.key, {
         preview: new CanvasTexture(canvasText.getOutlineCanvas()),
+        normalMap: new CanvasTexture(canvasText.getNormalMapCanvas()),
+        // normalMap: new CanvasTexture(canvasText.getNormalMapCanvas2()),
       });
     })();
   }, [editText?.text, editText?.material, editText?.outline, editText?.font, isVisiblePreview]);
@@ -92,24 +114,27 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
   }
 
   return createPortal(
-    <div id='testPreview' className={styles.textPreview}>
-      {!editText?.text ? (
-        <div className={styles.noText}>Enter text to show preview</div>
-      ) : (
-        <>
-          <div className={styles.textPreview__imgContainer}>
-            <img
-              height={80}
-              width={640}
-              ref={(el) => {
-                previewImgRef.current = el;
-                setIsVisiblePreview(!!el);
-              }}
-            />
-          </div>
-        </>
-      )}
-    </div>,
+    <>
+      <div id='testPreview' style={{ position: 'absolute', zIndex: '100' }} />
+      <div className={styles.textPreview}>
+        {!editText?.text ? (
+          <div className={styles.noText}>Enter text to show preview</div>
+        ) : (
+          <>
+            <div className={styles.textPreview__imgContainer}>
+              <img
+                height={80}
+                width={640}
+                ref={(el) => {
+                  previewImgRef.current = el;
+                  setIsVisiblePreview(!!el);
+                }}
+              />
+            </div>
+          </>
+        )}
+      </div>
+    </>,
     portalRef,
   );
 };

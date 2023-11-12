@@ -1,7 +1,15 @@
 import { Decal } from '@react-three/drei';
 import { EulerArray, TextCustomiser, Vector3Array } from '@store/customiser';
 import { useEffect, useMemo, useRef } from 'react';
-import { Euler, EulerOrder, MathUtils, MeshStandardMaterial, Texture, Vector3 } from 'three';
+import {
+  Euler,
+  EulerOrder,
+  MathUtils,
+  MeshStandardMaterial,
+  Texture,
+  Vector2,
+  Vector3,
+} from 'three';
 
 export interface DecalTextProps {
   text?: TextCustomiser;
@@ -49,6 +57,9 @@ const DecalText = ({ text = {}, position, orientation, scale = 1 }: DecalTextPro
         depthTest
         depthWrite={false}
         map={text.preview instanceof Texture ? text.preview : null}
+        normalMap={text.normalMap instanceof Texture ? text.normalMap : null}
+        normalScale={new Vector2(2, 2)}
+        // normalMap={}
       ></meshStandardMaterial>
     </Decal>
   );

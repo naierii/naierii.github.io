@@ -91,6 +91,7 @@ export interface TextCustomiser {
   crystalPrice?: AddonPrice;
   totalPrice?: number;
   preview?: Texture;
+  normalMap?: Texture;
 }
 export interface NavItem {
   id?: Scalars['ID'];

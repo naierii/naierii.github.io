@@ -98,8 +98,8 @@ export class CanvasText {
     (testPreviewDom as unknown as HTMLElement).innerHTML = ''; // TEST ONLY, TO BE REMOVED
     testPreviewDom?.appendChild(canvas); // TEST ONLY, TO BE REMOVED
     testPreviewDom?.appendChild(this.normalMapCanvas2); // TEST ONLY, TO BE REMOVED
-    testPreviewDom?.appendChild(this.normalMapOutlineCanvas); // TEST ONLY, TO BE REMOVED
-    testPreviewDom?.appendChild(this.normalMapOutlineCanvas2); // TEST ONLY, TO BE REMOVED
+    // testPreviewDom?.appendChild(this.normalMapOutlineCanvas); // TEST ONLY, TO BE REMOVED
+    // testPreviewDom?.appendChild(this.normalMapOutlineCanvas2); // TEST ONLY, TO BE REMOVED
   }
 
   public async maskImage(ctx: CanvasRenderingContext2D, img: HTMLImageElement) {
@@ -139,12 +139,12 @@ export class CanvasText {
   private async showTestMap(text: string, normalMapPatternImg: HTMLImageElement | undefined) {
     if (!normalMapPatternImg) return;
     this.drawPreviewText(this.normalMapCtx, text);
-    // this.normalMapCtx.drawImage(normalMapPatternImg, 0, 0);
     const pattern = this.normalMapCtx.createPattern(normalMapPatternImg, 'repeat');
 
     if (!pattern) return;
 
     this.normalMapCtx.globalCompositeOperation = 'source-in';
+    this.normalMapCtx.rect(0, 0, this.canvasWidth, this.canvasHeight);
     this.normalMapCtx.fillStyle = pattern;
     this.normalMapCtx.fill();
     this.normalMapCtx.globalCompositeOperation = 'source-over';

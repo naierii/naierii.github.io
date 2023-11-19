@@ -59,7 +59,6 @@ const DecalText = ({ text = {}, position, orientation, scale = 1 }: DecalTextPro
         map={text.preview instanceof Texture ? text.preview : null}
         normalMap={text.normalMap instanceof Texture ? text.normalMap : null}
         normalScale={new Vector2(2, 2)}
-        // normalMap={}
       ></meshStandardMaterial>
     </Decal>
   );

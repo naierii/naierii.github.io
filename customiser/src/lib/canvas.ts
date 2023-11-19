@@ -9,16 +9,11 @@ export function getMaterialUrl(material: MaterialFragment | undefined): string {
 }
 
 const normalMapGenerator = NormalMapGenerator.instance();
-async function imgToNormalMap(
-  img: HTMLImageElement | HTMLCanvasElement,
-  hasNoBackground?: boolean,
-) {
+async function imgToNormalMap(img: HTMLImageElement | HTMLCanvasElement) {
   return normalMapGenerator.generateFromImage(img, {
     strength: 0.5,
-    blur: 0,
-    // blur: 7,
+    blur: 7,
     level: 1,
-    hasNoBackground,
   });
 }
 
@@ -35,13 +30,13 @@ export class CanvasText {
   ctx: CanvasRenderingContext2D;
   outlineCanvas: HTMLCanvasElement;
   outlineCtx: CanvasRenderingContext2D;
+  normalMapTextureCanvas: HTMLCanvasElement;
+  normalMapTextureCtx: CanvasRenderingContext2D;
   normalMapCanvas: HTMLCanvasElement;
   normalMapCtx: CanvasRenderingContext2D;
-  normalMapCanvas2: HTMLCanvasElement;
-  normalMapCtx2: CanvasRenderingContext2D;
+  normalMapOutlineTextureCanvas: HTMLCanvasElement;
+  normalMapOutlineTextureCtx: CanvasRenderingContext2D;
   normalMapOutlineCanvas: HTMLCanvasElement;
-  normalMapOutlineCtx: CanvasRenderingContext2D;
-  normalMapOutlineCanvas2: HTMLCanvasElement;
   normalMapOutlineCtx2: CanvasRenderingContext2D;
 
   canvasHeight: number;
@@ -56,7 +51,6 @@ export class CanvasText {
     this.canvas = document.createElement('canvas');
     this.canvas.height = this.canvasHeight;
     this.canvas.width = this.canvasWidth;
-    this.canvas.style.display = 'none';
     this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
 
     this.outlineCanvas = document.createElement('canvas');
@@ -64,27 +58,31 @@ export class CanvasText {
     this.outlineCanvas.width = this.canvasWidth;
     this.outlineCtx = this.outlineCanvas.getContext('2d') as CanvasRenderingContext2D;
 
+    // Normal map section
+
+    this.normalMapTextureCanvas = document.createElement('canvas');
+    this.normalMapTextureCanvas.height = this.canvasHeight;
+    this.normalMapTextureCanvas.width = this.canvasWidth;
+    this.normalMapTextureCtx = this.normalMapTextureCanvas.getContext(
+      '2d',
+    ) as CanvasRenderingContext2D;
+
     this.normalMapCanvas = document.createElement('canvas');
     this.normalMapCanvas.height = this.canvasHeight;
     this.normalMapCanvas.width = this.canvasWidth;
     this.normalMapCtx = this.normalMapCanvas.getContext('2d') as CanvasRenderingContext2D;
 
-    this.normalMapCanvas2 = document.createElement('canvas');
-    this.normalMapCanvas2.height = this.canvasHeight;
-    this.normalMapCanvas2.width = this.canvasWidth;
-    this.normalMapCtx2 = this.normalMapCanvas2.getContext('2d') as CanvasRenderingContext2D;
+    this.normalMapOutlineTextureCanvas = document.createElement('canvas');
+    this.normalMapOutlineTextureCanvas.height = this.canvasHeight;
+    this.normalMapOutlineTextureCanvas.width = this.canvasWidth;
+    this.normalMapOutlineTextureCtx = this.normalMapOutlineTextureCanvas.getContext(
+      '2d',
+    ) as CanvasRenderingContext2D;
 
     this.normalMapOutlineCanvas = document.createElement('canvas');
     this.normalMapOutlineCanvas.height = this.canvasHeight;
     this.normalMapOutlineCanvas.width = this.canvasWidth;
-    this.normalMapOutlineCtx = this.normalMapOutlineCanvas.getContext(
-      '2d',
-    ) as CanvasRenderingContext2D;
-
-    this.normalMapOutlineCanvas2 = document.createElement('canvas');
-    this.normalMapOutlineCanvas2.height = this.canvasHeight;
-    this.normalMapOutlineCanvas2.width = this.canvasWidth;
-    this.normalMapOutlineCtx2 = this.normalMapOutlineCanvas2.getContext(
+    this.normalMapOutlineCtx2 = this.normalMapOutlineCanvas.getContext(
       '2d',
     ) as CanvasRenderingContext2D;
   }
@@ -100,10 +98,11 @@ export class CanvasText {
   public showTestCanvas(canvas: HTMLCanvasElement) {
     const testPreviewDom = document.getElementById('testPreview'); // TEST ONLY, TO BE REMOVED
     (testPreviewDom as unknown as HTMLElement).innerHTML = ''; // TEST ONLY, TO BE REMOVED
-    testPreviewDom?.appendChild(canvas); // TEST ONLY, TO BE REMOVED
-    testPreviewDom?.appendChild(this.normalMapCanvas2); // TEST ONLY, TO BE REMOVED
-    testPreviewDom?.appendChild(this.normalMapOutlineCanvas); // TEST ONLY, TO BE REMOVED
-    testPreviewDom?.appendChild(this.normalMapOutlineCanvas2); // TEST ONLY, TO BE REMOVED
+    // testPreviewDom?.appendChild(canvas); // TEST ONLY, TO BE REMOVED
+    // testPreviewDom?.appendChild(this.normalMapCanvas); // TEST ONLY, TO BE REMOVED
+    // testPreviewDom?.appendChild(this.normalMapOutlineTextureCanvas); // TEST ONLY, TO BE REMOVED
+    // testPreviewDom?.appendChild(this.normalMapOutlineCanvas); // TEST ONLY, TO BE REMOVED
+    // testPreviewDom?.appendChild(this.outlineCanvas); // TEST ONLY, TO BE REMOVED
   }
 
   public async maskImage(ctx: CanvasRenderingContext2D, img: HTMLImageElement) {
@@ -140,46 +139,49 @@ export class CanvasText {
     ctx.globalCompositeOperation = 'source-over'; // reset to default
   }
 
-  private async showTestMap(text: string, normalMapPatternImg: HTMLImageElement | undefined) {
+  private async drawNormalMap(text: string, normalMapPatternImg: HTMLImageElement | undefined) {
     if (!normalMapPatternImg) return;
-    this.drawPreviewText(this.normalMapCtx, text);
-    const pattern = this.normalMapCtx.createPattern(normalMapPatternImg, 'repeat');
+    this.drawPreviewText(this.normalMapTextureCtx, text);
+    const pattern = this.normalMapTextureCtx.createPattern(normalMapPatternImg, 'repeat');
 
     if (!pattern) return;
 
-    this.normalMapCtx.globalCompositeOperation = 'source-in';
-    this.normalMapCtx.rect(0, 0, this.canvasWidth, this.canvasHeight);
-    this.normalMapCtx.fillStyle = pattern;
-    this.normalMapCtx.fill();
-    this.normalMapCtx.globalCompositeOperation = 'source-over';
+    this.normalMapTextureCtx.globalCompositeOperation = 'source-in';
+    this.normalMapTextureCtx.rect(0, 0, this.canvasWidth, this.canvasHeight);
+    this.normalMapTextureCtx.fillStyle = pattern;
+    this.normalMapTextureCtx.fill();
+    this.normalMapTextureCtx.globalCompositeOperation = 'source-over';
 
-    const normalMap = await imgToNormalMap(this.normalMapCanvas, true);
-    this.normalMapCtx2.drawImage(normalMap, 0, 0);
+    const normalMap = await imgToNormalMap(this.normalMapTextureCanvas);
+    this.normalMapCtx.drawImage(normalMap, 0, 0);
   }
 
-  private async showTestOutlineMap(
+  private async drawOutlineNormalMap(
     text: string,
     normalMapPatternImg: HTMLImageElement | undefined,
   ) {
     if (!normalMapPatternImg) return;
-    this.drawPreviewOutlineOnlyText(this.normalMapOutlineCtx, text);
+    this.drawPreviewOutlineOnlyText(this.normalMapOutlineTextureCtx, text);
 
-    const pattern = this.normalMapOutlineCtx.createPattern(normalMapPatternImg, 'repeat');
+    const pattern = this.normalMapOutlineTextureCtx.createPattern(normalMapPatternImg, 'repeat');
 
     if (!pattern) return;
 
-    this.normalMapOutlineCtx.globalCompositeOperation = 'source-in';
-    this.normalMapOutlineCtx.rect(0, 0, this.canvasWidth, this.canvasHeight);
-    this.normalMapOutlineCtx.fillStyle = pattern;
-    this.normalMapOutlineCtx.fill();
-    this.normalMapOutlineCtx.globalCompositeOperation = 'source-over';
+    this.normalMapOutlineTextureCtx.globalCompositeOperation = 'source-in';
+    this.normalMapOutlineTextureCtx.rect(0, 0, this.canvasWidth, this.canvasHeight);
+    this.normalMapOutlineTextureCtx.fillStyle = pattern;
+    this.normalMapOutlineTextureCtx.fill();
+    this.normalMapOutlineTextureCtx.globalCompositeOperation = 'source-over';
 
-    const normalMap = await imgToNormalMap(this.normalMapOutlineCanvas);
+    const normalMap = await imgToNormalMap(this.normalMapOutlineTextureCanvas);
     this.normalMapOutlineCtx2.drawImage(normalMap, 0, 0);
   }
 
   private printTextMapToStrokeMap() {
-    this.normalMapOutlineCtx2.drawImage(this.normalMapCanvas2, 0, 0);
+    this.normalMapCtx.globalCompositeOperation = 'destination-in';
+    this.normalMapCtx.drawImage(this.normalMapTextureCanvas, 0, 0);
+    this.normalMapCtx.globalCompositeOperation = 'source-over'; // reset to default
+    this.normalMapOutlineCtx2.drawImage(this.normalMapCanvas, 0, 0);
   }
 
   public async previewText({
@@ -190,9 +192,13 @@ export class CanvasText {
     normalMapPatternImg,
   }: PreviewText) {
     this.clear();
-    this.showTestCanvas(this.normalMapCanvas);
-    await this.showTestMap(text, normalMapPatternImg);
-    await this.showTestOutlineMap(text, normalMapPatternImg);
+    this.showTestCanvas(this.normalMapTextureCanvas);
+
+    // Map should have a flag
+    await this.drawNormalMap(text, normalMapPatternImg);
+
+    // outline map should have a flag
+    await this.drawOutlineNormalMap(text, normalMapPatternImg);
 
     this.printTextMapToStrokeMap();
 
@@ -215,23 +221,13 @@ export class CanvasText {
     this.outlineCtx.drawImage(this.canvas, 0, 0);
   }
 
-  getCanvas() {
-    return this.canvas;
-  }
   getOutlineCanvas() {
     return this.outlineCanvas;
   }
-  getNormalMapCanvas() {
-    return this.normalMapCanvas;
+  getNormalMapTextureCanvas() {
+    return this.normalMapTextureCanvas;
   }
-  getNormalMapCanvas2() {
-    return this.normalMapCanvas2;
-  }
-
-  getCtx() {
-    return this.ctx;
-  }
-  getOutlineCtx() {
-    return this.outlineCtx;
+  getNormalMapOutlineCanvas() {
+    return this.normalMapOutlineCanvas;
   }
 }

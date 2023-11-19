@@ -59,7 +59,8 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
     return loadImage(getMaterialUrl(editText?.outline));
   }, [editText?.outline]);
   const normalMapImgMemo = useMemo<Promise<HTMLImageElement>>(() => {
-    return loadImage('/Fabric_Knitted_006_height_small.png');
+    // return loadImage('/Fabric_Knitted_006_height_small.png');
+    return loadImage('/DisplacementMap.png');
   }, []);
 
   useEffect(() => {
@@ -103,7 +104,7 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
 
       updateText(editText.key, {
         preview: new CanvasTexture(canvasText.getOutlineCanvas()),
-        normalMap: new CanvasTexture(canvasText.getNormalMapCanvas2()),
+        normalMap: new CanvasTexture(canvasText.getNormalMapOutlineCanvas()),
       });
     })();
   }, [editText?.text, editText?.material, editText?.outline, editText?.font, isVisiblePreview]);

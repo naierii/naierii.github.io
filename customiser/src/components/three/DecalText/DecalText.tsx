@@ -54,11 +54,16 @@ const DecalText = ({ text = {}, position, orientation, scale = 1 }: DecalTextPro
       <meshStandardMaterial
         ref={matRef}
         transparent
+        // roughness={0}
         depthTest
         depthWrite={false}
         map={text.preview instanceof Texture ? text.preview : null}
-        normalMap={text.normalMap instanceof Texture ? text.normalMap : null}
-        normalScale={new Vector2(2, 2)}
+        normalMap={
+          text.normalMap instanceof Texture && text.selectedName?.attributes?.name === 'Luxury'
+            ? text.normalMap
+            : null
+        }
+        normalScale={new Vector2(0.5, 0.5)}
       ></meshStandardMaterial>
     </Decal>
   );

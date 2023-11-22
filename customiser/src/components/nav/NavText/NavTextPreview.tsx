@@ -61,6 +61,7 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
   const normalMapImgMemo = useMemo<Promise<HTMLImageElement>>(() => {
     // return loadImage('/Fabric_Knitted_006_height_small.png');
     return loadImage('/DisplacementMap.png');
+    // return loadImage('/crystal-pattern-small.png');
   }, []);
 
   useEffect(() => {

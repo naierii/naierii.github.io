@@ -102,7 +102,6 @@ export class CanvasText {
     // testPreviewDom?.appendChild(this.normalMapCanvas); // TEST ONLY, TO BE REMOVED
     // testPreviewDom?.appendChild(this.normalMapOutlineTextureCanvas); // TEST ONLY, TO BE REMOVED
     // testPreviewDom?.appendChild(this.normalMapOutlineCanvas); // TEST ONLY, TO BE REMOVED
-    // testPreviewDom?.appendChild(this.outlineCanvas); // TEST ONLY, TO BE REMOVED
   }
 
   public async maskImage(ctx: CanvasRenderingContext2D, img: HTMLImageElement) {

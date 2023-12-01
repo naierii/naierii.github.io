@@ -1,4 +1,5 @@
 import type { MaterialFragment } from '@graphql/generated/graphql';
+import type { Falsey } from 'lodash';
 // eslint-disable-next-line
 // @ts-ignore
 import { NormalMapGenerator } from 'normalmap-online';
@@ -8,11 +9,20 @@ export function getMaterialUrl(material: MaterialFragment | undefined): string {
     ?.attributes?.formats.large.url;
 }
 
+export type NormalMapType = 'embroidery' | 'crystals';
+
+// TODO - Relocate this
+interface ImgToNormalMapParams {
+  img: HTMLImageElement | HTMLCanvasElement;
+  hasPuff?: boolean;
+  blur?: number;
+}
 const normalMapGenerator = NormalMapGenerator.instance();
-async function imgToNormalMap(img: HTMLImageElement | HTMLCanvasElement) {
+async function imgToNormalMap({ img, hasPuff, blur }: ImgToNormalMapParams) {
+  const blurAmount = hasPuff ? blur || 7 : 1;
   return normalMapGenerator.generateFromImage(img, {
     strength: 0.5,
-    blur: 7,
+    blur: blurAmount,
     level: 1,
   });
 }
@@ -22,7 +32,12 @@ interface PreviewText {
   material: HTMLImageElement | undefined;
   outline: HTMLImageElement | undefined;
   previewImg: HTMLImageElement;
-  normalMapPatternImg?: HTMLImageElement;
+  normalMapPatternImg?: HTMLImageElement | false;
+}
+
+interface CanvasTextConstructor {
+  hasPuff: boolean;
+  toNormalMap: boolean;
 }
 
 export class CanvasText {
@@ -39,14 +54,22 @@ export class CanvasText {
   normalMapOutlineCanvas: HTMLCanvasElement;
   normalMapOutlineCtx2: CanvasRenderingContext2D;
 
+  hasPuff: boolean;
+  toNormalMap: boolean;
+
   canvasHeight: number;
   canvasWidth: number;
   fontSize: number;
+  outlineWidth: number;
 
-  constructor() {
+  constructor({ hasPuff, toNormalMap }: CanvasTextConstructor) {
+    this.hasPuff = hasPuff;
+    this.toNormalMap = toNormalMap;
+
     this.fontSize = 360;
     this.canvasHeight = 400;
     this.canvasWidth = 3200;
+    this.outlineWidth = 20;
 
     this.canvas = document.createElement('canvas');
     this.canvas.height = this.canvasHeight;
@@ -119,7 +142,7 @@ export class CanvasText {
   public drawPreviewOutlineText(text: string) {
     this.outlineCtx.font = `${this.fontSize}px testFont`;
     this.outlineCtx.textAlign = 'center';
-    this.outlineCtx.lineWidth = 30;
+    this.outlineCtx.lineWidth = this.outlineWidth;
     this.outlineCtx.strokeText(
       text,
       this.canvas.width / 2,
@@ -138,41 +161,53 @@ export class CanvasText {
     ctx.globalCompositeOperation = 'source-over'; // reset to default
   }
 
-  private async drawNormalMap(text: string, normalMapPatternImg: HTMLImageElement | undefined) {
-    if (!normalMapPatternImg) return;
+  private async drawNormalMap(text: string, normalMapPatternImg: HTMLImageElement | Falsey) {
     this.drawPreviewText(this.normalMapTextureCtx, text);
-    const pattern = this.normalMapTextureCtx.createPattern(normalMapPatternImg, 'repeat');
 
-    if (!pattern) return;
+    if (normalMapPatternImg) {
+      const pattern = this.normalMapTextureCtx.createPattern(normalMapPatternImg, 'repeat');
 
-    this.normalMapTextureCtx.globalCompositeOperation = 'source-in';
-    this.normalMapTextureCtx.rect(0, 0, this.canvasWidth, this.canvasHeight);
-    this.normalMapTextureCtx.fillStyle = pattern;
-    this.normalMapTextureCtx.fill();
-    this.normalMapTextureCtx.globalCompositeOperation = 'source-over';
+      if (!pattern) return;
 
-    const normalMap = await imgToNormalMap(this.normalMapTextureCanvas);
+      this.normalMapTextureCtx.globalCompositeOperation = 'source-in';
+      this.normalMapTextureCtx.rect(0, 0, this.canvasWidth, this.canvasHeight);
+      this.normalMapTextureCtx.fillStyle = pattern;
+      this.normalMapTextureCtx.fill();
+      this.normalMapTextureCtx.globalCompositeOperation = 'source-over';
+    }
+
+    console.log('toNormalMap', this.toNormalMap);
+    const normalMap = this.toNormalMap
+      ? await imgToNormalMap({
+          img: this.normalMapTextureCanvas,
+          hasPuff: this.hasPuff,
+        })
+      : this.normalMapTextureCanvas;
     this.normalMapCtx.drawImage(normalMap, 0, 0);
   }
 
-  private async drawOutlineNormalMap(
-    text: string,
-    normalMapPatternImg: HTMLImageElement | undefined,
-  ) {
-    if (!normalMapPatternImg) return;
+  private async drawOutlineNormalMap(text: string, normalMapPatternImg: HTMLImageElement | Falsey) {
     this.drawPreviewOutlineOnlyText(this.normalMapOutlineTextureCtx, text);
 
-    const pattern = this.normalMapOutlineTextureCtx.createPattern(normalMapPatternImg, 'repeat');
+    if (normalMapPatternImg) {
+      const pattern = this.normalMapOutlineTextureCtx.createPattern(normalMapPatternImg, 'repeat');
 
-    if (!pattern) return;
+      if (!pattern) return;
 
-    this.normalMapOutlineTextureCtx.globalCompositeOperation = 'source-in';
-    this.normalMapOutlineTextureCtx.rect(0, 0, this.canvasWidth, this.canvasHeight);
-    this.normalMapOutlineTextureCtx.fillStyle = pattern;
-    this.normalMapOutlineTextureCtx.fill();
-    this.normalMapOutlineTextureCtx.globalCompositeOperation = 'source-over';
+      this.normalMapOutlineTextureCtx.globalCompositeOperation = 'source-in';
+      this.normalMapOutlineTextureCtx.rect(0, 0, this.canvasWidth, this.canvasHeight);
+      this.normalMapOutlineTextureCtx.fillStyle = pattern;
+      this.normalMapOutlineTextureCtx.fill();
+      this.normalMapOutlineTextureCtx.globalCompositeOperation = 'source-over';
+    }
 
-    const normalMap = await imgToNormalMap(this.normalMapOutlineTextureCanvas);
+    const normalMap = this.toNormalMap
+      ? await imgToNormalMap({
+          img: this.normalMapOutlineTextureCanvas,
+          hasPuff: this.hasPuff,
+          blur: 4,
+        })
+      : this.normalMapOutlineTextureCanvas;
     this.normalMapOutlineCtx2.drawImage(normalMap, 0, 0);
   }
 
@@ -193,10 +228,7 @@ export class CanvasText {
     this.clear();
     this.showTestCanvas(this.normalMapTextureCanvas);
 
-    // Map should have a flag
     await this.drawNormalMap(text, normalMapPatternImg);
-
-    // outline map should have a flag
     await this.drawOutlineNormalMap(text, normalMapPatternImg);
 
     this.printTextMapToStrokeMap();

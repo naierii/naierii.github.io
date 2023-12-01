@@ -35,6 +35,25 @@ const DecalText = ({ text = {}, position, orientation, scale = 1 }: DecalTextPro
       ? [text.material.attributes.images[0].image.data.attributes.url]
       : [];
 
+  const shouldNormalMap =
+    text.normalMap instanceof Texture && text.selectedName?.attributes?.name === 'Luxury';
+  const normalMap = shouldNormalMap ? text.normalMap : null;
+
+  // const isShiny = shouldNormalMap ? false : true;
+
+  const isLuxury: boolean = text.selectedName?.id === '2' ? true : false;
+  const hasPuff: boolean = text.puffPrice ? true : false;
+  const hasCrystals: boolean = text.crystalPrice ? true : false;
+
+  let normalScale = 1;
+  if (hasCrystals) {
+    normalScale = 4;
+  } else if (isLuxury && !hasPuff) {
+    normalScale = 0.5;
+  } else if (isLuxury && hasPuff) {
+    normalScale = 3;
+  }
+
   const scaleModifier = useMemo(() => {
     return new Vector3(3.2 * scale, 0.4 * scale, 4);
   }, [scale]);
@@ -54,16 +73,12 @@ const DecalText = ({ text = {}, position, orientation, scale = 1 }: DecalTextPro
       <meshStandardMaterial
         ref={matRef}
         transparent
-        // roughness={0}
+        roughness={isLuxury && !hasCrystals ? 1 : 0}
         depthTest
         depthWrite={false}
         map={text.preview instanceof Texture ? text.preview : null}
-        normalMap={
-          text.normalMap instanceof Texture && text.selectedName?.attributes?.name === 'Luxury'
-            ? text.normalMap
-            : null
-        }
-        normalScale={new Vector2(0.5, 0.5)}
+        normalMap={normalMap}
+        normalScale={new Vector2(normalScale, normalScale)}
       ></meshStandardMaterial>
     </Decal>
   );

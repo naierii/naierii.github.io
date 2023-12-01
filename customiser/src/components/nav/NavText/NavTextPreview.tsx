@@ -1,4 +1,4 @@
-import { CanvasText, getMaterialUrl } from '@lib/canvas';
+import { CanvasText, NormalMapType, getMaterialUrl } from '@lib/canvas';
 import { useCustomiserStore } from '@store/customiser';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CanvasTexture } from 'three';
@@ -7,10 +7,6 @@ import { usePortalRef } from '@hooks';
 import { createPortal } from 'react-dom';
 
 import styles from './NavText.module.scss';
-
-// eslint-disable-next-line
-// @ts-ignore
-import { NormalMapGenerator } from 'normalmap-online';
 
 // TODO - Pre load the fonts somewhere
 async function loadFonts(fontUrl: string) {
@@ -31,19 +27,15 @@ async function loadImage(src: string): Promise<HTMLImageElement> {
   });
 }
 
-const normalMapGenerator = NormalMapGenerator.instance();
-async function imgToNormalMap(img: HTMLImageElement) {
-  return normalMapGenerator.generateFromImage(img, {
-    strength: 0.5,
-    blur: 7,
-    level: 1,
-  });
-}
-
 const NavTextPreview = ({ editText }: NavTextSelectProps) => {
   const previewImgRef = useRef<HTMLImageElement | null>(null);
   const [fontFamily, setFontFamily] = useState<string | undefined>(editText?.font);
   const [isVisiblePreview, setIsVisiblePreview] = useState(false);
+
+  const hasCrystals: boolean = editText?.crystalPrice ? true : false;
+  const isLuxury: boolean = editText?.selectedName?.id === '2' ? true : false;
+  const hasPuff: boolean = editText?.puffPrice && !hasCrystals ? true : false; // 3D puff
+  const toNormalMap = hasCrystals ? false : true;
 
   const { updateText } = useCustomiserStore();
 
@@ -58,17 +50,26 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
   const outlineImgMemo = useMemo<Promise<HTMLImageElement>>(() => {
     return loadImage(getMaterialUrl(editText?.outline));
   }, [editText?.outline]);
-  const normalMapImgMemo = useMemo<Promise<HTMLImageElement>>(() => {
-    // return loadImage('/Fabric_Knitted_006_height_small.png');
-    return loadImage('/DisplacementMap.png');
-    // return loadImage('/crystal-pattern-small.png');
+  const fabricPatternImgMemo = useMemo<Promise<HTMLImageElement>>(() => {
+    return loadImage('/Fabric_Knitted_006_height_small.png');
+  }, []);
+  const crystalNormalMapImgMemo = useMemo<Promise<HTMLImageElement>>(() => {
+    // return loadImage('/crystal-32.png');
+    // return loadImage('/sphere-32.png');
+    // return loadImage('/ring-32.png');
+    // return loadImage('/grid-circle.png');
+    // return loadImage('/pyramid-24.png');
+    return loadImage('/crystal-16.png');
   }, []);
 
   useEffect(() => {
     const previewImgDom = previewImgRef.current as HTMLImageElement;
 
     (async () => {
-      const canvasText = new CanvasText();
+      const canvasText = new CanvasText({
+        hasPuff,
+        toNormalMap,
+      });
 
       if (!editText || !editText.key || !isVisiblePreview) {
         canvasText.clear();
@@ -91,16 +92,18 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
 
       const img = editText?.material && (await materialImgMemo);
       const outlineImg = editText?.outline && (await outlineImgMemo);
-      const normalMapPatternImg = await normalMapImgMemo;
+      const embroideryPattern = await fabricPatternImgMemo;
+      const crystalNormalMap = await crystalNormalMapImgMemo;
 
-      // const normalMapImg = (await imgToNormalMap(normalMapImgEntry)) as unknown as HTMLImageElement;
+      const shouldUsePattern = isLuxury && !hasPuff;
+      const patternImg = shouldUsePattern && (hasCrystals ? crystalNormalMap : embroideryPattern);
 
       await canvasText.previewText({
         text: editText.text,
         material: img,
         outline: outlineImg,
         previewImg: previewImgDom,
-        normalMapPatternImg,
+        normalMapPatternImg: patternImg,
       });
 
       updateText(editText.key, {
@@ -108,7 +111,14 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
         normalMap: new CanvasTexture(canvasText.getNormalMapOutlineCanvas()),
       });
     })();
-  }, [editText?.text, editText?.material, editText?.outline, editText?.font, isVisiblePreview]);
+  }, [
+    editText?.text,
+    editText?.material,
+    editText?.outline,
+    editText?.font,
+    isVisiblePreview,
+    editText?.puffPrice,
+  ]);
 
   if (!portalRef) {
     return null;

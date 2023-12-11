@@ -1,4 +1,4 @@
-import { CanvasText, NormalMapType, getMaterialUrl } from '@lib/canvas';
+import { CanvasText, PatternType, getMaterialUrl } from '@lib/canvas';
 import { useCustomiserStore } from '@store/customiser';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CanvasTexture } from 'three';
@@ -27,6 +27,19 @@ async function loadImage(src: string): Promise<HTMLImageElement> {
   });
 }
 
+function getPatternType({
+  hasCrystals,
+  isLuxury,
+}: {
+  hasCrystals: boolean;
+  isLuxury: boolean;
+}): PatternType {
+  if (!hasCrystals && isLuxury) return 'embroidery';
+  else if (hasCrystals) return 'crystals';
+
+  return '';
+}
+
 const NavTextPreview = ({ editText }: NavTextSelectProps) => {
   const previewImgRef = useRef<HTMLImageElement | null>(null);
   const [fontFamily, setFontFamily] = useState<string | undefined>(editText?.font);
@@ -36,6 +49,7 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
   const isLuxury: boolean = editText?.selectedName?.id === '2' ? true : false;
   const hasPuff: boolean = editText?.puffPrice && !hasCrystals ? true : false; // 3D puff
   const toNormalMap = hasCrystals ? false : true;
+  const patternType = getPatternType({ hasCrystals, isLuxury });
 
   const { updateText } = useCustomiserStore();
 
@@ -59,7 +73,8 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
     // return loadImage('/ring-32.png');
     // return loadImage('/grid-circle.png');
     // return loadImage('/pyramid-24.png');
-    return loadImage('/crystal-16.png');
+    // return loadImage('/crystal-16.png');
+    return loadImage('/crystal-12.png');
   }, []);
 
   useEffect(() => {
@@ -69,6 +84,8 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
       const canvasText = new CanvasText({
         hasPuff,
         toNormalMap,
+        patternType,
+        text: editText?.text,
       });
 
       if (!editText || !editText.key || !isVisiblePreview) {
@@ -99,7 +116,6 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
       const patternImg = shouldUsePattern && (hasCrystals ? crystalNormalMap : embroideryPattern);
 
       await canvasText.previewText({
-        text: editText.text,
         material: img,
         outline: outlineImg,
         previewImg: previewImgDom,
@@ -118,6 +134,7 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
     editText?.font,
     isVisiblePreview,
     editText?.puffPrice,
+    editText?.crystalPrice,
   ]);
 
   if (!portalRef) {

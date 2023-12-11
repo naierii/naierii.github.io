@@ -9,8 +9,6 @@ export function getMaterialUrl(material: MaterialFragment | undefined): string {
     ?.attributes?.formats.large.url;
 }
 
-export type NormalMapType = 'embroidery' | 'crystals';
-
 // TODO - Relocate this
 interface ImgToNormalMapParams {
   img: HTMLImageElement | HTMLCanvasElement;
@@ -28,16 +26,19 @@ async function imgToNormalMap({ img, hasPuff, blur }: ImgToNormalMapParams) {
 }
 
 interface PreviewText {
-  text: string;
   material: HTMLImageElement | undefined;
   outline: HTMLImageElement | undefined;
   previewImg: HTMLImageElement;
   normalMapPatternImg?: HTMLImageElement | false;
 }
 
+export type PatternType = 'crystals' | 'embroidery' | Falsey;
+
 interface CanvasTextConstructor {
   hasPuff: boolean;
   toNormalMap: boolean;
+  patternType: PatternType;
+  text?: string;
 }
 
 export class CanvasText {
@@ -56,15 +57,19 @@ export class CanvasText {
 
   hasPuff: boolean;
   toNormalMap: boolean;
+  patternType: PatternType;
+  text?: string;
 
   canvasHeight: number;
   canvasWidth: number;
   fontSize: number;
   outlineWidth: number;
 
-  constructor({ hasPuff, toNormalMap }: CanvasTextConstructor) {
+  constructor({ hasPuff, toNormalMap, text, patternType }: CanvasTextConstructor) {
     this.hasPuff = hasPuff;
     this.toNormalMap = toNormalMap;
+    this.patternType = patternType;
+    this.text = text;
 
     this.fontSize = 360;
     this.canvasHeight = 400;
@@ -133,36 +138,46 @@ export class CanvasText {
     ctx.globalCompositeOperation = 'source-over'; // reset to default
   }
 
-  public drawPreviewText(ctx: CanvasRenderingContext2D, text: string) {
+  public drawPreviewText(ctx: CanvasRenderingContext2D) {
+    if (!this.text) return;
+
     ctx.font = `${this.fontSize}px testFont`;
     ctx.textAlign = 'center';
-    ctx.fillText(text, this.canvas.width / 2, this.canvas.height / 2 + 15 + this.fontSize / 4);
+    ctx.fillText(this.text, this.canvas.width / 2, this.canvas.height / 2 + 15 + this.fontSize / 4);
   }
 
-  public drawPreviewOutlineText(text: string) {
+  public drawPreviewOutlineText() {
+    if (!this.text) return;
+
     this.outlineCtx.font = `${this.fontSize}px testFont`;
     this.outlineCtx.textAlign = 'center';
     this.outlineCtx.lineWidth = this.outlineWidth;
     this.outlineCtx.strokeText(
-      text,
+      this.text,
       this.canvas.width / 2,
       this.canvas.height / 2 + 15 + this.fontSize / 4,
     );
   }
 
-  public drawPreviewOutlineOnlyText(ctx: CanvasRenderingContext2D, text: string) {
+  public drawPreviewOutlineOnlyText(ctx: CanvasRenderingContext2D) {
+    if (!this.text) return;
+
     ctx.font = `${this.fontSize}px testFont`;
     ctx.textAlign = 'center';
     ctx.lineWidth = 30;
     ctx.fillStyle = 'green';
-    ctx.strokeText(text, this.canvas.width / 2, this.canvas.height / 2 + 15 + this.fontSize / 4);
+    ctx.strokeText(
+      this.text,
+      this.canvas.width / 2,
+      this.canvas.height / 2 + 15 + this.fontSize / 4,
+    );
     ctx.globalCompositeOperation = 'destination-out';
-    ctx.fillText(text, this.canvas.width / 2, this.canvas.height / 2 + 15 + this.fontSize / 4);
+    ctx.fillText(this.text, this.canvas.width / 2, this.canvas.height / 2 + 15 + this.fontSize / 4);
     ctx.globalCompositeOperation = 'source-over'; // reset to default
   }
 
-  private async drawNormalMap(text: string, normalMapPatternImg: HTMLImageElement | Falsey) {
-    this.drawPreviewText(this.normalMapTextureCtx, text);
+  private async drawNormalMap(normalMapPatternImg: HTMLImageElement | Falsey) {
+    this.drawPreviewText(this.normalMapTextureCtx);
 
     if (normalMapPatternImg) {
       const pattern = this.normalMapTextureCtx.createPattern(normalMapPatternImg, 'repeat');
@@ -183,11 +198,12 @@ export class CanvasText {
           hasPuff: this.hasPuff,
         })
       : this.normalMapTextureCanvas;
+
     this.normalMapCtx.drawImage(normalMap, 0, 0);
   }
 
-  private async drawOutlineNormalMap(text: string, normalMapPatternImg: HTMLImageElement | Falsey) {
-    this.drawPreviewOutlineOnlyText(this.normalMapOutlineTextureCtx, text);
+  private async drawOutlineNormalMap(normalMapPatternImg: HTMLImageElement | Falsey) {
+    this.drawPreviewOutlineOnlyText(this.normalMapOutlineTextureCtx);
 
     if (normalMapPatternImg) {
       const pattern = this.normalMapOutlineTextureCtx.createPattern(normalMapPatternImg, 'repeat');
@@ -196,18 +212,21 @@ export class CanvasText {
 
       this.normalMapOutlineTextureCtx.globalCompositeOperation = 'source-in';
       this.normalMapOutlineTextureCtx.rect(0, 0, this.canvasWidth, this.canvasHeight);
-      this.normalMapOutlineTextureCtx.fillStyle = pattern;
+      if (this.patternType !== 'crystals') {
+        this.normalMapOutlineTextureCtx.fillStyle = pattern;
+      }
       this.normalMapOutlineTextureCtx.fill();
       this.normalMapOutlineTextureCtx.globalCompositeOperation = 'source-over';
     }
 
-    const normalMap = this.toNormalMap
-      ? await imgToNormalMap({
-          img: this.normalMapOutlineTextureCanvas,
-          hasPuff: this.hasPuff,
-          blur: 4,
-        })
-      : this.normalMapOutlineTextureCanvas;
+    const normalMap =
+      this.toNormalMap || this.patternType === 'crystals'
+        ? await imgToNormalMap({
+            img: this.normalMapOutlineTextureCanvas,
+            hasPuff: this.patternType === 'crystals' ? true : this.hasPuff,
+            blur: 4,
+          })
+        : this.normalMapOutlineTextureCanvas;
     this.normalMapOutlineCtx2.drawImage(normalMap, 0, 0);
   }
 
@@ -218,27 +237,23 @@ export class CanvasText {
     this.normalMapOutlineCtx2.drawImage(this.normalMapCanvas, 0, 0);
   }
 
-  public async previewText({
-    text,
-    material,
-    outline,
-    previewImg,
-    normalMapPatternImg,
-  }: PreviewText) {
+  public async previewText({ material, outline, previewImg, normalMapPatternImg }: PreviewText) {
+    if (!this.text) return;
+
     this.clear();
     this.showTestCanvas(this.normalMapTextureCanvas);
 
-    await this.drawNormalMap(text, normalMapPatternImg);
-    await this.drawOutlineNormalMap(text, normalMapPatternImg);
+    await this.drawNormalMap(normalMapPatternImg);
+    await this.drawOutlineNormalMap(normalMapPatternImg);
 
     this.printTextMapToStrokeMap();
 
     if (outline) {
-      this.drawPreviewOutlineText(text);
+      this.drawPreviewOutlineText();
       await this.maskImage(this.outlineCtx, outline);
     }
 
-    this.drawPreviewText(this.ctx, text);
+    this.drawPreviewText(this.ctx);
 
     if (material) {
       await this.maskImage(this.ctx, material);

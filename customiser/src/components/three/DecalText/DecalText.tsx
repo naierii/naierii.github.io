@@ -79,6 +79,8 @@ const DecalText = ({ text = {}, position, orientation, scale = 1 }: DecalTextPro
         map={text.preview instanceof Texture ? text.preview : null}
         normalMap={normalMap}
         normalScale={new Vector2(normalScale, normalScale)}
+        emissiveMap={text.emissiveMap}
+        emissive={'red'}
       ></meshStandardMaterial>
     </Decal>
   );

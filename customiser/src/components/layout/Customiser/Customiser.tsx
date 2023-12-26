@@ -24,6 +24,14 @@ const Customiser = ({ className }: CustomiserProps) => {
 
   return (
     <div className={rootClassName}>
+      <div
+        id='iInfoContainer'
+        style={{
+          // re-figure out again how to put styled ID in scss
+          position: 'absolute',
+          zIndex: '201',
+        }}
+      />
       <CustomiserNav className={styles.nav} />
       <Header className={styles.header} />
       <svg

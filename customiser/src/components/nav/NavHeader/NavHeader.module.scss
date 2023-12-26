@@ -39,23 +39,6 @@
   font-weight: 900;
 }
 
-.infoIcon {
-  $infoIconColor: rgb(77, 77, 77);
-  border: 4px solid $infoIconColor;
-  color: $infoIconColor;
-  border-radius: 50%;
-  height: 2rem;
-  width: 2rem;
-  font-weight: 900;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.5rem;
-  position: absolute;
-  right: 1.5rem;
-  cursor: pointer;
-}
-
 .minimizeIcon {
   padding-left: 0.8rem;
   width: 40px;

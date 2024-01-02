@@ -92,6 +92,7 @@ export interface TextCustomiser {
   totalPrice?: number;
   preview?: Texture;
   normalMap?: Texture;
+  emissiveMap?: Texture;
 }
 export interface NavItem {
   id?: Scalars['ID'];

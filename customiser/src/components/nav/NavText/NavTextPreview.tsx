@@ -76,6 +76,9 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
     // return loadImage('/crystal-16.png');
     return loadImage('/crystal-12.png');
   }, []);
+  const crystalEmissiveMapImgMemo = useMemo<Promise<HTMLImageElement>>(() => {
+    return loadImage('/crystal-emissive-12.png');
+  }, []);
 
   useEffect(() => {
     const previewImgDom = previewImgRef.current as HTMLImageElement;
@@ -111,6 +114,7 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
       const outlineImg = editText?.outline && (await outlineImgMemo);
       const embroideryPattern = await fabricPatternImgMemo;
       const crystalNormalMap = await crystalNormalMapImgMemo;
+      const crystalEmissiveMap = await crystalEmissiveMapImgMemo;
 
       const shouldUsePattern = isLuxury && !hasPuff;
       const patternImg = shouldUsePattern && (hasCrystals ? crystalNormalMap : embroideryPattern);
@@ -120,11 +124,13 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
         outline: outlineImg,
         previewImg: previewImgDom,
         normalMapPatternImg: patternImg,
+        emissiveMap: crystalEmissiveMap,
       });
 
       updateText(editText.key, {
         preview: new CanvasTexture(canvasText.getOutlineCanvas()),
         normalMap: new CanvasTexture(canvasText.getNormalMapOutlineCanvas()),
+        emissiveMap: new CanvasTexture(canvasText.getEmissiveMapCanvas()),
       });
     })();
   }, [

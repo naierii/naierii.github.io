@@ -30,6 +30,7 @@ interface PreviewText {
   outline: HTMLImageElement | undefined;
   previewImg: HTMLImageElement;
   normalMapPatternImg?: HTMLImageElement | false;
+  emissiveMap?: HTMLImageElement | Falsey;
 }
 
 export type PatternType = 'crystals' | 'embroidery' | Falsey;
@@ -46,14 +47,19 @@ export class CanvasText {
   ctx: CanvasRenderingContext2D;
   outlineCanvas: HTMLCanvasElement;
   outlineCtx: CanvasRenderingContext2D;
+
   normalMapTextureCanvas: HTMLCanvasElement;
   normalMapTextureCtx: CanvasRenderingContext2D;
   normalMapCanvas: HTMLCanvasElement;
   normalMapCtx: CanvasRenderingContext2D;
+
   normalMapOutlineTextureCanvas: HTMLCanvasElement;
   normalMapOutlineTextureCtx: CanvasRenderingContext2D;
   normalMapOutlineCanvas: HTMLCanvasElement;
   normalMapOutlineCtx2: CanvasRenderingContext2D;
+
+  emissiveMapCanvas: HTMLCanvasElement;
+  emissiveMapCtx: CanvasRenderingContext2D;
 
   hasPuff: boolean;
   toNormalMap: boolean;
@@ -113,6 +119,12 @@ export class CanvasText {
     this.normalMapOutlineCtx2 = this.normalMapOutlineCanvas.getContext(
       '2d',
     ) as CanvasRenderingContext2D;
+
+    // TEST emissive map
+    this.emissiveMapCanvas = document.createElement('canvas');
+    this.emissiveMapCanvas.height = this.canvasHeight;
+    this.emissiveMapCanvas.width = this.canvasWidth;
+    this.emissiveMapCtx = this.emissiveMapCanvas.getContext('2d') as CanvasRenderingContext2D;
   }
 
   public clear() {
@@ -127,9 +139,10 @@ export class CanvasText {
     const testPreviewDom = document.getElementById('testPreview'); // TEST ONLY, TO BE REMOVED
     (testPreviewDom as unknown as HTMLElement).innerHTML = ''; // TEST ONLY, TO BE REMOVED
     // testPreviewDom?.appendChild(canvas); // TEST ONLY, TO BE REMOVED
-    // testPreviewDom?.appendChild(this.normalMapCanvas); // TEST ONLY, TO BE REMOVED
+    // testPreviewDom?.appendChild(this2.normalMapCanvas); // TEST ONLY, TO BE REMOVED
     // testPreviewDom?.appendChild(this.normalMapOutlineTextureCanvas); // TEST ONLY, TO BE REMOVED
     // testPreviewDom?.appendChild(this.normalMapOutlineCanvas); // TEST ONLY, TO BE REMOVED
+    // testPreviewDom?.appendChild(this.emissiveMapCanvas); // TEST ONLY, TO BE REMOVED
   }
 
   public async maskImage(ctx: CanvasRenderingContext2D, img: HTMLImageElement) {
@@ -237,7 +250,13 @@ export class CanvasText {
     this.normalMapOutlineCtx2.drawImage(this.normalMapCanvas, 0, 0);
   }
 
-  public async previewText({ material, outline, previewImg, normalMapPatternImg }: PreviewText) {
+  public async previewText({
+    material,
+    outline,
+    previewImg,
+    normalMapPatternImg,
+    emissiveMap,
+  }: PreviewText) {
     if (!this.text) return;
 
     this.clear();
@@ -261,6 +280,18 @@ export class CanvasText {
 
     this.outlineCtx.drawImage(this.canvas, 0, 0);
     previewImg.src = this.outlineCanvas.toDataURL();
+
+    // TEST
+
+    if (emissiveMap) {
+      const pattern = this.emissiveMapCtx.createPattern(emissiveMap, 'repeat');
+
+      if (pattern) {
+        this.emissiveMapCtx.rect(0, 0, this.canvasWidth, this.canvasHeight);
+        this.emissiveMapCtx.fillStyle = pattern;
+        this.emissiveMapCtx.fill();
+      }
+    }
   }
 
   public mergeCanvas() {
@@ -275,5 +306,9 @@ export class CanvasText {
   }
   getNormalMapOutlineCanvas() {
     return this.normalMapOutlineCanvas;
+  }
+
+  getEmissiveMapCanvas() {
+    return this.emissiveMapCanvas;
   }
 }

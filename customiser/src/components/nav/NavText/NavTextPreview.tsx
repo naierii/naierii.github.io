@@ -116,6 +116,7 @@ const NavTextPreview = ({ editText }: NavTextSelectProps) => {
       const crystalNormalMap = await crystalNormalMapImgMemo;
       const crystalEmissiveMap = await crystalEmissiveMapImgMemo;
 
+      // embroidery normal map is generated in the code while crystal pattern image is already a normal map
       const shouldUsePattern = isLuxury && !hasPuff;
       const patternImg = shouldUsePattern && (hasCrystals ? crystalNormalMap : embroideryPattern);
 

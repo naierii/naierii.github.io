@@ -12,10 +12,6 @@ import NavTextSelect from './NavTextSelect';
 import NavTextsSelection from './NavTextsSelection';
 import NavTextPreview from './NavTextPreview';
 
-// export interface NavTextProps {
-
-// }
-
 const NavText = () => {
   const [step, setStep] = useState<number | undefined>(0);
 

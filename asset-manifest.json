@@ -1,27 +1,27 @@
 {
   "files": {
     "main.css": "/static/css/main.035c16bd.css",
-    "main.js": "/static/js/main.6bf8d0f8.js",
-    "static/css/988.428f6eb3.chunk.css": "/static/css/988.428f6eb3.chunk.css",
-    "static/js/988.a0706fae.chunk.js": "/static/js/988.a0706fae.chunk.js",
+    "main.js": "/static/js/main.4bdcbea7.js",
+    "static/css/988.3caa1d97.chunk.css": "/static/css/988.3caa1d97.chunk.css",
+    "static/js/988.032dbe58.chunk.js": "/static/js/988.032dbe58.chunk.js",
     "static/css/399.e59b8fb7.chunk.css": "/static/css/399.e59b8fb7.chunk.css",
-    "static/js/399.d8a06684.chunk.js": "/static/js/399.d8a06684.chunk.js",
+    "static/js/399.caf3ee9f.chunk.js": "/static/js/399.caf3ee9f.chunk.js",
     "static/js/369.0c8f4dcc.chunk.js": "/static/js/369.0c8f4dcc.chunk.js",
     "static/js/771.734a9a5d.chunk.js": "/static/js/771.734a9a5d.chunk.js",
     "static/js/423.3439de10.chunk.js": "/static/js/423.3439de10.chunk.js",
     "index.html": "/index.html",
     "main.035c16bd.css.map": "/static/css/main.035c16bd.css.map",
-    "main.6bf8d0f8.js.map": "/static/js/main.6bf8d0f8.js.map",
-    "988.428f6eb3.chunk.css.map": "/static/css/988.428f6eb3.chunk.css.map",
-    "988.a0706fae.chunk.js.map": "/static/js/988.a0706fae.chunk.js.map",
+    "main.4bdcbea7.js.map": "/static/js/main.4bdcbea7.js.map",
+    "988.3caa1d97.chunk.css.map": "/static/css/988.3caa1d97.chunk.css.map",
+    "988.032dbe58.chunk.js.map": "/static/js/988.032dbe58.chunk.js.map",
     "399.e59b8fb7.chunk.css.map": "/static/css/399.e59b8fb7.chunk.css.map",
-    "399.d8a06684.chunk.js.map": "/static/js/399.d8a06684.chunk.js.map",
+    "399.caf3ee9f.chunk.js.map": "/static/js/399.caf3ee9f.chunk.js.map",
     "369.0c8f4dcc.chunk.js.map": "/static/js/369.0c8f4dcc.chunk.js.map",
     "771.734a9a5d.chunk.js.map": "/static/js/771.734a9a5d.chunk.js.map",
     "423.3439de10.chunk.js.map": "/static/js/423.3439de10.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.035c16bd.css",
-    "static/js/main.6bf8d0f8.js"
+    "static/js/main.4bdcbea7.js"
   ]
 }
